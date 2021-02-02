@@ -1,0 +1,14 @@
+<section class="py-5">
+  <form class="container" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+    <h1>Porfabor Identifiquese</h1>
+    <mat-form-field>
+      <input type="email" matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="password" matInput placeholder="Contraseña" formControlName="password">
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-raised-button color="primary" class="w-100" [disabled]="isLoading">Ingresar</button>
+    </div>
+  </form>
+</section>

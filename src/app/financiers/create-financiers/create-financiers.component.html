@@ -1,0 +1,20 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="financierForm" autocomplete="off">
+    <h1>Nueva Financiera</h1>
+    <mat-form-field>
+      <input type="text" matInput placeholder="N° RUC" formControlName="ruc" maxlength="11">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Nombres/Rason Social" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="email" matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Celular" formControlName="phoneNumber">
+    </mat-form-field>
+    <button type="button" mat-raised-button routerLink="/financiers" class="mr-2">Volver</button>
+    <div class="divider"></div>
+    <button type="submit" mat-raised-button color="primary">Guardar</button>
+  </form>
+</section>

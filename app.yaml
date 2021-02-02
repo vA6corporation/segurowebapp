@@ -1,0 +1,11 @@
+runtime: nodejs12
+
+handlers:
+- url: /(.*\..+)$ 
+  static_files: dist/seguroapp/\1
+  upload: dist/seguroapp/(.*\..+)$
+
+- url: /.*
+  secure: always
+  static_files: dist/seguroapp/index.html
+  upload: dist/seguroapp/index.html

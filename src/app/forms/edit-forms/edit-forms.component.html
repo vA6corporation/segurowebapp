@@ -1,0 +1,19 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formForm" autocomplete="off">
+    <h1>Nuevo Documento</h1>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Nombre" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Descripcion" formControlName="description">
+    </mat-form-field>
+    <button type="button" mat-raised-button routerLink="/financiers" class="mr-2">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+    <button type="submit" mat-raised-button color="primary">
+      <mat-icon>save</mat-icon>
+      Guardar
+    </button>
+  </form>
+</section>

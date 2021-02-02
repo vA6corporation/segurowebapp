@@ -1,0 +1,14 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-topbar (sidenavToggle)="sidenav.toggle()"></app-topbar>
+    <div class="container-spinner" *ngIf="isLoading">
+      <mat-spinner class="spinner"></mat-spinner>
+    </div>
+    <main *ngIf="isStart">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div [hidden]="!isAuth">
+      <button type="button" mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div class="divider" *ngIf="isAuth"></div>
+    <span>SeguroIn</span>
+    <span class="example-spacer"></span>
+    <a href="#" class="mr-3" routerLink="/login" *ngIf="!isAuth">Acceder</a>
+    <a href="#" routerLink="/signup" *ngIf="!isAuth">Registro</a>
+    <button mat-button [matMenuTriggerFor]="loginMenu" *ngIf="isAuth">
+      <span>{{ userName }}</span>
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #loginMenu="matMenu" xPosition="before">
+      <button type="button" (click)="onLogout()" mat-menu-item>Cerrar Session</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
