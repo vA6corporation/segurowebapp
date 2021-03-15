@@ -7,16 +7,74 @@
     <mat-icon class="mr-2">face</mat-icon>
     <span>Clientes</span>
   </a>
+  <a href="#" mat-list-item routerLink="/partnerships" (click)="onClose()">
+    <mat-icon class="mr-2">group</mat-icon>
+    <span>Consorcios</span>
+  </a>
+  <a href="#" mat-list-item routerLink="/beneficiaries" (click)="onClose()">
+    <mat-icon class="mr-2">group_add</mat-icon>
+    <span>Beneficiarios</span>
+  </a>
   <a href="#" mat-list-item routerLink="/financiers" (click)="onClose()">
     <mat-icon class="mr-2">account_balance</mat-icon>
     <span>Financieras</span>
   </a>
-  <a href="#" mat-list-item routerLink="/" (click)="onClose()">
+  <!-- <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
     <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Documentos</span>
+    <span>Adelanto de Materiales</span>
   </a>
+  <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
+    <mat-icon class="mr-2">text_snippet</mat-icon>
+    <span>Adelanto Directo</span>
+  </a>
+  <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
+    <mat-icon class="mr-2">text_snippet</mat-icon>
+    <span>Fiel Cumplimiento</span>
+  </a> -->
   <a href="#" mat-list-item routerLink="/users" (click)="onClose()">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Usuarios</span>
   </a>
+  <mat-accordion>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon class="mr-2">text_snippet</mat-icon>
+          Fianzas
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
+        <span>A. de Materiales</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
+        <span>A. Directo</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
+        <span>F. Cumplimiento</span>
+      </a>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon class="mr-2">poll</mat-icon>
+          Reportes
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <a href="#" mat-list-item routerLink="/reports/guaranties" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">poll</mat-icon> -->
+        <span>Cumplimiento de Fianzas</span>
+      </a>
+      <!-- <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
+        <mat-icon class="mr-2">text_snippet</mat-icon>
+        <span>Adelanto Directo</span>
+      </a> -->
+      <!-- <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
+        <mat-icon class="mr-2">text_snippet</mat-icon>
+        <span>Fiel Cumplimiento</span>
+      </a> -->
+    </mat-expansion-panel>
+  </mat-accordion>
 </mat-nav-list>

@@ -1,0 +1,51 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <h1>Nuevo Adelanto de Materiales</h1>
+    <div formGroupName="customer">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Cliente *" formControlName="name" (click)="openDialogCustomers()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="financier">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="beneficiary">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Beneficiario *" formControlName="name" (click)="openDialogBeneficiaries()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="partnership">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="material">
+      <mat-form-field>
+        <input type="text" matInput placeholder="N° de poliza *" formControlName="policyNumber">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Objeto *" formControlName="object">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="number" matInput placeholder="monto *" formControlName="price">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha de inicio *</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha de cumplimiento *</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <button type="button" mat-raised-button routerLink="/materials">Volver</button>
+    <div class="divider"></div>
+    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">Guardar</button>
+  </form>
+</section>

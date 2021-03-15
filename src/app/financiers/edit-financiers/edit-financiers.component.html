@@ -1,19 +1,24 @@
 <section class="container py-4">
-  <form (ngSubmit)="onSubmit()" [formGroup]="financierForm" autocomplete="off">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <h1>Editar Financiera</h1>
     <mat-form-field>
-      <input type="text" matInput placeholder="N° RUC" formControlName="ruc" maxlength="11">
+      <input type="text" matInput placeholder="N° RUC" formControlName="document" maxlength="11">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Nombres/Rason Social" formControlName="name">
+      <input type="text" matInput placeholder="Rason Social" formControlName="name">
     </mat-form-field>
     <mat-form-field>
       <input type="email" matInput placeholder="Email" formControlName="email">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Celular" formControlName="phoneNumber">
+      <input type="text" matInput placeholder="Celular" formControlName="mobileNumber">
     </mat-form-field>
-    <input type="text" formControlName="businessId" hidden>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Telefono" formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Anexo" formControlName="annexed">
+    </mat-form-field>
     <button type="button" mat-raised-button routerLink="/financiers" class="mr-2">Volver</button>
     <div class="divider"></div>
     <button type="submit" mat-raised-button color="primary" [disabled]="isLoading">Guardar</button>

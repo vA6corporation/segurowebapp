@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LoadScreenService } from 'src/app/navigation/loadScreen.service';
+import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UsersService } from '../users.service';
 
 @Component({
@@ -15,39 +15,40 @@ export class CreateUsersComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UsersService,
+    private usersService: UsersService,
     private matSnackBar: MatSnackBar,
-    private loadScreenService: LoadScreenService,
+    private navigationService: NavigationService,
     private router: Router,
   ) { 
-    this.userForm = this.formBuilder.group({
+    this.formGroup = this.formBuilder.group({
       name: [ null, Validators.required ],
       email: [ null, [ Validators.required, Validators.email ] ],
       password: [ null, [ Validators.required, Validators.minLength(8) ] ],
+      allGuaranties: false,
     });
   }
 
-  public userForm: FormGroup;
+  public formGroup: FormGroup;
   public isLoading: boolean = false;
 
   ngOnInit(): void {}
   
   onSubmit(): void {
-    if (this.userForm.valid) {
+    if (this.formGroup.valid) {
       this.isLoading = true;
-      this.loadScreenService.loadStart();
-      this.userService.create(this.userForm.value).subscribe(res => {
+      this.navigationService.loadSpinnerStart();
+      this.usersService.create(this.formGroup.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.router.navigate(['/users']);
-        this.matSnackBar.open('Usuario registrado correctamente', 'Aceptar', {
+        this.matSnackBar.open('Registrado correctamente', 'Aceptar', {
           duration: 5000,
         });
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.matSnackBar.open(error.error.message, 'Aceptar', {
           duration: 5000,
         });

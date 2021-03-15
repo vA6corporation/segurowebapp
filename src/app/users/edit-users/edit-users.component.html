@@ -1,5 +1,5 @@
 <section class="container py-4">
-  <form (ngSubmit)="onSubmit()" [formGroup]="userForm" autocomplete="off">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <h1>Editar Usuario</h1>
     <mat-form-field>
       <input type="text" matInput placeholder="Nombres" formControlName="name">
@@ -10,7 +10,8 @@
     <mat-form-field>
       <input type="password" matInput placeholder="Contraseña" formControlName="password">
     </mat-form-field>
-    <input type="text" formControlName="businessId" hidden>
+    <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
+    <div class="mb-1"></div>
     <button type="button" mat-raised-button routerLink="/users">Volver</button>
     <div class="divider"></div>
     <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">Guardar</button>

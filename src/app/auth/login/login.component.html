@@ -1,6 +1,6 @@
 <section class="py-5">
   <form class="container" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-    <h1>Porfabor Identifiquese</h1>
+    <h1>Por favor identifiquese</h1>
     <mat-form-field>
       <input type="email" matInput placeholder="Email" formControlName="email">
     </mat-form-field>
@@ -10,5 +10,6 @@
     <div>
       <button type="submit" mat-raised-button color="primary" class="w-100" [disabled]="isLoading">Ingresar</button>
     </div>
+    <div class="text-center text-muted mt-1">v{{ version }}</div>
   </form>
 </section>

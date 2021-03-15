@@ -13,9 +13,21 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 
 @NgModule({
   imports: [
+    MatExpansionModule,
+    MatNativeDateModule, // Native module for datepicker
+    MatDatepickerModule,
+    MatProgressBarModule,
+    MatDialogModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -30,8 +42,13 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatSlideToggleModule,
   ],
   exports: [
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatProgressBarModule,
+    MatDialogModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -46,6 +63,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatSlideToggleModule,
   ],
 })
 export class MaterialModule {}

@@ -18,6 +18,10 @@ export class FinanciersService {
     return this.httpService.get(`financiers/${pageIndex}/${pageSize}`);
   }
 
+  getFinanciersByAny(key: string): Observable<Financier[]> {
+    return this.httpService.get(`financiers/byAny/${key}`)
+  }
+
   getFinancierById(financierId: string): Observable<any> {
     return this.httpService.get(`financiers/${financierId}`)
   }
@@ -28,6 +32,7 @@ export class FinanciersService {
 
   create(financier: Financier): Observable<any> {
     financier.businessId = this.authService.businessId;
+    financier.userId = this.authService.userId;
     return this.httpService.post('financiers', { financier });
   }
 

@@ -10,10 +10,10 @@ export class HttpService {
 
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {}
 
   private baseUrl: string = environment.baseUrl;
-  accessToken: string|null = null;
+  public accessToken: string|null = null;
 
   get(url: string, headers?: HttpHeaders): Observable<any> {
     if (!headers) {

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { LoadScreenService } from 'src/app/navigation/loadScreen.service';
+import { NavigationService } from 'src/app/navigation/navigation.service';
 import { FinanciersService } from '../financiers.service';
 
 @Component({
@@ -15,15 +15,17 @@ export class CreateFinanciersComponent implements OnInit {
 
   constructor(
     private financiersService: FinanciersService,
-    private loadScreenService: LoadScreenService,
+    private navigationService: NavigationService,
     private router: Router,
     private matSnackBar: MatSnackBar,
   ) {
     this.financierForm = this.formBuilder.group({
-      ruc: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
+      document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
       name: [ null, Validators.required ],
       email: [ null, [ Validators.required, Validators.email ] ],
-      phoneNumber: [ null, [ Validators.required, Validators.minLength(12) ] ],
+      mobileNumber: null,
+      phoneNumber: null,
+      annexed: null,
     });
   }
     
@@ -36,20 +38,20 @@ export class CreateFinanciersComponent implements OnInit {
   async onSubmit() {
     if (this.financierForm.valid) {
       this.isLoading = true;
-      this.loadScreenService.loadStart();
+      this.navigationService.loadSpinnerStart();
       this.financiersService.create(this.financierForm.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.router.navigate(['/financiers']);
         this.matSnackBar.open('Financiera registrada correctamente', 'Aceptar', {
-          duration: 5000
+          duration: 5000,
         });
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000
+          duration: 5000,
         });
       });
     }

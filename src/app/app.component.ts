@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
-import { LoadScreenService } from './navigation/loadScreen.service';
+import { NavigationService } from './navigation/navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { LoadScreenService } from './navigation/loadScreen.service';
 export class AppComponent {
 
   constructor(
-    private loadScreenService: LoadScreenService,
+    private navigationService: NavigationService,
     private authService: AuthService,
     private router: Router,
   ) {}
@@ -21,23 +21,23 @@ export class AppComponent {
   isStart: boolean = false;
 
   ngOnInit(): void {
-    this.loadScreenService.loadState$.subscribe((loadState: boolean) => {
+    this.navigationService.loadSpinnerState$.subscribe((loadState: boolean) => {
       this.isLoading = loadState;
     });
     const accessToken = localStorage.getItem('accessToken');
     this.authService.getSession(accessToken).subscribe(res => {
       console.log(res);
-      this.authService.userId = res.userId;
-      this.authService.businessId = res.businessId;
-      this.authService.userName$.emit(res.name);
       this.authService.setAccessToken(accessToken);
-      this.loadScreenService.loadFinish();
+      this.authService.setUserId(res.userId);
+      this.authService.setBusinessId(res.businessId);
+      this.authService.setUserName(res.name);
+      this.authService.loggedIn();
+      this.navigationService.loadSpinnerFinish();
       this.isStart = true;
     }, (error: HttpErrorResponse) => {
       console.log(error);
       this.router.navigate(['/login']);
-      this.authService.setAccessToken(null);
-      this.loadScreenService.loadFinish();
+      this.navigationService.loadSpinnerFinish();
       this.isStart = true;
     });
   }

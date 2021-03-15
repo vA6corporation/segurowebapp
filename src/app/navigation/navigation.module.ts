@@ -4,6 +4,7 @@ import { TopbarComponent } from './topbar/topbar.component';
 import { SidenavListComponent } from './sidenav-list/sidenav-list.component';
 import { MaterialModule } from 'src/app/material.module';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MaterialModule,
     RouterModule,
+    ReactiveFormsModule,
   ],
   exports: [ 
     TopbarComponent,

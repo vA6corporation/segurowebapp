@@ -5,9 +5,9 @@ import { CreateFinanciersComponent } from './create-financiers/create-financiers
 import { EditFinanciersComponent } from './edit-financiers/edit-financiers.component';
 
 const routes: Routes = [
-  { path: 'financiers', component: FinanciersComponent },
-  { path: 'financiers/create', component: CreateFinanciersComponent },
-  { path: 'financiers/:financierId/edit', component: EditFinanciersComponent },
+  { path: '', component: FinanciersComponent },
+  { path: 'create', component: CreateFinanciersComponent },
+  { path: ':financierId/edit', component: EditFinanciersComponent },
 ];
 
 @NgModule({

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadScreenService } from 'src/app/navigation/loadScreen.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { NavigationService } from 'src/app/navigation/navigation.service';
 
 @Component({
   selector: 'app-signup',
@@ -13,10 +14,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class SignupComponent implements OnInit {
 
   constructor(
-    private snackBar: MatSnackBar,
+    private matSnackBar: MatSnackBar,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private loadScreenService: LoadScreenService,
+    private navigationService: NavigationService,
+    private router: Router,  
   ) {
     this.signupForm = this.formBuilder.group({
       user: this.formBuilder.group({
@@ -25,7 +27,7 @@ export class SignupComponent implements OnInit {
       }),
       business: this.formBuilder.group({
         name: [ null, Validators.required ],
-        ruc: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
+        document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
       }),
     });
   }
@@ -38,19 +40,20 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     if (this.signupForm.valid) {
       this.isLoading = true;
-      this.loadScreenService.loadStart();
+      this.navigationService.loadSpinnerStart();
       this.authService.register(this.signupForm.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
-        this.snackBar.open('Usuario creado correctamente', 'Aceptar', {
+        this.navigationService.loadSpinnerFinish();
+        this.router.navigate(['/login']);
+        this.matSnackBar.open('Registrado correctamente', 'Aceptar', {
           duration: 5000,
         });
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
-        this.snackBar.open(error.error.message, 'Aceptar', {
+        this.navigationService.loadSpinnerFinish();
+        this.matSnackBar.open(error.error.message, 'Aceptar', {
           duration: 5000,
         });
       });

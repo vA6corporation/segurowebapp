@@ -3,9 +3,10 @@ export interface Financier {
   _id?: string,
   name: string,
   email: string,
-  ruc: string,
+  document: string,
   phoneNumber: string,
   createdAt: any,
   updatedAt: any,
+  userId: string,
   businessId: string,
 }

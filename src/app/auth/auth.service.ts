@@ -10,32 +10,44 @@ export class AuthService {
 
   constructor(
     private httpService: HttpService,
-  ) {}
+  ) { }
     
   public authChange$: EventEmitter<boolean> = new EventEmitter();
   public userName$: EventEmitter<string> = new EventEmitter();
-  public accessToken: string|null = null;
   public businessId: string = '';
   public userId: string = '';
 
-  getAccessToken(): string|null {
-    return this.accessToken;
-  }
-
   setAccessToken(accessToken: string|null): void {
-    this.accessToken = accessToken;
-    this.httpService.accessToken = this.accessToken;
-    if (this.accessToken) {
-      localStorage.setItem('accessToken', this.accessToken);
-      this.authChange$.emit(true);
+    this.httpService.accessToken = accessToken;
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken);
     } else {
       localStorage.setItem('accessToken', '');
-      this.authChange$.emit(false);
     }
   }
   
   login(email: string, password: string): Observable<any> {
     return this.httpService.post('auth/login', { email, password });
+  }
+
+  loggedIn(): void {
+    this.authChange$.emit(true);
+  }
+
+  loggedOut(): void {
+    this.authChange$.emit(false);
+  }
+
+  setUserName(name: string) {
+    this.userName$.emit(name);
+  }
+
+  setUserId(userId: string) {
+    this.userId = userId;
+  }
+
+  setBusinessId(businessId: string) {
+    this.businessId = businessId;
   }
 
   register(signupForm: any): Observable<any> {
@@ -44,6 +56,7 @@ export class AuthService {
 
   logout(): void {
     this.setAccessToken(null);
+    this.authChange$.emit(false);
   }
 
   getSession(accessToken: string|null): Observable<any> {

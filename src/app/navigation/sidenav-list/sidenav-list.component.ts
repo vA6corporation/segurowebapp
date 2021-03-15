@@ -14,6 +14,8 @@ export class SidenavListComponent implements OnInit {
 
   @Output() sidenavClose = new EventEmitter<void>();
 
+  public panelOpenState = false;
+
   onClose() {
     this.sidenavClose.emit();
   }

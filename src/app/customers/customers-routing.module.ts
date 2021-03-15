@@ -5,9 +5,9 @@ import { CreateCustomersComponent } from './create-customers/create-customers.co
 import { EditCustomersComponent } from './edit-customers/edit-customers.component';
 
 const routes: Routes = [
-  { path: 'customers', component: CustomersComponent },
-  { path: 'customers/create', component: CreateCustomersComponent },
-  { path: 'customers/:customerId/edit', component: EditCustomersComponent },
+  { path: '', component: CustomersComponent },
+  { path: 'create', component: CreateCustomersComponent },
+  { path: ':customerId/edit', component: EditCustomersComponent },
 ];
 
 @NgModule({

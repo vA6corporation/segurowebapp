@@ -12,13 +12,13 @@ export class UsersComponent implements OnInit {
 
   constructor( 
     private usersService: UsersService,
-  ) {}
+  ) { }
 
-  public displayedColumns: string[] = [ 'name', 'email', 'actions' ];
+  public displayedColumns: string[] = [ 'name', 'email', 'allGuaranties', 'actions' ];
   public dataSource: User[] = [];
   public length: number = 100;
-  public pageSize: number = 5;
-  public pageSizeOptions: number[] = [5, 10, 30, 50];
+  public pageSize: number = 10;
+  public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
   handlePageEvent(event: PageEvent): void {
@@ -32,6 +32,7 @@ export class UsersComponent implements OnInit {
       this.length = count;
     });
     this.usersService.getUsersByPage(this.pageIndex + 1, this.pageSize).subscribe(users => {
+      console.log(users);
       this.dataSource = users;
     });
   }

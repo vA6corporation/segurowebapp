@@ -7,7 +7,11 @@
     </div>
     <div class="divider" *ngIf="isAuth"></div>
     <span>SeguroIn</span>
-    <span class="example-spacer"></span>
+    <span class="spacer"></span>
+    <form class="search" (ngSubmit)="onSubmit()" [formGroup]="formGroup" *ngIf="isAuth">
+      <input type="text" formControlName="key" class="input-search" placeholder="Buscador">
+    </form>
+    <span class="spacer"></span>
     <a href="#" class="mr-3" routerLink="/login" *ngIf="!isAuth">Acceder</a>
     <a href="#" routerLink="/signup" *ngIf="!isAuth">Registro</a>
     <button mat-button [matMenuTriggerFor]="loginMenu" *ngIf="isAuth">
@@ -19,3 +23,4 @@
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>

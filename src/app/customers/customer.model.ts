@@ -1,12 +1,17 @@
-
 export interface Customer {
   _id?: string,
   typeDocument: string,
   document: string,
   name: string,
   email: string,
+  mobileNumber: string,
   phoneNumber: string,
+  annexed: string,
+  birthDate: string,
+  address: string,
+  representative: string,
   createdAt: any,
   updatedAt: any,
+  userId: string,
   businessId: string,
 }

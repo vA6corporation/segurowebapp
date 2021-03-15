@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { LoadScreenService } from 'src/app/navigation/loadScreen.service';
+import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CustomersService } from '../customers.service';
 
 @Component({
@@ -18,66 +19,71 @@ export class EditCustomersComponent implements OnInit {
     private customersService: CustomersService,
     private activatedRoute: ActivatedRoute,
     private matSnackBar: MatSnackBar,
-    private loadScreenService: LoadScreenService,
+    private navigationService: NavigationService,
+    public matDialog: MatDialog,
   ) {
-    this.customerForm = this.formBuilder.group({
-      typeDocument: [ null, Validators.required ],
-      document: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-      email: [ null, [ Validators.required, Validators.email ] ],
-      phoneNumber: [ null, [Validators.required, Validators.minLength(9)] ],
-      businessId: [null, Validators.required],
+    this.formGroup = this.formBuilder.group({
+      customer: this.formBuilder.group({
+        _id: [ null ],
+        typeDocument: [ null, Validators.required ],
+        document: [ null, Validators.required ],
+        name: [ null, Validators.required ],
+        email: [ null, [ Validators.required, Validators.email ] ],
+        mobileNumber: null,
+        phoneNumber: null,
+        annexed: null,
+        birthDate: null,
+        address: null,        
+        representative: null,
+        representativeDocument: null,
+      }),
     });
-  
-    this.customerForm.controls.typeDocument.valueChanges.subscribe(value => {
+
+    this.formGroup.get('customer.typeDocument')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
-          this.customerForm.controls.document.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.formGroup.get('customer.documento')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.maxlength = 11;
           break;
         case 'DNI':
-          this.customerForm.controls.document.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
-          break;
-        default:
-          this.customerForm.controls.document.setValidators([ Validators.required ]);
+          this.formGroup.get('customer.documento')?.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
+          this.maxlength = 8;
           break;
       }
-      this.customerForm.controls.document.updateValueAndValidity();
+      this.formGroup.get('customer.documento')?.updateValueAndValidity();
     });
   
-    this.activatedRoute.params.subscribe(async params => {
+    this.activatedRoute.params.subscribe(params => {
       this.customerId = params.customerId;
       this.customersService.getCustomerById(this.customerId).subscribe(customer => {
         console.log(customer);
-        this.customerForm.controls.typeDocument.setValue(customer.typeDocument);
-        this.customerForm.controls.document.setValue(customer.document);
-        this.customerForm.controls.name.setValue(customer.name);
-        this.customerForm.controls.email.setValue(customer.email);
-        this.customerForm.controls.phoneNumber.setValue(customer.phoneNumber);
-        this.customerForm.controls.businessId.setValue(customer.businessId);
+        this.formGroup.get('customer')?.setValue(customer);
       });
     });
   }
-    
-  public customerForm: FormGroup;
+  
+  public formGroup: FormGroup;
   private customerId: string = '';
   public isLoading: boolean = false;
+  public maxlength: number = 11;
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(): void {
-    if (this.customerForm.valid) {
+    if (this.formGroup.valid) {
       this.isLoading = true;
-      this.loadScreenService.loadStart();
-      this.customersService.update(this.customerForm.value, this.customerId).subscribe(res => {
+      this.navigationService.loadSpinnerStart();
+      const { customer } = this.formGroup.value;
+      this.customersService.update(customer, this.customerId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.matSnackBar.open('Se han guardado los cambios', 'Aceptar', {
           duration: 5000,
         });
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.loadScreenService.loadFinish();
+        this.navigationService.loadSpinnerFinish();
         this.matSnackBar.open(error.error.message, 'Aceptar', {
           duration: 5000,
         });

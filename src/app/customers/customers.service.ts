@@ -12,7 +12,11 @@ export class CustomersService {
   constructor(
     private httpService: HttpService,
     private authService: AuthService,
-  ) {}
+  ) { }
+
+  getCustomersByAny(key: string): Observable<Customer[]> {
+    return this.httpService.get(`customers/byAny/${key}`);
+  }
 
   getCustomersByPage(pageIndex: number, pageSize: number): Observable<Customer[]> {
     return this.httpService.get(`customers/${pageIndex}/${pageSize}`);
@@ -28,6 +32,7 @@ export class CustomersService {
 
   create(customer: Customer): Observable<Customer> {
     customer.businessId = this.authService.businessId;
+    customer.userId = this.authService.userId;
     return this.httpService.post('customers', { customer });
   }
 
