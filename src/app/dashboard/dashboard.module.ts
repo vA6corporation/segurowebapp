@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-
-// import { SignupComponent } from './signup/signup.component';
+import { DashboardComponent } from './dashboard.component';
 
 @NgModule({
   declarations: [
-    // LoginComponent,
-    // SignupComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,

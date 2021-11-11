@@ -1,7 +1,15 @@
-<mat-nav-list>
-  <a href="#" mat-list-item routerLink="/dashboard" (click)="onClose()">
+<mat-nav-list class="pt-0">
+  <div class="nav-header p-2 text-white overflow-hidden">
+    <p class="text-capitalize text-bold mb-1">{{ business?.tradeName }}</p>
+    <span class="m-0 text-capitalize text-truncate">{{ user?.name }}</span>
+  </div>
+  <!-- <a href="#" mat-list-item routerLink="/dashboard" (click)="onClose()">
     <mat-icon class="mr-2">home</mat-icon>
     <span>Dashboard</span>
+  </a> -->
+  <a href="#" mat-list-item routerLink="/search" (click)="onClose()">
+    <mat-icon class="mr-2">search</mat-icon>
+    <span>Buscar</span>
   </a>
   <a href="#" mat-list-item routerLink="/customers" (click)="onClose()">
     <mat-icon class="mr-2">face</mat-icon>
@@ -19,18 +27,6 @@
     <mat-icon class="mr-2">account_balance</mat-icon>
     <span>Financieras</span>
   </a>
-  <!-- <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Adelanto de Materiales</span>
-  </a>
-  <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Adelanto Directo</span>
-  </a>
-  <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Fiel Cumplimiento</span>
-  </a> -->
   <a href="#" mat-list-item routerLink="/users" (click)="onClose()">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Usuarios</span>
@@ -44,15 +40,12 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
         <span>A. de Materiales</span>
       </a>
       <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
         <span>A. Directo</span>
       </a>
       <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
         <span>F. Cumplimiento</span>
       </a>
     </mat-expansion-panel>
@@ -63,18 +56,27 @@
           Reportes
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <a href="#" mat-list-item routerLink="/reports/guaranties" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">poll</mat-icon> -->
+      <a href="#" mat-list-item routerLink="/guaranties" (click)="onClose()">
         <span>Cumplimiento de Fianzas</span>
       </a>
-      <!-- <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
-        <mat-icon class="mr-2">text_snippet</mat-icon>
-        <span>Adelanto Directo</span>
-      </a> -->
-      <!-- <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
-        <mat-icon class="mr-2">text_snippet</mat-icon>
-        <span>Fiel Cumplimiento</span>
-      </a> -->
+      <a href="#" mat-list-item routerLink="/cheques" (click)="onClose()">
+        <span>Cheques por cobrar</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/cheques/all" (click)="onClose()">
+        <span>Todos los cheques</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/mails" (click)="onClose()">
+        <span>Mails enviados</span>
+      </a>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-divider></mat-divider>
+  <!-- <a href="#" *ngIf="(user$ | async)?.isAdmin" mat-list-item routerLink="/settings" (click)="onClose()">
+    <mat-icon class="mr-2">build</mat-icon>
+    <span>Ajustes</span>
+  </a> -->
+  <a href="#" mat-list-item routerLink="/logout" (click)="onClose()">
+    <mat-icon class="mr-2">logout</mat-icon>
+    <span>Cerrar sesion</span>
+  </a>
 </mat-nav-list>

@@ -1,7 +1,6 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="customer">
-      <h1>Nuevo Cliente</h1>
       <mat-form-field appearance="fill">
         <mat-label>Tipo de Documento *</mat-label>
         <mat-select formControlName="typeDocument">
@@ -44,8 +43,8 @@
         <input type="text" matInput placeholder="Documento del representante legal" formControlName="representativeDocument">
       </mat-form-field>
     </div>
-    <button type="button" mat-raised-button routerLink="/customers">Volver</button>
+    <button type="button" mat-raised-button routerLink="/customers">CANCELAR</button>
     <div class="divider"></div>
-    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">Guardar</button>
+    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
   </form>
 </section>

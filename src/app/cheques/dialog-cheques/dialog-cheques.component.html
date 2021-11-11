@@ -1,0 +1,28 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off" class="fixActionRow">
+  <h1 mat-dialog-title *ngIf="cheque; else elseBlock">Editar cheque</h1>
+  <ng-template #elseBlock>
+    <h1 mat-dialog-title>Agregar cheque</h1>
+  </ng-template>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input type="number" matInput placeholder="Monto *" formControlName="price">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de cobro *</mat-label>
+      <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de prorroga</mat-label>
+      <input matInput [matDatepicker]="extensionPicker" formControlName="extension">
+      <mat-datepicker-toggle matSuffix [for]="extensionPicker"></mat-datepicker-toggle>
+      <mat-datepicker #extensionPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="spacer"></div>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>CANCELAR</button>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

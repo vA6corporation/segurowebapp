@@ -10,9 +10,8 @@ import { Financier } from './financier.model'
 export class FinanciersService {
 
   constructor(
-    private httpService: HttpService,
-    private authService: AuthService,
-  ) {}
+    private readonly httpService: HttpService,
+  ) { }
 
   getFinanciersByPage(pageIndex: number, pageSize: number): Observable<Financier[]> {
     return this.httpService.get(`financiers/${pageIndex}/${pageSize}`);
@@ -31,8 +30,6 @@ export class FinanciersService {
   }
 
   create(financier: Financier): Observable<any> {
-    financier.businessId = this.authService.businessId;
-    financier.userId = this.authService.userId;
     return this.httpService.post('financiers', { financier });
   }
 

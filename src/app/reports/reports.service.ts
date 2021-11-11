@@ -15,4 +15,8 @@ export class ReportsService {
     return this.httpService.get(`reports/${startDate}/${endDate}`);
   }
 
+  getGuarantiesByAny(key: string): Observable<any[]> {
+    return this.httpService.get(`reports/${key}`);
+  }
+
 }

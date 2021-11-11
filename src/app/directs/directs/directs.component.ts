@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { DialogDirectComponent } from '../dialog-direct/dialog-direct.component';
 import { Direct } from '../direct.model';
 import { DirectsService } from '../directs.service';
 
@@ -15,10 +16,12 @@ import { DirectsService } from '../directs.service';
 export class DirectsComponent implements OnInit {
 
   constructor(
-    private directsService: DirectsService,
-    private navigationService: NavigationService,
-    private matSnackBar: MatSnackBar,
+    private readonly directsService: DirectsService,
+    private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
   ) { }
+
+  private handlerSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public dataSource: Direct[] = [];
@@ -26,7 +29,26 @@ export class DirectsComponent implements OnInit {
   public pageSize: number = 10;
   public pageIndex: number = 0;
   public length: number = 100;
-  private subscription: Subscription = new Subscription();
+
+  ngOnInit(): void {
+    this.navigationService.setTitle('Adelanto directo');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
+    this.fetchData();
+    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+      this.directsService.getDirectsByAny(key).subscribe(directs => {
+        this.dataSource = directs;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.handlerSearch$.unsubscribe();
+  }
 
   handlePageEvent(event: PageEvent): void {
     this.directsService.getDirectsByPage(event.pageIndex + 1, event.pageSize).subscribe(materials => {
@@ -36,40 +58,35 @@ export class DirectsComponent implements OnInit {
 
   sendMail(directId: string): void {
     this.navigationService.loadBarStart();
-    this.directsService.sendMail(directId).subscribe(direct => {
+    this.directsService.sendMail(directId).subscribe(mail => {
       this.navigationService.loadBarFinish();
-      const { customer } = direct;
-      this.matSnackBar.open(`Enviado correctamente a: ${customer?.email}`, 'Aceptar', {
-        duration: 5000,
-      });
+      this.navigationService.showMessage(`Enviado correctamente a: ${mail.to}`);
     }, (error: HttpErrorResponse) => {
       this.navigationService.loadBarFinish();
-      this.matSnackBar.open(error.error.message, 'Aceptar', {
-        duration: 5000,
-      });
+      this.navigationService.showMessage(error.error.message);
     });
   }
 
-  ngOnInit(): void {
-    this.directsService.getDirectsCount().subscribe(count => {
-      this.length = count;
-    });
-    this.directsService.getDirectsByPage(this.pageIndex + 1, this.pageSize).subscribe(directs => {
-      this.dataSource = directs;
-    });
-    this.subscription = this.navigationService.searchState$.subscribe((key: string) => {
-      this.directsService.getDirectsByAny(key).subscribe(directs => {
-        this.dataSource = directs;
-      }, (error: HttpErrorResponse) => {
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
-      });
+  onShowDetails(directId: string) {
+    this.matDialog.open(DialogDirectComponent, {
+      position: { top: '20px' },
+      data: directId,
     });
   }
+  
+  async fetchData() {
+    this.length = await this.directsService.getDirectsCount().toPromise();
+    this.dataSource = await this.directsService.getDirectsByPage(this.pageIndex + 1, this.pageSize).toPromise();
+  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  async onDelete(directId: string) {
+    const ok = confirm('Esta seguro de eliminar?...');
+    if (ok) {
+      await this.directsService.delete(directId).toPromise();
+      this.navigationService.showMessage('Eliminado correctamente');
+      this.fetchData();
+    }
+
   }
 
 }

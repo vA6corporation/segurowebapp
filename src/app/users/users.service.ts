@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
-import { User } from './user.model';
+import { UserModel } from './user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,10 @@ import { User } from './user.model';
 export class UsersService {
 
   constructor(
-    private httpService: HttpService,
-    private authService: AuthService,
+    private readonly httpService: HttpService,
   ) { }
 
-  getUsersByPage(pageIndex: number, pageSize: number): Observable<User[]> {
+  getUsersByPage(pageIndex: number, pageSize: number): Observable<UserModel[]> {
     return this.httpService.get(`users/${pageIndex}/${pageSize}`);
   }
 
@@ -22,16 +21,15 @@ export class UsersService {
     return this.httpService.get('users/count');
   }
 
-  getUserById(userId: string): Observable<User> {
+  getUserById(userId: string): Observable<UserModel> {
     return this.httpService.get(`users/${userId}`);
   }
 
-  create(user: User): Observable<User> {
-    user.businessId = this.authService.businessId;
+  create(user: UserModel): Observable<UserModel> {
     return this.httpService.post('users', { user });
   }
 
-  update(user: User, userId: string): Observable<User> {
+  update(user: UserModel, userId: string): Observable<UserModel> {
     return this.httpService.put(`users/${userId}`, { user });
   }
 

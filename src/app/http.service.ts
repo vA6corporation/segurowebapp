@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 export class HttpService {
 
   constructor(
-    private http: HttpClient,
+    private readonly http: HttpClient,
   ) {}
 
   private baseUrl: string = environment.baseUrl;
@@ -39,5 +39,13 @@ export class HttpService {
       'Authorization': `Bearer ${this.accessToken}`
     });
     return this.http.put(`${this.baseUrl}${url}`, body, { headers });
+  }
+
+  delete(url: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.accessToken}`
+    });
+    return this.http.delete(`${this.baseUrl}${url}`, { headers });
   }
 }

@@ -4,7 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: 'dashboard',
-    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+    loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
   },
   {
     path: 'customers',
@@ -39,8 +43,16 @@ const routes: Routes = [
     loadChildren: () => import('./compliances/compliances.module').then(m => m.CompliancesModule)
   },
   {
-    path: 'reports',
+    path: 'guaranties',
     loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule)
+  },
+  {
+    path: 'cheques',
+    loadChildren: () => import('./cheques/cheques.module').then(m => m.ChequesModule)
+  },
+  {
+    path: 'mails',
+    loadChildren: () => import('./mails/mails.module').then(m => m.MailsModule)
   }
 ];
 

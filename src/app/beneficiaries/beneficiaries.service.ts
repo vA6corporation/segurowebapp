@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
 import { Beneficiary } from './beneficiary.model';
 
@@ -10,8 +9,7 @@ import { Beneficiary } from './beneficiary.model';
 export class BeneficiariesService {
 
   constructor(
-    private httpService: HttpService,
-    private authService: AuthService,
+    private readonly httpService: HttpService,
   ) { }
 
   getBeneficiariesByAny(key: string):Observable<Beneficiary[]> {
@@ -31,8 +29,6 @@ export class BeneficiariesService {
   }
 
   create(beneficiary: Beneficiary): Observable<Beneficiary> {
-    beneficiary.businessId = this.authService.businessId;
-    beneficiary.userId = this.authService.userId;
     return this.httpService.post('beneficiaries', { beneficiary });
   }
 

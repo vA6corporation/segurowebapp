@@ -6,12 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FinanciersComponent } from './financiers/financiers.component';
 import { CreateFinanciersComponent } from './create-financiers/create-financiers.component';
 import { EditFinanciersComponent } from './edit-financiers/edit-financiers.component';
+import { DialogFinanciersComponent } from '../financiers/dialog-financiers/dialog-financiers.component';
 
 @NgModule({
   declarations: [
     FinanciersComponent,
     CreateFinanciersComponent,
     EditFinanciersComponent,
+    DialogFinanciersComponent,
   ],
   imports: [
     CommonModule,

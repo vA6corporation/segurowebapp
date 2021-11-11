@@ -1,0 +1,42 @@
+<div class="nav-bar">
+  <mat-progress-bar mode="indeterminate" *ngIf="isLoadingBar"></mat-progress-bar>
+  <div class="container-spinner" *ngIf="isLoadingSpinner">
+    <mat-spinner class="spinner"></mat-spinner>
+  </div>
+  <mat-toolbar color="primary">
+    <div *ngIf="isAuth">
+      <button type="button" *ngIf="isMainToolbar" mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button type="button" *ngIf="!isMainToolbar" mat-icon-button (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <span class="title">{{ title }}</span>
+    <span class="spacer"></span>
+    <form autocomplete="off" class="mr-2 d-inline" (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+      <mat-form-field floatLabel="never" *ngIf="isAuth && showSearch && showInputSearch">
+        <mat-label>Buscar</mat-label>
+        <input matInput type="text" formControlName="key" #inputKey>
+        <button type="button" mat-icon-button matSuffix (click)="showInputSearch = false">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+    <button type="button" mat-icon-button aria-label="Mat menu" *ngIf="(isAuth && !showInputSearch && showSearch)" (click)="showInputSearch = true; onToggleSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <button type="button" mat-icon-button aria-label="Mat menu" *ngFor="let menu of buttons" (click)="onClick(menu.id)">
+      <mat-icon>{{ menu.icon }}</mat-icon>
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" *ngIf="menus.length">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngFor="let menu of menus" (click)="onClick(menu.id)">
+        <mat-icon>{{ menu.icon }}</mat-icon>
+        <span>{{ menu.label }}</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+</div>

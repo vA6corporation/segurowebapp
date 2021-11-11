@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Compliance } from '../compliance.model';
 import { CompliancesService } from '../compliances.service';
+import { DialogComplianceComponent } from '../dialog-compliance/dialog-compliance.component';
 
 @Component({
   selector: 'app-compliances',
@@ -15,10 +16,12 @@ import { CompliancesService } from '../compliances.service';
 export class CompliancesComponent implements OnInit {
 
   constructor(
-    private compliancesService: CompliancesService,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
+    private readonly compliancesService: CompliancesService,
+    private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
   ) { }
+
+  private handlerSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public dataSource: Compliance[] = [];
@@ -26,7 +29,26 @@ export class CompliancesComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private subscription: Subscription = new Subscription();
+
+  ngOnInit(): void {
+    this.navigationService.setTitle('Fiel complimiento');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
+    this.fetchData();
+    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+      this.compliancesService.getCompliancesByAny(key).subscribe(compliances => {
+        this.dataSource = compliances;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.handlerSearch$.unsubscribe();
+  }
 
   handlePageEvent(event: PageEvent): void {
     this.compliancesService.getCompliancesByPage(event.pageIndex + 1, event.pageSize).subscribe(compliances => {
@@ -36,40 +58,34 @@ export class CompliancesComponent implements OnInit {
 
   sendMail(complianceId: string): void {
     this.navigationService.loadBarStart();
-    this.compliancesService.sendMail(complianceId).subscribe(compliance => {
+    this.compliancesService.sendMail(complianceId).subscribe(mail => {
       this.navigationService.loadBarFinish();
-      const { customer } = compliance;
-      this.matSnackBar.open(`Enviado correctamente a: ${customer?.email}`, 'Aceptar', {
-        duration: 5000,
-      });
+      this.navigationService.showMessage(`Enviado correctamente a: ${mail.to}`);
     }, (error: HttpErrorResponse) => {
       this.navigationService.loadBarFinish();
-      this.matSnackBar.open(error.error.message, 'Aceptar', {
-        duration: 5000,
-      });
+      this.navigationService.showMessage(error.error.message);
     });
   }
 
-  ngOnInit(): void {
-    this.compliancesService.getCompliancesCount().subscribe(count => {
-      this.length = count;
-    });
-    this.compliancesService.getCompliancesByPage(this.pageIndex + 1, this.pageSize).subscribe(compliances => {
-      console.log(compliances);
-      this.dataSource = compliances;
-    });
-    this.subscription = this.navigationService.searchState$.subscribe((key: string) => {
-      this.compliancesService.getCompliancesByAny(key).subscribe(compliances => {
-        this.dataSource = compliances;
-      }, (error: HttpErrorResponse) => {
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
-      });
+  onShowDetails(complianceId: string) {
+    this.matDialog.open(DialogComplianceComponent, {
+      position: { top: '20px' },
+      data: complianceId,
     });
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  async onDelete(complianceId: string) {
+    const ok = confirm('Esta seguro de eliminar?...');
+    if (ok) {
+      await this.compliancesService.delete(complianceId).toPromise();
+      this.navigationService.showMessage('Eliminado correctamente');
+      this.fetchData();
+    }
   }
+  
+  async fetchData() {
+    this. length = await this.compliancesService.getCompliancesCount().toPromise();
+    this.dataSource = await this.compliancesService.getCompliancesByPage(this.pageIndex + 1, this.pageSize).toPromise();
+  }
+
 }

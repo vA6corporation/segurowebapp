@@ -1,8 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CustomersService } from '../customers.service';
@@ -15,33 +13,37 @@ import { CustomersService } from '../customers.service';
 export class CreateCustomersComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
-    private customersService: CustomersService,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
-    private router: Router,
-    public matDialog: MatDialog,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      customer: this.formBuilder.group({
-        typeDocument: [ null, Validators.required ],
-        document: [ null, Validators.required ],
-        name: [ null, Validators.required ],
-        email: [ null, [ Validators.required, Validators.email ] ],
-        mobileNumber: null,
-        phoneNumber: null,
-        annexed: null,
-        birthDate: null,
-        address: null,
-        representative: null,
-        representativeDocument: null,
-      }),
-      partnership: this.formBuilder.group({
-        _id: [ null ],
-        name: [ null ],
-      }),
-    });
+    private readonly formBuilder: FormBuilder,
+    private readonly customersService: CustomersService,
+    private readonly navigationService: NavigationService,
+    private readonly router: Router,
+  ) { }
+    
+  public formGroup: FormGroup = this.formBuilder.group({
+    customer: this.formBuilder.group({
+      typeDocument: [ null, Validators.required ],
+      document: [ null, Validators.required ],
+      name: [ null, Validators.required ],
+      email: [ null, [ Validators.required, Validators.email ] ],
+      mobileNumber: null,
+      phoneNumber: null,
+      annexed: null,
+      birthDate: null,
+      address: null,
+      representative: null,
+      representativeDocument: null,
+    }),
+    partnership: this.formBuilder.group({
+      _id: [ null ],
+      name: [ null ],
+    }),
+  });
 
+  public isLoading: boolean = false;
+  public maxlength: number = 11;
+  
+  ngOnInit(): void { 
+    this.navigationService.setTitle('Nuevo Cliente');
     this.formGroup.get('customer.typeDocument')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
@@ -56,33 +58,23 @@ export class CreateCustomersComponent implements OnInit {
       this.formGroup.get('customer.documento')?.updateValueAndValidity();
     });
   }
-    
-  public formGroup: FormGroup;
-  public isLoading: boolean = false;
-  public maxlength: number = 11;
-  
-  ngOnInit(): void { }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       const { customer, partnership } = this.formGroup.value;
       customer.partnershipId = partnership._id;
       this.customersService.create(customer).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
+        this.navigationService.loadBarFinish();
         this.router.navigate(['/customers']);
-        this.matSnackBar.open('Registrado correctamente', 'Aceptar', {
-          duration: 5000
-        });
+        this.navigationService.showMessage('Registrador correctamente');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

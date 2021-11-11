@@ -5,9 +5,11 @@ import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
+    LogoutComponent,
     LoginComponent,
     SignupComponent,
   ],

@@ -1,0 +1,118 @@
+<h2 mat-dialog-title>Detalles Fiel Cumplimiento</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Garantia</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">N° de poliza:</td>
+        <td class="text-uppercase">{{ compliance?.policyNumber }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Objeto:</td>
+        <td class="text-uppercase">{{ compliance?.object }}</td>
+      </tr>
+      <tr>
+        <td>Monto entregado:</td>
+        <td>{{ compliance?.price }}</td>
+      </tr>
+      <tr>
+        <td>Garantia:</td>
+        <td>{{ (compliance?.guarantee || 0).toFixed(2) }}</td>
+      </tr>
+      <tr>
+        <td>Fecha de inicio:</td>
+        <td>{{ compliance?.startDate | date }}</td>
+      </tr>
+      <tr>
+        <td>Fecha de vencimiento:</td>
+        <td>{{ compliance?.endDate | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <table>
+    <tbody>
+      <tr *ngFor="let cheque of compliance?.cheques">
+        <td style="width: 13rem">Cheque:</td>
+        <td>
+          {{ (cheque?.price || 0).toFixed(2) }} 
+          <span class="ml-2">
+            F. Vencimiento: {{ cheque.endDate | date }}
+          </span>
+        </td>
+      </tr>
+      <tr *ngFor="let deposit of compliance?.deposits">
+        <td>Deposito:</td>
+        <td>{{ (deposit?.price || 0).toFixed(2) }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Consorcio</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ (partnership?.name || 'Ninguno') }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ (partnership?.document || 'Ninguno') }}</td>
+      </tr>
+      <tr>
+        <td>Operador tributario:</td>
+        <td>{{ (partnership?.customer?.name || 'Ninguno') }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Cliente</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ customer?.name }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ customer?.document }}</td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td>{{ customer?.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Financiera</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ financier?.name }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ financier?.document }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Beneficiario</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ beneficiary?.name }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ beneficiary?.document }}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>CANCELAR</button>
+  <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+</mat-dialog-actions>

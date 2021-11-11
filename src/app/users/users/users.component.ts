@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { UsersService } from '../users.service';
-import { User } from '../user.model';
+import { UserModel } from '../user.model';
+import { NavigationService } from 'src/app/navigation/navigation.service';
 
 @Component({
   selector: 'app-users',
@@ -11,11 +12,12 @@ import { User } from '../user.model';
 export class UsersComponent implements OnInit {
 
   constructor( 
-    private usersService: UsersService,
+    private readonly usersService: UsersService,
+    private readonly navigationService: NavigationService,
   ) { }
 
   public displayedColumns: string[] = [ 'name', 'email', 'allGuaranties', 'actions' ];
-  public dataSource: User[] = [];
+  public dataSource: UserModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
@@ -28,6 +30,11 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.navigationService.setTitle('Usuarios');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
     this.usersService.getUsersCount().subscribe(count => {
       this.length = count;
     });

@@ -7,19 +7,22 @@ import { CreateDirectsComponent } from './create-directs/create-directs.componen
 import { EditDirectsComponent } from './edit-directs/edit-directs.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PartnershipsModule } from '../partnerships/partnerships.module';
+import { DialogDirectComponent } from './dialog-direct/dialog-direct.component';
 
 
 @NgModule({
   declarations: [
     DirectsComponent, 
     CreateDirectsComponent, 
-    EditDirectsComponent
+    EditDirectsComponent, DialogDirectComponent,
   ],
   imports: [
     CommonModule,
     DirectsRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    PartnershipsModule,
   ]
 })
 export class DirectsModule { }

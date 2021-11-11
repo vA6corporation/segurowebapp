@@ -15,45 +15,52 @@ import { PartnershipsService } from '../partnerships.service';
 export class PartnershipsComponent implements OnInit {
 
   constructor(
-    private partnershipsService: PartnershipsService,
-    private navigationService: NavigationService,
-    private matSnackBar: MatSnackBar,
+    private readonly partnershipsService: PartnershipsService,
+    private readonly navigationService: NavigationService,
   ) { }
     
-  public displayedColumns: string[] = [ 'document', 'name', 'actions' ];
+  private handlerSearch$: Subscription = new Subscription();
+
+  public displayedColumns: string[] = [ 'document', 'name', 'customer', 'actions' ];
   public dataSource: Partnership[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private subscription: Subscription = new Subscription();
+  
+  ngOnInit(): void {
+    this.navigationService.setTitle('Consorcios');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
+    this.partnershipsService.getPartnershipsCount().subscribe(count => {
+      this.length = count;
+    });
+
+    this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
+      console.log(partnerships);
+      this.dataSource = partnerships;
+    });
+
+    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+      this.partnershipsService.getPartnershipsByAny(key).subscribe(partnerships => {
+        this.dataSource = partnerships;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.handlerSearch$.unsubscribe();
+  }
+
 
   handlePageEvent(event: PageEvent): void {
     this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
       this.dataSource = partnerships;
     });
   }
-  
-  ngOnInit(): void {
-    this.partnershipsService.getPartnershipsCount().subscribe(count => {
-      this.length = count;
-    });
-    this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
-      console.log(partnerships);
-      this.dataSource = partnerships;
-    });
-    this.subscription = this.navigationService.searchState$.subscribe((key: string) => {
-      this.partnershipsService.getPartnershipsByAny(key).subscribe(partnerships => {
-        this.dataSource = partnerships;
-      }, (error: HttpErrorResponse) => {
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
-      });
-    });
-  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
 }

@@ -1,12 +1,10 @@
+<!-- <app-print-iframe></app-print-iframe> -->
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
     <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-topbar (sidenavToggle)="sidenav.toggle()"></app-topbar>
-    <div class="container-spinner" *ngIf="isLoading">
-      <mat-spinner class="spinner"></mat-spinner>
-    </div>
+    <app-toolbar (sidenavToggle)="sidenav.toggle()"></app-toolbar>
     <main *ngIf="isStart">
       <router-outlet></router-outlet>
     </main>

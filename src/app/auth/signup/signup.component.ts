@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -14,25 +13,23 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 export class SignupComponent implements OnInit {
 
   constructor(
-    private matSnackBar: MatSnackBar,
-    private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private navigationService: NavigationService,
-    private router: Router,  
-  ) {
-    this.signupForm = this.formBuilder.group({
-      user: this.formBuilder.group({
-        email: [ null, [ Validators.required, Validators.email ] ],
-        password: [ null, [ Validators.required, Validators.minLength(8) ] ],
-      }),
-      business: this.formBuilder.group({
-        name: [ null, Validators.required ],
-        document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
-      }),
-    });
-  }
+    private readonly authService: AuthService,
+    private readonly formBuilder: FormBuilder,
+    private readonly navigationService: NavigationService,
+    private readonly router: Router,  
+  ) { }
     
-  public signupForm: FormGroup;
+  public signupForm: FormGroup = this.formBuilder.group({
+    user: this.formBuilder.group({
+      email: [ null, [ Validators.required, Validators.email ] ],
+      password: [ null, [ Validators.required, Validators.minLength(8) ] ],
+      allGuaranties: true,
+    }),
+    business: this.formBuilder.group({
+      name: [ null, Validators.required ],
+      document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
+    }),
+  });
   public isLoading: boolean = false;
 
   ngOnInit(): void {}
@@ -40,22 +37,18 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     if (this.signupForm.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       this.authService.register(this.signupForm.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
+        this.navigationService.loadBarFinish();
         this.router.navigate(['/login']);
-        this.matSnackBar.open('Registrado correctamente', 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.showMessage('Registrado correctamente')
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

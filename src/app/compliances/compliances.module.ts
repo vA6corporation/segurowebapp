@@ -7,22 +7,25 @@ import { CreateCompliancesComponent } from './create-compliances/create-complian
 import { EditCompliancesComponent } from './edit-compliances/edit-compliances.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DialogBeneficiariesComponent } from '../dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogPartnershipsComponent } from '../dialog-partnerships/dialog-partnerships.component';
+import { CustomersModule } from '../customers/customers.module';
+import { PartnershipsModule } from '../partnerships/partnerships.module';
+import { DialogComplianceComponent } from './dialog-compliance/dialog-compliance.component';
+// import { DepositsModule } from '../deposits/deposits.module';
 
 @NgModule({
   declarations: [
     CompliancesComponent, 
     CreateCompliancesComponent, 
-    EditCompliancesComponent, 
-    DialogBeneficiariesComponent,
-    DialogPartnershipsComponent,
+    EditCompliancesComponent, DialogComplianceComponent, 
   ],
   imports: [
     CommonModule,
     CompliancesRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    CustomersModule,
+    PartnershipsModule,
+    // DepositsModule,
   ]
 })
 export class CompliancesModule { }

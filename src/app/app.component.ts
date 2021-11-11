@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { NavigationService } from './navigation/navigation.service';
 
@@ -12,26 +12,27 @@ import { NavigationService } from './navigation/navigation.service';
 export class AppComponent {
 
   constructor(
-    private navigationService: NavigationService,
-    private authService: AuthService,
-    private router: Router,
+    private readonly navigationService: NavigationService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {}
 
   isLoading: boolean = true;
   isStart: boolean = false;
 
   ngOnInit(): void {
-    this.navigationService.loadSpinnerState$.subscribe((loadState: boolean) => {
-      this.isLoading = loadState;
+    this.navigationService.handlerLoadSpinner().subscribe(state => {
+      this.isLoading = state;
     });
     const accessToken = localStorage.getItem('accessToken');
     this.authService.getSession(accessToken).subscribe(res => {
       console.log(res);
       this.authService.setAccessToken(accessToken);
-      this.authService.setUserId(res.userId);
-      this.authService.setBusinessId(res.businessId);
-      this.authService.setUserName(res.name);
+      const { user, business } = res;
       this.authService.loggedIn();
+      this.authService.setUser(user);
+      this.authService.setBusiness(business);
       this.navigationService.loadSpinnerFinish();
       this.isStart = true;
     }, (error: HttpErrorResponse) => {
@@ -39,6 +40,15 @@ export class AppComponent {
       this.router.navigate(['/login']);
       this.navigationService.loadSpinnerFinish();
       this.isStart = true;
+    });
+
+    this.router.events.forEach((event) => {
+      if(event instanceof NavigationStart) {
+        this.route.data.subscribe(() => {
+          this.navigationService.setMenu([]);
+          this.navigationService.isMainToolbar();
+        });
+      }
     });
   }
 }

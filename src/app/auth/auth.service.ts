@@ -1,7 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpService } from 'src/app/http.service';
 import { HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { UserModel } from '../users/user.model';
+import { BusinessModel } from './business.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +11,15 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   constructor(
-    private httpService: HttpService,
+    private readonly httpService: HttpService,
   ) { }
-    
-  public authChange$: EventEmitter<boolean> = new EventEmitter();
-  public userName$: EventEmitter<string> = new EventEmitter();
-  public businessId: string = '';
-  public userId: string = '';
+  
+  private user$: Subject<UserModel|null> = new Subject();
+  private business$: Subject<BusinessModel|null> = new Subject();
+  private authStatus$: EventEmitter<boolean> = new EventEmitter();
+
+  private user: UserModel|null = null;
+  private business: BusinessModel|null = null;
 
   setAccessToken(accessToken: string|null): void {
     this.httpService.accessToken = accessToken;
@@ -31,39 +35,55 @@ export class AuthService {
   }
 
   loggedIn(): void {
-    this.authChange$.emit(true);
+    this.authStatus$.emit(true);
   }
 
   loggedOut(): void {
-    this.authChange$.emit(false);
+    this.authStatus$.emit(false);
   }
 
-  setUserName(name: string) {
-    this.userName$.emit(name);
+  handlerAuthStatus(): Observable<boolean> {
+    return this.authStatus$.asObservable();
   }
 
-  setUserId(userId: string) {
-    this.userId = userId;
+  setUser(user: UserModel): void {
+    this.user = user;
+    this.user$.next(user);
   }
 
-  setBusinessId(businessId: string) {
-    this.businessId = businessId;
+  getUser(): Observable<UserModel|null> {
+    setTimeout(() => {
+      this.user$.next(this.user);
+    });
+    return this.user$.asObservable();
   }
 
-  register(signupForm: any): Observable<any> {
+  setBusiness(business: BusinessModel): void {
+    this.business = business;
+    this.business$.next(business);
+  }
+
+  getBusiness(): Observable<BusinessModel|null> {
+    setTimeout(() => {
+      this.business$.next(this.business);
+    });
+    return this.business$.asObservable();
+  }
+
+  register(signupForm: any): Observable<void> {
     return this.httpService.post('businesses', signupForm);
   }
 
   logout(): void {
     this.setAccessToken(null);
-    this.authChange$.emit(false);
+    this.authStatus$.emit(false);
   }
 
-  getSession(accessToken: string|null): Observable<any> {
+  getSession(accessToken: string|null): Observable<{ user: UserModel, business: BusinessModel }> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
-    })
+    });
     return this.httpService.get('profile', headers);
   }
 }

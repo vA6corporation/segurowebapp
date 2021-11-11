@@ -14,20 +14,24 @@ import { UsersService } from '../users.service';
 export class EditUsersComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
-    private usersService: UsersService,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
-    private activatedRoute: ActivatedRoute,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      name: [ null, Validators.required ],
-      email: [ null, [ Validators.required, Validators.email ] ],
-      password: [ null, Validators.required ],
-      allGuaranties: false,
-    });
+    private readonly formBuilder: FormBuilder,
+    private readonly usersService: UsersService,
+    private readonly navigationService: NavigationService,
+    private readonly route: ActivatedRoute,
+  ) { }
 
-    this.activatedRoute.params.subscribe(async params => {
+  public formGroup: FormGroup = this.formBuilder.group({
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    password: [ null, Validators.required ],
+    allGuaranties: false,
+  });
+
+  private userId: string = '';
+  public isLoading: boolean = false;
+
+  ngOnInit(): void {
+    this.route.params.subscribe(async params => {
       this.userId = params.userId;
       this.usersService.getUserById(this.userId).subscribe(user => {
         console.log(user);
@@ -36,29 +40,19 @@ export class EditUsersComponent implements OnInit {
     });
   }
 
-  public formGroup: FormGroup;
-  private userId: string = '';
-  public isLoading: boolean = false;
-
-  ngOnInit(): void {}
-
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       this.usersService.update(this.formGroup.value, this.userId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open('Se han guardado los cambios', 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Se han guardado los cambios');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

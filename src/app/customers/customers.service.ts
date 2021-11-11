@@ -4,14 +4,17 @@ import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
 import { Customer } from './customer.model'
 
+// interface DistricModel {
+//   name: string,
+// }
+
 @Injectable({
   providedIn: 'root'
 })
 export class CustomersService {
   
   constructor(
-    private httpService: HttpService,
-    private authService: AuthService,
+    private readonly httpService: HttpService,
   ) { }
 
   getCustomersByAny(key: string): Observable<Customer[]> {
@@ -31,8 +34,6 @@ export class CustomersService {
   }
 
   create(customer: Customer): Observable<Customer> {
-    customer.businessId = this.authService.businessId;
-    customer.userId = this.authService.userId;
     return this.httpService.post('customers', { customer });
   }
 

@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { DialogMaterialComponent } from '../dialog-material/dialog-material.component';
 import { Material } from '../material.model';
 import { MaterialsService } from '../materials.service';
 
@@ -15,10 +16,12 @@ import { MaterialsService } from '../materials.service';
 export class MaterialsComponent implements OnInit {
 
   constructor(
-    private materialsService: MaterialsService,
-    private navigationService: NavigationService,
-    private matSnackBar: MatSnackBar,
+    private readonly materialsService: MaterialsService,
+    private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
   ) { }
+
+  private handlerSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public dataSource: Material[] = [];
@@ -26,7 +29,26 @@ export class MaterialsComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private subscription: Subscription = new Subscription();
+
+  ngOnInit(): void {
+    this.navigationService.setTitle('Adelanto de materiales');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
+    this.fetchData();
+    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+      this.materialsService.getMaterialsByAny(key).subscribe(materials => {
+        this.dataSource = materials;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.handlerSearch$.unsubscribe();
+  }
 
   handlePageEvent(event: PageEvent): void {
     this.materialsService.getMaterialsByPage(event.pageIndex + 1, event.pageSize).subscribe(materials => {
@@ -36,40 +58,33 @@ export class MaterialsComponent implements OnInit {
 
   sendMail(materialId: string): void {
     this.navigationService.loadBarStart();
-    this.materialsService.sendMail(materialId).subscribe(material => {
+    this.materialsService.sendMail(materialId).subscribe(mail => {
       this.navigationService.loadBarFinish();
-      const { customer } = material;
-      this.matSnackBar.open(`Enviado correctamente a: ${customer?.email}`, 'Aceptar', {
-        duration: 5000,
-      });
+      this.navigationService.showMessage(`Enviado correctamente a: ${mail.to}`);
     }, (error: HttpErrorResponse) => {
       this.navigationService.loadBarFinish();
-      this.matSnackBar.open(error.error.message, 'Aceptar', {
-        duration: 5000,
-      });
-    });
-  }
-  
-  ngOnInit(): void {
-    this.materialsService.getMaterialsCount().subscribe(count => {
-      this.length = count;
-    });
-    this.materialsService.getMaterialsByPage(this.pageIndex + 1, this.pageSize).subscribe(materials => {
-      console.log(materials);
-      this.dataSource = materials;
-    });
-    this.subscription = this.navigationService.searchState$.subscribe((key: string) => {
-      this.materialsService.getMaterialsByAny(key).subscribe(materials => {
-        this.dataSource = materials;
-      }, (error: HttpErrorResponse) => {
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
-      });
+      this.navigationService.showMessage(error.error.message);
     });
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  onShowDetails(materialId: string) {
+    this.matDialog.open(DialogMaterialComponent, {
+      position: { top: '20px' },
+      data: materialId,
+    });
+  }
+
+  async onDelete(materialId: string) {
+    const ok = confirm('Esta seguro de eliminar?...');
+    if (ok) {
+      await this.materialsService.delete(materialId).toPromise();
+      this.navigationService.showMessage('Eliminado correctamente');
+      this.fetchData();
+    }
+  }
+
+  async fetchData() {
+    this.length = await this.materialsService.getMaterialsCount().toPromise();
+    this.dataSource = await this.materialsService.getMaterialsByPage(this.pageIndex + 1, this.pageSize).toPromise();
   }
 }

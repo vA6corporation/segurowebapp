@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { FinanciersService } from '../financiers.service';
@@ -14,22 +13,26 @@ import { FinanciersService } from '../financiers.service';
 export class EditFinanciersComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
-    private financiersService: FinanciersService,
-    private activatedRoute: ActivatedRoute,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      document: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-      email: [ null, [ Validators.required, Validators.email ] ],
-      mobileNumber: null,
-      phoneNumber: null,
-      annexed: null,
-    });
+    private readonly formBuilder: FormBuilder,
+    private readonly financiersService: FinanciersService,
+    private readonly navigationService: NavigationService,
+    private readonly route: ActivatedRoute,
+  ) { }
+    
+  public formGroup: FormGroup = this.formBuilder.group({
+    document: [ null, Validators.required ],
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    mobileNumber: null,
+    phoneNumber: null,
+    annexed: null,
+  });
 
-    this.activatedRoute.params.subscribe(async params => {
+  private financierId: string = '';
+  public isLoading: boolean = false;
+
+  ngOnInit(): void {
+    this.route.params.subscribe(async params => {
       this.financierId = params.financierId;
       this.financiersService.getFinancierById(this.financierId).subscribe(financier => {
         console.log(financier);
@@ -41,30 +44,20 @@ export class EditFinanciersComponent implements OnInit {
       });
     });
   }
-    
-  public formGroup: FormGroup;
-  private financierId: string = '';
-  public isLoading: boolean = false;
-
-  ngOnInit(): void {}
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       this.financiersService.update(this.formGroup.value, this.financierId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open('Se han guardado los cambios', 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Se han guardado los cambios');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

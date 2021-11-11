@@ -7,6 +7,7 @@ import { CreatePartnershipsComponent } from './create-partnerships/create-partne
 import { EditPartnershipsComponent } from './edit-partnerships/edit-partnerships.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogPartnershipsComponent } from './dialog-partnerships/dialog-partnerships.component';
 
 
 @NgModule({
@@ -14,12 +15,17 @@ import { ReactiveFormsModule } from '@angular/forms';
     PartnershipsComponent, 
     CreatePartnershipsComponent, 
     EditPartnershipsComponent,
+    PartnershipsComponent,
+    DialogPartnershipsComponent
   ],
   imports: [
     CommonModule,
     PartnershipsRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+  ],
+  exports: [
+    DialogPartnershipsComponent,
   ]
 })
 export class PartnershipsModule { }

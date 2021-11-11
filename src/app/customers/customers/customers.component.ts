@@ -15,44 +15,50 @@ import { Subscription } from 'rxjs';
 export class CustomersComponent implements OnInit {
 
   constructor(
-    private customersService: CustomersService,
-    private navigationService: NavigationService,
-    private matSnackBar: MatSnackBar,
-  ) {}
+    private readonly customersService: CustomersService,
+    private readonly navigationService: NavigationService,
+  ) { }
     
+  private handlerSearch$: Subscription = new Subscription();
+
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
   public dataSource: Customer[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private subscription: Subscription = new Subscription();
-
-  handlePageEvent(event: PageEvent): void {
-    this.customersService.getCustomersByPage(event.pageIndex + 1, event.pageSize).subscribe(customers => {
-      this.dataSource = customers;
-    });
-  }
-  
+    
   ngOnInit(): void {
+    this.navigationService.setTitle('Clientes');
+
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+
     this.customersService.getCustomersCount().subscribe(count => {
       this.length = count;
     });
+
     this.customersService.getCustomersByPage(this.pageIndex + 1, this.pageSize).subscribe(customers => {
       this.dataSource = customers;
     });
-    this.subscription = this.navigationService.searchState$.subscribe((key: string) => {
+
+    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
       this.customersService.getCustomersByAny(key).subscribe(customers => {
         this.dataSource = customers;
       }, (error: HttpErrorResponse) => {
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.showMessage(error.error.message);
       });
     });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.handlerSearch$.unsubscribe();
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.customersService.getCustomersByPage(event.pageIndex + 1, event.pageSize).subscribe(customers => {
+      this.dataSource = customers;
+    });
   }
 }

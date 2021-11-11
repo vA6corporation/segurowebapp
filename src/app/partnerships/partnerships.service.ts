@@ -10,8 +10,7 @@ import { Partnership } from './partnership.model';
 export class PartnershipsService {
 
   constructor(
-    private httpService: HttpService,
-    private authService: AuthService,
+    private readonly httpService: HttpService,
   ) { }
 
   getPartnershipsByAny(key: string): Observable<Partnership[]> {
@@ -31,8 +30,6 @@ export class PartnershipsService {
   }
 
   create(partnership: Partnership): Observable<Partnership> {
-    partnership.businessId = this.authService.businessId;
-    partnership.userId = this.authService.userId;
     return this.httpService.post('partnerships', { partnership });
   }
 

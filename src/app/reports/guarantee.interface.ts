@@ -3,7 +3,10 @@ import { Direct } from "../directs/direct.model";
 import { Material } from "../materials/material.model";
 
 export interface Guarantee {
-  materials: Material[],
-  compliances: Compliance[],
-  directs: Direct[],
+  _id: string,
+  guaranteeType: string,
+  isMarked: boolean,
+  // materials: Material[],
+  // compliances: Compliance[],
+  // directs: Direct[],
 }

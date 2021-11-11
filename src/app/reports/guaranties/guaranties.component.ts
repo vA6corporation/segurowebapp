@@ -1,10 +1,18 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { Compliance } from 'src/app/compliances/compliance.model';
+import { CompliancesService } from 'src/app/compliances/compliances.service';
+import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
+import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
+import { Direct } from 'src/app/directs/direct.model';
+import { DirectsService } from 'src/app/directs/directs.service';
+import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
+import { Material } from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { Mail } from 'src/app/mails/mail.interface';
 import { ReportsService } from '../reports.service';
 
 @Component({
@@ -16,16 +24,13 @@ export class GuarantiesComponent implements OnInit {
 
   constructor(
     private readonly materialsService: MaterialsService,
+    private readonly directsService: DirectsService,
+    private readonly compliancesService: CompliancesService,
     private readonly reportsService: ReportsService,
     private readonly navigationService: NavigationService,
-    private readonly matSnackBar: MatSnackBar,
     private readonly formBuilder: FormBuilder,
-  ) { 
-    this.formGroup = this.formBuilder.group({
-      startDate: [ null, Validators.required ],
-      endDate: [ null, Validators.required ],
-    });
-  }
+    private readonly matDialog: MatDialog,
+  ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: any[] = [];
@@ -33,8 +38,17 @@ export class GuarantiesComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private subscription: Subscription = new Subscription();
-  public formGroup: FormGroup;
+  public formGroup: FormGroup = this.formBuilder.group({
+    startDate: [ null, Validators.required ],
+    endDate: [ null, Validators.required ],
+  });
+    
+  ngOnInit(): void {
+    this.navigationService.setTitle('Cumplimiento de fianzas');
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true }
+    ]);
+  }
 
   onRangeChange() {
     if (this.formGroup.valid) {
@@ -48,25 +62,68 @@ export class GuarantiesComponent implements OnInit {
     }
   }
 
-  sendMail(materialId: string): void {
-    this.navigationService.loadBarStart();
-    this.materialsService.sendMail(materialId).subscribe(material => {
-      this.navigationService.loadBarFinish();
-      const { customer } = material;
-      this.matSnackBar.open(`Enviado correctamente a: ${customer?.email}`, 'Aceptar', {
-        duration: 5000,
-      });
-    }, (error: HttpErrorResponse) => {
-      this.navigationService.loadBarFinish();
-      this.matSnackBar.open(error.error.message, 'Aceptar', {
-        duration: 5000,
-      });
-    });
+  onShowDetails(guarantee: Direct|Compliance|Material) {
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.matDialog.open(DialogMaterialComponent, {
+          position: { top: '20px' },
+          data: guarantee._id,
+        });
+        break;
+      case 'GADF':
+        this.matDialog.open(DialogDirectComponent, {
+          position: { top: '20px' },
+          data: guarantee._id,
+        });
+        break;
+      case 'GFCF':
+        this.matDialog.open(DialogComplianceComponent, {
+          position: { top: '20px' },
+          data: guarantee._id,
+        });
+        break;
+    }
   }
-  
-  ngOnInit(): void { }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  async onMarkGuarantee(guarantee: any) {
+    guarantee.isMarked = !guarantee.isMarked;
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GADF':
+        this.directsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GFCF':
+        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
   }
+
+  async sendMail(guarantee: any): Promise<any> {
+    this.navigationService.loadBarStart();
+    let mail: Mail;
+    try {
+      switch (guarantee.guaranteeType) {
+        case 'GFCF':
+          mail = await this.compliancesService.sendMail(guarantee._id).toPromise();
+          break;
+        case 'GAMF':
+          mail = await this.materialsService.sendMail(guarantee._id).toPromise();
+          break;
+        case 'GADF':
+          mail = await this.directsService.sendMail(guarantee._id).toPromise();
+          break;
+        default:
+          mail = { to: '' };
+          break;
+      }
+      this.navigationService.showMessage('Email enviado');
+      this.onRangeChange();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 }

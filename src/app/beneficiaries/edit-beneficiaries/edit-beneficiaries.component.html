@@ -1,7 +1,7 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="beneficiary">
-      <h1>Editar Beneficiario</h1>
+      <!-- <h1>Editar Beneficiario</h1> -->
       <mat-form-field>
         <input type="text" matInput placeholder="N° de RUC *" formControlName="document" [maxlength]="maxlength">
       </mat-form-field>
@@ -24,8 +24,11 @@
         <input type="text" matInput placeholder="Direccion" formControlName="address">
       </mat-form-field>
     </div>
-    <button type="button" mat-raised-button routerLink="/beneficiaries">Volver</button>
-    <div class="divider"></div>
-    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">Guardar</button>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/beneficiaries">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
   </form>
 </section>

@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UsersService } from '../users.service';
@@ -14,11 +13,10 @@ import { UsersService } from '../users.service';
 export class CreateUsersComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
-    private usersService: UsersService,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
-    private router: Router,
+    private readonly formBuilder: FormBuilder,
+    private readonly usersService: UsersService,
+    private readonly navigationService: NavigationService,
+    private readonly router: Router,
   ) { 
     this.formGroup = this.formBuilder.group({
       name: [ null, Validators.required ],
@@ -36,22 +34,18 @@ export class CreateUsersComponent implements OnInit {
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       this.usersService.create(this.formGroup.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
+        this.navigationService.loadBarFinish();
         this.router.navigate(['/users']);
-        this.matSnackBar.open('Registrado correctamente', 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.showMessage('Registrado correctamente');
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

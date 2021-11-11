@@ -2,10 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Customer } from 'src/app/customers/customer.model';
-import { DialogCustomersComponent } from 'src/app/dialog-customers/dialog-customers.component';
+import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { PartnershipsService } from '../partnerships.service';
 
@@ -17,25 +16,33 @@ import { PartnershipsService } from '../partnerships.service';
 export class EditPartnershipsComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
-    private partnershipsService: PartnershipsService,
-    private matSnackBar: MatSnackBar,
-    private navigationService: NavigationService,
-    private activatedRoute: ActivatedRoute,
-    private matDialog: MatDialog,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      partnership: this.formBuilder.group({
-        _id: [ null, Validators.required ],
-        document: null,
-        name: [ null, Validators.required ],
-        address: null,
-        representative: null,
-        representativeDocument: null,
-      }),
-    });
+    private readonly formBuilder: FormBuilder,
+    private readonly partnershipsService: PartnershipsService,
+    private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
+    private readonly route: ActivatedRoute,
+  ) { }
+    
+  public formGroup: FormGroup = this.formBuilder.group({
+    partnership: this.formBuilder.group({
+      _id: [ null, Validators.required ],
+      document: null,
+      name: [ null, Validators.required ],
+      address: null,
+      customerId: [ null, Validators.required ],
+      representative: [ null, Validators.required ],
+      representativeDocument: [ null, Validators.required ],
+    }),
+  });
 
-    this.activatedRoute.params.subscribe(params => {
+  public isLoading: boolean = false;
+  private partnershipId: string = '';
+  public customers: Customer[] = [];
+  
+  ngOnInit(): void { 
+    this.navigationService.setTitle('Editar consorcio');
+    this.navigationService.backTo();
+    this.route.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
         console.log(partnership);
@@ -45,13 +52,6 @@ export class EditPartnershipsComponent implements OnInit {
       });
     });
   }
-    
-  public formGroup: FormGroup;
-  public isLoading: boolean = false;
-  private partnershipId: string = '';
-  public customers: Customer[] = [];
-  
-  ngOnInit(): void { }
 
   openDialogCustomers(): void {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
@@ -74,23 +74,19 @@ export class EditPartnershipsComponent implements OnInit {
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
-      this.navigationService.loadSpinnerStart();
+      this.navigationService.loadBarStart();
       const { partnership } = this.formGroup.value;
       partnership.customerIds = this.customers.map(e => e._id);
       this.partnershipsService.update(partnership, this.partnershipId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open('Se han guardado los cambios', 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Se han guardado los cambios');
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;
-        this.navigationService.loadSpinnerFinish();
-        this.matSnackBar.open(error.error.message, 'Aceptar', {
-          duration: 5000,
-        });
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }
