@@ -1,6 +1,6 @@
 <mat-nav-list class="pt-0">
   <div class="nav-header p-2 text-white overflow-hidden">
-    <p class="text-capitalize text-bold mb-1">{{ business?.tradeName }}</p>
+    <p class="text-capitalize text-bold mb-1">{{ business?.name }}</p>
     <span class="m-0 text-capitalize text-truncate">{{ user?.name }}</span>
   </div>
   <!-- <a href="#" mat-list-item routerLink="/dashboard" (click)="onClose()">
@@ -31,6 +31,26 @@
     <mat-icon class="mr-2">people</mat-icon>
     <span>Usuarios</span>
   </a>
+  <!-- <a href="#" mat-list-item routerLink="/users" (click)="onClose()">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Usuarios</span>
+  </a> -->
+  <a href="#" mat-list-item routerLink="/providers" (click)="onClose()">
+    <mat-icon class="mr-2">face</mat-icon>
+    <span>Proveedores</span>
+  </a>
+  <a href="#" mat-list-item routerLink="/paymentOrders" (click)="onClose()">
+    <mat-icon class="mr-2">local_atm</mat-icon>
+    <span>Ordenes de pago</span>
+  </a>
+  <a href="#" mat-list-item routerLink="/banks" (click)="onClose()">
+    <mat-icon class="mr-2">account_balance_wallet</mat-icon>
+    <span>Cuentas bancarias</span>
+  </a>
+  <a href="#" mat-list-item routerLink="/workers" (click)="onClose()">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Personal</span>
+  </a>
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header>
@@ -60,13 +80,19 @@
         <span>Cumplimiento de Fianzas</span>
       </a>
       <a href="#" mat-list-item routerLink="/cheques" (click)="onClose()">
-        <span>Cheques por cobrar</span>
+        <span>Pagos por cobrar</span>
       </a>
       <a href="#" mat-list-item routerLink="/cheques/all" (click)="onClose()">
-        <span>Todos los cheques</span>
+        <span>Todos los pagos</span>
       </a>
       <a href="#" mat-list-item routerLink="/mails" (click)="onClose()">
         <span>Mails enviados</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/collections" (click)="onClose()">
+        <span>Recaudacion</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/constructionStatus" (click)="onClose()">
+        <span>Estado de obras</span>
       </a>
     </mat-expansion-panel>
   </mat-accordion>

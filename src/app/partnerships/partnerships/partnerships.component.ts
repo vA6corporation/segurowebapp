@@ -19,7 +19,7 @@ export class PartnershipsComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
     
-  private handlerSearch$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'document', 'name', 'customer', 'actions' ];
   public dataSource: Partnership[] = [];
@@ -43,17 +43,20 @@ export class PartnershipsComponent implements OnInit {
       this.dataSource = partnerships;
     });
 
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
+      this.navigationService.loadBarStart();
       this.partnershipsService.getPartnershipsByAny(key).subscribe(partnerships => {
+        this.navigationService.loadBarFinish();
         this.dataSource = partnerships;
       }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
         this.navigationService.showMessage(error.error.message);
       });
     });
   }
 
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
 

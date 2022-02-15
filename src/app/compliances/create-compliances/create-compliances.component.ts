@@ -13,6 +13,9 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { Cheque } from 'src/app/cheques/cheque.model';
 import { Deposit } from 'src/app/deposits/deposit.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-compliances',
@@ -24,9 +27,10 @@ export class CreateCompliancesComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly compliancesService: CompliancesService,
+    private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
-    private readonly matDialog: MatDialog
+    private readonly matDialog: MatDialog,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -53,16 +57,30 @@ export class CreateCompliancesComponent implements OnInit {
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       guarantee: null,
+      prima: null,
+      commission: null,
+      workerId: null,
     }),
   });
 
   public isLoading: boolean = false;
   public deposits: Deposit[] = [];
   public cheques: Cheque[] = [];
+  public workers: WorkerModel[] = [];
+
+  private workers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.workers$.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.navigationService.backTo();
     this.navigationService.setTitle('Nuevo fiel cumplimiento');
+
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
   }
 
   removeCheque(index: number): void {
@@ -75,7 +93,6 @@ export class CreateCompliancesComponent implements OnInit {
 
   openDialogCustomers() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -87,7 +104,6 @@ export class CreateCompliancesComponent implements OnInit {
 
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -99,7 +115,6 @@ export class CreateCompliancesComponent implements OnInit {
 
   openDialogBeneficiaries() {
     const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -111,21 +126,21 @@ export class CreateCompliancesComponent implements OnInit {
 
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
     
     dialogRef.afterClosed().subscribe(partnership => {
-      const { customer } = partnership;
-      this.formGroup.patchValue({ customer: customer || {} });
-      this.formGroup.patchValue({ partnership: partnership || {} });
+      if (partnership) {
+        const { customer } = partnership;
+        this.formGroup.patchValue({ customer: customer || {} });
+        this.formGroup.patchValue({ partnership: partnership || {} });
+      }
     });
   }
 
   openDialogCheques() {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -139,7 +154,6 @@ export class CreateCompliancesComponent implements OnInit {
 
   openDialogDeposits() {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

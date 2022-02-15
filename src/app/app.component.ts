@@ -22,7 +22,7 @@ export class AppComponent {
   isStart: boolean = false;
 
   ngOnInit(): void {
-    this.navigationService.handlerLoadSpinner().subscribe(state => {
+    this.navigationService.handleLoadSpinner().subscribe(state => {
       this.isLoading = state;
     });
     const accessToken = localStorage.getItem('accessToken');

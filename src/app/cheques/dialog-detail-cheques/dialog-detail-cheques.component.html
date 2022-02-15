@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Detalles de pago</h2>
+<div mat-dialog-content>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Tipo de pago:</td>
+        <td class="text-uppercase">{{ cheque?.paymentType }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Monto:</td>
+        <td class="text-uppercase">{{ (cheque?.price || 0).toFixed(2) }}</td>
+      </tr>
+      <tr>
+        <td>F. de vencimiento:</td>
+        <td>{{ cheque?.paymentAt | date }}</td>
+      </tr>
+      <tr>
+        <td>F. de prorroga:</td>
+        <td>{{ cheque?.extensionAt | date }}</td>
+      </tr>
+      <tr>
+        <td>Observaciones:</td>
+        <td>{{ cheque?.observations }}</td>
+      </tr>
+      <tr>
+        <td>Garantia:</td>
+        <td>{{ cheque?.guarantee?.guaranteeType }}</td>
+      </tr>
+      <tr class="text-muted">
+        <td>ID:</td>
+        <td>{{ cheque?._id }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="my-3"></div>
+</div>
+<div class="spacer"></div>
+<mat-dialog-actions>
+  <span class="spacer"></span>
+  <button mat-button mat-stroked-button color="primary" mat-dialog-close>VOLVER</button>
+</mat-dialog-actions>

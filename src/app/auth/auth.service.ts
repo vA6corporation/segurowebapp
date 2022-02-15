@@ -42,7 +42,7 @@ export class AuthService {
     this.authStatus$.emit(false);
   }
 
-  handlerAuthStatus(): Observable<boolean> {
+  handleAuthStatus(): Observable<boolean> {
     return this.authStatus$.asObservable();
   }
 
@@ -57,6 +57,15 @@ export class AuthService {
     });
     return this.user$.asObservable();
   }
+
+  // getAuth() {
+  //   setTimeout(() => {
+  //     if (this.auth) {
+  //       this.auth$.next(this.auth);
+  //     }
+  //   });
+  //   return this.auth$.asObservable();
+  // }
 
   setBusiness(business: BusinessModel): void {
     this.business = business;
@@ -84,6 +93,6 @@ export class AuthService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     });
-    return this.httpService.get('profile', headers);
+    return this.httpService.get('profile', { headers });
   }
 }

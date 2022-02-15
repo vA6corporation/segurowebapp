@@ -32,6 +32,8 @@ export class EditFinanciersComponent implements OnInit {
   public isLoading: boolean = false;
 
   ngOnInit(): void {
+    this.navigationService.setTitle('Editar financiera');
+    this.navigationService.backTo();
     this.route.params.subscribe(async params => {
       this.financierId = params.financierId;
       this.financiersService.getFinancierById(this.financierId).subscribe(financier => {

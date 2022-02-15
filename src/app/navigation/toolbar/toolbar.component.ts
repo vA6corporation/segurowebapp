@@ -41,33 +41,33 @@ export class ToolbarComponent implements OnInit {
   public buttons: any[] = [];
 
   ngOnInit(): void {
-    this.navigationService.handlerTitle().subscribe(title => {
+    this.navigationService.handleTitle().subscribe(title => {
       this.title = title;
     });
 
-    this.navigationService.handlerBackTo().subscribe(isMainToolbar => {
+    this.navigationService.handleBackTo().subscribe(isMainToolbar => {
       this.isMainToolbar = isMainToolbar;
     });
 
-    this.navigationService.handlerBackTo().subscribe(isBackTo => {
+    this.navigationService.handleBackTo().subscribe(isBackTo => {
       this.isBackTo = isBackTo;
     });
   
-    this.authService.handlerAuthStatus().subscribe(isAuth => {
+    this.authService.handleAuthStatus().subscribe(isAuth => {
       console.log('isLogin', isAuth);
       
       this.isAuth = isAuth;
     });
 
-    this.navigationService.handlerLoadSpinner().subscribe(loadState => {
+    this.navigationService.handleLoadSpinner().subscribe(loadState => {
       this.isLoadingSpinner = loadState;
     });
 
-    this.navigationService.handlerLoadBar().subscribe(loadState => {
+    this.navigationService.handleLoadBar().subscribe(loadState => {
       this.isLoadingBar = loadState;
     });
 
-    this.navigationService.handlerMenu().subscribe(menus => {
+    this.navigationService.handleMenu().subscribe(menus => {
       const filterMenus = [];
       const filterButtons = [];
       this.showSearch = false;

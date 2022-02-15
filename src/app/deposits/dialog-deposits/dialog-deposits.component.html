@@ -1,11 +1,11 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off" class="fixActionRow">
-  <h1 mat-dialog-title *ngIf="deposit; else elseBlock">Editar deposito</h1>
+  <h2 mat-dialog-title *ngIf="deposit; else elseBlock">Editar deposito</h2>
   <ng-template #elseBlock>
-    <h1 mat-dialog-title>Agregar deposito</h1>
+    <h2 mat-dialog-title>Agregar deposito</h2>
   </ng-template>
   <div mat-dialog-content>
     <mat-form-field>
-      <input type="number" matInput placeholder="Monto *" formControlName="price">
+      <input type="number" matInput placeholder="Suma asegurada *" formControlName="price">
     </mat-form-field>
     <!-- <mat-form-field appearance="fill">
       <mat-label>Fecha de cobro *</mat-label>

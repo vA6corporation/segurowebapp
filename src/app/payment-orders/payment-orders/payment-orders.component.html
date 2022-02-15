@@ -1,0 +1,63 @@
+<section class="container">
+  <!-- <mat-form-field appearance="standard">
+    <mat-select [(value)]="locationCode" (selectionChange)="onLocationChange()">
+      <mat-option value="">TODOS LOS DISTRITOS</mat-option>
+      <mat-option *ngFor="let element of locations" [value]="element.code" class="text-uppercase">{{ element.name }}</mat-option>
+    </mat-select>
+  </mat-form-field> -->
+  <div class="mat-elevation-z2">
+    <table mat-table [dataSource]="dataSource" class="w-100">
+      <ng-container matColumnDef="provider">
+        <th mat-header-cell *matHeaderCellDef>Proveedor</th>
+        <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">{{ element.provider.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="concept">
+        <th mat-header-cell *matHeaderCellDef>Descripcion</th>
+        <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">{{ element.concept }}</td>
+      </ng-container>
+      <ng-container matColumnDef="charge">
+        <th mat-header-cell *matHeaderCellDef>Importe</th>
+        <td mat-cell *matCellDef="let element">{{ element.charge.toFixed(2) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="paymentAt">
+        <th mat-header-cell *matHeaderCellDef>F. de pago</th>
+        <td mat-cell *matCellDef="let element">{{ element.paymentAt | date }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button aria-label="Example icon-button with a menu">
+            <mat-icon *ngIf="element.pdfId">attach_file</mat-icon>
+          </button>
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button type="button" [routerLink]="['/paymentOrders', element._id, 'edit']" mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button type="button" *ngIf="element.pdfId" (click)="onShowPdf(element)" mat-menu-item>
+              <mat-icon>attach_file</mat-icon>
+              <span>Comprobante</span>
+            </button>
+            <button type="button" (click)="onDelete(element._id)" mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.isPaid }"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
+  </div>
+  <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
+    <button mat-fab color="primary" class="float-right" routerLink="/paymentOrders/create">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</section>

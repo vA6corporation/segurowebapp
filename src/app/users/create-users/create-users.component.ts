@@ -29,7 +29,10 @@ export class CreateUsersComponent implements OnInit {
   public formGroup: FormGroup;
   public isLoading: boolean = false;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.navigationService.setTitle('Nuevo usuario');
+    this.navigationService.backTo();
+  }
   
   onSubmit(): void {
     if (this.formGroup.valid) {

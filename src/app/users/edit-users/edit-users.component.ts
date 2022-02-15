@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UsersService } from '../users.service';
@@ -24,13 +23,17 @@ export class EditUsersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],
+    isActive: false,
     allGuaranties: false,
   });
 
   private userId: string = '';
   public isLoading: boolean = false;
+  public hide: boolean = true;
 
   ngOnInit(): void {
+    this.navigationService.setTitle('Editar usuario');
+    this.navigationService.backTo();
     this.route.params.subscribe(async params => {
       this.userId = params.userId;
       this.usersService.getUserById(this.userId).subscribe(user => {

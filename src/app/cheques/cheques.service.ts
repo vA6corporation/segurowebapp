@@ -16,8 +16,28 @@ export class ChequesService {
     return this.httpService.get('cheques/forPaid');
   }
 
+  getCountChequesByRangeDate(startDate: Date, endDate: Date): Observable<number> {
+    return this.httpService.get(`cheques/countChequesByRangeDate/${startDate}/${endDate}`);
+  }
+
   getByPage(pageIndex: number, pageSize: number): Observable<{ cheques: Cheque[], count: number }> {
     return this.httpService.get(`cheques/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/byRangeDatePage/${startDate}/${endDate}/${pageIndex}/${pageSize}`);
+  }
+
+  getCountByRangeDate(startDate: Date, endDate: Date): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/countByRangeDate/${startDate}/${endDate}`);
+  }
+
+  getChequeById(chequeId: string): Observable<Cheque> {
+    return this.httpService.get(`cheques/byId/${chequeId}`);
+  }
+
+  getByKey(key: string): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/byKey/${key}`);
   }
 
   update(cheque: Cheque, chequeId: string) {

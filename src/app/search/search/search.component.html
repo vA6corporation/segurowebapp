@@ -1,6 +1,27 @@
 <section class="container py-4">
-  <!-- <h1>Busqueda Global</h1> -->
   <div class="mat-elevation-z2">
+    <div class="d-flex">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de tramite</mat-label>
+        <mat-select [(value)]="processStatusCode" (selectionChange)="onStatusChange()">
+          <mat-option value="" disabled>TODOS LOS ESTADOS</mat-option>
+          <mat-option value="01">REDACCION</mat-option>
+          <mat-option value="02">LEGALIZACION</mat-option>
+          <mat-option value="03">CONFORMIDAD</mat-option>
+          <mat-option value="04">CONSTITUIDO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de revision</mat-label>
+        <mat-select [(value)]="status" (selectionChange)="onStatusChange()">
+          <mat-option value="" disabled>TODOS LAS REVISIONES</mat-option>
+          <mat-option value="01">SIN REVISAR</mat-option>
+          <mat-option value="02">RENOVAR</mat-option>
+          <mat-option value="03">NO RENOVAR</mat-option>
+          <mat-option value="04">LIBERADO</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <table mat-table [dataSource]="dataSource" class="w-100">
       <ng-container matColumnDef="guaranteeType">
         <th mat-header-cell *matHeaderCellDef>Garantia</th>
@@ -12,7 +33,7 @@
       </ng-container>
       <ng-container matColumnDef="customer">
         <th mat-header-cell *matHeaderCellDef>Cliente</th>
-        <td mat-cell *matCellDef="let element">{{ element.customer.name | uppercase }}</td>
+        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.customer.name | uppercase }}</td>
       </ng-container>
       <ng-container matColumnDef="policyNumber">
         <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
@@ -21,6 +42,10 @@
       <ng-container matColumnDef="endDate">
         <th mat-header-cell *matHeaderCellDef>Fecha de cumplimiento</th>
         <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -31,6 +56,12 @@
           <button type="button" *ngIf="!element.mails" mat-icon-button>
             <!-- <mat-icon>mail</mat-icon> -->
           </button>
+          <button type="button" *ngIf="element.isEmition" mat-icon-button>
+            <mat-icon>looks_one</mat-icon>
+          </button>
+          <button type="button" *ngIf="!element.isEmition" mat-icon-button>
+            <!-- <mat-icon>mail</mat-icon> -->
+          </button>
           <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -38,6 +69,22 @@
             <button type="button" (click)="onShowDetails(element)" mat-menu-item>
               <mat-icon>info</mat-icon>
               <span>Detalles</span>
+            </button>
+            <button type="button" (click)="onNotLookGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Sin revisar</span>
+            </button>
+            <button type="button" (click)="onRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Renovar</span>
+            </button>
+            <button type="button" (click)="onNotRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>No renovar</span>
+            </button>
+            <button type="button" (click)="onFreeGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Liberado</span>
             </button>
             <button type="button" *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
@@ -51,11 +98,15 @@
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </button>
+            <button type="button" (click)="onDelete(element)" mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Eliminar</span>
+            </button>
           </mat-menu>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.isMarked }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
     </table>
   </div>
 </section>

@@ -1,5 +1,5 @@
 <section class="container py-4">
-  <h1>Busqueda Global</h1>
+  <!-- <h1>Busqueda Global</h1> -->
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" class="w-100">
       <ng-container matColumnDef="guaranteeType">
@@ -55,7 +55,7 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.isMarked }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.status === 'RENEW', 'bg-warning': row.status === 'NOTRENEW', 'bg-danger': row.status === 'FREE' }"></tr>
     </table>
   </div>
 </section>

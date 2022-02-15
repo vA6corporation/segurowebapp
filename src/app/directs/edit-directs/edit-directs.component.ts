@@ -15,6 +15,9 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DepositsService } from 'src/app/deposits/deposits.service';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-directs',
@@ -27,6 +30,7 @@ export class EditDirectsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly directsService: DirectsService,
     private readonly chequesService: ChequesService,
+    private readonly workersService: WorkersService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
     private readonly route: ActivatedRoute,
@@ -51,6 +55,8 @@ export class EditDirectsComponent implements OnInit {
       name: null,
     }),
     direct: this.formBuilder.group({
+      processStatusCode: '01',
+      constructionCode: '01',
       _id: [ null, Validators.required ],
       policyNumber: [ null, Validators.required ],
       object: [ null, Validators.required ],
@@ -58,6 +64,10 @@ export class EditDirectsComponent implements OnInit {
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       guarantee: null,
+      prima: null,
+      isEmition: false,
+      commission: null,
+      workerId: null
     }),
   });
 
@@ -65,8 +75,17 @@ export class EditDirectsComponent implements OnInit {
   public isLoading: boolean = false;
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
+  public workers: WorkerModel[] = [];
+
+  private workers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.workers$.unsubscribe();
+  }
 
   ngOnInit(): void { 
+    this.navigationService.setTitle('Editar adelanto directo');
+    this.navigationService.backTo();
     this.route.params.subscribe(params => {
       this.directId = params.directId;
       this.directsService.getDirectById(this.directId).subscribe(direct => {
@@ -81,15 +100,22 @@ export class EditDirectsComponent implements OnInit {
         this.deposits = deposits;
       });
     });;
+
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
   }
 
   removeCheque(index: number): void {
-    const ok = confirm('Esta seguro de eliminar?...');
+    const ok = confirm('Esta seguro de anular?...');
     if (ok) {
       const cheque = this.cheques[index];
-      this.cheques.splice(index, 1);
-      this.chequesService.deleteOne(cheque._id || '').toPromise();
-      this.navigationService.showMessage('Se han guardado los cambios');
+      this.chequesService.deleteOne(cheque._id).subscribe(() => {
+        cheque.deletedAt = new Date().toString();
+        this.navigationService.showMessage('Anulado correctamente');
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
     }
   }
 
@@ -105,7 +131,6 @@ export class EditDirectsComponent implements OnInit {
 
   openDialogCustomers() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -119,7 +144,6 @@ export class EditDirectsComponent implements OnInit {
 
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -131,7 +155,6 @@ export class EditDirectsComponent implements OnInit {
 
   openDialogBeneficiaries() {
     const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -143,31 +166,48 @@ export class EditDirectsComponent implements OnInit {
 
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
     
     dialogRef.afterClosed().subscribe(partnership => {
-      const { customer } = partnership;
-      this.formGroup.patchValue({ customer: customer || {} });
-      this.formGroup.patchValue({ partnership: partnership || {} });
+      if (partnership) {
+        const { customer } = partnership;
+        this.formGroup.patchValue({ customer: customer || {} });
+        this.formGroup.patchValue({ partnership: partnership || {} });
+      }
     });
   }
 
   openDialogCheques() {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
 
     dialogRef.afterClosed().subscribe(cheque => {
       if (cheque) {
-        this.cheques.push(cheque);
         cheque.onModel = 'Direct';
         cheque.guaranteeId = this.directId;
-        this.chequesService.create(cheque).toPromise();
+        this.chequesService.create(cheque).subscribe(cheque => {
+          this.cheques.push(cheque);
+          this.navigationService.showMessage('Se han guardado los cambios');
+        });
+      }
+    });
+  }
+
+  onEditCheque(cheque: Cheque): void {
+    const dialogRef = this.matDialog.open(DialogChequesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: cheque,
+    });
+
+    dialogRef.afterClosed().subscribe(async updatedCheque => {
+      if (updatedCheque) {
+        Object.assign(cheque, updatedCheque);
+        await this.chequesService.update(updatedCheque, cheque._id).toPromise();
         this.navigationService.showMessage('Se han guardado los cambios');
       }
     });
@@ -175,7 +215,6 @@ export class EditDirectsComponent implements OnInit {
 
   openDialogDeposits() {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

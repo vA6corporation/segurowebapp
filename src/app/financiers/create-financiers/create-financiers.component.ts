@@ -29,7 +29,10 @@ export class CreateFinanciersComponent implements OnInit {
     annexed: null,
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.navigationService.setTitle('Nueva financiera');
+    this.navigationService.backTo();
+  }
 
   async onSubmit() {
     if (this.financierForm.valid) {

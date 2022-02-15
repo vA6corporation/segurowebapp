@@ -1,0 +1,96 @@
+<section class="container py-4">
+  <div class="mat-elevation-z2">
+    <table mat-table [dataSource]="dataSource" class="w-100">
+      <ng-container matColumnDef="guaranteeType">
+        <th mat-header-cell *matHeaderCellDef>Garantia</th>
+        <td mat-cell *matCellDef="let element">{{ element.guaranteeType }}</td>
+      </ng-container>
+      <ng-container matColumnDef="partnership">
+        <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'Ninguno' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.customer.name | uppercase }}</td>
+      </ng-container>
+      <ng-container matColumnDef="policyNumber">
+        <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+        <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endDate">
+        <th mat-header-cell *matHeaderCellDef>Fecha de cumplimiento</th>
+        <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button type="button" *ngIf="element.mails" mat-icon-button>
+            <mat-icon>mail</mat-icon>
+          </button>
+          <button type="button" *ngIf="!element.mails" mat-icon-button>
+            <!-- <mat-icon>mail</mat-icon> -->
+          </button>
+          <button type="button" *ngIf="element.isEmition" mat-icon-button>
+            <mat-icon>looks_one</mat-icon>
+          </button>
+          <button type="button" *ngIf="!element.isEmition" mat-icon-button>
+            <!-- <mat-icon>mail</mat-icon> -->
+          </button>
+          <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button type="button" (click)="onShowDetails(element)" mat-menu-item>
+              <mat-icon>info</mat-icon>
+              <span>Detalles</span>
+            </button>
+            <!-- <button type="button" (click)="onNotLookGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Sin revisar</span>
+            </button>
+            <button type="button" (click)="onRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Renovar</span>
+            </button>
+            <button type="button" (click)="onNotRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>No renovar</span>
+            </button>
+            <button type="button" (click)="onFreeGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Liberado</span>
+            </button> -->
+            <button type="button" *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button type="button" *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button type="button" *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'edit']" mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button type="button" (click)="onDelete(element)" mat-menu-item>
+              <mat-icon>delete</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
+    </table>  
+    <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator> -->
+  </div>
+  <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
+    <button mat-fab color="primary" class="float-right" routerLink="/financiers/create">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</section>

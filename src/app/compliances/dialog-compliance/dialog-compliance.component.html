@@ -12,7 +12,7 @@
         <td class="text-uppercase">{{ compliance?.object }}</td>
       </tr>
       <tr>
-        <td>Monto entregado:</td>
+        <td>Suma asegurada:</td>
         <td>{{ compliance?.price }}</td>
       </tr>
       <tr>
@@ -37,7 +37,7 @@
         <td>
           {{ (cheque?.price || 0).toFixed(2) }} 
           <span class="ml-2">
-            F. Vencimiento: {{ cheque.endDate | date }}
+            F. Vencimiento: {{ cheque.paymentAt | date }}
           </span>
         </td>
       </tr>
@@ -113,6 +113,6 @@
   </table>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>CANCELAR</button>
+  <button mat-button mat-dialog-close>VOLVER</button>
   <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
 </mat-dialog-actions>

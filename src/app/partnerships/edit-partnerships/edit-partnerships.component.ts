@@ -45,7 +45,6 @@ export class EditPartnershipsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
-        console.log(partnership);
         const { customers } = partnership;
         this.customers = customers;
         this.formGroup.patchValue({ partnership });
@@ -55,7 +54,6 @@ export class EditPartnershipsComponent implements OnInit {
 
   openDialogCustomers(): void {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

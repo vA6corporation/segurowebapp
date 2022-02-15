@@ -13,6 +13,9 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { Cheque } from 'src/app/cheques/cheque.model';
 import { Deposit } from 'src/app/deposits/deposit.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-directs',
@@ -25,6 +28,7 @@ export class CreateDirectsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly directsService: DirectsService,
     private readonly navigationService: NavigationService,
+    private readonly workersService: WorkersService,
     private readonly router: Router,
     private readonly matDialog: MatDialog
   ) { }
@@ -53,13 +57,30 @@ export class CreateDirectsComponent implements OnInit {
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       guarantee: null,
+      prima: null,
+      commission: null,
+      workerId: null
     }),
   });;
   public isLoading: boolean = false;
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
+  public workers: WorkerModel[] = [];
 
-  ngOnInit(): void { }
+  private workers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.workers$.unsubscribe();
+  }
+
+  ngOnInit(): void { 
+    this.navigationService.setTitle('Nuevo adelanto directo');
+    this.navigationService.backTo();
+
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
+  }
 
   removeCheque(index: number): void {
     this.cheques.splice(index, 1);
@@ -71,7 +92,6 @@ export class CreateDirectsComponent implements OnInit {
 
   openDialogCustomers() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -85,7 +105,6 @@ export class CreateDirectsComponent implements OnInit {
 
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -99,7 +118,6 @@ export class CreateDirectsComponent implements OnInit {
 
   openDialogBeneficiaries() {
     const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -113,21 +131,21 @@ export class CreateDirectsComponent implements OnInit {
 
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
     
     dialogRef.afterClosed().subscribe(partnership => {
-      const { customer } = partnership;
-      this.formGroup.patchValue({ customer: customer || {} });
-      this.formGroup.patchValue({ partnership: partnership || {} });
+      if (partnership) {
+        const { customer } = partnership;
+        this.formGroup.patchValue({ customer: customer || {} });
+        this.formGroup.patchValue({ partnership: partnership || {} });
+      }
     });
   }
 
   openDialogCheques() {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -141,7 +159,6 @@ export class CreateDirectsComponent implements OnInit {
 
   openDialogDeposits() {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
     private readonly reportsService: ReportsService,
   ) { }
 
-  private handlerSearch$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
@@ -33,12 +33,12 @@ export class DashboardComponent implements OnInit {
   public pageIndex: number = 0;
 
   ngOnInit(): void {
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
       this.reportsService.getGuarantiesByAny(key).subscribe(materials => {
+        this.navigationService.loadBarFinish();
         console.log(materials);
         this.dataSource = materials;
-        this.navigationService.loadBarFinish();
       }, (error: HttpErrorResponse) => {
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage(error.error.message);
@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
   onShowDetails(guarantee: Direct|Compliance|Material) {

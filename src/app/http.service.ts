@@ -1,7 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+
+interface Options {
+  headers?: HttpHeaders,
+  params?: Params,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +16,34 @@ export class HttpService {
 
   constructor(
     private readonly http: HttpClient,
-  ) {}
+  ) { }
 
   private baseUrl: string = environment.baseUrl;
   public accessToken: string|null = null;
 
-  get(url: string, headers?: HttpHeaders): Observable<any> {
+  get(url: string, options?: Options): Observable<any> {
+    let headers = options?.headers;
+    const params = options?.params;
     if (!headers) {
       headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.accessToken}`
       });
     }
-    return this.http.get(`${this.baseUrl}${url}`, { headers });
+    return this.http.get(`${this.baseUrl}${url}`, { headers, params });
   }
 
   post(url: string, body: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.accessToken}`
+    });
+    return this.http.post(`${this.baseUrl}${url}`, body, { headers });
+  }
+
+  postForm(url: string, body: any): Observable<any> {
+    const headers = new HttpHeaders({
+      // 'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.accessToken}`
     });
     return this.http.post(`${this.baseUrl}${url}`, body, { headers });

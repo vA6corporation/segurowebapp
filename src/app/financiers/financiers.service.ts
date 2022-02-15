@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
+import { Guarantee } from '../reports/guarantee.interface';
 import { Financier } from './financier.model'
 
 @Injectable({
@@ -27,6 +28,10 @@ export class FinanciersService {
 
   getCount(): Observable<number> {
     return this.httpService.get('financiers/count')
+  }
+
+  getEmitionGuaranties(financierId: string): Observable<Guarantee[]> {
+    return this.httpService.get(`reports/${financierId}/emitionGuaranties`);
   }
 
   create(financier: Financier): Observable<any> {

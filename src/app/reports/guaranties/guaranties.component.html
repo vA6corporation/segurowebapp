@@ -50,13 +50,25 @@
               <mat-icon>info</mat-icon>
               <span>Detalles</span>
             </button>
-            <button type="button" (click)="onMarkGuarantee(element)" *ngIf="element.isMarked" mat-menu-item>
+            <!-- <button type="button" (click)="onMarkGuarantee(element)" *ngIf="element.isMarked" mat-menu-item>
               <mat-icon>bookmark</mat-icon>
               <span>Desmarcar</span>
-            </button>
-            <button type="button" (click)="onMarkGuarantee(element)" *ngIf="!element.isMarked" mat-menu-item>
+            </button> -->
+            <button type="button" (click)="onNotLookGuarantee(element)" mat-menu-item>
               <mat-icon>bookmark</mat-icon>
-              <span>Resaltar</span>
+              <span>Sin revisar</span>
+            </button>
+            <button type="button" (click)="onRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Renovar</span>
+            </button>
+            <button type="button" (click)="onNotRenewGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>No renovar</span>
+            </button>
+            <button type="button" (click)="onFreeGuarantee(element)" mat-menu-item>
+              <mat-icon>bookmark</mat-icon>
+              <span>Liberado</span>
             </button>
             <button type="button" (click)="sendMail(element)" mat-menu-item>
               <mat-icon>mail</mat-icon>
@@ -66,7 +78,7 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.isMarked }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.status === 'RENEW', 'bg-warning': row.status === 'NOTRENEW', 'bg-danger': row.status === 'FREE' }"></tr>
     </table>
   </div>
 </section>

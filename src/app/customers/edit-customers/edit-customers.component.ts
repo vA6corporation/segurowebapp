@@ -42,6 +42,8 @@ export class EditCustomersComponent implements OnInit {
   public maxlength: number = 11;
 
   ngOnInit(): void { 
+    this.navigationService.setTitle('Editar cliente');
+    this.navigationService.backTo();
     this.formGroup.get('customer.typeDocument')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':

@@ -15,6 +15,9 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DepositsService } from 'src/app/deposits/deposits.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { Subscription } from 'rxjs';
+import { WorkersService } from 'src/app/workers/workers.service';
 
 @Component({
   selector: 'app-edit-materials',
@@ -26,6 +29,7 @@ export class EditMaterialsComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly materialsService: MaterialsService,
+    private readonly workersService: WorkersService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
@@ -51,12 +55,18 @@ export class EditMaterialsComponent implements OnInit {
       name: null,
     }),
     material: this.formBuilder.group({
+      processStatusCode: '01',
+      constructionCode: '01',
       policyNumber: [ null, Validators.required ],
       object: [ null, Validators.required ],
       price: [ null, Validators.required ],
       startDate: [null, Validators. required ],
       endDate: [ null, Validators.required ],
       guarantee: null,
+      prima: null,
+      isEmition: false,
+      commission: null,
+      workerId: null,
     }),
   });
 
@@ -64,6 +74,13 @@ export class EditMaterialsComponent implements OnInit {
   private materialId: string = '';
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
+  public workers: WorkerModel[] = [];
+
+  private workers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.workers$.unsubscribe();
+  }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
@@ -82,15 +99,22 @@ export class EditMaterialsComponent implements OnInit {
         this.deposits = deposits;
       });
     });
+
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
   }
 
   removeCheque(index: number): void {
-    const ok = confirm('Esta seguro de aliminar?...');
+    const ok = confirm('Esta seguro de anular?...');
     if (ok) {
       const cheque = this.cheques[index];
-      this.cheques.splice(index, 1);
-      this.chequesService.deleteOne(cheque._id || '').toPromise();
-      this.navigationService.showMessage('Se han guardado los cambios');
+      this.chequesService.deleteOne(cheque._id).subscribe(() => {
+        cheque.deletedAt = new Date().toString();
+        this.navigationService.showMessage('Anulado correctamente');
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
     }
   }
 
@@ -99,14 +123,14 @@ export class EditMaterialsComponent implements OnInit {
     if (ok) {
       const deposit = this.deposits[index];
       this.deposits.splice(index, 1);
-      this.depositsService.deleteOne(deposit._id || '').toPromise();
-      this.navigationService.showMessage('Se han guardado los cambios');
+      this.depositsService.deleteOne(deposit._id || '').subscribe(() => {
+        this.navigationService.showMessage('Se han guardado los cambios');
+      });
     }
   }
 
   openDialogCustomers() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -118,7 +142,6 @@ export class EditMaterialsComponent implements OnInit {
 
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -130,7 +153,6 @@ export class EditMaterialsComponent implements OnInit {
 
   openDialogBeneficiaries() {
     const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
@@ -142,31 +164,48 @@ export class EditMaterialsComponent implements OnInit {
 
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
     
     dialogRef.afterClosed().subscribe(partnership => {
-      const { customer } = partnership;
-      this.formGroup.patchValue({ customer: customer || {} });
-      this.formGroup.patchValue({ partnership: partnership || {} });
+      if (partnership) {
+        const { customer } = partnership;
+        this.formGroup.patchValue({ customer: customer || {} });
+        this.formGroup.patchValue({ partnership: partnership || {} });
+      }
     });
   }
 
   openDialogCheques() {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(async cheque => {
+    dialogRef.afterClosed().subscribe(cheque => {
       if (cheque) {
-        this.cheques.push(cheque);
         cheque.onModel = 'Material';
         cheque.guaranteeId = this.materialId;
-        await this.chequesService.create(cheque).toPromise();
+        this.chequesService.create(cheque).subscribe(cheque => {
+          this.cheques.push(cheque);
+          this.navigationService.showMessage('Se han guardado los cambios');
+        });
+      }
+    });
+  }
+
+  onEditCheque(cheque: Cheque): void {
+    const dialogRef = this.matDialog.open(DialogChequesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: cheque,
+    });
+
+    dialogRef.afterClosed().subscribe(async updatedCheque => {
+      if (updatedCheque) {
+        Object.assign(cheque, updatedCheque);
+        await this.chequesService.update(updatedCheque, cheque._id).toPromise();
         this.navigationService.showMessage('Se han guardado los cambios');
       }
     });
@@ -174,7 +213,6 @@ export class EditMaterialsComponent implements OnInit {
 
   openDialogDeposits() {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

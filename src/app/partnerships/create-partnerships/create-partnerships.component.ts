@@ -43,7 +43,6 @@ export class CreatePartnershipsComponent implements OnInit {
 
   openDialogCustomers(): void {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      height: '400px',
       width: '600px',
       position: { top: '20px' }
     });

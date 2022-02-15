@@ -17,7 +17,7 @@ export class MailsComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  private handlerSearch$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'date', 'user', 'to', 'policyNumber', 'customer', 'actions' ];
   public dataSource: Mail[] = [];
@@ -33,7 +33,7 @@ export class MailsComponent implements OnInit {
     ]);
 
     this.fetchData();
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe(async (key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(async (key: string) => {
       this.navigationService.loadBarStart();
       const mails = await this.mailsService.getManyByAny(key).toPromise();
       this.dataSource = mails;
@@ -42,7 +42,7 @@ export class MailsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
   handlePageEvent(event: PageEvent): void {

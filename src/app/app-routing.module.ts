@@ -53,6 +53,30 @@ const routes: Routes = [
   {
     path: 'mails',
     loadChildren: () => import('./mails/mails.module').then(m => m.MailsModule)
+  },
+  {
+    path: 'collections',
+    loadChildren: () => import('./collections/collections.module').then(m => m.CollectionsModule)
+  },
+  {
+    path: 'constructionStatus',
+    loadChildren: () => import('./construction-status/construction-status.module').then(m => m.ConstructionStatusModule)
+  },
+  {
+    path: 'workers',
+    loadChildren: () => import('./workers/workers.module').then(m => m.WorkersModule)
+  },
+  {
+    path: 'providers',
+    loadChildren: () => import('./providers/providers.module').then(m => m.ProvidersModule)
+  },
+  {
+    path: 'paymentOrders',
+    loadChildren: () => import('./payment-orders/payment-orders.module').then(m => m.PaymentOrdersModule)
+  },
+  {
+    path: 'banks',
+    loadChildren: () => import('./banks/banks.module').then(m => m.BanksModule)
   }
 ];
 

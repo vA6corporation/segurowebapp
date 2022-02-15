@@ -54,7 +54,7 @@ export class GuarantiesComponent implements OnInit {
     if (this.formGroup.valid) {
       const { startDate, endDate } = this.formGroup.value;
       this.navigationService.loadBarStart();
-      this.reportsService.getGuarantiesByRange(startDate, endDate).subscribe(guaranties => {
+      this.reportsService.getGuarantiesByRangeDate(startDate, endDate).subscribe(guaranties => {
         console.log(guaranties);
         this.navigationService.loadBarFinish();
         this.dataSource = guaranties;
@@ -85,8 +85,56 @@ export class GuarantiesComponent implements OnInit {
     }
   }
 
-  async onMarkGuarantee(guarantee: any) {
-    guarantee.isMarked = !guarantee.isMarked;
+  async onRenewGuarantee(guarantee: any) {
+    guarantee.status = '02';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GADF':
+        this.directsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GFCF':
+        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onNotRenewGuarantee(guarantee: any) {
+    guarantee.status = '03';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GADF':
+        this.directsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GFCF':
+        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onFreeGuarantee(guarantee: any) {
+    guarantee.status = '04';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GADF':
+        this.directsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case 'GFCF':
+        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onNotLookGuarantee(guarantee: any) {
+    guarantee.status = '01';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
         this.materialsService.update(guarantee, guarantee._id).toPromise();

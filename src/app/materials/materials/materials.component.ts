@@ -21,7 +21,7 @@ export class MaterialsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
 
-  private handlerSearch$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public dataSource: Material[] = [];
@@ -37,17 +37,84 @@ export class MaterialsComponent implements OnInit {
     ]);
 
     this.fetchData();
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
+      this.navigationService.loadBarStart();
       this.materialsService.getMaterialsByAny(key).subscribe(materials => {
+        this.navigationService.loadBarFinish();
         this.dataSource = materials;
       }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
         this.navigationService.showMessage(error.error.message);
       });
     });
   }
 
+  async onRenewGuarantee(guarantee: any) {
+    guarantee.status = '02';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      // case 'GADF':
+      //   this.directsService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+      // case 'GFCF':
+      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onNotRenewGuarantee(guarantee: any) {
+    guarantee.status = '03';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      // case 'GADF':
+      //   this.directsService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+      // case 'GFCF':
+      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onFreeGuarantee(guarantee: any) {
+    guarantee.status = '04';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      // case 'GADF':
+      //   this.directsService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+      // case 'GFCF':
+      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onNotLookGuarantee(guarantee: any) {
+    guarantee.status = '01';
+    switch (guarantee.guaranteeType) {
+      case 'GAMF':
+        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        break;
+      // case 'GADF':
+      //   this.directsService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+      // case 'GFCF':
+      //   this.materialsService.update(guarantee, guarantee._id).toPromise();
+      //   break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
   handlePageEvent(event: PageEvent): void {

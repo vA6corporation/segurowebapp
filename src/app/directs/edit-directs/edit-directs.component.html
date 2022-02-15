@@ -1,6 +1,5 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <!-- <h1>Editar Adelanto Directo</h1> -->
     <div formGroupName="partnership">
       <mat-form-field>
         <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
@@ -22,6 +21,32 @@
       </mat-form-field>
     </div>
     <div formGroupName="direct">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de tramite</mat-label>
+        <mat-select formControlName="processStatusCode">
+          <mat-option value="01">REDACCION</mat-option>
+          <mat-option value="02">LEGALIZACION</mat-option>
+          <mat-option value="03">CONFORMIDAD</mat-option>
+          <mat-option value="04">CONSTITUIDO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de obra</mat-label>
+        <mat-select formControlName="constructionCode">
+          <mat-option value="01">EJECUCION</mat-option>
+          <mat-option value="02">POR TERMINAR</mat-option>
+          <mat-option value="03">PARALIZADA</mat-option>
+          <mat-option value="04">EN ARBITRAJE</mat-option>
+          <mat-option value="04">ANULADA</mat-option>
+          <mat-option value="04">FINALIZADA</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Personal a cargo</mat-label>
+        <mat-select formControlName="workerId">
+          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field>
         <input type="text" matInput placeholder="N° de poliza" formControlName="policyNumber">
       </mat-form-field>
@@ -44,26 +69,67 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
+        <input type="number" matInput placeholder="Prima" formControlName="prima">
+      </mat-form-field>
+      <mat-form-field>
         <input type="number" matInput placeholder="Garantia" formControlName="guarantee">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="number" matInput placeholder="Comision" formControlName="commission">
+      </mat-form-field>
+      <div class="mb-3">
+        <mat-slide-toggle formControlName="isEmition">Emision</mat-slide-toggle>
+      </div>
+      <mat-form-field>
+        <input type="number" matInput placeholder="Comision" formControlName="commission">
       </mat-form-field>
       <mat-list class="mb-1">
         <div mat-subheader>
-          Cheques
+          Pagos
           <div class="spacer"></div>
           <button type="button" mat-mini-fab color="primary" (click)="openDialogCheques()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
-        <mat-list-item *ngFor="let cheque of cheques; let i = index;">
-          <mat-icon mat-list-icon>monetization_on</mat-icon>
-          <div mat-line>{{ cheque.price.toFixed(2) }}</div>
-          <div mat-line>{{ cheque.endDate | date }}</div>
-          <div class="spancer"></div>
-          <button type="button" mat-icon-button (click)="removeCheque(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <mat-list-item *ngFor="let cheque of cheques; let i = index;" class="my-3 py-3" [ngClass]="{ 'bg-danger': cheque.deletedAt }">
+          <table >
+            <tbody>
+              <tr>
+                <td style="width: 70px;">
+                  Monto:
+                </td>
+                <td>
+                  {{ cheque.price.toFixed(2) }} - {{ cheque.paymentType }}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Cobro: 
+                </td>
+                <td>
+                  {{ cheque.paymentAt | date }}
+                </td>
+              </tr>
+              <tr *ngIf="cheque.extensionAt">
+                <td>
+                  Prorroga:
+                </td>
+                <td>
+                  {{ cheque.extensionAt | date }}
+                </td>  
+              </tr>
+            </tbody>
+          </table>
+          <div class="spacer"></div>
+          <div>
+            <button type="button" mat-icon-button (click)="onEditCheque(cheque)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button type="button" mat-icon-button (click)="removeCheque(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </mat-list-item>
-        <mat-divider></mat-divider>
       </mat-list>
       <mat-list class="mb-1">
         <div mat-subheader>

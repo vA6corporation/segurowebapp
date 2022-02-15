@@ -19,7 +19,7 @@ export class BeneficiariesComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
   
-  private handlerSearch$: Subscription = new Subscription(); 
+  private handleSearch$: Subscription = new Subscription(); 
   
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
   public dataSource: Beneficiary[] = [];
@@ -42,17 +42,20 @@ export class BeneficiariesComponent implements OnInit {
       this.dataSource = beneficiaries;
     });
 
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
+      this.navigationService.loadBarStart();
       this.beneficiariesService.getBeneficiariesByAny(key).subscribe(beneficiaries => {
+        this.navigationService.loadBarStart();
         this.dataSource = beneficiaries;
       }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
         this.navigationService.showMessage(error.error.message);
       });
     });
   }
 
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
   handlePageEvent(event: PageEvent): void {

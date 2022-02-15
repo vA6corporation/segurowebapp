@@ -5,7 +5,8 @@ import { Material } from "../materials/material.model";
 export interface Guarantee {
   _id: string,
   guaranteeType: string,
-  isMarked: boolean,
+  // isMarked: boolean,
+  status: string
   // materials: Material[],
   // compliances: Compliance[],
   // directs: Direct[],

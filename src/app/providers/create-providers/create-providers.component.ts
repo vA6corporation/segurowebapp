@@ -1,0 +1,90 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NavigationService } from 'src/app/navigation/navigation.service';
+import { ProvidersService } from '../providers.service';
+
+@Component({
+  selector: 'app-create-providers',
+  templateUrl: './create-providers.component.html',
+  styleUrls: ['./create-providers.component.sass']
+})
+export class CreateProvidersComponent implements OnInit {
+
+  constructor(
+    private readonly providersService: ProvidersService,
+    private readonly navigationService: NavigationService,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+  ) { }
+
+  public formArray: FormArray = this.formBuilder.array([]);    
+  public formGroup: FormGroup = this.formBuilder.group({
+    identificationType: [ 'DNI', Validators.required ],
+    identificationNumber: null,
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.email ] ],
+    mobileNumber: null,
+    birthDate: null,
+    address: null,
+    banks: this.formArray,
+  });
+  
+  public isLoading: boolean = false;
+  public maxLength: number = 11;
+  
+  ngOnInit(): void { 
+    this.navigationService.setTitle('Nuevo proveedor');
+    this.navigationService.backTo();
+
+    this.formGroup.get('identificationType')?.valueChanges.subscribe(value => {
+      switch (value) {
+        case 'RUC':
+          this.formGroup.get('identificationNumber')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.maxLength = 11;
+          break;
+        case 'DNI':
+          this.formGroup.get('identificationNumber')?.setValidators([ Validators.minLength(8), Validators.maxLength(8) ]);
+          this.maxLength = 8;
+          break;
+        default:
+          this.formGroup.get('identificationNumber')?.setValidators([]);
+          this.maxLength = 24;
+          break;
+      }
+      this.formGroup.get('identificationNumber')?.updateValueAndValidity();
+    });
+  }
+
+  onAddAccount() {
+    const formGroup = this.formBuilder.group({
+      bankName: 'BCP',
+      accountNumber: [ null, Validators.required ],
+    });
+    this.formArray.push(formGroup);
+  }
+
+  onRemoveAccount(index: number) {
+    this.formArray.removeAt(index);
+  }
+
+  onSubmit(): void {
+    if (this.formGroup.valid) {
+      this.isLoading = true;
+      this.navigationService.loadSpinnerStart();
+      this.providersService.create(this.formGroup.value, this.formArray.value).subscribe(res => {
+        console.log(res);
+        this.isLoading = false;
+        this.navigationService.loadSpinnerFinish();
+        this.router.navigate(['/providers']);
+        this.navigationService.showMessage('Registrado correctamente');
+      }, (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.navigationService.loadSpinnerFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    }
+  }
+
+}

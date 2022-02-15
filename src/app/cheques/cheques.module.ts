@@ -6,12 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { ChequesComponent } from './cheques/cheques.component';
 import { ChequesPaymentComponent } from './cheques-payment/cheques-payment.component';
+import { DialogDetailChequesComponent } from './dialog-detail-cheques/dialog-detail-cheques.component';
 
 @NgModule({
   declarations: [
     DialogChequesComponent,
     ChequesComponent,
-    ChequesPaymentComponent
+    ChequesPaymentComponent,
+    DialogDetailChequesComponent
   ],
   imports: [
     CommonModule,

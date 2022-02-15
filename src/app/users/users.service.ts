@@ -21,6 +21,10 @@ export class UsersService {
     return this.httpService.get('users/count');
   }
 
+  getActiveUsers(): Observable<UserModel[]> {
+    return this.httpService.get('users/activeUsers');
+  }
+
   getUserById(userId: string): Observable<UserModel> {
     return this.httpService.get(`users/${userId}`);
   }

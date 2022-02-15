@@ -19,10 +19,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   imports: [
+    MatCardModule,
     MatExpansionModule,
     MatNativeDateModule, // Native module for datepicker
     MatDatepickerModule,
@@ -45,6 +46,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSlideToggleModule,
   ],
   exports: [
+    MatCardModule,
     MatExpansionModule,
     MatDatepickerModule,
     MatProgressBarModule,

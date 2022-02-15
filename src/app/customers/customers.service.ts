@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
 import { Customer } from './customer.model'
-
-// interface DistricModel {
-//   name: string,
-// }
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +14,10 @@ export class CustomersService {
 
   getCustomersByAny(key: string): Observable<Customer[]> {
     return this.httpService.get(`customers/byAny/${key}`);
+  }
+
+  getCustomers(): Observable<Customer[]> {
+    return this.httpService.get('customers');
   }
 
   getCustomersByPage(pageIndex: number, pageSize: number): Observable<Customer[]> {

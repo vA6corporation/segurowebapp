@@ -1,6 +1,6 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="financierForm" autocomplete="off">
-    <h1>Nueva Financiera</h1>
+    <!-- <h1>Nueva Financiera</h1> -->
     <mat-form-field>
       <input type="text" matInput placeholder="N° RUC *" formControlName="document" maxlength="11">
     </mat-form-field>
@@ -19,8 +19,11 @@
     <mat-form-field>
       <input type="text" matInput placeholder="Anexo" formControlName="annexed">
     </mat-form-field>
-    <button type="button" mat-raised-button routerLink="/financiers" class="mr-2">CANCELAR</button>
-    <div class="divider"></div>
-    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/financiers" class="mr-2">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    </div>
   </form>
 </section>

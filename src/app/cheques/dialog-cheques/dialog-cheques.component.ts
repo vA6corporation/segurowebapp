@@ -11,20 +11,18 @@ import { Cheque } from '../cheque.model';
 export class DialogChequesComponent implements OnInit {
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) 
+    public readonly cheque: Cheque|null,
     private readonly formBuilder: FormBuilder,
     private readonly dialogRef: MatDialogRef<DialogChequesComponent>,
-    @Inject(MAT_DIALOG_DATA) 
-    public cheque: Cheque|null,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
-    _id: null,
-    onModel: null,
-    isPaid: null,
-    guaranteeId: null,
+    paymentType: 'CHEQUE',
     price: [ null, Validators.required ],
-    endDate: [ null, Validators.required ],
-    extension: null,
+    paymentAt: [ null, Validators.required ],
+    extensionAt: null,
+    observations: null,
   });
 
   ngOnInit(): void {

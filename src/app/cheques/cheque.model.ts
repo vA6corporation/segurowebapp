@@ -1,10 +1,16 @@
+import { Guarantee } from "../reports/guarantee.interface";
+
 export interface Cheque {
-  _id?: string,
-  price: number,
-  endDate: string,
-  extension: Date|null,
-  onModel: any,
-  isPaid: boolean,
-  guaranteeId: string,
-  businessId: string,
+  _id: string
+  price: number
+  paymentType: string
+  observations: string
+  paymentAt: string
+  extensionAt: string|null
+  deletedAt: string|null
+  onModel: any
+  isPaid: boolean
+  guaranteeId: string
+  guarantee: Guarantee|null
+  businessId: string
 }

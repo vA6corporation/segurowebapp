@@ -26,11 +26,11 @@ export class NavigationService {
   private setMenu$ = new EventEmitter<MenuToolbar[]>();
   private onClickMenu$ = new EventEmitter<string>();
 
-  handlerSearch(): Observable<string> {
+  handleSearch(): Observable<string> {
     return this.searchState$.asObservable();
   }
 
-  handlerClickMenu() {
+  handleClickMenu() {
     return this.onClickMenu$.asObservable();
   }
 
@@ -42,15 +42,15 @@ export class NavigationService {
     this.setMenu$.emit(menus);
   }
 
-  handlerMenu() {
+  handleMenu() {
     return this.setMenu$.asObservable();
   }
 
-  handlerLoadSpinner(): Observable<boolean> {
+  handleLoadSpinner(): Observable<boolean> {
     return this.loadSpinnerStatus$.asObservable();
   }
 
-  handlerLoadBar(): Observable<boolean> {
+  handleLoadBar(): Observable<boolean> {
     return this.loadBarStatus$.asObservable();
   }
 
@@ -84,11 +84,11 @@ export class NavigationService {
     this.changeTitle$.emit(title);
   }
 
-  handlerTitle(): Observable<string> {
+  handleTitle(): Observable<string> {
     return this.changeTitle$.asObservable();
   }
 
-  handlerBackTo(): Observable<boolean> {
+  handleBackTo(): Observable<boolean> {
     return this.isMainToolbar$.asObservable();
   }
 

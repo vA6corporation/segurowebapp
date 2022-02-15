@@ -1,19 +1,29 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <h1>Editar Usuario</h1>
+    <!-- <h1>Editar Usuario</h1> -->
     <mat-form-field>
       <input type="text" matInput placeholder="Nombres" formControlName="name">
     </mat-form-field>
     <mat-form-field>
       <input type="email" matInput placeholder="Email" formControlName="email">
     </mat-form-field>
-    <mat-form-field>
-      <input type="password" matInput placeholder="Contraseña" formControlName="password">
+    <mat-form-field appearance="fill">
+      <mat-label>Contraseña</mat-label>
+      <input [type]="hide ? 'password' : 'text'" matInput formControlName="password">
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
     </mat-form-field>
-    <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
+    </div>
+    <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
     <div class="mb-1"></div>
-    <button type="button" mat-raised-button routerLink="/users">CANCELAR</button>
-    <div class="divider"></div>
-    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/users">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
   </form>
 </section>

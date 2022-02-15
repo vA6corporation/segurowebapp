@@ -1,6 +1,6 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <h1>Nuevo Adelanto Directo</h1>
+    <!-- <h1>Nuevo Adelanto Directo</h1> -->
     <div formGroupName="partnership">
       <mat-form-field>
         <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
@@ -29,7 +29,7 @@
         <input type="text" matInput placeholder="Objeto *" formControlName="object">
       </mat-form-field>
       <mat-form-field>
-        <input type="number" matInput placeholder="Monto *" formControlName="price">
+        <input type="number" matInput placeholder="Suma asegurada *" formControlName="price">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Fecha de inicio *</mat-label>
@@ -44,11 +44,23 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field>
+        <input type="number" matInput placeholder="Prima" formControlName="prima">
+      </mat-form-field>
+      <mat-form-field>
         <input type="number" matInput placeholder="Garantia" formControlName="guarantee">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="number" matInput placeholder="Comision" formControlName="commission">
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Personal a cargo</mat-label>
+        <mat-select formControlName="workerId">
+          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-list class="mb-1">
         <div mat-subheader>
-          Cheques
+          Pagos
           <div class="spacer"></div>
           <button type="button" mat-mini-fab color="primary" (click)="openDialogCheques()">
             <mat-icon>add</mat-icon>
@@ -57,7 +69,8 @@
         <mat-list-item *ngFor="let cheque of cheques; let i = index;">
           <mat-icon mat-list-icon>monetization_on</mat-icon>
           <div mat-line>{{ cheque.price.toFixed(2) }}</div>
-          <div mat-line>{{ cheque.endDate | date }}</div>
+          <div mat-line>{{ cheque.paymentAt | date }}</div>
+          <div mat-line>{{ cheque.paymentType }}</div>
           <div class="spancer"></div>
           <button type="button" mat-icon-button (click)="removeCheque(i)">
             <mat-icon>delete</mat-icon>

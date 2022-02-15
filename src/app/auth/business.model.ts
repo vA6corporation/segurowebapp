@@ -1,7 +1,6 @@
 export class BusinessModel {
   _id: string = '';
-  businessName: string = '';
-  tradeName: string = '';
+  name: string = '';
   ruc: string = '';
   email: string = '';
   userId: string = '';

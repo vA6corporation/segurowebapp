@@ -18,7 +18,7 @@ export class FinanciersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
     
-  private handlerSearch$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
   public dataSource: Financier[] = [];
@@ -47,16 +47,19 @@ export class FinanciersComponent implements OnInit {
       this.dataSource = financiers;
     });
 
-    this.handlerSearch$ = this.navigationService.handlerSearch().subscribe((key: string) => {
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
+      this.navigationService.loadBarStart();
       this.financiersService.getFinanciersByAny(key).subscribe(financiers => {
+        this.navigationService.loadBarFinish();
         this.dataSource = financiers;
       }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
         this.navigationService.showMessage(error.error.message);
       });
     });
   }
 
   ngOnDestroy() {
-    this.handlerSearch$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 }

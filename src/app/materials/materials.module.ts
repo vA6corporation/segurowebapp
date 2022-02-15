@@ -11,8 +11,6 @@ import { ChequesModule } from '../cheques/cheques.module';
 import { DepositsModule } from '../deposits/deposits.module';
 import { DialogMaterialComponent } from './dialog-material/dialog-material.component';
 import { MatDialogModule } from '@angular/material/dialog';
-// import { CustomersModule } from '../customers/customers.module';
-// import { PartnershipsModule } from '../partnerships/partnerships.module';
 
 @NgModule({
   declarations: [
@@ -28,8 +26,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     ChequesModule,
     DepositsModule,
     MatDialogModule,
-    // CustomersModule,
-    // PartnershipsModule,
   ]
 })
 export class MaterialsModule { }

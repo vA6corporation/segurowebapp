@@ -1,6 +1,6 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <h1>Nuevo Usuario</h1>
+    <!-- <h1>Nuevo Usuario</h1> -->
     <mat-form-field>
       <input type="text" matInput placeholder="Nombres" formControlName="name">
     </mat-form-field>
@@ -12,8 +12,11 @@
     </mat-form-field>
     <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
     <div class="mb-1"></div>
-    <button type="button" mat-raised-button routerLink="/users">CANCELAR</button>
-    <div class="divider"></div>
-    <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/users">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
   </form>
 </section>
