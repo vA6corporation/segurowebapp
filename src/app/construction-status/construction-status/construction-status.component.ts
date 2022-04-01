@@ -1,18 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
-import { CustomersService } from 'src/app/customers/customers.service';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
-import { Financier } from 'src/app/financiers/financier.model';
-import { FinanciersService } from 'src/app/financiers/financiers.service';
+import { FinancierModelsService } from 'src/app/financiers/financiers.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
 import { Material } from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
@@ -27,7 +24,7 @@ import { Guarantee } from 'src/app/reports/guarantee.interface';
 export class ConstructionStatusComponent implements OnInit {
 
   constructor(
-    private readonly financiersService: FinanciersService,
+    private readonly financiersService: FinancierModelsService,
     private readonly navigationService: NavigationService,
     private readonly materialsService: MaterialsService,
     private readonly compliancesService: CompliancesService,
@@ -69,13 +66,13 @@ export class ConstructionStatusComponent implements OnInit {
     //   this.length = count;
     // });
     
-    // this.financiersService.getFinanciersByPage(this.pageIndex + 1, this.pageSize).subscribe(financiers => {
+    // this.financiersService.getFinancierModelsByPage(this.pageIndex + 1, this.pageSize).subscribe(financiers => {
     //   this.dataSource = financiers;
     // });
 
     // this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
     //   this.navigationService.loadBarStart();
-    //   this.financiersService.getFinanciersByAny(key).subscribe(financiers => {
+    //   this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
     //     this.navigationService.loadBarFinish();
     //     this.dataSource = financiers;
     //   }, (error: HttpErrorResponse) => {

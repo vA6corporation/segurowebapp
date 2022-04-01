@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
-import { DialogFinanciersComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { MaterialsService } from '../materials.service';
@@ -15,9 +15,11 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DepositsService } from 'src/app/deposits/deposits.service';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { Subscription } from 'rxjs';
-import { WorkersService } from 'src/app/workers/workers.service';
+import { DialogPdfMaterialsComponent, MaterialPdfData } from '../dialog-pdf-materials/dialog-pdf-materials.component';
+import { ConstructionModel } from 'src/app/constructions/construction.model';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
+import { CustomerModel } from 'src/app/customers/customer.model';
+import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 
 @Component({
   selector: 'app-edit-materials',
@@ -29,7 +31,6 @@ export class EditMaterialsComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly materialsService: MaterialsService,
-    private readonly workersService: WorkersService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
@@ -38,10 +39,6 @@ export class EditMaterialsComponent implements OnInit {
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
-    customer: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
@@ -50,15 +47,10 @@ export class EditMaterialsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    partnership: this.formBuilder.group({
-      _id: null,
-      name: null,
-    }),
     material: this.formBuilder.group({
-      processStatusCode: '01',
-      constructionCode: '01',
+      constructionId: '',
       policyNumber: [ null, Validators.required ],
-      object: [ null, Validators.required ],
+      object: null,
       price: [ null, Validators.required ],
       startDate: [null, Validators. required ],
       endDate: [ null, Validators.required ],
@@ -66,7 +58,7 @@ export class EditMaterialsComponent implements OnInit {
       prima: null,
       isEmition: false,
       commission: null,
-      workerId: null,
+      currency: 'PEN',
     }),
   });
 
@@ -74,13 +66,9 @@ export class EditMaterialsComponent implements OnInit {
   private materialId: string = '';
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
-  public workers: WorkerModel[] = [];
-
-  private workers$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.workers$.unsubscribe();
-  }
+  public construction: ConstructionModel|null = null;
+  public customer: CustomerModel|null = null;
+  public partnership: PartnershipModel|null = null;
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
@@ -89,29 +77,143 @@ export class EditMaterialsComponent implements OnInit {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
         console.log(material);
-        const { customer, financier, beneficiary, partnership, cheques = [], deposits = [] } = material;
+        const { customer, financier, beneficiary, partnership, cheques = [], deposits = [], construction } = material;
         this.formGroup.patchValue({ customer });
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ beneficiary });
         this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ material });
+        this.construction = construction;
+        this.customer = construction?.customer || null;
+        this.partnership = construction?.partnership || null;
         this.cheques = cheques;
         this.deposits = deposits;
       });
     });
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
-      this.workers = workers;
+  }
+
+  onEditConstruction() {
+    const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+      width: '100vw',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(construction => {
+      console.log(construction);
+      
+      if (construction) {
+        this.construction = construction;
+        this.formGroup.patchValue({ material: { constructionId: construction._id } });
+      }
+    });
+  }
+
+  onAttachPdfInvoice() {
+    const data: MaterialPdfData = {
+      type: 'invoice',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfTicket() {
+    const data: MaterialPdfData = {
+      type: 'voucher',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfDocuments() {
+    const data: MaterialPdfData = {
+      type: 'document',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfCheques() {
+    const data: MaterialPdfData = {
+      type: 'cheque',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfDeposits() {
+    const data: MaterialPdfData = {
+      type: 'deposit',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfFianzas() {
+    const data: MaterialPdfData = {
+      type: 'fianza',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfConstructions() {
+    const data: MaterialPdfData = {
+      type: 'construction',
+      materialId: this.materialId
+    }
+
+    this.matDialog.open(DialogPdfMaterialsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
     });
   }
 
   removeCheque(index: number): void {
-    const ok = confirm('Esta seguro de anular?...');
+    const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
       const cheque = this.cheques[index];
       this.chequesService.deleteOne(cheque._id).subscribe(() => {
-        cheque.deletedAt = new Date().toString();
-        this.navigationService.showMessage('Anulado correctamente');
+        this.cheques.splice(index, 1);
+        this.navigationService.showMessage('Eliminado correctamente');
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
       });
@@ -129,7 +231,7 @@ export class EditMaterialsComponent implements OnInit {
     }
   }
 
-  openDialogCustomers() {
+  openDialogCustomer() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
@@ -141,7 +243,7 @@ export class EditMaterialsComponent implements OnInit {
   }
 
   openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
+    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
@@ -232,11 +334,9 @@ export class EditMaterialsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, beneficiary, partnership, material } = this.formGroup.value;
-      material.customerId = customer._id;
+      const { financier, beneficiary, material } = this.formGroup.value;
       material.financierId = financier._id;
       material.beneficiaryId = beneficiary._id;
-      material.partnershipId = partnership._id;
       this.materialsService.update(material, this.materialId).subscribe(res => {
         console.log(res);
         this.isLoading = false;

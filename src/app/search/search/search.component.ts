@@ -33,7 +33,7 @@ export class SearchComponent implements OnInit {
     private readonly compliancesService: CompliancesService,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
   public guaranties: any[] = [];
   public dataSource: any[] = [];
   public length: number = 100;
@@ -219,7 +219,8 @@ export class SearchComponent implements OnInit {
         case 'GAMF':
           this.materialsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
-            this.fetchData();
+            this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
+            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();
@@ -229,7 +230,8 @@ export class SearchComponent implements OnInit {
         case 'GADF':
           this.directsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
-            this.fetchData();
+            this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
+            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();
@@ -239,7 +241,8 @@ export class SearchComponent implements OnInit {
         case 'GFCF':
           this.compliancesService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
-            this.fetchData();
+            this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
+            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();

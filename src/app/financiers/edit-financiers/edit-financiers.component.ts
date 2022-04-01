@@ -3,18 +3,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { FinanciersService } from '../financiers.service';
+import { FinancierModelsService } from '../financiers.service';
 
 @Component({
   selector: 'app-edit-financiers',
   templateUrl: './edit-financiers.component.html',
   styleUrls: ['./edit-financiers.component.sass']
 })
-export class EditFinanciersComponent implements OnInit {
+export class EditFinancierModelsComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly financiersService: FinanciersService,
+    private readonly financiersService: FinancierModelsService,
     private readonly navigationService: NavigationService,
     private readonly route: ActivatedRoute,
   ) { }
@@ -36,7 +36,7 @@ export class EditFinanciersComponent implements OnInit {
     this.navigationService.backTo();
     this.route.params.subscribe(async params => {
       this.financierId = params.financierId;
-      this.financiersService.getFinancierById(this.financierId).subscribe(financier => {
+      this.financiersService.getFinancierModelById(this.financierId).subscribe(financier => {
         console.log(financier);
         this.formGroup.get('document')?.setValue(financier.document);
         this.formGroup.get('name')?.setValue(financier.name);

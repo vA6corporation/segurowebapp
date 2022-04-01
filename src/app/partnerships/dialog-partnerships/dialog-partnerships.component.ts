@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Partnership } from 'src/app/partnerships/partnership.model';
+import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { PartnershipsService } from 'src/app/partnerships/partnerships.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 
@@ -17,11 +17,11 @@ export class DialogPartnershipsComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public partnerships: Partnership[] = [];
+  public partnerships: PartnershipModel[] = [];
   private formBuilder: FormBuilder = new FormBuilder();
   public formGroup: FormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
-  });;
+  });
 
   ngOnInit(): void { }
 
@@ -39,4 +39,5 @@ export class DialogPartnershipsComponent implements OnInit {
       });
     }
   }
+  
 }

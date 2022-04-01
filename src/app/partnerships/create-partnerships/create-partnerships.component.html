@@ -6,7 +6,7 @@
         <input type="text" matInput placeholder="N° de RUC" formControlName="document" maxlength="11">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Rason Social *" formControlName="name">
+        <input type="text" matInput placeholder="Razon Social *" formControlName="name">
       </mat-form-field>
       <mat-form-field>
         <input type="text" matInput placeholder="Direccion" formControlName="address">
@@ -29,7 +29,7 @@
         <div mat-subheader>
           Empresas
           <div class="spacer"></div>
-          <button type="button" mat-mini-fab color="primary" (click)="openDialogCustomers()">
+          <button type="button" mat-mini-fab color="primary" (click)="openDialogCustomer()">
             <mat-icon>add</mat-icon>
           </button>
         </div>
@@ -38,7 +38,7 @@
           <div mat-line>{{ customer.name | uppercase }}</div>
           <div mat-line>{{ customer.document }}</div>
           <div class="spancer"></div>
-          <button type="button" mat-icon-button (click)="removeCustomer(i)">
+          <button type="button" mat-icon-button (click)="removeCustomerModel(i)">
             <mat-icon>delete</mat-icon>
           </button>
         </mat-list-item>

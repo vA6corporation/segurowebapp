@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Beneficiary } from 'src/app/beneficiaries/beneficiary.model';
-import { Customer } from 'src/app/customers/customer.model';
-import { Financier } from 'src/app/financiers/financier.model';
-import { Partnership } from 'src/app/partnerships/partnership.model';
+import { CustomerModel } from 'src/app/customers/customer.model';
+import { FinancierModel } from 'src/app/financiers/financier.model';
+import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { Compliance } from '../compliance.model';
 import { CompliancesService } from '../compliances.service';
 
@@ -21,9 +21,9 @@ export class DialogComplianceComponent implements OnInit {
   ) { }
 
   public compliance: Compliance|null = null;
-  public customer: Customer|null = null;
-  public financier: Financier|null = null;
-  public partnership: Partnership|null = null;
+  public customer: CustomerModel|null = null;
+  public financier: FinancierModel|null = null;
+  public partnership: PartnershipModel|null = null;
   public beneficiary: Beneficiary|null = null;
 
   ngOnInit(): void { 

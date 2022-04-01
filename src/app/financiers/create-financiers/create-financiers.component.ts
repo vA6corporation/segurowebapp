@@ -3,17 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { FinanciersService } from '../financiers.service';
+import { FinancierModelsService } from '../financiers.service';
 
 @Component({
   selector: 'app-create-financiers',
   templateUrl: './create-financiers.component.html',
   styleUrls: ['./create-financiers.component.sass']
 })
-export class CreateFinanciersComponent implements OnInit {
+export class CreateFinancierModelsComponent implements OnInit {
 
   constructor(
-    private financiersService: FinanciersService,
+    private financiersService: FinancierModelsService,
     private navigationService: NavigationService,
     private router: Router,
   ) { }

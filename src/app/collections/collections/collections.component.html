@@ -28,21 +28,35 @@
       </mat-form-field>
     </div>
   </form>
+  
+  <form [formGroup]="financierForm" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Financiera</mat-label>
+      <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
+    </mat-form-field>
+  </form>
+
+  <form [formGroup]="customerForm" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Cliente</mat-label>
+      <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+    </mat-form-field>
+  </form>
 
   <div class="d-flex">
-    <div style="margin-right: 5rem;">
-      <table>
-        <tbody>
-          <tr class="mat-h3">
-            <td style="width: 120px;">Emisiones:</td>
-            <td>{{ emitionCount }}</td>
-          </tr>
-          <tr class="mat-h3">
-            <td>Renovaciones:</td>
-            <td>{{ renovationCount }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div style="margin-right: 5rem; min-width: 10rem;">
+      <mat-action-list>
+        <button type="button" (click)="onSetEmition(true)" mat-list-item>
+          Emisiones:
+          <span class="spacer"></span>
+          {{ emitionCount }}
+        </button>
+        <button type="button" (click)="onSetEmition(false)" mat-list-item>
+          Renovaciones:
+          <span class="spacer"></span>
+          {{ renovationCount }}
+        </button>
+      </mat-action-list>
     </div>
     <div>
       <h2>Suma asegurada</h2>
@@ -67,7 +81,7 @@
         </mat-list-item>
       </mat-list>
     </div>
-    <div class="p-4"></div>
+    <!-- <div class="p-4"></div>
     <div>
       <h2>Prima</h2>
       <div>
@@ -90,6 +104,6 @@
           {{ materialPrima.toFixed(2) }}
         </mat-list-item>
       </mat-list>
-    </div>
+    </div> -->
   </div>
 </section>

@@ -1,4 +1,4 @@
-import { Partnership } from "../partnerships/partnership.model";
+import { PartnershipModel } from "../partnerships/partnership.model";
 
 export interface Beneficiary {
   _id?: string,
@@ -10,7 +10,7 @@ export interface Beneficiary {
   createdAt: any,
   updatedAt: any,
   partnershipId: string,
-  partnership?: Partnership
+  partnership?: PartnershipModel
   userId: string,
   businessId: string,
 }

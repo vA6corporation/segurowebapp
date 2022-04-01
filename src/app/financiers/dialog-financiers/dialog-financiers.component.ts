@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Financier } from 'src/app/financiers/financier.model';
-import { FinanciersService } from 'src/app/financiers/financiers.service';
+import { FinancierModel } from 'src/app/financiers/financier.model';
+import { FinancierModelsService } from 'src/app/financiers/financiers.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 
 @Component({
@@ -10,15 +10,15 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
   templateUrl: './dialog-financiers.component.html',
   styleUrls: ['./dialog-financiers.component.sass']
 })
-export class DialogFinanciersComponent implements OnInit {
+export class DialogFinanciesComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private financiersService: FinanciersService,
+    private financiersService: FinancierModelsService,
     private navigationService: NavigationService,
   ) { }
 
-  public financiers: Financier[] = [];
+  public financiers: FinancierModel[] = [];
   public formGroup: FormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
@@ -30,7 +30,7 @@ export class DialogFinanciersComponent implements OnInit {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.get('key')?.setValue(null);
-      this.financiersService.getFinanciersByAny(key).subscribe(financiers => {
+      this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
         this.navigationService.loadBarFinish();
         this.financiers = financiers;
       }, (error: HttpErrorResponse) => {

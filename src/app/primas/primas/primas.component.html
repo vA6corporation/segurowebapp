@@ -1,0 +1,108 @@
+<section class="container">
+    <form [formGroup]="formGroup" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Seleccine un rango de fechas</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Desde" formControlName="startDate">
+          <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <div class="d-flex">
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Categoria</mat-label>
+          <mat-select (selectionChange)="onChangeCategory()" formControlName="categoryId">
+            <mat-option value="">TODAS LAS CATEGORIAS</mat-option>
+            <mat-option class="text-uppercase" *ngFor="let category of categories" [value]="category._id">
+              {{ category.name | uppercase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill">
+          <mat-label>Usuario</mat-label>
+          <mat-select (selectionChange)="onChangeUser()" formControlName="userId">
+            <mat-option value="">TODOS LOS USUARIOS</mat-option>
+            <mat-option *ngFor="let element of users" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+    <form [formGroup]="financierForm" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Financiera</mat-label>
+        <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="customerForm" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+      </mat-form-field>
+    </form>
+  
+    <div class="d-flex">
+      <div style="margin-right: 1rem; min-width: 10rem;">
+        <mat-action-list>
+          <button type="button" (click)="onSetEmition(true)" mat-list-item>
+            Emisiones:
+            <span class="spacer"></span>
+            {{ emitionCount }}
+          </button>
+          <button type="button" (click)="onSetEmition(false)" mat-list-item>
+            Renovaciones:
+            <span class="spacer"></span>
+            {{ renovationCount }}
+          </button>
+        </mat-action-list>
+      </div>
+      <div>
+        <h2>Pagados</h2>
+        <div>
+          <canvas #collectionChartPrice width="300" height="300"></canvas>
+        </div>
+        <mat-list>
+          <mat-list-item class="text-uppercase">
+            GFCF
+            <span class="spacer"></span>
+            {{ compliancePayed.toFixed(2) }}
+          </mat-list-item>
+          <mat-list-item class="text-uppercase">
+            GADF
+            <span class="spacer"></span>
+            {{ directPayed.toFixed(2) }}
+          </mat-list-item>
+          <mat-list-item class="text-uppercase">
+            GAMF
+            <span class="spacer"></span>
+            {{ materialPayed.toFixed(2) }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div class="p-4"></div>
+      <div>
+        <h2>No pagados</h2>
+        <div>
+          <canvas #collectionChartPrima width="300" height="300"></canvas>
+        </div>
+        <mat-list>
+          <mat-list-item class="text-uppercase">
+            GFCF
+            <span class="spacer"></span>
+            {{ complianceNotPayed.toFixed(2) }}
+          </mat-list-item>
+          <mat-list-item class="text-uppercase">
+            GADF
+            <span class="spacer"></span>
+            {{ directNotPayed.toFixed(2) }}
+          </mat-list-item>
+          <mat-list-item class="text-uppercase">
+            GAMF
+            <span class="spacer"></span>
+            {{ materialNotPayed.toFixed(2) }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </section>

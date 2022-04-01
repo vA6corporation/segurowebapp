@@ -1,9 +1,10 @@
 import { Beneficiary } from "../beneficiaries/beneficiary.model";
 import { Cheque } from "../cheques/cheque.model";
-import { Customer } from "../customers/customer.model";
+import { ConstructionModel } from "../constructions/construction.model";
+import { CustomerModel } from "../customers/customer.model";
 import { Deposit } from "../deposits/deposit.model";
-import { Financier } from "../financiers/financier.model";
-import { Partnership } from "../partnerships/partnership.model";
+import { FinancierModel } from "../financiers/financier.model";
+import { PartnershipModel } from "../partnerships/partnership.model";
 
 export interface Compliance {
   _id?: string,
@@ -15,10 +16,11 @@ export interface Compliance {
   guarantee: number,
   customerId: string,
   financierId: string,
-  customer?: Customer,
-  financier?: Financier,
+  customer?: CustomerModel,
+  financier?: FinancierModel,
   beneficiary?: Beneficiary,
-  partnership?: Partnership,
+  partnership?: PartnershipModel,
+  construction: ConstructionModel|null,
   guaranteeType?: string,
   isMarked?: boolean,
   cheques?: Cheque[],

@@ -1,23 +1,25 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CustomersService } from '../customers.service';
+import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 
 @Component({
   selector: 'app-edit-customers',
   templateUrl: './edit-customers.component.html',
   styleUrls: ['./edit-customers.component.sass']
 })
-export class EditCustomersComponent implements OnInit {
+export class EditCustomerModelsComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly customersService: CustomersService,
     private readonly navigationService: NavigationService,
     private readonly route: ActivatedRoute,
+    private readonly matDialog: MatDialog,
   ) { }
   
   public formGroup: FormGroup = this.formBuilder.group({
@@ -67,6 +69,15 @@ export class EditCustomersComponent implements OnInit {
     });
   }
 
+  onAttachPdfDocuments() {
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: this.customerId,
+    });
+  }
+
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
@@ -84,4 +95,5 @@ export class EditCustomersComponent implements OnInit {
       });
     }
   }
+  
 }

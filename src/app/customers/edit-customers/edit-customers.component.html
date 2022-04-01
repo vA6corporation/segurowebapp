@@ -1,4 +1,7 @@
 <section class="container py-4">
+  <div class="mb-3">
+    <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
+  </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="customer">
       <!-- <h1>Editar Cliente</h1> -->
@@ -14,7 +17,7 @@
         <input type="text" matInput placeholder="N° de Documento *" formControlName="document" [maxlength]="maxlength">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Nombres/Rason Social *" formControlName="name">
+        <input type="text" matInput placeholder="Nombres/Razon Social *" formControlName="name">
       </mat-form-field>
       <mat-form-field>
         <input type="email" matInput placeholder="Email *" formControlName="email">

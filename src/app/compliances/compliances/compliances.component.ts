@@ -31,7 +31,7 @@ export class CompliancesComponent implements OnInit {
   public pageIndex: number = 0;
 
   ngOnInit(): void {
-    this.navigationService.setTitle('Fiel complimiento');
+    this.navigationService.setTitle('Fiel cumplimiento');
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true }
     ]);

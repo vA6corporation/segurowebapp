@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { Cheque } from './cheque.model';
@@ -20,8 +21,12 @@ export class ChequesService {
     return this.httpService.get(`cheques/countChequesByRangeDate/${startDate}/${endDate}`);
   }
 
-  getByPage(pageIndex: number, pageSize: number): Observable<{ cheques: Cheque[], count: number }> {
-    return this.httpService.get(`cheques/byPage/${pageIndex}/${pageSize}`);
+  getCountCheques(): Observable<number> {
+    return this.httpService.get(`cheques/countCheques`);
+  }
+
+  getChequesByPage(pageIndex: number, pageSize: number, params: Params): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/byPage/${pageIndex}/${pageSize}`, { params });
   }
 
   getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<Cheque[]> {

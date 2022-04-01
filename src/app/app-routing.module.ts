@@ -7,8 +7,24 @@ const routes: Routes = [
     loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
   },
   {
+    path: 'insurances',
+    loadChildren: () => import('./insurances/insurances.module').then(m => m.InsurancesModule)
+  },
+  {
+    path: 'brokers',
+    loadChildren: () => import('./brokers/brokers.module').then(m => m.BrokersModule)
+  },
+  {
     path: 'search',
     loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
+  },
+  {
+    path: 'constructions',
+    loadChildren: () => import('./constructions/constructions.module').then(m => m.ConstructionsModule)
+  },
+  {
+    path: 'documentation',
+    loadChildren: () => import('./documentation/documentation.module').then(m => m.DocumentationModule)
   },
   {
     path: 'customers',
@@ -24,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: 'financiers',
-    loadChildren: () => import('./financiers/financiers.module').then(m => m.FinanciersModule)
+    loadChildren: () => import('./financiers/financiers.module').then(m => m.FinancierModelsModule)
   },
   {
     path: 'users',
@@ -59,6 +75,10 @@ const routes: Routes = [
     loadChildren: () => import('./collections/collections.module').then(m => m.CollectionsModule)
   },
   {
+    path: 'primas',
+    loadChildren: () => import('./primas/primas.module').then(m => m.PrimasModule)
+  },
+  {
     path: 'constructionStatus',
     loadChildren: () => import('./construction-status/construction-status.module').then(m => m.ConstructionStatusModule)
   },
@@ -77,7 +97,23 @@ const routes: Routes = [
   {
     path: 'banks',
     loadChildren: () => import('./banks/banks.module').then(m => m.BanksModule)
-  }
+  },
+  {
+    path: 'legals',
+    loadChildren: () => import('./legals/legals.module').then(m => m.LegalsModule)
+  },
+  {
+    path: 'credits',
+    loadChildren: () => import('./credits/credits.module').then(m => m.CreditsModule)
+  },
+  {
+    path: 'insuranceCustomers',
+    loadChildren: () => import('./insurance-customers/insurance-customers.module').then(m => m.InsuranceCustomersModule)
+  },
+  {
+    path: 'insurancePartnerships',
+    loadChildren: () => import('./insurance-partnerships/insurance-partnerships.module').then(m => m.InsurancePartnershipsModule)
+  },
 ];
 
 @NgModule({

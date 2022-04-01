@@ -10,13 +10,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CustomersModule } from '../customers/customers.module';
 import { PartnershipsModule } from '../partnerships/partnerships.module';
 import { DialogComplianceComponent } from './dialog-compliance/dialog-compliance.component';
-// import { DepositsModule } from '../deposits/deposits.module';
+import { DialogPdfCompliancesComponent } from './dialog-pdf-compliances/dialog-pdf-compliances.component';
 
 @NgModule({
   declarations: [
     CompliancesComponent, 
     CreateCompliancesComponent, 
-    EditCompliancesComponent, DialogComplianceComponent, 
+    EditCompliancesComponent, DialogComplianceComponent, DialogPdfCompliancesComponent, 
   ],
   imports: [
     CommonModule,
@@ -25,7 +25,6 @@ import { DialogComplianceComponent } from './dialog-compliance/dialog-compliance
     ReactiveFormsModule,
     CustomersModule,
     PartnershipsModule,
-    // DepositsModule,
   ]
 })
 export class CompliancesModule { }

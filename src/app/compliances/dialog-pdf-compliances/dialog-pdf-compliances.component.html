@@ -1,0 +1,20 @@
+<div mat-dialog-content class="mx-0 px-0" style="height: calc(100% - 44px)">
+    <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event" style="overflow: hidden;">
+      <mat-tab label="Documentos">
+        <mat-action-list>
+          <button mat-list-item (click)="onChangePdf(compliancePdf)" *ngFor="let compliancePdf of compliancePdfs">{{ compliancePdf.filename }}</button>
+        </mat-action-list>
+      </mat-tab>
+      <mat-tab label="Preview" style="overflow: hidden;">
+        <iframe [src]="url" frameborder="0" style="overflow:hidden;height:100%;width:100%"></iframe>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <mat-dialog-actions>
+    <button type="button" mat-raised-button color="warn" (click)="onDeletePdf()" [disabled]="pdfId === ''">ELIMINAR</button>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
+    <!-- <button type="button" mat-raised-button mat-dialog-close color="primary" (click)="onDeletePdf()">ADJUNTAR</button> -->
+    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">ADJUNTAR</button>
+    <input type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput)" [accept]="accept" hidden>  
+  </mat-dialog-actions>

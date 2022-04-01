@@ -9,13 +9,14 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PartnershipsModule } from '../partnerships/partnerships.module';
 import { DialogDirectComponent } from './dialog-direct/dialog-direct.component';
+import { DialogPdfDirectsComponent } from './dialog-pdf-directs/dialog-pdf-directs.component';
 
 
 @NgModule({
   declarations: [
     DirectsComponent, 
     CreateDirectsComponent, 
-    EditDirectsComponent, DialogDirectComponent,
+    EditDirectsComponent, DialogDirectComponent, DialogPdfDirectsComponent,
   ],
   imports: [
     CommonModule,

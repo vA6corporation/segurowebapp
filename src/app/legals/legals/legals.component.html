@@ -1,0 +1,60 @@
+<section class="container">
+
+    <form [formGroup]="statusForm" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de tramite</mat-label>
+        <mat-select formControlName="processStatusCode" (selectionChange)="onSelectionChange()">
+          <mat-option value="">TODOS LOS ESTADOS</mat-option>
+          <mat-option value="01">REDACCION</mat-option>
+          <mat-option value="02">LEGALIZACION</mat-option>
+          <mat-option value="03">CONFORMIDAD</mat-option>
+          <mat-option value="04">CONSTITUIDO</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="financierForm" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Financiera</mat-label>
+        <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup]="customerForm" autocomplete="off">
+      <mat-form-field appearance="fill">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+      </mat-form-field>
+    </form>
+
+    <div class="mat-elevation-z2">
+        <table mat-table [dataSource]="dataSource" class="w-100">
+          <ng-container matColumnDef="guaranteeType">
+            <th mat-header-cell *matHeaderCellDef>Garantia</th>
+            <td mat-cell *matCellDef="let element">{{ element.guaranteeType }}</td>
+          </ng-container>
+          <ng-container matColumnDef="partnership">
+            <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+            <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'Ninguno' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="customer">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.customer.name | uppercase }}</td>
+          </ng-container>
+          <ng-container matColumnDef="policyNumber">
+            <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+            <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>Fecha de cumplimiento</th>
+            <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+          </ng-container>
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+            <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
+        </table>
+      </div>
+  </section>

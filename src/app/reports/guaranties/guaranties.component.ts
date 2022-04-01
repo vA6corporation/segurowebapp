@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
@@ -14,6 +13,8 @@ import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Mail } from 'src/app/mails/mail.interface';
 import { ReportsService } from '../reports.service';
+import { formatDate } from '@angular/common';
+import { buildExcel } from 'src/app/xlsx';
 
 @Component({
   selector: 'app-guaranties',
@@ -32,7 +33,7 @@ export class GuarantiesComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'worker', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -44,10 +45,46 @@ export class GuarantiesComponent implements OnInit {
   });
     
   ngOnInit(): void {
-    this.navigationService.setTitle('Cumplimiento de fianzas');
+    this.navigationService.setTitle('Renovaciones');
     this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true }
+      { id: 'search', label: 'search', icon: 'search', show: true },
+      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
     ]);
+
+    this.navigationService.handleClickMenu().subscribe(id => {
+      const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+      let body = [];
+      body.push([
+        'GARANTIA',
+        'FINANCIERA',
+        'CONSORCIO',
+        'CLIENTE',
+        'N° DE POLIZA',
+        'SUMA ASEGURADA',
+        'PRIMA',
+        'E. DE TRAMITE',
+        'E. DE REVISION',
+        'F. CUMPLIMIENTO',
+      ]);
+
+      for (const guarantee of this.dataSource) {
+        const { customer, partnership, financier } = guarantee;
+        body.push([
+          guarantee.guaranteeType,
+          financier?.name || null,
+          partnership?.name || null,
+          customer?.name || null,
+          guarantee.policyNumber,
+          guarantee.price,
+          guarantee.prima,
+          guarantee.processStatus,
+          guarantee.statusLabel,
+          formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+        ]);
+      }
+      const name = `RENOVACIONES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+      buildExcel(body, name, wscols, [], []);
+    });
   }
 
   onRangeChange() {

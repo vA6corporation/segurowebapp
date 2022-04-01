@@ -20,6 +20,14 @@ export class ReportsService {
     return this.httpService.get(`reports/byKey/${key}`);
   }
 
+  getGuarantiesWithoutConstructions(): Observable<any[]> {
+    return this.httpService.get(`reports/withoutConstructions`);
+  }
+
+  getGuarantiesByFinancierModelCustomerModelStatus(params: Params): Observable<any[]> {
+    return this.httpService.get(`reports/byFinancierModelCustomerModelStatus`, { params });
+  }
+
   getGuarantiesByStatus(processStatusCode: string, status: string): Observable<any[]> {
     const params: Params = {
       processStatusCode,
@@ -30,6 +38,14 @@ export class ReportsService {
 
   getCollectionGuarantiesByRangeDateUser(params: Params): Observable<any> {
     return this.httpService.get('reports/collectionGuarantiesByRangeDateUser', { params });
+  }
+
+  getSummaryPrimasByRangeDateUser(params: Params): Observable<any> {
+    return this.httpService.get('reports/summaryPrimasByRangeDateUser', { params });
+  }
+
+  getPrimasByRangeDateUser(params: Params): Observable<any> {
+    return this.httpService.get('reports/primasByRangeDateUser', { params });
   }
 
 }

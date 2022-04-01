@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Customer } from 'src/app/customers/customer.model';
+import { CustomerModel } from 'src/app/customers/customer.model';
 import { CustomersService } from 'src/app/customers/customers.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 
@@ -19,7 +18,7 @@ export class DialogCustomersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public customers: Customer[] = [];
+  public customers: CustomerModel[] = [];
   public formGroup: FormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Customer } from 'src/app/customers/customer.model';
+import { CustomerModel } from 'src/app/customers/customer.model';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { PartnershipsService } from '../partnerships.service';
@@ -37,7 +37,7 @@ export class EditPartnershipsComponent implements OnInit {
 
   public isLoading: boolean = false;
   private partnershipId: string = '';
-  public customers: Customer[] = [];
+  public customers: CustomerModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');
@@ -45,6 +45,7 @@ export class EditPartnershipsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
+        console.log(partnership)
         const { customers } = partnership;
         this.customers = customers;
         this.formGroup.patchValue({ partnership });
@@ -52,7 +53,7 @@ export class EditPartnershipsComponent implements OnInit {
     });
   }
 
-  openDialogCustomers(): void {
+  openDialogCustomer(): void {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }

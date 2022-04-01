@@ -1,4 +1,10 @@
 <section class="container py-4">
+  <mat-form-field appearance="fill">
+    <mat-select [(value)]="params.payed" (selectionChange)="onSelectionChange()">
+      <mat-option value="false">NO PAGADOS</mat-option>
+      <mat-option value="true">PAGADOS</mat-option>
+    </mat-select>
+  </mat-form-field>
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" class="w-100">
       <ng-container matColumnDef="guarantee">
@@ -62,5 +68,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.isPaid }"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
   </div>
 </section>

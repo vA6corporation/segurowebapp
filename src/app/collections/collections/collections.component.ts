@@ -9,8 +9,11 @@ import { Subscription } from 'rxjs';
 import { UserModel } from 'src/app/users/user.model';
 import { Params } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-Chart.register(...registerables);
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-collections',
@@ -24,6 +27,7 @@ export class CollectionsComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
   ) { }
     
   @ViewChild('collectionChartPrice') 
@@ -34,6 +38,16 @@ export class CollectionsComponent implements OnInit {
 
   public chartPrice: Chart|null = null;
   public chartPrima: Chart|null = null;
+
+  public customerForm = this.formBuilder.group({
+    name: [ null, Validators.required ],
+    _id: [ null, Validators.required ],
+  });
+
+  public financierForm = this.formBuilder.group({
+    name: [ null, Validators.required ],
+    _id: [ null, Validators.required ],
+  });
   
   public formGroup = this.formBuilder.group({
     userId: '',
@@ -53,15 +67,21 @@ export class CollectionsComponent implements OnInit {
 
   public emitionCount: number = 0;
   public renovationCount: number = 0;
+  public isEmition: boolean|null = null;
 
   private guaranties: string[] = ["GFCF", "GADF", "GAMF"]
+
+  onSetEmition(isEmition: boolean) {
+    this.isEmition = isEmition;
+    this.fetchData();
+  }
   
   ngOnDestroy() {
     this.users$.unsubscribe();
   }
 
   ngOnInit() {
-    this.navigationService.setTitle("Recaudacion");
+    this.navigationService.setTitle("Suma Asegurada");
 
     this.navigationService.setMenu([
       // { id: 'search', label: 'Buscar', icon: 'search', show: true },
@@ -72,6 +92,23 @@ export class CollectionsComponent implements OnInit {
       this.users = users;
     });
   }
+
+  openDialogFinanciers() {
+    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(financier => {
+      if (financier) {
+        this.financierForm.patchValue(financier);
+      } else {
+        this.financierForm.patchValue({ name: null, _id: null });
+      }
+      this.fetchData();
+    });
+  }
+
 
   ngAfterViewInit() {
     this.fetchData();
@@ -84,12 +121,20 @@ export class CollectionsComponent implements OnInit {
       const params: Params = {
         startDate, endDate, userId
       };
+      if (this.financierForm.valid) {
+        params.financierId = this.financierForm.value._id;
+      }
+
+      params.isEmition = this.isEmition;
+
+      if (this.customerForm.valid) {
+        params.customerId = this.customerForm.value._id;
+      }
+
       this.reportsService.getCollectionGuarantiesByRangeDateUser(
         params
       ).subscribe(collection => {
         this.navigationService.loadBarFinish();
-        console.log(collection);
-        
         const { material, direct, compliance } = collection;
         const colors = [randomColor(), randomColor(), randomColor()];
 
@@ -143,59 +188,73 @@ export class CollectionsComponent implements OnInit {
         const canvasPrice = this.collectionChartPrice.nativeElement;
         this.chartPrice = new Chart(canvasPrice, configPrice);
 
+        // this.chartPrima?.destroy();
+        // this.compliancePrima = compliance.emitionPrima + compliance.renovationPrima;
+        // this.directPrima = direct.emitionPrima + direct.renovationPrima;
+        // this.materialPrima = material.emitionPrima + material.renovationPrima;
 
-        
-        this.chartPrima?.destroy();
-        this.compliancePrima = compliance.emitionPrima + compliance.renovationPrima;
-        this.directPrima = direct.emitionPrima + direct.renovationPrima;
-        this.materialPrima = material.emitionPrima + material.renovationPrima;
-
-        const dataPrima = {
-          datasets: [
-            {
-              label: 'Dataset 1',
-              data: [this.compliancePrima, this.directPrima, this.materialPrima],
-              backgroundColor: colors,
-              fill: true
-            },
-          ]
-        };
+        // const dataPrima = {
+        //   datasets: [
+        //     {
+        //       label: 'Dataset 1',
+        //       data: [this.compliancePrima, this.directPrima, this.materialPrima],
+        //       backgroundColor: colors,
+        //       fill: true
+        //     },
+        //   ]
+        // };
     
-        const configPrima = {
-          type: 'pie' as ChartType,
-          data: dataPrima,
-          plugins: [ChartDataLabels],
-          options: {
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                backgroundColor: function(ctx) {
-                  return 'rgba(73, 79, 87, 0.5)'
-                },
-                borderRadius: 4,
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: (value, ctx) => {
-                  if (value) {
-                    return this.guaranties[ctx.dataIndex];
-                  } else {
-                    return null;
-                  }
-                },
-                padding: 6
-              },
-            }
-          } as ChartOptions,
-        };
-        const canvasPrima = this.collectionChartPrima.nativeElement;
-        this.chartPrima = new Chart(canvasPrima, configPrima);
+        // const configPrima = {
+        //   type: 'pie' as ChartType,
+        //   data: dataPrima,
+        //   plugins: [ChartDataLabels],
+        //   options: {
+        //     maintainAspectRatio: false,
+        //     plugins: {
+        //       datalabels: {
+        //         backgroundColor: function(ctx) {
+        //           return 'rgba(73, 79, 87, 0.5)'
+        //         },
+        //         borderRadius: 4,
+        //         color: 'white',
+        //         font: {
+        //           weight: 'bold'
+        //         },
+        //         formatter: (value, ctx) => {
+        //           if (value) {
+        //             return this.guaranties[ctx.dataIndex];
+        //           } else {
+        //             return null;
+        //           }
+        //         },
+        //         padding: 6
+        //       },
+        //     }
+        //   } as ChartOptions,
+        // };
+        // const canvasPrima = this.collectionChartPrima.nativeElement;
+        // this.chartPrima = new Chart(canvasPrima, configPrima);
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
         this.navigationService.loadBarFinish();
       });
     }
+  }
+
+  openDialogCustomer() {
+    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(customer => {
+      if (customer) {
+        this.customerForm.patchValue(customer);
+      } else {
+        this.customerForm.patchValue({ name: null, _id: null });
+      }
+      this.fetchData();
+    });
   }
 
   onChangeCategory() {
@@ -213,6 +272,5 @@ export class CollectionsComponent implements OnInit {
   onChange() {
     this.fetchData();
   }
-
 
 }

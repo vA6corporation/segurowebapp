@@ -1,0 +1,20 @@
+<div class="fixActionRow">
+    <h2 mat-dialog-title>Seleccione un broker</h2>
+    <div mat-dialog-content>
+      <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <mat-form-field>
+          <input type="text" matInput placeholder="Busqueda" formControlName="key">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </form>
+      <mat-selection-list [multiple]="false">
+        <mat-list-option *ngFor="let broker of brokers" [mat-dialog-close]="broker">
+          {{ broker.name | uppercase }}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+    <div class="spacer"></div>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>CANCELAR</button>
+    </mat-dialog-actions>
+  </div>

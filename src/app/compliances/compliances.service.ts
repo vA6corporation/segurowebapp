@@ -4,6 +4,7 @@ import { Cheque } from '../cheques/cheque.model';
 import { Deposit } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
 import { Mail } from '../mails/mail.interface';
+import { CompliancePdfModel } from './compliance-pdf.model';
 import { Compliance } from './compliance.model';
 
 @Injectable({
@@ -24,7 +25,7 @@ export class CompliancesService {
   }
 
   getCompliancesByPage(pageIndex: number, pageSize: number): Observable<Compliance[]> {
-    return this.httpService.get(`compliances/${pageIndex}/${pageSize}`);
+    return this.httpService.get(`compliances/byPage/${pageIndex}/${pageSize}`);
   }
 
   getCompliancesCount(): Observable<number> {
@@ -32,7 +33,7 @@ export class CompliancesService {
   }
 
   getComplianceById(complianceId: string): Observable<Compliance> {
-    return this.httpService.get(`compliances/${complianceId}`);
+    return this.httpService.get(`compliances/byId/${complianceId}`);
   }
 
   create(compliance: Compliance, cheques: Cheque[], deposits: Deposit[]): Observable<Compliance> {
@@ -46,4 +47,17 @@ export class CompliancesService {
   delete(complianceId: string): Observable<any> {
     return this.httpService.delete(`compliances/${complianceId}`);
   }
+
+  getCompliancePdfs(complianceId: string, type: string): Observable<CompliancePdfModel[]> {
+    return this.httpService.get(`compliances/pdfs/${complianceId}/${type}`);
+  }
+
+  uploadPdf(formData: FormData, complianceId: string, type: string): Observable<string> {
+    return this.httpService.postForm(`compliances/uploadPdf/${complianceId}/${type}`, formData);
+  }
+
+  deletePdf(compliancePdfId: string, pdfId: string): Observable<string> {
+    return this.httpService.delete(`compliances/deletePdf/${compliancePdfId}/${pdfId}`);
+  }
+
 }

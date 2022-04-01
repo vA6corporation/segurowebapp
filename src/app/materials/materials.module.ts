@@ -11,12 +11,13 @@ import { ChequesModule } from '../cheques/cheques.module';
 import { DepositsModule } from '../deposits/deposits.module';
 import { DialogMaterialComponent } from './dialog-material/dialog-material.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DialogPdfMaterialsComponent } from './dialog-pdf-materials/dialog-pdf-materials.component';
 
 @NgModule({
   declarations: [
     MaterialsComponent, 
     CreateMaterialsComponent, 
-    EditMaterialsComponent, DialogMaterialComponent,
+    EditMaterialsComponent, DialogMaterialComponent, DialogPdfMaterialsComponent,
   ],
   imports: [
     CommonModule,

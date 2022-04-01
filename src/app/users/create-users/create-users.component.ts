@@ -17,17 +17,16 @@ export class CreateUsersComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
-  ) { 
-    this.formGroup = this.formBuilder.group({
-      name: [ null, Validators.required ],
-      email: [ null, [ Validators.required, Validators.email ] ],
-      password: [ null, [ Validators.required, Validators.minLength(8) ] ],
-      allGuaranties: false,
-    });
-  }
+  ) { }
 
-  public formGroup: FormGroup;
+  public formGroup: FormGroup = this.formBuilder.group({
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    password: [ null, [ Validators.required, Validators.minLength(8) ] ],
+    allGuaranties: false,
+  });
   public isLoading: boolean = false;
+  public hide: boolean = true;
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nuevo usuario');

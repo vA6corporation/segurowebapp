@@ -1,4 +1,4 @@
-export interface Customer {
+export interface CustomerModel {
   _id?: string,
   typeDocument: string,
   document: string,

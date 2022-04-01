@@ -50,7 +50,7 @@ export class PaymentOrdersComponent implements OnInit {
       switch (id) {
         case 'export_excel': {
           // this.navigationService.loadBarStart();
-          // this.customersService.getCustomers().subscribe(customers => {
+          // this.customersService.getCustomerModels().subscribe(customers => {
           //   this.navigationService.loadBarFinish();
           //   const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
           //   let body = [];
@@ -95,7 +95,7 @@ export class PaymentOrdersComponent implements OnInit {
     });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
-      // this.customersService.getCustomersByKey(key).subscribe(customers => {
+      // this.customersService.getCustomerModelsByKey(key).subscribe(customers => {
       //   this.dataSource = customers;
       // }, (error: HttpErrorResponse) => {
       //   this.navigationService.showMessage(error.error.message);

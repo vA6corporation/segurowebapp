@@ -20,9 +20,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [
+    ClipboardModule,
     MatCardModule,
     MatExpansionModule,
     MatNativeDateModule, // Native module for datepicker
@@ -46,6 +48,7 @@ import { MatCardModule } from '@angular/material/card';
     MatSlideToggleModule,
   ],
   exports: [
+    ClipboardModule,
     MatCardModule,
     MatExpansionModule,
     MatDatepickerModule,

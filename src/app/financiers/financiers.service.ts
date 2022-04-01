@@ -3,26 +3,26 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
 import { Guarantee } from '../reports/guarantee.interface';
-import { Financier } from './financier.model'
+import { FinancierModel } from './financier.model'
 
 @Injectable({
   providedIn: 'root'
 })
-export class FinanciersService {
+export class FinancierModelsService {
 
   constructor(
     private readonly httpService: HttpService,
   ) { }
 
-  getFinanciersByPage(pageIndex: number, pageSize: number): Observable<Financier[]> {
+  getFinancierModelsByPage(pageIndex: number, pageSize: number): Observable<FinancierModel[]> {
     return this.httpService.get(`financiers/${pageIndex}/${pageSize}`);
   }
 
-  getFinanciersByAny(key: string): Observable<Financier[]> {
+  getFinancierModelsByAny(key: string): Observable<FinancierModel[]> {
     return this.httpService.get(`financiers/byAny/${key}`)
   }
 
-  getFinancierById(financierId: string): Observable<any> {
+  getFinancierModelById(financierId: string): Observable<any> {
     return this.httpService.get(`financiers/${financierId}`)
   }
 
@@ -34,11 +34,11 @@ export class FinanciersService {
     return this.httpService.get(`reports/${financierId}/emitionGuaranties`);
   }
 
-  create(financier: Financier): Observable<any> {
+  create(financier: FinancierModel): Observable<any> {
     return this.httpService.post('financiers', { financier });
   }
 
-  update(financier: Financier, financierId: string): Observable<any> {
+  update(financier: FinancierModel, financierId: string): Observable<any> {
     return this.httpService.put(`financiers/${financierId}`, { financier });
   }
 }

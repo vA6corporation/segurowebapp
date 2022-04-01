@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Customer } from 'src/app/customers/customer.model';
+import { CustomerModel } from 'src/app/customers/customer.model';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { PartnershipsService } from '../partnerships.service';
@@ -34,14 +34,14 @@ export class CreatePartnershipsComponent implements OnInit {
     }),
   });
   public isLoading: boolean = false;
-  public customers: Customer[] = [];
+  public customers: CustomerModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio');
     this.navigationService.backTo();
   }
 
-  openDialogCustomers(): void {
+  openDialogCustomer(): void {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
@@ -54,7 +54,7 @@ export class CreatePartnershipsComponent implements OnInit {
     });
   }
 
-  removeCustomer(index: number): void {
+  removeCustomerModel(index: number): void {
     this.customers.splice(index, 1);
   }
 

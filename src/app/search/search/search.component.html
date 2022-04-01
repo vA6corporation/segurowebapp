@@ -1,27 +1,27 @@
 <section class="container py-4">
+  <div class="d-flex">
+    <mat-form-field appearance="fill">
+      <mat-label>Estado de tramite</mat-label>
+      <mat-select [(value)]="processStatusCode" (selectionChange)="onStatusChange()">
+        <mat-option value="" disabled>TODOS LOS ESTADOS</mat-option>
+        <mat-option value="01">REDACCION</mat-option>
+        <mat-option value="02">LEGALIZACION</mat-option>
+        <mat-option value="03">CONFORMIDAD</mat-option>
+        <mat-option value="04">CONSTITUIDO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado de revision</mat-label>
+      <mat-select [(value)]="status" (selectionChange)="onStatusChange()">
+        <mat-option value="" disabled>TODOS LAS REVISIONES</mat-option>
+        <mat-option value="01">SIN REVISAR</mat-option>
+        <mat-option value="02">RENOVAR</mat-option>
+        <mat-option value="03">NO RENOVAR</mat-option>
+        <mat-option value="04">LIBERADO</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="mat-elevation-z2">
-    <div class="d-flex">
-      <mat-form-field appearance="fill">
-        <mat-label>Estado de tramite</mat-label>
-        <mat-select [(value)]="processStatusCode" (selectionChange)="onStatusChange()">
-          <mat-option value="" disabled>TODOS LOS ESTADOS</mat-option>
-          <mat-option value="01">REDACCION</mat-option>
-          <mat-option value="02">LEGALIZACION</mat-option>
-          <mat-option value="03">CONFORMIDAD</mat-option>
-          <mat-option value="04">CONSTITUIDO</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Estado de revision</mat-label>
-        <mat-select [(value)]="status" (selectionChange)="onStatusChange()">
-          <mat-option value="" disabled>TODOS LAS REVISIONES</mat-option>
-          <mat-option value="01">SIN REVISAR</mat-option>
-          <mat-option value="02">RENOVAR</mat-option>
-          <mat-option value="03">NO RENOVAR</mat-option>
-          <mat-option value="04">LIBERADO</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
     <table mat-table [dataSource]="dataSource" class="w-100">
       <ng-container matColumnDef="guaranteeType">
         <th mat-header-cell *matHeaderCellDef>Garantia</th>
@@ -46,6 +46,10 @@
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
         <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado de T.</th>
+        <td mat-cell *matCellDef="let element">{{ element.processStatus }}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -86,10 +90,10 @@
               <mat-icon>bookmark</mat-icon>
               <span>Liberado</span>
             </button>
-            <button type="button" *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
+            <a *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
-            </button>
+            </a>
             <button type="button" *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>

@@ -1,6 +1,6 @@
-import { Customer } from "../customers/customer.model";
+import { CustomerModel } from "../customers/customer.model";
 
-export interface Partnership {
+export interface PartnershipModel {
   _id?: string,
   document: string,
   name: string,
@@ -9,7 +9,7 @@ export interface Partnership {
   annexed: string,
   representative: string,
   representativeDocument: string,
-  customer?: Customer,
+  customer?: CustomerModel,
   createdAt: any,
   updatedAt: any,
   userId: string,

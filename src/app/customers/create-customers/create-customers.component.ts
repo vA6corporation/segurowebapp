@@ -10,7 +10,7 @@ import { CustomersService } from '../customers.service';
   templateUrl: './create-customers.component.html',
   styleUrls: ['./create-customers.component.sass']
 })
-export class CreateCustomersComponent implements OnInit {
+export class CreateCustomerModelsComponent implements OnInit {
 
   constructor(
     private readonly formBuilder: FormBuilder,

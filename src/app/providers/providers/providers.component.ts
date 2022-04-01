@@ -55,7 +55,7 @@ export class ProvidersComponent implements OnInit {
       switch (id) {
         case 'export_excel': {
           // this.navigationService.loadBarStart();
-          // this.customersService.getCustomers().subscribe(customers => {
+          // this.customersService.getCustomerModels().subscribe(customers => {
           //   this.navigationService.loadBarFinish();
           //   const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
           //   let body = [];

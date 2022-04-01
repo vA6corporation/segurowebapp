@@ -9,6 +9,7 @@ export interface Cheque {
   extensionAt: string|null
   deletedAt: string|null
   onModel: any
+  currency: string
   isPaid: boolean
   guaranteeId: string
   guarantee: Guarantee|null

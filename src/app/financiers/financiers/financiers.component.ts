@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { FinanciersService } from '../financiers.service';
-import { Financier } from '../financier.model';
+import { FinancierModelsService } from '../financiers.service';
+import { FinancierModel } from '../financier.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Subscription } from 'rxjs';
@@ -11,24 +11,24 @@ import { Subscription } from 'rxjs';
   templateUrl: './financiers.component.html',
   styleUrls: ['./financiers.component.sass']
 })
-export class FinanciersComponent implements OnInit {
+export class FinancierModelsComponent implements OnInit {
 
   constructor(
-    private readonly financiersService: FinanciersService,
+    private readonly financiersService: FinancierModelsService,
     private readonly navigationService: NavigationService,
   ) { }
     
   private handleSearch$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
-  public dataSource: Financier[] = [];
+  public dataSource: FinancierModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
   handlePageEvent(event: PageEvent): void {
-    this.financiersService.getFinanciersByPage(event.pageIndex + 1, event.pageSize).subscribe(financiers => {
+    this.financiersService.getFinancierModelsByPage(event.pageIndex + 1, event.pageSize).subscribe(financiers => {
       this.dataSource = financiers;
     });
   }
@@ -43,13 +43,13 @@ export class FinanciersComponent implements OnInit {
       this.length = count;
     });
     
-    this.financiersService.getFinanciersByPage(this.pageIndex + 1, this.pageSize).subscribe(financiers => {
+    this.financiersService.getFinancierModelsByPage(this.pageIndex + 1, this.pageSize).subscribe(financiers => {
       this.dataSource = financiers;
     });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.financiersService.getFinanciersByAny(key).subscribe(financiers => {
+      this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
         this.navigationService.loadBarFinish();
         this.dataSource = financiers;
       }, (error: HttpErrorResponse) => {

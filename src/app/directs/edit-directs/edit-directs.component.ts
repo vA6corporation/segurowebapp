@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
-import { DialogFinanciersComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DirectsService } from '../directs.service';
@@ -18,6 +18,11 @@ import { DepositsService } from 'src/app/deposits/deposits.service';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { Subscription } from 'rxjs';
+import { DialogPdfDirectsComponent, DirectPdfData } from '../dialog-pdf-directs/dialog-pdf-directs.component';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
+import { ConstructionModel } from 'src/app/constructions/construction.model';
+import { CustomerModel } from 'src/app/customers/customer.model';
+import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 
 @Component({
   selector: 'app-edit-directs',
@@ -30,7 +35,6 @@ export class EditDirectsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly directsService: DirectsService,
     private readonly chequesService: ChequesService,
-    private readonly workersService: WorkersService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
     private readonly route: ActivatedRoute,
@@ -38,10 +42,6 @@ export class EditDirectsComponent implements OnInit {
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
-    customer: this.formBuilder.group({
-      _id: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-    }),
     financier: this.formBuilder.group({
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
@@ -50,16 +50,11 @@ export class EditDirectsComponent implements OnInit {
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
     }),
-    partnership: this.formBuilder.group({
-      _id: null,
-      name: null,
-    }),
     direct: this.formBuilder.group({
-      processStatusCode: '01',
-      constructionCode: '01',
+      constructionId: '',
       _id: [ null, Validators.required ],
       policyNumber: [ null, Validators.required ],
-      object: [ null, Validators.required ],
+      object: null,
       price: [ null, Validators.required ],
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
@@ -67,21 +62,24 @@ export class EditDirectsComponent implements OnInit {
       prima: null,
       isEmition: false,
       commission: null,
-      workerId: null
+      currency: 'PEN'
     }),
   });
 
+  public construction: ConstructionModel|null = null;
+  public customer: CustomerModel|null = null;
+  public partnership: PartnershipModel|null = null;
   private directId: string = '';
   public isLoading: boolean = false;
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
-  public workers: WorkerModel[] = [];
+  // public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription();
+  // private workers$: Subscription = new Subscription();
 
-  ngOnDestroy() {
-    this.workers$.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.workers$.unsubscribe();
+  // }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto directo');
@@ -90,29 +88,147 @@ export class EditDirectsComponent implements OnInit {
       this.directId = params.directId;
       this.directsService.getDirectById(this.directId).subscribe(direct => {
         console.log(direct);
-        const { customer, financier, beneficiary, partnership, cheques = [], deposits = [] } = direct;
-        this.formGroup.patchValue({ customer });
+        const { financier, beneficiary, cheques = [], deposits = [], construction } = direct;
+        // this.formGroup.patchValue({ partnership: partnership || {} });
+        // this.formGroup.patchValue({ customer });
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ beneficiary });
-        this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ direct });
+        this.construction = construction;
+        this.customer = construction?.customer || null;
+        this.partnership = construction?.partnership || null;
         this.cheques = cheques;
         this.deposits = deposits;
       });
     });;
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
-      this.workers = workers;
+    // this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    //   this.workers = workers;
+    // });
+  }
+
+  onEditConstruction() {
+    const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+      width: '100vw',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(construction => {
+      console.log(construction);
+      
+      if (construction) {
+        this.construction = construction;
+        this.formGroup.patchValue({ direct: { constructionId: construction._id } });
+      }
     });
   }
 
+  onAttachPdfInvoice() {
+    const data: DirectPdfData = {
+      type: 'invoice',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfTicket() {
+    const data: DirectPdfData = {
+      type: 'voucher',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfDocuments() {
+    const data: DirectPdfData = {
+      type: 'document',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfCheques() {
+    const data: DirectPdfData = {
+      type: 'cheque',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfDeposits() {
+    const data: DirectPdfData = {
+      type: 'deposit',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfFianzas() {
+    const data: DirectPdfData = {
+      type: 'fianza',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfConstructions() {
+    const data: DirectPdfData = {
+      type: 'construction',
+      directId: this.directId
+    }
+
+    this.matDialog.open(DialogPdfDirectsComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+
   removeCheque(index: number): void {
-    const ok = confirm('Esta seguro de anular?...');
+    const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
       const cheque = this.cheques[index];
       this.chequesService.deleteOne(cheque._id).subscribe(() => {
-        cheque.deletedAt = new Date().toString();
-        this.navigationService.showMessage('Anulado correctamente');
+        this.cheques.splice(index, 1);
+        this.navigationService.showMessage('Eliminado correctamente');
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
       });
@@ -129,7 +245,7 @@ export class EditDirectsComponent implements OnInit {
     }
   }
 
-  openDialogCustomers() {
+  openDialogCustomer() {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
@@ -143,7 +259,7 @@ export class EditDirectsComponent implements OnInit {
   }
 
   openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciersComponent, {
+    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
@@ -234,11 +350,11 @@ export class EditDirectsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, beneficiary, partnership, direct } = this.formGroup.value;
-      direct.customerId = customer._id;
+      const { financier, beneficiary, direct } = this.formGroup.value;
+      // direct.customerId = customer._id;
+      // direct.partnershipId = partnership._id;
       direct.financierId = financier._id;
       direct.beneficiaryId = beneficiary._id;
-      direct.partnershipId = partnership._id;
       this.directsService.update(direct, this.directId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
@@ -254,3 +370,7 @@ export class EditDirectsComponent implements OnInit {
   }
 
 }
+function DialogPdfDirectComponent(DialogPdfDirectComponent: any, arg1: { width: string; height: string; position: { top: string; }; data: DirectPdfData; }) {
+  throw new Error('Function not implemented.');
+}
+

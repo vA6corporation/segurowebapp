@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
-import { Partnership } from './partnership.model';
+import { PartnershipModel } from './partnership.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +12,15 @@ export class PartnershipsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getPartnershipsByAny(key: string): Observable<Partnership[]> {
+  getPartnershipsByAny(key: string): Observable<PartnershipModel[]> {
     return this.httpService.get(`partnerships/byAny/${key}`);
   }
 
-  getPartnershipsByPage(pageIndex: number, pageSize: number): Observable<Partnership[]> {
+  getPartnerships(): Observable<PartnershipModel[]> {
+    return this.httpService.get('partnerships');
+  }
+
+  getPartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
     return this.httpService.get(`partnerships/${pageIndex}/${pageSize}`); 
   }
 
@@ -29,11 +32,11 @@ export class PartnershipsService {
     return this.httpService.get(`partnerships/${partnershipId}`);
   }
 
-  create(partnership: Partnership): Observable<Partnership> {
+  create(partnership: PartnershipModel): Observable<PartnershipModel> {
     return this.httpService.post('partnerships', { partnership });
   }
 
-  update(partnership: Partnership, partnershipId: string): Observable<Partnership> {
+  update(partnership: PartnershipModel, partnershipId: string): Observable<PartnershipModel> {
     return this.httpService.put(`partnerships/${partnershipId}`, { partnership });
   }
 }

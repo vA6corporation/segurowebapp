@@ -1,15 +1,40 @@
 <section class="container py-4">
+  <div class="d-flex">
+    <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 mb-3">
+      <span class="mat-h1">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
+    </button>
+  </div>
+  <h3 class="text-center">{{ partnership?.name }}</h3>
+  <h4 class="text-center">{{ customer?.name }}</h4>
+  <div class="my-3">
+    <button type="button" (click)="onAttachPdfInvoice()" [disabled]="isLoading" mat-raised-button color="primary">FACTURA</button>
+    <span class="divider"></span>
+    <button type="button" (click)="onAttachPdfTicket()" [disabled]="isLoading" mat-raised-button color="primary">VOUCHER</button>
+    <span class="divider"></span>
+    <!-- <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
+    <span class="divider"></span> -->
+    <button type="button" (click)="onAttachPdfCheques()" [disabled]="isLoading" mat-raised-button color="primary">CHEQUES</button>
+    <span class="divider"></span>
+    <button type="button" (click)="onAttachPdfDeposits()" [disabled]="isLoading" mat-raised-button color="primary">DEPOSITOS</button>
+    <span class="divider"></span>
+    <button type="button" (click)="onAttachPdfFianzas()" [disabled]="isLoading" mat-raised-button color="primary">FIANZAS</button>
+    <span class="divider"></span>
+    <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">ESTADO DE OBRA</button>
+  </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <div formGroupName="partnership">
+    <!-- <div formGroupName="partnership">
       <mat-form-field>
         <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
       </mat-form-field>
     </div>
     <div formGroupName="customer">
       <mat-form-field>
-        <input type="text" matInput placeholder="Cliente" formControlName="name" (click)="openDialogCustomers()" readonly>
+        <input type="text" matInput placeholder="Cliente" formControlName="name" (click)="openopenDialogCustomers()" readonly>
       </mat-form-field>
-    </div>
+    </div> -->
     <div formGroupName="financier">
       <mat-form-field>
         <input type="text" matInput placeholder="Financiera" formControlName="name" (click)="openDialogFinanciers()" readonly>
@@ -21,7 +46,7 @@
       </mat-form-field>
     </div>
     <div formGroupName="compliance">
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Estado de tramite</mat-label>
         <mat-select formControlName="processStatusCode">
           <mat-option value="01">REDACCION</mat-option>
@@ -37,8 +62,9 @@
           <mat-option value="02">POR TERMINAR</mat-option>
           <mat-option value="03">PARALIZADA</mat-option>
           <mat-option value="04">EN ARBITRAJE</mat-option>
-          <mat-option value="04">ANULADA</mat-option>
-          <mat-option value="04">FINALIZADA</mat-option>
+          <mat-option value="05">ANULADA</mat-option>
+          <mat-option value="06">FINALIZADA</mat-option>
+          <mat-option value="07">AMORTIZADO</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -46,7 +72,7 @@
         <mat-select formControlName="workerId">
           <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-form-field>
         <input type="text" matInput placeholder="N° de poliza" formControlName="policyNumber">
       </mat-form-field>
@@ -68,6 +94,13 @@
         <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Moneda</mat-label>
+        <mat-select formControlName="currency">
+          <mat-option value="PEN">PEN</mat-option>
+          <mat-option value="USD">USD</mat-option>
+        </mat-select>
+      </mat-form-field>
       <mat-form-field>
         <input type="number" matInput placeholder="Prima" formControlName="prima">
       </mat-form-field>
@@ -82,7 +115,7 @@
       </div>
       <mat-list class="mb-1">
         <div mat-subheader>
-          Pagos
+          Cheques
           <div class="spacer"></div>
           <button type="button" mat-mini-fab color="primary" (click)="openDialogCheques()">
             <mat-icon>add</mat-icon>
@@ -96,7 +129,7 @@
                   Monto:
                 </td>
                 <td>
-                  {{ cheque.price.toFixed(2) }} - {{ cheque.paymentType }}
+                  {{ cheque.price.toFixed(2) }} - {{ cheque.currency }}
                 </td>
               </tr>
               <tr>
@@ -138,7 +171,7 @@
         </div>
         <mat-list-item *ngFor="let deposit of deposits; let i = index;">
           <mat-icon mat-list-icon>monetization_on</mat-icon>
-          <div mat-line>{{ deposit.price.toFixed(2) }}</div>
+          <div mat-line>{{ deposit.price.toFixed(2) }} {{ deposit.currency }}</div>
           <div class="spancer"></div>
           <div>
             <button type="button" mat-icon-button (click)="onEditDeposit(deposit)">

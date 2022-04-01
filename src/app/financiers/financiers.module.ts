@@ -1,25 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FinanciersRoutingModule } from './financiers-routing.module';
+import { FinancierModelsRoutingModule } from './financiers-routing.module';
 import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FinanciersComponent } from './financiers/financiers.component';
-import { CreateFinanciersComponent } from './create-financiers/create-financiers.component';
-import { EditFinanciersComponent } from './edit-financiers/edit-financiers.component';
-import { DialogFinanciersComponent } from '../financiers/dialog-financiers/dialog-financiers.component';
+import { FinancierModelsComponent } from './financiers/financiers.component';
+import { CreateFinancierModelsComponent } from './create-financiers/create-financiers.component';
+import { EditFinancierModelsComponent } from './edit-financiers/edit-financiers.component';
+import { DialogFinanciesComponent } from '../financiers/dialog-financiers/dialog-financiers.component';
 
 @NgModule({
   declarations: [
-    FinanciersComponent,
-    CreateFinanciersComponent,
-    EditFinanciersComponent,
-    DialogFinanciersComponent,
+    FinancierModelsComponent,
+    CreateFinancierModelsComponent,
+    EditFinancierModelsComponent,
+    DialogFinanciesComponent,
   ],
   imports: [
     CommonModule,
-    FinanciersRoutingModule,
+    FinancierModelsRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
   ],
 })
-export class FinanciersModule { }
+export class FinancierModelsModule { }

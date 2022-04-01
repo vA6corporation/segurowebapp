@@ -1,0 +1,56 @@
+<section class="container py-4">
+  <div class="my-3">
+    <button type="button" (click)="onAttachPdf()" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
+    <span class="divider"></span>
+  </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Objeto *" formControlName="object">
+      </mat-form-field>
+      <div formGroupName="partnership">
+        <mat-form-field>
+          <mat-label>Consorcio</mat-label>
+          <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
+        </mat-form-field>
+      </div>
+      <div formGroupName="customer">
+        <mat-form-field>
+          <mat-label>Cliente *</mat-label>
+          <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de tramite</mat-label>
+        <mat-select formControlName="processStatusCode">
+          <mat-option value="01">REDACCION</mat-option>
+          <mat-option value="02">LEGALIZACION</mat-option>
+          <mat-option value="03">CONFORMIDAD</mat-option>
+          <mat-option value="04">CONSTITUIDO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de obra</mat-label>
+        <mat-select formControlName="constructionCode">
+          <mat-option value="01">EJECUCION</mat-option>
+          <mat-option value="02">POR TERMINAR</mat-option>
+          <mat-option value="03">PARALIZADA</mat-option>
+          <mat-option value="04">EN ARBITRAJE</mat-option>
+          <mat-option value="05">ANULADA</mat-option>
+          <mat-option value="06">FINALIZADA</mat-option>
+          <mat-option value="07">AMORTIZADO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Personal a cargo</mat-label>
+        <mat-select formControlName="workerId">
+          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="d-flex">
+        <span class="spacer"></span>
+        <button type="button" mat-stroked-button color="primary" routerLink="/constructions" class="mr-2">CANCELAR</button>
+        <div class="divider"></div>
+        <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+      </div>
+    </form>
+  </section>

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { CustomersService } from '../customers.service';
-import { Customer } from '../customer.model';
+import { CustomerModel } from '../customer.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
@@ -14,7 +13,7 @@ import { buildExcel } from 'src/app/xlsx';
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.sass']
 })
-export class CustomersComponent implements OnInit {
+export class CustomerModelsComponent implements OnInit {
 
   constructor(
     private readonly customersService: CustomersService,
@@ -22,7 +21,7 @@ export class CustomersComponent implements OnInit {
   ) { }
     
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
-  public dataSource: Customer[] = [];
+  public dataSource: CustomerModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];

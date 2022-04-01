@@ -1,5 +1,5 @@
 
-export interface Financier {
+export interface FinancierModel {
   _id?: string,
   name: string,
   email: string,
