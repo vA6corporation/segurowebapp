@@ -31,6 +31,9 @@
           <button type="button" *ngIf="element.isEmition" mat-icon-button>
             <mat-icon>looks_one</mat-icon>
           </button>
+          <button type="button" *ngIf="!element.isEmition" mat-icon-button>
+            <!-- <mat-icon>looks_one</mat-icon> -->
+          </button>
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -59,10 +62,10 @@
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </button>
-            <button type="button" (click)="sendMail(element._id)" mat-menu-item>
+            <!-- <button type="button" (click)="sendMail(element._id)" mat-menu-item>
               <mat-icon>mail</mat-icon>
               <span>Enviar Mail</span>
-            </button>
+            </button> -->
             <button type="button" (click)="onDelete(element._id)" mat-menu-item>
               <mat-icon>delete</mat-icon>
               <span>Eliminar</span>
@@ -77,9 +80,9 @@
   
     <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
   </div>
-  <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
+  <!-- <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
     <button mat-fab color="primary" class="float-right" routerLink="/compliances/create">
       <mat-icon>add</mat-icon>
     </button>
-  </div>
+  </div> -->
 </section>

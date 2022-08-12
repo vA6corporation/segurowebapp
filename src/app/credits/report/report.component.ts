@@ -1,23 +1,15 @@
-import { formatDate } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { randomColor } from 'src/app/randomColor';
-import { ReportsService } from 'src/app/reports/reports.service';
-import { UserModel } from 'src/app/users/user.model';
-import { UsersService } from 'src/app/users/users.service';
-import { buildExcel } from 'src/app/xlsx';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { HttpErrorResponse } from '@angular/common/http';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { CreditsService } from '../credits.service';
+import { buildExcel } from 'src/app/xlsx';
 Chart.register(...registerables);
 
 @Component({
@@ -35,28 +27,49 @@ export class ReportComponent implements OnInit {
     private readonly matDialog: MatDialog
   ) { }
     
-  @ViewChild('collectionChart') 
-  private collectionChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('insurancesChart') 
+  private insurancesChart!: ElementRef<HTMLCanvasElement>;
 
-  public chart: Chart|null = null;
+  public chartInsurance: Chart|null = null;
+  public years: number[] = [];
+  public types: string[] = [
+    'SCTR',
+    'SOAT',
+    'VIDALEY',
+    'POLIZACAR',
+    'POLIZATREC',
+    'POLIZAEAR',
+    'RCIVIL',
+    'VEHICULAR',
+    'VIDA',
+    'EPS',
+    'SALUD',
+  ];
 
   public formGroup = this.formBuilder.group({
     workerId: '',
-    startDate: [ new Date(), Validators.required ],
-    endDate: [ new Date(), Validators.required ],
+    type: 'SCTR',
+    year: new Date().getFullYear()
   });
 
   private workers$: Subscription = new Subscription();
   public workers: WorkerModel[] = [];
+  public summaries: any[] = [];
+  private months: string[] = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-  // private guaranties: string[] = ["GFCF", "GADF", "GAMF"]
-  
   ngOnDestroy() {
     this.workers$.unsubscribe();
   }
 
   ngOnInit() {
-    this.navigationService.setTitle("Linea de creditos");
+    this.navigationService.setTitle("Seguros");
+
+    const startYear = 2020;
+    const currentYear = new Date().getFullYear();
+
+    for (let index = startYear; index <= currentYear; index++) {
+      this.years.push(index);
+    }
 
     this.navigationService.setMenu([
       // { id: 'search', label: 'Buscar', icon: 'search', show: true },
@@ -66,6 +79,44 @@ export class ReportComponent implements OnInit {
     this.workers$ = this.workersService.getWorkers().subscribe(workers => {
       this.workers = workers;
     });
+
+    this.navigationService.handleClickMenu().subscribe(id => {
+      const { year } = this.formGroup.value;
+      this.creditsService.getSummaryMonthsByYear(year).subscribe(workers => {
+        console.log(workers);
+        {
+          const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+          let body = [];
+          const headerRow = ['PERSONAL', 'ASEGURADORA'];
+          this.months.forEach(e => headerRow.push(e.toUpperCase()));
+          body.push(headerRow);
+          for (const worker of workers) {
+            const workerRow = [worker.worker.name.toUpperCase(), worker.financier.name.toUpperCase()];
+            worker.months.forEach((e: any) => workerRow.push(e.totalCommission));
+            body.push(workerRow);
+          }
+  
+          const name = `COMISIONES`;
+          buildExcel(body, name, wscols, [], []);
+        }
+        {
+          const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+          let body = [];
+          const headerRow = ['PERSONAL', 'ASEGURADORA'];
+          this.months.forEach(e => headerRow.push(e.toUpperCase()));
+          body.push(headerRow);
+          for (const worker of workers) {
+            const workerRow = [worker.worker.name.toUpperCase(), worker.financier.name.toUpperCase()];
+            worker.months.forEach((e: any) => workerRow.push(e.totalPrima));
+            body.push(workerRow);
+          }
+  
+          const name = `PRIMAS`;
+          buildExcel(body, name, wscols, [], []);
+
+        }
+      });
+    });
   }
 
   ngAfterViewInit() {
@@ -74,96 +125,78 @@ export class ReportComponent implements OnInit {
 
   fetchData() {
     if (this.formGroup.valid) {
-      this.navigationService.loadBarStart();
-      const { startDate, endDate, workerId } = this.formGroup.value;
+      const { year, workerId } = this.formGroup.value;
       const params = { workerId };
-      this.creditsService.getSummary(
-        startDate,
-        endDate,
+      this.navigationService.loadBarStart();
+      this.creditsService.getSummaryByYear(
+        year,
         params
-      ).subscribe(value => {
+      ).subscribe(summaries => {
+
+        console.log(summaries);
+
         this.navigationService.loadBarFinish();
-        console.log(value);
+
+        const colors = [
+          randomColor(), 
+          randomColor(), 
+          randomColor(),
+        ];
+
+        this.summaries = summaries;
+
+        this.chartInsurance?.destroy();
         
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
-      //   console.log(collection);
-      //   this.navigationService.loadBarFinish();
-      //   const { payedCompliance, payedMaterial, payedDirect, notPayedCompliance, notPayedMaterial, notPayedDirect } = collection;
-      //   const colors = [randomColor(), randomColor(), randomColor()];
+        const dataSet = {
+          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+          datasets: [
+            // {
+            //   label: 'Cantidad',
+            //   data: summaries.map(e => e.count),
+            //   backgroundColor: colors[0],
+            //   // fill: true
+            // },
+            {
+              label: 'Primas',
+              data: summaries.map((e: any) => e.totalPrima),
+              backgroundColor: colors[1],
+              // fill: true
+            },
+            {
+              label: 'Comisiones',
+              data: summaries.map((e: any) => e.totalCommission),
+              backgroundColor: colors[2],
+              // fill: true
+            },
+          ]
+        };
 
-      //   this.emitionCount = payedMaterial.emitionCount + payedDirect.emitionCount + payedCompliance.emitionCount + notPayedMaterial.emitionCount + notPayedDirect.emitionCount + notPayedCompliance.emitionCount;
-      //   this.renovationCount = payedMaterial.renovationCount + payedDirect.renovationCount + payedCompliance.renovationCount + notPayedMaterial.renovationCount + notPayedCompliance.renovationCount + notPayedCompliance.renovationCount;
-
-      //   this.chartPayed?.destroy();
-      //   this.compliancePayed = payedCompliance.emitionPrima + payedCompliance.renovationPrima;
-      //   this.directPayed = payedDirect.emitionPrima + payedDirect.renovationPrima;
-      //   this.materialPayed = payedMaterial.emitionPrima + payedMaterial.renovationPrima;
-
-      //   const dataPrice = {
-      //     datasets: [
-      //       {
-      //         label: 'Dataset 1',
-      //         data: [this.compliancePayed, this.directPayed, this.materialPayed],
-      //         backgroundColor: colors,
-      //         fill: true
-      //       },
-      //     ]
-      //   };
+        // const dataCommission = {
+        //   datasets: [
+        //     {
+        //       label: 'Dataset 1',
+        //       data: summaries.map(e => e.totalCommission),
+        //       backgroundColor: colors,
+        //       fill: true
+        //     },
+        //   ]
+        // };
     
-      //   const configPrice = {
-      //     type: 'pie' as ChartType,
-      //     data: dataPrice,
-      //     plugins: [ChartDataLabels],
-      //     options: {
-      //       maintainAspectRatio: false,
-      //       plugins: {
-      //         datalabels: {
-      //           backgroundColor: function(ctx) {
-      //             return 'rgba(73, 79, 87, 0.5)'
-      //           },
-      //           borderRadius: 4,
-      //           color: 'white',
-      //           font: {
-      //             weight: 'bold'
-      //           },
-      //           formatter: (value, ctx) => {
-      //             if (value) {
-      //               return this.guaranties[ctx.dataIndex];
-      //             } else {
-      //               return null;
-      //             }
-      //           },
-      //           padding: 6
-      //         },
-      //       }
-      //     } as ChartOptions,
-      //   };
-      //   const canvasPrice = this.collectionChart.nativeElement;
-      //   this.chart = new Chart(canvasPrice, configPrice);
-      // }, (error: HttpErrorResponse) => {
-      //   this.navigationService.showMessage(error.error.message);
-      //   this.navigationService.loadBarFinish();
-      // });
+        const configPrima = {
+          type: 'bar' as ChartType,
+          // labels: ['Ene', 'Feb'],
+          data: dataSet,
+          options: {
+            maintainAspectRatio: false,
+          } as ChartOptions,
+        };
+        const canvasPrima = this.insurancesChart.nativeElement;
+        this.chartInsurance = new Chart(canvasPrima, configPrima);
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+        this.navigationService.loadBarFinish();
+      });
     }
-  }
-
-  onChangeCategory() {
-    this.fetchData();
-  }
-
-  onChangeUser() {
-    this.fetchData();
-  }
-
-  onRangeChange() {
-    this.fetchData();
-  }
-
-  onChange() {
-    this.fetchData();
   }
 
 }

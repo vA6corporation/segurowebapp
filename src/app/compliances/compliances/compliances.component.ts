@@ -39,7 +39,7 @@ export class CompliancesComponent implements OnInit {
     this.fetchData();
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.compliancesService.getCompliancesByAny(key).subscribe(compliances => {
+      this.compliancesService.getCompliancesByKey(key).subscribe(compliances => {
         this.navigationService.loadBarFinish();
         this.dataSource = compliances;
       }, (error: HttpErrorResponse) => {

@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { DialogMaterialComponent } from '../dialog-material/dialog-material.component';
-import { Material } from '../material.model';
+import { Material }from '../material.model';
 import { MaterialsService } from '../materials.service';
 
 @Component({
@@ -22,10 +22,7 @@ export class MaterialsComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
   ) { }
-
-  private handleSearch$: Subscription = new Subscription();
-  private handleClickMenu$: Subscription = new Subscription();
-
+  
   public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public dataSource: Material[] = [];
   public length: number = 100;
@@ -33,11 +30,13 @@ export class MaterialsComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
+  private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
+
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
-
 
   ngOnInit(): void {
     this.navigationService.setTitle('Adelanto de materiales');
@@ -49,7 +48,7 @@ export class MaterialsComponent implements OnInit {
     this.fetchData();
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
-      this.materialsService.getMaterialsByAny(key).subscribe(materials => {
+      this.materialsService.getMaterialsByKey(key).subscribe(materials => {
         this.navigationService.loadBarFinish();
         this.dataSource = materials;
       }, (error: HttpErrorResponse) => {

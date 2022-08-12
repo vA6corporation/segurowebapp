@@ -17,7 +17,7 @@ export class DirectsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getDirectsByAny(key: string): Observable<Direct[]> {
+  getDirectsByKey(key: string): Observable<Direct[]> {
     return this.httpService.get(`directs/byAny/${key}`);
   }
 
@@ -35,6 +35,10 @@ export class DirectsService {
 
   getDirectsByPage(pageIndex: number, pageSize: number): Observable<Direct[]> {
     return this.httpService.get(`directs/byPage/${pageIndex}/${pageSize}`)
+  }
+
+  getDirectsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<Direct[]> {
+    return this.httpService.get(`directs/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`)
   }
 
   create(direct: Direct, cheques: Cheque[], deposits: Deposit[]): Observable<Direct> {

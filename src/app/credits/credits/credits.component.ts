@@ -7,6 +7,7 @@ import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialo
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CreditModel } from '../credit.model';
 import { CreditsService } from '../credits.service';
+import { DialogDetailCreditsComponent } from '../dialog-detail-credits/dialog-detail-credits.component';
 
 @Component({
   selector: 'app-credits',
@@ -21,15 +22,15 @@ export class CreditsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
 
-  private handleSearch$: Subscription = new Subscription();
-  private handleClickMenu$: Subscription = new Subscription();
-
   public displayedColumns: string[] = [ 'customer', 'financier', 'partnership', 'emitionAt', 'days', 'prima', 'actions' ];
   public dataSource: CreditModel[] = [];
-  public length: number = 100;
+  public length: number = 0;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+
+  private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
@@ -39,6 +40,21 @@ export class CreditsComponent implements OnInit {
   ngOnInit(): void {
 
     this.navigationService.setTitle('Lineas de credito');
+
+    this.creditsService.getCountCredits().subscribe(count => {
+      this.length = count;
+    });
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart();
+      this.creditsService.getCreditsByKey(key).subscribe(credits => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = credits;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
     
     this.fetchData();
 
@@ -75,15 +91,15 @@ export class CreditsComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    // this.materialsService.getMaterialsByPage(event.pageIndex + 1, event.pageSize).subscribe(materials => {
-    //   this.dataSource = materials;
-    // });
+    this.creditsService.getCreditsByPage(event.pageIndex + 1, event.pageSize).subscribe(credits => {
+      this.dataSource = credits;
+    });
   }
 
-  onShowDetails(materialId: string) {
-    this.matDialog.open(DialogMaterialComponent, {
+  onShowDetails(creditId: string) {
+    this.matDialog.open(DialogDetailCreditsComponent, {
       position: { top: '20px' },
-      data: materialId,
+      data: creditId,
     });
   }
 

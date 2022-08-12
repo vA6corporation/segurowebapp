@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
@@ -20,6 +20,8 @@ import { DialogConstructionsComponent } from 'src/app/constructions/dialog-const
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
+import { ConstructionsService } from 'src/app/constructions/constructions.service';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
 
 @Component({
   selector: 'app-create-directs',
@@ -33,8 +35,10 @@ export class CreateDirectsComponent implements OnInit {
     private readonly directsService: DirectsService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
+    private readonly constructionsService: ConstructionsService,
+    private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly matDialog: MatDialog
+    private readonly route: ActivatedRoute,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -42,10 +46,10 @@ export class CreateDirectsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    beneficiary: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
+    // beneficiary: this.formBuilder.group({
+    //   name: [ null, Validators.required ],
+    //   _id: [ null, Validators.required ],
+    // }),
     direct: this.formBuilder.group({
       constructionId: '',
       policyNumber: [ null, Validators.required ],
@@ -63,15 +67,18 @@ export class CreateDirectsComponent implements OnInit {
   public customer: CustomerModel|null = null;
   public partnership: PartnershipModel|null = null;
   public worker: WorkerModel|null = null;
+  public beneficiary: BeneficiaryModel|null = null;
   public isLoading: boolean = false;
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
   public workers: WorkerModel[] = [];
 
   private workers$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.workers$.unsubscribe();
+    this.queryParams$.unsubscribe();
   }
 
   ngOnInit(): void { 
@@ -80,6 +87,21 @@ export class CreateDirectsComponent implements OnInit {
 
     this.workers$ = this.workersService.getWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.queryParams$ = this.route.queryParams.subscribe(params => {
+      if (params.constructionId) {
+        this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
+          if (construction) {
+            this.construction = construction;
+            this.customer = construction.customer;
+            this.partnership = construction.partnership;
+            this.worker = construction.worker;
+            this.beneficiary = construction.beneficiary;
+            this.formGroup.patchValue({ material: { constructionId: construction._id } });
+          }
+        });
+      }
     });
   }
 
@@ -97,6 +119,7 @@ export class CreateDirectsComponent implements OnInit {
         this.customer = construction.customer;
         this.partnership = construction.partnership;
         this.worker = construction.worker;
+        this.beneficiary = construction.beneficiary;
         this.formGroup.patchValue({ direct: { constructionId: construction._id } });
       }
     });
@@ -194,12 +217,13 @@ export class CreateDirectsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { financier, beneficiary, direct } = this.formGroup.value;
+      const { financier, direct } = this.formGroup.value;
       direct.partnershipId = this.partnership?._id;
       direct.customerId = this.customer?._id;
+      direct.beneficiaryId = this.beneficiary?._id;
       direct.financierId = financier._id;
-      direct.beneficiaryId = beneficiary._id;
       direct.workerId = this.worker?._id;
+      direct.constructionId = this.construction?._id;
       this.directsService.create(direct, this.cheques, this.deposits).subscribe(res => {
         console.log(res);
         this.isLoading = false;

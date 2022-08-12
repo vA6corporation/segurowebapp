@@ -35,7 +35,7 @@ export class MailsComponent implements OnInit {
     this.fetchData();
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(async (key: string) => {
       this.navigationService.loadBarStart();
-      const mails = await this.mailsService.getManyByAny(key).toPromise();
+      const mails = await this.mailsService.getManyByKey(key).toPromise();
       this.dataSource = mails;
       this.navigationService.loadBarFinish();
     });

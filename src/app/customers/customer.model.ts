@@ -9,7 +9,7 @@ export interface CustomerModel {
   annexed: string,
   birthDate: string,
   address: string,
-  representative: string,
+  representativeName: string,
   createdAt: any,
   updatedAt: any,
   userId: string,

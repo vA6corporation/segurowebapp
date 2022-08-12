@@ -30,6 +30,14 @@
         <td>ID:</td>
         <td>{{ cheque?._id }}</td>
       </tr>
+      <tr class="text-muted">
+        <td>Garantia:</td>
+        <td>
+          <a *ngIf="cheque?.onModel === 'Material'" [href]="[ '/materials/' + cheque?.guaranteeId + '/edit' ]" target="_blank">Ir a la garantia</a>
+          <a *ngIf="cheque?.onModel === 'Compliance'" [href]="[ '/compliances/' + cheque?.guaranteeId + '/edit' ]" target="_blank">Ir a la garantia</a>
+          <a *ngIf="cheque?.onModel === 'Direct'" [href]="[ '/directs/' + cheque?.guaranteeId + '/edit' ]" target="_blank">Ir a la garantia</a>
+        </td>
+      </tr>
     </tbody>
   </table>
   <div class="my-3"></div>

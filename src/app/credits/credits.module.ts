@@ -9,10 +9,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 import { ReportComponent } from './report/report.component';
+import { DialogDetailCreditsComponent } from './dialog-detail-credits/dialog-detail-credits.component';
 
 
 @NgModule({
-  declarations: [CreditsComponent, CreateCreditsComponent, EditCreditsComponent, DialogAttachPdfComponent, ReportComponent],
+  declarations: [CreditsComponent, CreateCreditsComponent, EditCreditsComponent, DialogAttachPdfComponent, ReportComponent, DialogDetailCreditsComponent],
   imports: [
     CommonModule,
     CreditsRoutingModule,

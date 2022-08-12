@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
-import { InsurancePdfModel } from 'src/app/insurances/insurance-pdf.model';
 import { environment } from 'src/environments/environment';
 import { ConstructionPdfModel } from '../construction-pdf.model';
 import { ConstructionsService } from '../constructions.service';

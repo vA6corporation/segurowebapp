@@ -20,6 +20,8 @@ import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
 
 @Component({
   selector: 'app-edit-materials',
@@ -43,10 +45,6 @@ export class EditMaterialsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    beneficiary: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
     material: this.formBuilder.group({
       constructionId: '',
       policyNumber: [ null, Validators.required ],
@@ -54,9 +52,11 @@ export class EditMaterialsComponent implements OnInit {
       price: [ null, Validators.required ],
       startDate: [null, Validators. required ],
       endDate: [ null, Validators.required ],
+      voucherAt: null,
       guarantee: null,
       prima: null,
       isEmition: false,
+      isPaid: false,
       commission: null,
       currency: 'PEN',
     }),
@@ -69,6 +69,8 @@ export class EditMaterialsComponent implements OnInit {
   public construction: ConstructionModel|null = null;
   public customer: CustomerModel|null = null;
   public partnership: PartnershipModel|null = null;
+  public beneficiary: BeneficiaryModel|null = null;
+  public worker: WorkerModel|null = null;
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
@@ -76,16 +78,16 @@ export class EditMaterialsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
-        console.log(material);
-        const { customer, financier, beneficiary, partnership, cheques = [], deposits = [], construction } = material;
+        const { customer, financier, partnership, beneficiary, cheques = [], deposits = [], construction } = material;
         this.formGroup.patchValue({ customer });
         this.formGroup.patchValue({ financier });
-        this.formGroup.patchValue({ beneficiary });
         this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ material });
         this.construction = construction;
+        this.beneficiary = beneficiary || null;
         this.customer = construction?.customer || null;
         this.partnership = construction?.partnership || null;
+        this.worker = material.worker;
         this.cheques = cheques;
         this.deposits = deposits;
       });
@@ -334,9 +336,8 @@ export class EditMaterialsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { financier, beneficiary, material } = this.formGroup.value;
+      const { financier, material } = this.formGroup.value;
       material.financierId = financier._id;
-      material.beneficiaryId = beneficiary._id;
       this.materialsService.update(material, this.materialId).subscribe(res => {
         console.log(res);
         this.isLoading = false;

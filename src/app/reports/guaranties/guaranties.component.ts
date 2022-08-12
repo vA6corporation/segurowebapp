@@ -8,13 +8,14 @@ import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-dire
 import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material } from 'src/app/materials/material.model';
+import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Mail } from 'src/app/mails/mail.interface';
 import { ReportsService } from '../reports.service';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-guaranties',
@@ -43,15 +44,21 @@ export class GuarantiesComponent implements OnInit {
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
   });
+
+  private handleClickMenu$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
+  }
     
   ngOnInit(): void {
-    this.navigationService.setTitle('Renovaciones');
+    this.navigationService.setTitle('Renovaciones de fianzas');
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
       { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.navigationService.handleClickMenu().subscribe(id => {
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([

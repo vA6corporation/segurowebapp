@@ -30,7 +30,7 @@ export class DialogFinanciesComponent implements OnInit {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.get('key')?.setValue(null);
-      this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
+      this.financiersService.getFinancierModelsByKey(key).subscribe(financiers => {
         this.navigationService.loadBarFinish();
         this.financiers = financiers;
       }, (error: HttpErrorResponse) => {

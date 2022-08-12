@@ -11,12 +11,13 @@ import { CustomersModule } from '../customers/customers.module';
 import { PartnershipsModule } from '../partnerships/partnerships.module';
 import { DialogComplianceComponent } from './dialog-compliance/dialog-compliance.component';
 import { DialogPdfCompliancesComponent } from './dialog-pdf-compliances/dialog-pdf-compliances.component';
+import { EditCommercialsComponent } from './edit-commercials/edit-commercials.component';
 
 @NgModule({
   declarations: [
     CompliancesComponent, 
     CreateCompliancesComponent, 
-    EditCompliancesComponent, DialogComplianceComponent, DialogPdfCompliancesComponent, 
+    EditCompliancesComponent, DialogComplianceComponent, DialogPdfCompliancesComponent, EditCommercialsComponent, 
   ],
   imports: [
     CommonModule,

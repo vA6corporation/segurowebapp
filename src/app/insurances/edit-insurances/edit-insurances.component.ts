@@ -16,6 +16,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DialogAttachPdfComponent, InsurancePdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogInsuranceCustomersComponent } from 'src/app/insurance-customers/dialog-insurance-customers/dialog-insurance-customers.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
+import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
+import { OfficeModel } from 'src/app/auth/office.model';
+import { OfficesService } from 'src/app/offices/offices.service';
 
 @Component({
   selector: 'app-edit-insurances',
@@ -29,13 +32,18 @@ export class EditInsurancesComponent implements OnInit {
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
-    private readonly router: Router,
+    private readonly officesService: OfficesService,
     private readonly route: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly location: Location,
+    private readonly router: Router,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
+    construction: this.formBuilder.group({
+      object: null,
+      _id: null,
+    }),
     partnership: this.formBuilder.group({
       _id: null,
       name: null,
@@ -61,15 +69,18 @@ export class EditInsurancesComponent implements OnInit {
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
+      currency: 'PEN',
       isPaid: false,
       isEmition: false,
+      officeId: '',
     }),
   });
 
   public construction: ConstructionModel|null = null;
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
-  private type: string = '';
+  public offices: OfficeModel[] = [];
+  // private type: string = '';
   private insuranceId: string = '';
 
   private workers$: Subscription = new Subscription;
@@ -84,20 +95,54 @@ export class EditInsurancesComponent implements OnInit {
     this.workers$ = this.workersService.getWorkers().subscribe(workers => {
       this.workers = workers;
     });
+
+    this.officesService.getActiveOffices().subscribe(offices => {
+      this.offices = offices;
+    });
     
     this.route.params.subscribe(params => {
-      // this.type = params.type;
       this.insuranceId = params.insuranceId;
       this.navigationService.setTitle('Editar seguro');
       this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
         console.log(insurance);
-        const { broker, customer, financier } = insurance;
+        const { broker, customer, financier, construction } = insurance;
+        this.formGroup.get('construction')?.patchValue(construction || {});
         this.formGroup.get('broker')?.patchValue(broker);
         this.formGroup.get('customer')?.patchValue(customer);
         this.formGroup.get('financier')?.patchValue(financier);
         this.formGroup.get('insurance')?.patchValue(insurance);
         this.formGroup.get('worker')?.patchValue({ _id: insurance.workerId });
       });
+    });
+  }
+
+  onChangeOffice() {
+    if (this.formGroup.valid) {
+      this.navigationService.loadBarStart();
+      const { insurance } = this.formGroup.value;
+      // construction.customerId = customer._id;
+      // construction.beneficiaryId = beneficiary._id;
+      // construction.partnershipId = partnership._id;
+      this.insurancesService.updateOffice(this.insuranceId, insurance.officeId).subscribe(() => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Se han guardado los cambios');
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    }
+  }
+
+  openDialogConstruction() {
+    const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
+      width: '100vw',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(construction => {
+      if (construction) {
+        this.formGroup.patchValue({ construction });
+      }
     });
   }
 
@@ -220,18 +265,17 @@ export class EditInsurancesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, broker, worker, insurance, partnership } = this.formGroup.value;
+      const { customer, financier, broker, worker, insurance, partnership, construction } = this.formGroup.value;
+      insurance.constructionId = construction?._id || null;
+      insurance.partnershipId = partnership?._id || null,
       insurance.customerId = customer._id;
       insurance.financierId = financier._id;
       insurance.brokerId = broker._id;
       insurance.workerId = worker._id;
-      insurance.partnershipId = partnership._id,
-      // insurance.type = this.type;
       this.insurancesService.update(insurance, this.insuranceId).subscribe(res => {
         this.navigationService.loadBarFinish();
         console.log(res);
         this.isLoading = false;
-        // this.location.back();
         this.navigationService.showMessage('Se han guardado los cambios');
       }, (error: HttpErrorResponse) => {
         console.log(error);

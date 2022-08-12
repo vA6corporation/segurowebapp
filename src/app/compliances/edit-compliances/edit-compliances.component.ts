@@ -15,14 +15,13 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DepositsService } from 'src/app/deposits/deposits.service';
-import { WorkersService } from 'src/app/workers/workers.service';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { Subscription } from 'rxjs';
 import { CompliancePdfData, DialogPdfCompliancesComponent } from '../dialog-pdf-compliances/dialog-pdf-compliances.component';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
 
 @Component({
   selector: 'app-edit-compliances',
@@ -46,10 +45,10 @@ export class EditCompliancesComponent implements OnInit {
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
     }),
-    beneficiary: this.formBuilder.group({
-      _id: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-    }),
+    // beneficiary: this.formBuilder.group({
+    //   _id: [ null, Validators.required ],
+    //   name: [ null, Validators.required ],
+    // }),
     compliance: this.formBuilder.group({
       constructionId: '',
       _id: [ null, Validators.required ],
@@ -58,9 +57,11 @@ export class EditCompliancesComponent implements OnInit {
       price: [ null, Validators.required ],
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
+      voucherAt: null,
       guarantee: null,
       prima: null,
       isEmition: false,
+      isPaid: false,
       commission: null,
       currency: 'PEN',
     }),
@@ -69,17 +70,12 @@ export class EditCompliancesComponent implements OnInit {
   public construction: ConstructionModel|null = null;
   public customer: CustomerModel|null = null;
   public partnership: PartnershipModel|null = null;
+  public beneficiary: BeneficiaryModel|null = null;
+  public worker: WorkerModel|null = null;
   public isLoading: boolean = false;
   private complianceId: string = '';
   public deposits: Deposit[] = [];
   public cheques: Cheque[] = [];
-  // public workers: WorkerModel[] = [];
-
-  // private workers$: Subscription = new Subscription();
-
-  // ngOnDestroy() {
-  //   this.workers$.unsubscribe();
-  // }
 
   ngOnInit(): void { 
     this.navigationService.backTo();
@@ -91,12 +87,13 @@ export class EditCompliancesComponent implements OnInit {
         const { customer, financier, beneficiary, partnership, cheques = [], deposits = [], construction } = compliance;
         this.formGroup.patchValue({ customer });
         this.formGroup.patchValue({ financier });
-        this.formGroup.patchValue({ beneficiary });
         this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ compliance });
         this.construction = construction;
+        this.beneficiary = beneficiary || null;
         this.customer = construction?.customer || null;
         this.partnership = construction?.partnership || null;
+        this.worker = compliance.worker;
         this.cheques = cheques;
         this.deposits = deposits;
       });
@@ -271,11 +268,11 @@ export class EditCompliancesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { financier, beneficiary, compliance } = this.formGroup.value;
+      const { financier, compliance } = this.formGroup.value;
       // compliance.customerId = customer._id;
       // compliance.partnershipId = partnership._id;
       compliance.financierId = financier._id;
-      compliance.beneficiaryId = beneficiary._id;
+      // compliance.beneficiaryId = beneficiary._id;
       this.compliancesService.update(compliance, this.complianceId).subscribe(res => {
         console.log(res);
         this.isLoading = false;

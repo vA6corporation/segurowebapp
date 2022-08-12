@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+// import { Params } from '@angular/router';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
@@ -22,6 +25,8 @@ export class DocumentationComponent implements OnInit {
     private readonly documentationService: DocumentationService,
     private readonly matDialog: MatDialog,
     private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) { }
     
   public displayedColumns: string[] = [
@@ -95,16 +100,37 @@ export class DocumentationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(financier => {
       if (financier) {
         this.financierForm.patchValue(financier);
+
+        const queryParams: Params = financier;
+
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: queryParams, 
+          queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
+        
       } else {
         this.financierForm.patchValue({ name: null, _id: null });
       }
-      // this.fetchData();
       this.fetchData();
     });
   }
 
   onRangeChange() {
+
     const { startDate, endDate, isEmition} = this.formGroup.value;
+
+    const queryParams: Params = { pageIndex: 0, isEmition };
+    
+    if (startDate && endDate) {
+      Object.assign(queryParams, { startDate: startDate.getTime(), endDate: endDate.getTime() });  
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
 
     if (this.formGroup.valid) {
       this.dataSourceDirect = this.directs.filter(e => {
@@ -169,7 +195,25 @@ export class DocumentationComponent implements OnInit {
     
   ngOnInit(): void {
     this.navigationService.setTitle('Documentacion faltante');
-    this.fetchData();
+    
+    this.route.queryParams.pipe(first()).subscribe(params => {
+      this.financierForm.patchValue(params);
+      this.formGroup.patchValue(params);
+      if (params.startDate && params.endDate) {
+        this.formGroup.patchValue({
+          startDate: new Date(Number(params.startDate)),
+          endDate: new Date(Number(params.endDate))
+        });
+      }
+      this.fetchData();
+      // this.bankId = params.bankId;
+
+      // this.banksService.getBankById(this.bankId).subscribe(bank => {
+      //   console.log(bank);
+        
+      //   this.formGroup.patchValue(bank);
+      // });
+    });
   }
 
   fetchData() {
@@ -189,6 +233,8 @@ export class DocumentationComponent implements OnInit {
       this.directs = directsDocumentation;
       this.materials = materialsDocumentation;
       this.compliances = compliancesDocumentation;
+
+      this.onRangeChange();
       this.updateTableHead();
     }, (error: HttpErrorResponse) => {
       this.navigationService.loadBarFinish();

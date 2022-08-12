@@ -1,9 +1,10 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
-import { Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
@@ -23,8 +24,15 @@ export class ChequesPaymentComponent implements OnInit {
     private readonly chequesService: ChequesService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) { }
 
+  public formGroup: FormGroup = this.formBuilder.group({
+    startDate: [ new Date(), Validators.required ],
+    endDate: [ new Date(), Validators.required ],
+  });
   public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'customer', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
@@ -32,10 +40,16 @@ export class ChequesPaymentComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   public params: Params = {
-    payed: 'false',
+    isPaid: 'false',
   };
 
   private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleSearch$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
+  }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
@@ -46,7 +60,7 @@ export class ChequesPaymentComponent implements OnInit {
       { id: 'export_cheques', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.navigationService.handleClickMenu().subscribe(id => {
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([
@@ -56,7 +70,7 @@ export class ChequesPaymentComponent implements OnInit {
         'F. DE PRORROGA',
         'N° DE POLIZA',
         'CONSORCIO',
-        'CLIENTE'
+        'CLIENTE',
       ]);
       for (const cheque of this.dataSource) {
         body.push([
@@ -66,7 +80,7 @@ export class ChequesPaymentComponent implements OnInit {
           formatDate(cheque.extensionAt, 'dd/MM/yyyy', 'en-US'),
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
-          cheque.guarantee?.customer?.name
+          cheque.guarantee?.customer?.name,
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -89,10 +103,6 @@ export class ChequesPaymentComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    this.handleSearch$.unsubscribe();
-  }
-
   onShowDetails(chequeId: string) {
     const dialogRef = this.matDialog.open(DialogDetailChequesComponent, {
       data: chequeId,
@@ -102,9 +112,32 @@ export class ChequesPaymentComponent implements OnInit {
   }
 
   fetchData() {
-    this.chequesService.getChequesByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(cheques => {
-      this.dataSource = cheques;
-    });
+    if (this.formGroup.valid) {
+      const { startDate, endDate } = this.formGroup.value;
+      this.navigationService.loadBarStart();
+      this.chequesService.getChequesByRangeDate(startDate, endDate, this.params).subscribe(cheques => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = cheques;
+      });
+    }
+  }
+
+  onRangeChange() {
+    if (this.formGroup.valid) {
+      this.pageIndex = 0;
+
+      const { startDate, endDate } = this.formGroup.value;
+
+      const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0 };
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
+      this.fetchData();
+    }
   }
 
   async onDelete(chequeId: string) {

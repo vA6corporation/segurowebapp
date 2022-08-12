@@ -2,7 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
 import { UsersService } from '../users.service';
 
 @Component({
@@ -16,6 +19,7 @@ export class EditUsersComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly usersService: UsersService,
     private readonly navigationService: NavigationService,
+    private readonly workersService: WorkersService,
     private readonly route: ActivatedRoute,
   ) { }
 
@@ -25,11 +29,19 @@ export class EditUsersComponent implements OnInit {
     password: [ null, Validators.required ],
     isActive: false,
     allGuaranties: false,
+    workerId: ''
   });
 
-  private userId: string = '';
   public isLoading: boolean = false;
   public hide: boolean = true;
+  public workers: WorkerModel[] = [];
+  private userId: string = '';
+
+  private workers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.workers$.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Editar usuario');
@@ -40,6 +52,10 @@ export class EditUsersComponent implements OnInit {
         console.log(user);
         this.formGroup.patchValue(user);
       });
+    });
+
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
     });
   }
 

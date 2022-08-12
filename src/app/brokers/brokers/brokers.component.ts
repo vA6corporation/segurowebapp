@@ -1,10 +1,8 @@
-import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { buildExcel } from 'src/app/xlsx';
 import { BrokerModel } from '../broker.model';
 import { BrokersService } from '../brokers.service';
 

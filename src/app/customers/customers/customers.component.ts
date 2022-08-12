@@ -7,6 +7,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogConstructionCustomersComponent } from '../dialog-construction-customers/dialog-construction-customers.component';
 
 @Component({
   selector: 'app-customers',
@@ -18,6 +20,7 @@ export class CustomerModelsComponent implements OnInit {
   constructor(
     private readonly customersService: CustomersService,
     private readonly navigationService: NavigationService,
+    private readonly matDialog: MatDialog,
   ) { }
     
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
@@ -53,7 +56,7 @@ export class CustomerModelsComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.customersService.getCustomersByAny(key).subscribe(customers => {
+      this.customersService.getCustomersByKey(key).subscribe(customers => {
         this.navigationService.loadBarFinish();
         this.dataSource = customers;
       }, (error: HttpErrorResponse) => {
@@ -71,6 +74,14 @@ export class CustomerModelsComponent implements OnInit {
         default:
           break;
       }
+    });
+  }
+
+  onShowConstructions(customerId: string) {
+    const dialogRef = this.matDialog.open(DialogConstructionCustomersComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: customerId,
     });
   }
 

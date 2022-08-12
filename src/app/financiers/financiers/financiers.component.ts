@@ -49,7 +49,7 @@ export class FinancierModelsComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
+      this.financiersService.getFinancierModelsByKey(key).subscribe(financiers => {
         this.navigationService.loadBarFinish();
         this.dataSource = financiers;
       }, (error: HttpErrorResponse) => {

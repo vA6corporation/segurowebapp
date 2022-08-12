@@ -1,3 +1,5 @@
+import { OfficeModel } from "../auth/office.model";
+
 export interface WorkerModel {
   _id: string,
   name: string,
@@ -7,4 +9,5 @@ export interface WorkerModel {
   mobileNumber: string,
   email: string,
   birthDate: string,
+  office: OfficeModel
 }

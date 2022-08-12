@@ -22,6 +22,18 @@ export class InsurancesService {
     return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`);
   }
 
+  getInsurancesByKeyType(key: string, type: string): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/byKeyType/${key}/${type}`);
+  }
+
+  getCountInsurancesByType(type: string): Observable<number> {
+    return this.httpService.get(`insurances/countInsurancesByType/${type}`);
+  }
+
+  getInsurancesByRangeDateTypeWorker(pageIndex: number, pageSize: number, params: Params): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/byRangeDateTypeWorker/${pageIndex}/${pageSize}`, { params });
+  }
+
   getPdfs(insuranceId: string, type: string): Observable<InsurancePdfModel[]> {
     return this.httpService.get(`insurances/pdfs/${insuranceId}/${type}`);
   }
@@ -38,6 +50,14 @@ export class InsurancesService {
     return this.httpService.put(`insurances/${insuranceId}`, { insurance });
   }
 
+  updateOffice(insuranceId: string, officeId: string): Observable<void> {
+    return this.httpService.put(`insurances/updateOffice/${insuranceId}`, { officeId });
+  }
+
+  updateStatus(insuranceId: string, status: string): Observable<void> {
+    return this.httpService.get(`insurances/${insuranceId}/${status}`);
+  }
+
   delete(insuranceId: string): Observable<void> {
     return this.httpService.delete(`insurances/${insuranceId}`);
   }
@@ -48,6 +68,10 @@ export class InsurancesService {
 
   getSummary(year: number, type: string, params: Params): Observable<any[]> {
     return this.httpService.get(`insurances/summaryByYearType/${year}/${type}`, { params });
+  }
+
+  getSummaryByRangeDateTypeWorker(startDate: Date, endDate: Date, params: Params): Observable<any[]> {
+    return this.httpService.get(`insurances/summaryByRangeDateTypeWorker/${startDate}/${endDate}`, { params });
   }
 
 }

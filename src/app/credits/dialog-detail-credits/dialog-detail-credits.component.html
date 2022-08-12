@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>Detalles</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Garantia</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Prima:</td>
+        <td class="text-uppercase">{{ credit?.prima }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Comision:</td>
+        <td class="text-uppercase">{{ credit?.commission }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Dias:</td>
+        <td class="text-uppercase">{{ credit?.days }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Promotor:</td>
+        <td class="text-uppercase">{{ credit?.worker?.name }}</td>
+      </tr>
+      <!-- <tr>
+        <td>Suma asegurada:</td>
+        <td>{{ credit?.price }}</td>
+      </tr> -->
+      <!-- <tr>
+        <td>Garantia:</td>
+        <td>{{ (credit?.guarantee || 0).toFixed(2) }}</td>
+      </tr> -->
+      <tr>
+        <td>Fecha de vencimiento:</td>
+        <td>{{ credit?.emitionAt | date }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Consorcio</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ (partnership?.name || 'Ninguno') }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ (partnership?.document || 'Ninguno') }}</td>
+      </tr>
+      <tr>
+        <td>Operador tributario:</td>
+        <td>{{ (partnership?.customer?.name || 'Ninguno') }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Cliente</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ customer?.name }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ customer?.document }}</td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td>{{ customer?.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <h3>Financiera</h3>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Razon social:</td>
+        <td class="text-uppercase">{{ financier?.name }}</td>
+      </tr>
+      <tr>
+        <td>Documento:</td>
+        <td>{{ financier?.document }}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>VOLVER</button>
+  <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+</mat-dialog-actions>

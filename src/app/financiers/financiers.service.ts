@@ -18,7 +18,7 @@ export class FinancierModelsService {
     return this.httpService.get(`financiers/${pageIndex}/${pageSize}`);
   }
 
-  getFinancierModelsByAny(key: string): Observable<FinancierModel[]> {
+  getFinancierModelsByKey(key: string): Observable<FinancierModel[]> {
     return this.httpService.get(`financiers/byAny/${key}`)
   }
 

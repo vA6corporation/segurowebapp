@@ -25,8 +25,12 @@ export class ChequesService {
     return this.httpService.get(`cheques/countCheques`);
   }
 
-  getChequesByPage(pageIndex: number, pageSize: number, params: Params): Observable<Cheque[]> {
-    return this.httpService.get(`cheques/byPage/${pageIndex}/${pageSize}`, { params });
+  getChequesByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/byRangeDate/${startDate}/${endDate}`, { params });
+  }
+
+  getChequesByCommercialPage(startDate: Date, endDate: Date, workerId: string, pageIndex: number, pageSize: number, params: Params): Observable<Cheque[]> {
+    return this.httpService.get(`cheques/byCommercialPageRangeDate/${startDate}/${endDate}/${workerId}/${pageIndex}/${pageSize}`, { params });
   }
 
   getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<Cheque[]> {

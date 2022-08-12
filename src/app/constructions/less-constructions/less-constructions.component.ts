@@ -10,7 +10,7 @@ import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-dire
 import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material } from 'src/app/materials/material.model';
+import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Guarantee } from 'src/app/reports/guarantee.interface';
@@ -47,6 +47,11 @@ export class LessConstructionsComponent implements OnInit {
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
 
+  ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
+    this.handleSearch$.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.navigationService.setTitle('Fianzas sin obra');
 
@@ -70,11 +75,6 @@ export class LessConstructionsComponent implements OnInit {
           break;
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.handleClickMenu$.unsubscribe();
-    this.handleSearch$.unsubscribe();
   }
 
   private fetchData() {

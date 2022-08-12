@@ -44,4 +44,8 @@ export class ProvidersService {
   create(provider: ProviderModel, banks: BankModel[]) {
     return this.httpService.post('providers', { provider, banks });
   }
+
+  delete(providerId: string) {
+    return this.httpService.delete(`providers/${providerId}`);
+  }
 }

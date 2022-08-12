@@ -12,12 +12,13 @@ import { DepositsModule } from '../deposits/deposits.module';
 import { DialogMaterialComponent } from './dialog-material/dialog-material.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogPdfMaterialsComponent } from './dialog-pdf-materials/dialog-pdf-materials.component';
+import { EditCommercialsComponent } from './edit-commercials/edit-commercials.component';
 
 @NgModule({
   declarations: [
     MaterialsComponent, 
     CreateMaterialsComponent, 
-    EditMaterialsComponent, DialogMaterialComponent, DialogPdfMaterialsComponent,
+    EditMaterialsComponent, DialogMaterialComponent, DialogPdfMaterialsComponent, EditCommercialsComponent,
   ],
   imports: [
     CommonModule,

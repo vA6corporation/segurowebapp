@@ -9,6 +9,8 @@ import { CreateCustomerModelsComponent } from './create-customers/create-custome
 import { EditCustomerModelsComponent } from './edit-customers/edit-customers.component';
 import { DialogCustomersComponent } from './dialog-customers/dialog-customers.component';
 import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
+import { ConstructionCustomersComponent } from './construction-customers/construction-customers.component';
+import { DialogConstructionCustomersComponent } from './dialog-construction-customers/dialog-construction-customers.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.
     CreateCustomerModelsComponent,
     EditCustomerModelsComponent,
     DialogCustomersComponent,
-    DialogAttachPdfComponent
+    DialogAttachPdfComponent,
+    ConstructionCustomersComponent,
+    DialogConstructionCustomersComponent
   ],
   imports: [
     CommonModule,

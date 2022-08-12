@@ -28,10 +28,10 @@
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </button>
-            <!-- <button [routerLink]="['/constructionStatus', element._id]" mat-menu-item>
-              <mat-icon>edit</mat-icon>
-              <span>Emiones</span>
-            </button> -->
+            <button (click)="onShowConstructions(element._id)" mat-menu-item>
+              <mat-icon>construction</mat-icon>
+              <span>Obras</span>
+            </button>
           </mat-menu>
         </td>
       </ng-container>

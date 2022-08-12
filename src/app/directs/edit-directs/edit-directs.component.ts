@@ -15,14 +15,13 @@ import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-ch
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DepositsService } from 'src/app/deposits/deposits.service';
-import { WorkersService } from 'src/app/workers/workers.service';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { Subscription } from 'rxjs';
 import { DialogPdfDirectsComponent, DirectPdfData } from '../dialog-pdf-directs/dialog-pdf-directs.component';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
 
 @Component({
   selector: 'app-edit-directs',
@@ -46,10 +45,6 @@ export class EditDirectsComponent implements OnInit {
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
     }),
-    beneficiary: this.formBuilder.group({
-      _id: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-    }),
     direct: this.formBuilder.group({
       constructionId: '',
       _id: [ null, Validators.required ],
@@ -58,9 +53,11 @@ export class EditDirectsComponent implements OnInit {
       price: [ null, Validators.required ],
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
+      voucherAt: null,
       guarantee: null,
       prima: null,
       isEmition: false,
+      isPaid: false,
       commission: null,
       currency: 'PEN'
     }),
@@ -69,17 +66,12 @@ export class EditDirectsComponent implements OnInit {
   public construction: ConstructionModel|null = null;
   public customer: CustomerModel|null = null;
   public partnership: PartnershipModel|null = null;
+  public beneficiary: BeneficiaryModel|null = null;
   private directId: string = '';
   public isLoading: boolean = false;
   public cheques: Cheque[] = [];
   public deposits: Deposit[] = [];
-  // public workers: WorkerModel[] = [];
-
-  // private workers$: Subscription = new Subscription();
-
-  // ngOnDestroy() {
-  //   this.workers$.unsubscribe();
-  // }
+  public worker: WorkerModel|null = null;
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto directo');
@@ -89,22 +81,17 @@ export class EditDirectsComponent implements OnInit {
       this.directsService.getDirectById(this.directId).subscribe(direct => {
         console.log(direct);
         const { financier, beneficiary, cheques = [], deposits = [], construction } = direct;
-        // this.formGroup.patchValue({ partnership: partnership || {} });
-        // this.formGroup.patchValue({ customer });
         this.formGroup.patchValue({ financier });
-        this.formGroup.patchValue({ beneficiary });
         this.formGroup.patchValue({ direct });
         this.construction = construction;
+        this.beneficiary = beneficiary;
         this.customer = construction?.customer || null;
         this.partnership = construction?.partnership || null;
+        this.worker = direct.worker;
         this.cheques = cheques;
         this.deposits = deposits;
       });
     });;
-
-    // this.workers$ = this.workersService.getWorkers().subscribe(workers => {
-    //   this.workers = workers;
-    // });
   }
 
   onEditConstruction() {
@@ -350,11 +337,8 @@ export class EditDirectsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { financier, beneficiary, direct } = this.formGroup.value;
-      // direct.customerId = customer._id;
-      // direct.partnershipId = partnership._id;
+      const { financier, direct } = this.formGroup.value;
       direct.financierId = financier._id;
-      direct.beneficiaryId = beneficiary._id;
       this.directsService.update(direct, this.directId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
@@ -370,7 +354,3 @@ export class EditDirectsComponent implements OnInit {
   }
 
 }
-function DialogPdfDirectComponent(DialogPdfDirectComponent: any, arg1: { width: string; height: string; position: { top: string; }; data: DirectPdfData; }) {
-  throw new Error('Function not implemented.');
-}
-

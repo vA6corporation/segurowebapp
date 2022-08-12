@@ -26,7 +26,7 @@ export class InsurancesComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'financier', 'policyNumber', 'emitionAt', 'expirationAt', 'prima', 'actions' ];
+  public displayedColumns: string[] = [ 'partnership', 'customer', 'financier', 'policyNumber', 'insuranceNumber', 'emitionAt', 'expirationAt', 'prima', 'actions' ];
   public dataSource: InsuranceModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -40,17 +40,29 @@ export class InsurancesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.navigationService.setTitle('Lineas de credito');
+    this.navigationService.setTitle('Seguros');
     this.route.params.subscribe(params => {
       this.type = params.type;
       this.navigationService.setTitle(this.type);
       this.fetchData();
+      
+      this.navigationService.setMenu([
+        { id: 'search', label: 'search', icon: 'search', show: true },
+        // { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
+      ]);
     });
 
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true },
-      // { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
-    ]);
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart();
+      this.insurancesService.getInsurancesByKeyType(key, this.type).subscribe(insurances => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = insurances;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
 
@@ -75,16 +87,16 @@ export class InsurancesComponent implements OnInit {
           'P. A CARGO'
         ]);
       }
-
+      
     });
   }
 
   handlePageEvent(event: PageEvent): void {
-    // this.materialsService.getMaterialsByPage(event.pageIndex + 1, event.pageSize).subscribe(materials => {
-    //   this.dataSource = materials;
-    // });
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchData();
   }
-
+  
   onShowDetails(materialId: string) {
     this.matDialog.open(DialogMaterialComponent, {
       position: { top: '20px' },
@@ -103,6 +115,10 @@ export class InsurancesComponent implements OnInit {
   }
 
   async fetchData() {
+    this.insurancesService.getCountInsurancesByType(this.type).subscribe(count => {
+      this.length = count;
+    });
+    
     this.insurancesService.getInsurancesByPageType(this.pageIndex + 1, this.pageSize, this.type).subscribe(insurances => {
       console.log(insurances);
       this.dataSource = insurances;

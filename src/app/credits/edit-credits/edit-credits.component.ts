@@ -54,8 +54,8 @@ export class EditCreditsComponent implements OnInit {
     credit: this.formBuilder.group({
       days: [null, Validators. required ],
       emitionAt: [ null, Validators.required ],
-      prima: [ null, Validators.required ],
-      commission: [ null, Validators.required ],
+      prima: null,
+      commission: null,
       charge: [ null, Validators.required ],
     }),
   });

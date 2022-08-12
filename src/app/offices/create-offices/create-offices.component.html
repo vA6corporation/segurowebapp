@@ -1,0 +1,18 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Nombre *" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Direccion *" formControlName="address">
+    </mat-form-field>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <div class="py-3">
+        <button type="button" mat-stroked-button routerLink="/offices" color="primary">CANCELAR</button>
+        <span class="divider"></span>
+        <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+      </div>
+    </div>
+  </form>
+</section>

@@ -34,7 +34,7 @@ export class EditCustomerModelsComponent implements OnInit {
       annexed: null,
       birthDate: null,
       address: null,        
-      representative: null,
+      representativeName: null,
       representativeDocument: null,
     }),
   });
@@ -64,7 +64,7 @@ export class EditCustomerModelsComponent implements OnInit {
       this.customerId = params.customerId;
       this.customersService.getCustomerById(this.customerId).subscribe(customer => {
         console.log(customer);
-        this.formGroup.get('customer')?.setValue(customer);
+        this.formGroup.get('customer')?.patchValue(customer);
       });
     });
   }

@@ -1,7 +1,7 @@
 <section class="container">
   <form [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
-      <mat-label>Seleccine un rango de fechas</mat-label>
+      <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
         <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
@@ -20,10 +20,10 @@
         </mat-select>
       </mat-form-field> -->
       <mat-form-field appearance="fill">
-        <mat-label>Usuario</mat-label>
-        <mat-select (selectionChange)="onChangeUser()" formControlName="userId">
-          <mat-option value="">TODOS LOS USUARIOS</mat-option>
-          <mat-option *ngFor="let element of users" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
+        <mat-label>Personal</mat-label>
+        <mat-select (selectionChange)="onChangeWorker()" formControlName="workerId">
+          <mat-option value="">TODOS LOS PERSONALES</mat-option>
+          <mat-option *ngFor="let element of workers" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

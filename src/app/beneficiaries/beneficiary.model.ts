@@ -1,6 +1,6 @@
 import { PartnershipModel } from "../partnerships/partnership.model";
 
-export interface Beneficiary {
+export interface BeneficiaryModel {
   _id?: string,
   document: string,
   name: string,

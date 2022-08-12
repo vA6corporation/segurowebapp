@@ -11,10 +11,12 @@ import { UserModel } from 'src/app/users/user.model';
 import { UsersService } from 'src/app/users/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { buildExcel } from 'src/app/xlsx';
 import { formatDate } from '@angular/common';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 Chart.register(...registerables);
 
 @Component({
@@ -29,7 +31,8 @@ export class PrimasComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
-    private readonly matDialog: MatDialog
+    private readonly matDialog: MatDialog,
+    private readonly workersService: WorkersService,
   ) { }
     
   @ViewChild('collectionChartPrice') 
@@ -52,34 +55,35 @@ export class PrimasComponent implements OnInit {
   });
   
   public formGroup = this.formBuilder.group({
-    userId: '',
+    workerId: '',
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
   });
 
-  private users$: Subscription = new Subscription();
   public users: UserModel[] = [];
+  public workers: WorkerModel[] = [];
   public compliancePayed: number = 0;
   public materialPayed: number = 0;
   public directPayed: number = 0;
-
+  
   public complianceNotPayed: number = 0;
   public materialNotPayed: number = 0;
   public directNotPayed: number = 0;
-
+  
   public emitionCount: number = 0;
   public renovationCount: number = 0;
   public isEmition: boolean|null = null;
+  
+  private guaranties: string[] = ["GFCF", "GADF", "GAMF"];
 
-  private guaranties: string[] = ["GFCF", "GADF", "GAMF"]
-
-  onSetEmition(isEmition: boolean) {
-    this.isEmition = isEmition;
-    this.fetchData();
-  }
+  private users$: Subscription = new Subscription();
+  private workers$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
   
   ngOnDestroy() {
     this.users$.unsubscribe();
+    this.workers$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
@@ -94,15 +98,19 @@ export class PrimasComponent implements OnInit {
       this.users = users;
     });
 
-    this.navigationService.handleClickMenu().subscribe(id => {
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       switch (id) {
         case 'excel_simple':
           if (this.formGroup.valid) {
             this.navigationService.loadBarStart();
-            const { startDate, endDate, userId } = this.formGroup.value;
+            const { startDate, endDate, workerId } = this.formGroup.value;
       
             const params: Params = {
-              startDate, endDate, userId,
+              startDate, endDate, workerId,
             };
       
             if (this.financierForm.valid) {
@@ -115,7 +123,7 @@ export class PrimasComponent implements OnInit {
       
             params.isEmition = this.isEmition;
             
-            this.reportsService.getPrimasByRangeDateUser(
+            this.reportsService.getPrimasByRangeDateWorker(
               params
             ).subscribe(collection => {
               console.log(collection);
@@ -135,6 +143,7 @@ export class PrimasComponent implements OnInit {
                 'E. DE TRAMITE',
                 'E. DE REVISION',
                 'F. CUMPLIMIENTO',
+                'OBRA'
               ]);
 
               for (const guarantee of payedDirect) {
@@ -151,8 +160,10 @@ export class PrimasComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
+
               for (const guarantee of notPayedDirect) {
                 const { customer, partnership, financier } = guarantee;
                 body.push([
@@ -167,6 +178,7 @@ export class PrimasComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
 
@@ -184,8 +196,10 @@ export class PrimasComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
+
               for (const guarantee of notPayedCompliance) {
                 const { customer, partnership, financier } = guarantee;
                 body.push([
@@ -196,10 +210,11 @@ export class PrimasComponent implements OnInit {
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
-                  'PAGADO',
+                  'NO PAGADO',
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
 
@@ -217,8 +232,10 @@ export class PrimasComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
+              
               for (const guarantee of notPayedMaterial) {
                 const { customer, partnership, financier } = guarantee;
                 body.push([
@@ -233,6 +250,7 @@ export class PrimasComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
                 ]);
               }
               const name = `PRIMAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -245,6 +263,11 @@ export class PrimasComponent implements OnInit {
           break;
       }
     });
+  }
+
+  onSetEmition(isEmition: boolean) {
+    this.isEmition = isEmition;
+    this.fetchData();
   }
 
   openDialogFinanciers() {
@@ -286,10 +309,10 @@ export class PrimasComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
-      const { startDate, endDate, userId } = this.formGroup.value;
+      const { startDate, endDate, workerId } = this.formGroup.value;
 
       const params: Params = {
-        startDate, endDate, userId,
+        startDate, endDate, workerId,
       };
 
       if (this.financierForm.valid) {
@@ -302,7 +325,7 @@ export class PrimasComponent implements OnInit {
 
       params.isEmition = this.isEmition;
       
-      this.reportsService.getSummaryPrimasByRangeDateUser(
+      this.reportsService.getSummaryPrimasByRangeDateWorker(
         params
       ).subscribe(collection => {
         console.log(collection);
@@ -310,10 +333,28 @@ export class PrimasComponent implements OnInit {
         const { payedCompliance, payedMaterial, payedDirect, notPayedCompliance, notPayedMaterial, notPayedDirect } = collection;
         const colors = [randomColor(), randomColor(), randomColor()];
 
-        this.emitionCount = payedMaterial.emitionCount + payedDirect.emitionCount + payedCompliance.emitionCount + notPayedMaterial.emitionCount + notPayedDirect.emitionCount + notPayedCompliance.emitionCount;
-        this.renovationCount = payedMaterial.renovationCount + payedDirect.renovationCount + payedCompliance.renovationCount + notPayedMaterial.renovationCount + notPayedCompliance.renovationCount + notPayedCompliance.renovationCount;
+        this.emitionCount = 
+          payedMaterial.emitionCount + 
+          notPayedMaterial.emitionCount + 
+          
+          payedDirect.emitionCount + 
+          notPayedDirect.emitionCount + 
+
+          payedCompliance.emitionCount + 
+          notPayedCompliance.emitionCount;
+
+        this.renovationCount = 
+          payedMaterial.renovationCount + 
+          notPayedMaterial.renovationCount +
+
+          payedDirect.renovationCount + 
+          notPayedDirect.renovationCount + 
+
+          payedCompliance.renovationCount + 
+          notPayedCompliance.renovationCount;
 
         this.chartPayed?.destroy();
+
         this.compliancePayed = payedCompliance.emitionPrima + payedCompliance.renovationPrima;
         this.directPayed = payedDirect.emitionPrima + payedDirect.renovationPrima;
         this.materialPayed = payedMaterial.emitionPrima + payedMaterial.renovationPrima;
@@ -361,6 +402,7 @@ export class PrimasComponent implements OnInit {
         this.chartPayed = new Chart(canvasPrice, configPrice);
         
         this.chartNotPayed?.destroy();
+
         this.complianceNotPayed = notPayedCompliance.emitionPrima + notPayedCompliance.renovationPrima;
         this.directNotPayed = notPayedDirect.emitionPrima + notPayedDirect.renovationPrima;
         this.materialNotPayed = notPayedMaterial.emitionPrima + notPayedMaterial.renovationPrima;
@@ -417,7 +459,7 @@ export class PrimasComponent implements OnInit {
     this.fetchData();
   }
 
-  onChangeUser() {
+  onChangeWorker() {
     this.fetchData();
   }
 

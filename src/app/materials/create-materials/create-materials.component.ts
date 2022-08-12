@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialsService } from '../materials.service';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
@@ -20,6 +20,8 @@ import { DialogConstructionsComponent } from 'src/app/constructions/dialog-const
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
+import { ConstructionsService } from 'src/app/constructions/constructions.service';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
 
 @Component({
   selector: 'app-create-materials',
@@ -32,17 +34,15 @@ export class CreateMaterialsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly materialsService: MaterialsService,
     private readonly navigationService: NavigationService,
+    private readonly constructionsService: ConstructionsService,
     private readonly workersService: WorkersService,
+    private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly matDialog: MatDialog
+    private readonly route: ActivatedRoute,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    beneficiary: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -63,15 +63,18 @@ export class CreateMaterialsComponent implements OnInit {
   public customer: CustomerModel|null = null;
   public partnership: PartnershipModel|null = null;
   public worker: WorkerModel|null = null;
+  public beneficiary: BeneficiaryModel| null = null;
   public isLoading: boolean = false;
   public deposits: Deposit[] = [];
   public cheques: Cheque[] = [];
   public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription;
+  private workers$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.workers$.unsubscribe();
+    this.queryParams$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -80,6 +83,23 @@ export class CreateMaterialsComponent implements OnInit {
 
     this.workers$ = this.workersService.getWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.queryParams$ = this.route.queryParams.subscribe(params => {
+      if (params.constructionId) {
+        this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
+          console.log(construction);
+          
+          if (construction) {
+            this.construction = construction;
+            this.customer = construction.customer;
+            this.partnership = construction.partnership;
+            this.worker = construction.worker;
+            this.beneficiary = construction.beneficiary;
+            this.formGroup.patchValue({ material: { constructionId: construction._id } });
+          }
+        });
+      }
     });
   }
 
@@ -97,6 +117,7 @@ export class CreateMaterialsComponent implements OnInit {
         this.customer = construction.customer;
         this.partnership = construction.partnership;
         this.worker = construction.worker;
+        this.beneficiary = construction.beneficiary;
         this.formGroup.patchValue({ material: { constructionId: construction._id } });
       }
     });
@@ -188,12 +209,13 @@ export class CreateMaterialsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { financier, beneficiary, material } = this.formGroup.value;
+      const { financier, material } = this.formGroup.value;
       material.partnershipId = this.partnership?._id;
       material.customerId = this.customer?._id;
+      material.beneficiaryId = this.beneficiary?._id;
       material.financierId = financier._id;
-      material.beneficiaryId = beneficiary._id;
       material.workerId = this.worker?._id;
+      material.constructionId = this.construction?._id;
       this.materialsService.create(material, this.cheques, this.deposits).subscribe(res => {
         console.log(res);
         this.isLoading = false;

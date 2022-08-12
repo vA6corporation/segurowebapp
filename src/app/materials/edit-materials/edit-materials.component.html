@@ -1,21 +1,26 @@
 <section class="container py-4">
-  <div class="d-flex">
-    <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
-      <mat-icon>content_copy</mat-icon>
+  <div>
+    <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 p-0">
+      <span class="mat-h1 text-wrap">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
     </button>
-    <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 mb-3">
-      <span class="mat-h1">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
+    <span>{{ construction?.code }}</span>
+    <a mat-icon-button [href]="[ '/constructions/' + construction._id + '/edit' ]" type="button" target="_blank" *ngIf="construction !== null">
+      <mat-icon>open_in_new</mat-icon>
+    </a>
+    <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
+        <mat-icon>content_copy</mat-icon>
     </button>
   </div>
   <h3 class="text-center">{{ partnership?.name }}</h3>
-  <h4 class="text-center">{{ customer?.name }}</h4>
+  <h4 class="text-center mb-0">{{ customer?.name }}</h4>
+  <span class="mat-divider"></span>
+  <h4 class="text-center">{{ beneficiary?.name }}</h4>
+  <h4 class="text-center text-muted">{{ worker?.name }}</h4>
   <div class="my-3">
     <button type="button" (click)="onAttachPdfInvoice()" [disabled]="isLoading" mat-raised-button color="primary">FACTURA</button>
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdfTicket()" [disabled]="isLoading" mat-raised-button color="primary">VOUCHER</button>
     <span class="divider"></span>
-    <!-- <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
-    <span class="divider"></span> -->
     <button type="button" (click)="onAttachPdfCheques()" [disabled]="isLoading" mat-raised-button color="primary">CHEQUES</button>
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdfDeposits()" [disabled]="isLoading" mat-raised-button color="primary">DEPOSITOS</button>
@@ -25,54 +30,12 @@
     <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">ESTADO DE OBRA</button>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <!-- <div formGroupName="partnership">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
-      </mat-form-field>
-    </div>
-    <div formGroupName="customer">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Cliente *" formControlName="name" (click)="openopenDialogCustomers()" readonly>
-      </mat-form-field>
-    </div> -->
     <div formGroupName="financier">
       <mat-form-field>
         <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
       </mat-form-field>
     </div>
-    <div formGroupName="beneficiary">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Beneficiario *" formControlName="name" (click)="openDialogBeneficiaries()" readonly>
-      </mat-form-field>
-    </div>
     <div formGroupName="material">
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Estado de tramite</mat-label>
-        <mat-select formControlName="processStatusCode">
-          <mat-option value="01">REDACCION</mat-option>
-          <mat-option value="02">LEGALIZACION</mat-option>
-          <mat-option value="03">CONFORMIDAD</mat-option>
-          <mat-option value="04">CONSTITUIDO</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Estado de obra</mat-label>
-        <mat-select formControlName="constructionCode">
-          <mat-option value="01">EJECUCION</mat-option>
-          <mat-option value="02">POR TERMINAR</mat-option>
-          <mat-option value="03">PARALIZADA</mat-option>
-          <mat-option value="04">EN ARBITRAJE</mat-option>
-          <mat-option value="05">ANULADA</mat-option>
-          <mat-option value="06">FINALIZADA</mat-option>
-          <mat-option value="07">AMORTIZADO</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Personal a cargo</mat-label>
-        <mat-select formControlName="workerId">
-          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
       <mat-form-field>
         <input type="text" matInput placeholder="N° de poliza *" formControlName="policyNumber">
       </mat-form-field>
@@ -95,6 +58,12 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field appearance="fill">
+        <mat-label>Fecha de voucher</mat-label>
+        <input matInput [matDatepicker]="voucherDatePicker" formControlName="voucherAt">
+        <mat-datepicker-toggle matSuffix [for]="voucherDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #voucherDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Moneda</mat-label>
         <mat-select formControlName="currency">
           <mat-option value="PEN">PEN</mat-option>
@@ -112,6 +81,9 @@
       </mat-form-field>
       <div class="mb-3">
         <mat-slide-toggle formControlName="isEmition">Emision</mat-slide-toggle>
+      </div>
+      <div class="mb-3">
+        <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
       </div>
       <mat-list class="mb-1">
         <div mat-subheader>

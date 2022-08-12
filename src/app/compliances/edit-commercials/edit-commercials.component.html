@@ -1,0 +1,27 @@
+<section class="container py-4">
+    <div class="d-flex">
+      <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+      <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 mb-3">
+        <span class="mat-h1">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
+      </button>
+    </div>
+    <h3 class="text-center">{{ partnership?.name }}</h3>
+    <h4 class="text-center">{{ customer?.name }}</h4>
+    <div class="my-3">
+      <button type="button" (click)="onAttachPdfInvoice()" [disabled]="isLoading" mat-raised-button color="primary">FACTURA</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfTicket()" [disabled]="isLoading" mat-raised-button color="primary">VOUCHER</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfCheques()" [disabled]="isLoading" mat-raised-button color="primary">CHEQUES</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfDeposits()" [disabled]="isLoading" mat-raised-button color="primary">DEPOSITOS</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfFianzas()" [disabled]="isLoading" mat-raised-button color="primary">FIANZAS</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">ESTADO DE OBRA</button>
+      <span class="divider"></span>
+      <button type="button" (click)="onAttachPdfConstruction()" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
+    </div>
+  </section>

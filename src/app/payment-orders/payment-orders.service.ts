@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { CreatePaymentOrderModel } from './create-payment-order.model';
@@ -19,6 +20,10 @@ export class PaymentOrdersService {
 
   getPaymentOrders(): Observable<PaymentOrderModel[]> {
     return this.httpService.get('paymentOrders');
+  }
+
+  getSummaryByYear(year: number, params: Params): Observable<PaymentOrderModel[]> {
+    return this.httpService.get(`paymentOrders/summaryByYear/${year}`, { params });
   }
 
   create(paymentOrder: CreatePaymentOrderModel): Observable<PaymentOrderModel> {

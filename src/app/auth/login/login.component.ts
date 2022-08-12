@@ -144,10 +144,11 @@ export class LoginComponent implements OnInit {
       const { email, password, rememberme } = this.loginForm.value;
       this.authService.login(email, password).subscribe(res => {
         console.log(res);
-        const { accessToken, userId, name, email } = res;
+        const { accessToken, userId, name, email, isAdmin } = res;
         if (rememberme) {
           const user: UserModel = {
             _id: userId,
+            isAdmin,
             name,
             email,
             password,
@@ -157,7 +158,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.authService.setAccessToken(accessToken);
         this.navigationService.loadBarFinish();
-        this.router.navigate(['/dashboard']).then(() => {
+        this.router.navigate(['/setOffice']).then(() => {
           location.reload();
         });
       }, (error: HttpErrorResponse) => {

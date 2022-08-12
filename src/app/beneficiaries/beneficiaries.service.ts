@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
-import { Beneficiary } from './beneficiary.model';
+import { BeneficiaryModel } from './beneficiary.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,11 @@ export class BeneficiariesService {
     private readonly httpService: HttpService,
   ) { }
 
-  getBeneficiariesByAny(key: string):Observable<Beneficiary[]> {
+  getBeneficiariesByKey(key: string):Observable<BeneficiaryModel[]> {
     return this.httpService.get(`beneficiaries/byAny/${key}`);
   }
 
-  getBeneficiariesByPage(pageIndex: number, pageSize: number): Observable<Beneficiary[]> {
+  getBeneficiariesByPage(pageIndex: number, pageSize: number): Observable<BeneficiaryModel[]> {
     return this.httpService.get(`beneficiaries/${pageIndex}/${pageSize}`);
   }
 
@@ -24,15 +24,15 @@ export class BeneficiariesService {
     return this.httpService.get('beneficiaries/count');
   }
 
-  getBeneficiaryById(beneficiaryId: string): Observable<Beneficiary> {
+  getBeneficiaryById(beneficiaryId: string): Observable<BeneficiaryModel> {
     return this.httpService.get(`beneficiaries/${beneficiaryId}`);
   }
 
-  create(beneficiary: Beneficiary): Observable<Beneficiary> {
+  create(beneficiary: BeneficiaryModel): Observable<BeneficiaryModel> {
     return this.httpService.post('beneficiaries', { beneficiary });
   }
 
-  update(beneficiary: Beneficiary, beneficiaryId: string): Observable<Beneficiary> {
+  update(beneficiary: BeneficiaryModel, beneficiaryId: string): Observable<BeneficiaryModel> {
     return this.httpService.put(`beneficiaries/${beneficiaryId}`, { beneficiary });
   }
 

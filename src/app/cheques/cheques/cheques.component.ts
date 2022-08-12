@@ -1,6 +1,5 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,6 +51,12 @@ export class ChequesComponent implements OnInit {
   });
 
   private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleSearch$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
+  }
 
   ngOnInit(): void { 
 
@@ -77,7 +82,7 @@ export class ChequesComponent implements OnInit {
       { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.navigationService.handleClickMenu().subscribe(id => {
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([
@@ -87,7 +92,7 @@ export class ChequesComponent implements OnInit {
         'F. DE PRORROGA',
         'N° DE POLIZA',
         'CONSORCIO',
-        'CLIENTE'
+        'CLIENTE',
       ]);
       for (const cheque of this.dataSource) {
         body.push([
@@ -97,7 +102,7 @@ export class ChequesComponent implements OnInit {
           formatDate(cheque.extensionAt, 'dd/MM/yyyy', 'en-US'),
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
-          cheque.guarantee?.customer?.name
+          cheque.guarantee?.customer?.name,
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -114,10 +119,6 @@ export class ChequesComponent implements OnInit {
         this.navigationService.showMessage(error.error.message);
       });
     });
-  }
-
-  ngOnDestroy() {
-    this.handleSearch$.unsubscribe();
   }
 
   onRangeChange() {
@@ -145,7 +146,6 @@ export class ChequesComponent implements OnInit {
     const { startDate, endDate } = this.formGroup.value;
     this.chequesService.getByRangeDatePage(startDate, endDate, this.pageIndex + 1, this.pageSize).subscribe(cheques => {
       this.navigationService.loadBarFinish();
-      // this.length = count;
       this.dataSource = cheques;
     });
   }

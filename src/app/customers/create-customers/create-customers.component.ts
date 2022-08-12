@@ -30,7 +30,7 @@ export class CreateCustomerModelsComponent implements OnInit {
       annexed: null,
       birthDate: null,
       address: null,
-      representative: null,
+      representativeName: null,
       representativeDocument: null,
     }),
     partnership: this.formBuilder.group({

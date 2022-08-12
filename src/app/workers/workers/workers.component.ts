@@ -46,4 +46,16 @@ export class WorkersComponent implements OnInit {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+  onDelete(workerId: string) {
+    const ok = confirm('Estas seguro de eliminar?...');
+    if (ok) {
+      this.navigationService.loadBarStart();
+      this.workersService.delete(workerId).subscribe(() => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = this.dataSource.filter(e => e._id !== workerId);
+      });
+    }
+  }
+
 }

@@ -14,9 +14,16 @@
         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </mat-form-field>
-    <div class="mb-3">
+    <mat-form-field appearance="fill">
+      <mat-label>Personal a cargo</mat-label>
+      <mat-select formControlName="workerId">
+        <mat-option value="">NINGUNO</mat-option>
+        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- <div class="mb-3">
       <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
-    </div>
+    </div> -->
     <mat-slide-toggle formControlName="isActive">Activo</mat-slide-toggle>
     <div class="mb-1"></div>
     <div class="d-flex">

@@ -18,8 +18,28 @@ export class CreditsService {
     return this.httpService.get(`credits/summaryByDate/${startDate}/${endDate}`, { params });
   }
 
+  getSummaryByYear(year: string, params: Params): Observable<any[]> {
+    return this.httpService.get(`credits/summaryByYear/${year}`, { params });
+  }
+
+  getSummaryMonthsByYear(year: string): Observable<any[]> {
+    return this.httpService.get(`credits/summaryMonthsByYear/${year}`);
+  }
+
+  // getSummaryPrimasByYear(year: string): Observable<any[]> {
+  //   return this.httpService.get(`credits/summaryPrimasByYear/${year}`);
+  // }
+
   getCreditsByPage(pageIndex: number, pageSize: number): Observable<CreditModel[]> {
     return this.httpService.get(`credits/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getCountCredits(): Observable<number> {
+    return this.httpService.get(`credits/countCredits`);
+  }
+
+  getCreditsByKey(key: string): Observable<CreditModel[]> {
+    return this.httpService.get(`credits/byKey/${key}`);
   }
 
   getCreditById(creditId: string): Observable<CreditModel> {

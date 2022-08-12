@@ -11,7 +11,7 @@ import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { FinancierModelsService } from 'src/app/financiers/financiers.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material } from 'src/app/materials/material.model';
+import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { Guarantee } from 'src/app/reports/guarantee.interface';
@@ -72,7 +72,7 @@ export class ConstructionStatusComponent implements OnInit {
 
     // this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
     //   this.navigationService.loadBarStart();
-    //   this.financiersService.getFinancierModelsByAny(key).subscribe(financiers => {
+    //   this.financiersService.getFinancierModelsByKey(key).subscribe(financiers => {
     //     this.navigationService.loadBarFinish();
     //     this.dataSource = financiers;
     //   }, (error: HttpErrorResponse) => {

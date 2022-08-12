@@ -22,7 +22,7 @@ export class CreateUsersComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
-    password: [ null, [ Validators.required, Validators.minLength(8) ] ],
+    password: [ null, Validators.required ],
     allGuaranties: false,
   });
   public isLoading: boolean = false;

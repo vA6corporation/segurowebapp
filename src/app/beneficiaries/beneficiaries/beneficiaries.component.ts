@@ -1,11 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BeneficiariesService } from '../beneficiaries.service';
-import { Beneficiary } from '../beneficiary.model';
+import { BeneficiaryModel } from '../beneficiary.model';
 
 @Component({
   selector: 'app-beneficiaries',
@@ -22,7 +21,7 @@ export class BeneficiariesComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription(); 
   
   public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
-  public dataSource: Beneficiary[] = [];
+  public dataSource: BeneficiaryModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
@@ -38,14 +37,19 @@ export class BeneficiariesComponent implements OnInit {
       this.length = count;
     });
     
+    this.navigationService.loadBarStart();
     this.beneficiariesService.getBeneficiariesByPage(this.pageIndex + 1, this.pageSize).subscribe(beneficiaries => {
+      this.navigationService.loadBarFinish();
       this.dataSource = beneficiaries;
+    }, (error: HttpErrorResponse) => {
+      this.navigationService.loadBarFinish();
+      this.navigationService.showMessage(error.error.message);
     });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.beneficiariesService.getBeneficiariesByAny(key).subscribe(beneficiaries => {
-        this.navigationService.loadBarStart();
+      this.beneficiariesService.getBeneficiariesByKey(key).subscribe(beneficiaries => {
+        this.navigationService.loadBarFinish();
         this.dataSource = beneficiaries;
       }, (error: HttpErrorResponse) => {
         this.navigationService.loadBarFinish();

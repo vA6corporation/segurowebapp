@@ -16,15 +16,16 @@ export class UsersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'name', 'email', 'allGuaranties', 'actions' ];
+  public displayedColumns: string[] = [ 'name', 'email', 'actions' ];
   public dataSource: UserModel[] = [];
+  public dataSourceDisabled: UserModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
   handlePageEvent(event: PageEvent): void {
-    this.usersService.getUsersByPage(event.pageIndex + 1, event.pageSize).subscribe(users => {
+    this.usersService.getActiveUsersByPage(event.pageIndex + 1, event.pageSize).subscribe(users => {
       this.dataSource = users;
     });
   }
@@ -38,9 +39,17 @@ export class UsersComponent implements OnInit {
     this.usersService.getUsersCount().subscribe(count => {
       this.length = count;
     });
-    this.usersService.getUsersByPage(this.pageIndex + 1, this.pageSize).subscribe(users => {
-      console.log(users);
+
+    this.usersService.getActiveUsersByPage(this.pageIndex + 1, this.pageSize).subscribe(users => {
       this.dataSource = users;
     });
+  }
+
+  fetchDisabled(event: any) {
+    if (event.index === 1) {
+      this.usersService.getDisabledUsersByPage(this.pageIndex + 1, this.pageSize).subscribe(users => {
+        this.dataSourceDisabled = users;
+      });
+    }
   }
 }

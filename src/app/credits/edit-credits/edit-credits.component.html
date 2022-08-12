@@ -38,29 +38,20 @@
           <input type="number" matInput placeholder="Monto *" formControlName="charge">
         </mat-form-field>
         <mat-form-field>
-          <input type="number" matInput placeholder="Prima *" formControlName="prima">
+          <input type="number" matInput placeholder="Prima" formControlName="prima">
         </mat-form-field>
         <mat-form-field>
-          <input type="number" matInput placeholder="Comision *" formControlName="commission">
+          <input type="number" matInput placeholder="Comision" formControlName="commission">
         </mat-form-field>
         <mat-form-field>
           <input type="number" matInput placeholder="Dias *" formControlName="days">
         </mat-form-field>
-        <!-- <div class="mb-3">
-          <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
-        </div> -->
         <mat-form-field appearance="fill">
           <mat-label>Fecha de emision *</mat-label>
           <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
           <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill">
-          <mat-label>Fecha de vencimiento *</mat-label>
-          <input matInput [matDatepicker]="endDatePicker" formControlName="expirationAt">
-          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #endDatePicker></mat-datepicker>
-        </mat-form-field> -->
       </div>
       <div class="mt-3 d-flex">
         <span class="spacer"></span>

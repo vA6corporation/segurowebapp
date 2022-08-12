@@ -28,7 +28,7 @@ export class CreatePartnershipsComponent implements OnInit {
       document: null,
       name: [ null, Validators.required ],
       address: [ null ],
-      representative: [ null, Validators.required ],
+      representativeName: [ null, Validators.required ],
       representativeDocument: [ null, Validators.required ],
       customerId: [ null, Validators.required ],
     }),

@@ -1,12 +1,15 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Params } from '@angular/router';
 import { Chart, ChartOptions, ChartType } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { randomColor } from 'src/app/randomColor';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
+import { buildExcel } from 'src/app/xlsx';
 import { InsurancesService } from '../insurances.service';
 
 @Component({
@@ -23,7 +26,7 @@ export class ReportPieComponent implements OnInit {
     private readonly workersService: WorkersService,
   ) { }
     
-  @ViewChild('insurancesChart') 
+  @ViewChild('creditsChart') 
   private insurancesChart!: ElementRef<HTMLCanvasElement>;
 
   public chartInsurance: Chart|null = null;
@@ -41,19 +44,21 @@ export class ReportPieComponent implements OnInit {
     'EPS',
     'SALUD',
   ];
-
   public formGroup = this.formBuilder.group({
     workerId: '',
-    type: 'SCTR',
-    year: new Date().getFullYear()
+    type: '',
+    startDate: new Date(),
+    endDate: new Date(),
   });
-
-  private workers$: Subscription = new Subscription();
   public workers: WorkerModel[] = [];
   public summaries: any[] = [];
 
+  private workers$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
+
   ngOnDestroy() {
     this.workers$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
@@ -71,26 +76,76 @@ export class ReportPieComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      switch (id) {
+        case 'excel_simple':
+          const { startDate, endDate, workerId } = this.formGroup.value;
+          const params: Params = { workerId };
+          this.insurancesService.getInsurancesByRangeDateTypeWorker(startDate, endDate, params).subscribe(insurances => {
+            const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+            let body = [];
+            body.push([
+              'CONSORCIO',
+              'CLIENTE',
+              'N° POLIZA',
+              'OBJETO',
+              'F. DE EMISION',
+              'F. DE VENCIMIENTO',
+              'PRIMA',
+              'COMISION',
+              'ESTADO DE PAGO',
+              'PROMOTOR'
+            ]);
+            for (const insurance of insurances) {
+              body.push([
+                insurance.partnership?.name.toUpperCase(),
+                insurance.customer?.name.toUpperCase(),
+                insurance.policyNumber,
+                insurance.construction?.object,
+                formatDate(insurance.emitionAt, 'dd/MM/yyyy', 'en-US'),
+                formatDate(insurance.expirationAt, 'dd/MM/yyyy', 'en-US'),
+                insurance.prima,
+                insurance.commission,
+                insurance.isPaid ? 'PAGADO' : 'PENDIENTE',
+                insurance.worker?.name.toUpperCase(),
+              ]);
+            }
+            const name = `SEGUROS_DESDE_${formatDate(startDate, 'dd/MM/yyyy', 'en-US')}_HASTA_${formatDate(endDate, 'dd/MM/yyyy', 'en-US')}`;
+            buildExcel(body, name, wscols, [], []);
+          });
+          break;
+      
+        default:
+          break;
+      }
+    });
+
     this.workers$ = this.workersService.getWorkers().subscribe(workers => {
       this.workers = workers;
     });
-
+    
   }
 
   ngAfterViewInit() {
     this.fetchData();
   }
 
+  onRangeChange() {
+    this.fetchData();
+  }
+
   fetchData() {
     if (this.formGroup.valid) {
-      const { year, type, workerId } = this.formGroup.value;
-      const params = { workerId };
+      const { startDate, endDate, type, workerId } = this.formGroup.value;
+      const params = { workerId, type };
       this.navigationService.loadBarStart();
-      this.insurancesService.getSummary(
-        year,
-        type,
+      this.insurancesService.getSummaryByRangeDateTypeWorker(
+        startDate,
+        endDate,
         params
       ).subscribe(summaries => {
+        console.log(summaries);
+        
         this.navigationService.loadBarFinish();
         const colors = [
           randomColor(), 
@@ -100,41 +155,18 @@ export class ReportPieComponent implements OnInit {
         this.summaries = summaries;
         this.chartInsurance?.destroy();
         const dataSet = {
-          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+          // labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+          labels: summaries.map(e => e._id),
           datasets: [
-            // {
-            //   label: 'Cantidad',
-            //   data: summaries.map(e => e.count),
-            //   backgroundColor: colors[0],
-            //   // fill: true
-            // },
             {
               label: 'Primas',
               data: summaries.map(e => e.totalPrima),
-              backgroundColor: colors[1],
-              // fill: true
-            },
-            {
-              label: 'Comisiones',
-              data: summaries.map(e => e.totalCommission),
-              backgroundColor: colors[2],
-              // fill: true
+              backgroundColor: colors,
             },
           ]
         };
-        // const dataCommission = {
-        //   datasets: [
-        //     {
-        //       label: 'Dataset 1',
-        //       data: summaries.map(e => e.totalCommission),
-        //       backgroundColor: colors,
-        //       fill: true
-        //     },
-        //   ]
-        // };
         const configPrima = {
-          type: 'bar' as ChartType,
-          // labels: ['Ene', 'Feb'],
+          type: 'pie' as ChartType,
           data: dataSet,
           options: {
             maintainAspectRatio: false,

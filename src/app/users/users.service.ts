@@ -13,12 +13,16 @@ export class UsersService {
     private readonly httpService: HttpService,
   ) { }
 
-  getUsersByPage(pageIndex: number, pageSize: number): Observable<UserModel[]> {
-    return this.httpService.get(`users/${pageIndex}/${pageSize}`);
+  getActiveUsersByPage(pageIndex: number, pageSize: number): Observable<UserModel[]> {
+    return this.httpService.get(`users/active/${pageIndex}/${pageSize}`);
+  }
+
+  getDisabledUsersByPage(pageIndex: number, pageSize: number): Observable<UserModel[]> {
+    return this.httpService.get(`users/disabled/${pageIndex}/${pageSize}`);
   }
 
   getUsersCount(): Observable<number> {
-    return this.httpService.get('users/count');
+    return this.httpService.get('users/countActiveUsers');
   }
 
   getActiveUsers(): Observable<UserModel[]> {

@@ -13,11 +13,18 @@
     <mat-form-field appearance="fill">
       <mat-label>Estado de revision</mat-label>
       <mat-select [(value)]="status" (selectionChange)="onStatusChange()">
-        <mat-option value="" disabled>TODOS LAS REVISIONES</mat-option>
+        <mat-option value="" disabled>TODAS LAS REVISIONES</mat-option>
         <mat-option value="01">SIN REVISAR</mat-option>
         <mat-option value="02">RENOVAR</mat-option>
         <mat-option value="03">NO RENOVAR</mat-option>
         <mat-option value="04">LIBERADO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Oficina</mat-label>
+      <mat-select [(value)]="officeId">
+        <!-- <mat-option value="" disabled>TODAS LAS OFICINAS</mat-option> -->
+        <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -94,10 +101,10 @@
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </a>
-            <button type="button" *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
+            <a type="button" *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
-            </button>
+            </a>
             <button type="button" *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>

@@ -12,7 +12,7 @@ export class PartnershipsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getPartnershipsByAny(key: string): Observable<PartnershipModel[]> {
+  getPartnershipsByKey(key: string): Observable<PartnershipModel[]> {
     return this.httpService.get(`partnerships/byAny/${key}`);
   }
 

@@ -5,7 +5,7 @@ import { Deposit } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
 import { Mail } from '../mails/mail.interface';
 import { MaterialPdfModel } from './material-pdf.model';
-import { Material } from './material.model';
+import { Material }from './material.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +20,16 @@ export class MaterialsService {
     return this.httpService.get(`mails/${materialId}/mailMaterial`);
   }
 
-  getMaterialsByAny(key: string): Observable<Material[]> {
+  getMaterialsByKey(key: string): Observable<Material[]> {
     return this.httpService.get(`materials/byAny/${key}`);
   }
 
   getMaterialsByPage(pageIndex: number, pageSize: number): Observable<Material[]> {
     return this.httpService.get(`materials/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getMaterialsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<Material[]> {
+    return this.httpService.get(`materials/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`);
   }
 
   getMaterialsCount(): Observable<number> {

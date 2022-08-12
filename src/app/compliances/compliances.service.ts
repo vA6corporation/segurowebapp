@@ -16,7 +16,7 @@ export class CompliancesService {
     private readonly httpService: HttpService,
   ) { }
 
-  getCompliancesByAny(key: string): Observable<Compliance[]> {
+  getCompliancesByKey(key: string): Observable<Compliance[]> {
     return this.httpService.get(`compliances/byAny/${key}`);
   }
 
@@ -26,6 +26,10 @@ export class CompliancesService {
 
   getCompliancesByPage(pageIndex: number, pageSize: number): Observable<Compliance[]> {
     return this.httpService.get(`compliances/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getCompliancesByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<Compliance[]> {
+    return this.httpService.get(`compliances/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`);
   }
 
   getCompliancesCount(): Observable<number> {

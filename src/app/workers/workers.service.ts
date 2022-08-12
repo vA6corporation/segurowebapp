@@ -16,7 +16,7 @@ export class WorkersService {
   private workers: WorkerModel[]|null = null;
 
   getWorkersByPage(pageIndex: number, pageSize: number) {
-    return this.httpService.get(`workers/byPage/${pageIndex}/${pageSize}`);
+    return this.httpService.get(`workers/activeWorkersByPage/${pageIndex}/${pageSize}`);
   }
 
   getWorkerById(workerId: string): Observable<WorkerModel> {
@@ -51,13 +51,18 @@ export class WorkersService {
   }
 
   loadWorkers() {
-    console.log('cargando trabajadores !!!!!');
-    
     this.httpService.get('workers').subscribe(workers => {
-      console.log(workers);
-      
       this.workers = workers;
       this.workers$.next(this.workers || []);
     });
   }
+
+  getActiveWorkersGlobal() {
+    return this.httpService.get('workers/global');
+  }
+
+  delete(workerId: string) {
+    return this.httpService.delete(`workers/${workerId}`);
+  } 
+
 }

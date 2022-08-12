@@ -1,0 +1,65 @@
+<section class="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-accordion>
+      <mat-expansion-panel formGroupName="business">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Sobre la empresa
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="fill">
+          <mat-label>Razon Social</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>RUC</mat-label>
+          <input matInput formControlName="ruc">
+        </mat-form-field>
+        <span class="text-muted">ID de empresa: {{ business?._id }}</span>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel formGroupName="office">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Sobre la oficina
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Direccion</mat-label>
+          <input matInput formControlName="address">
+        </mat-form-field>
+        <span class="text-muted">ID de sucursal: {{ office._id }}</span>
+        <br>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel routerLink="/offices">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Oficinas
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
+
+      <!-- <mat-expansion-panel routerLink="/tools">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Herramientas
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel> -->
+
+    </mat-accordion>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <div class="py-3">
+        <button type="button" mat-stroked-button routerLink="/products" color="primary">CANCELAR</button>
+        <span class="divider"></span>
+        <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+      </div>
+    </div>
+  </form>
+</section>

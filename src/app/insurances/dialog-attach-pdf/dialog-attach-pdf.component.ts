@@ -61,6 +61,7 @@ export class DialogAttachPdfComponent implements OnInit {
     } else if (insurancePdf.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       // this.downloadURI(`${environment.baseUrl}insurances/docx/${this.pdfId}`, insurancePdf.filename)
     } else {
+      this.downloadURI(`${environment.baseUrl}insurances/xls/${this.pdfId}`, insurancePdf.filename)
       // this.downloadURI(`${environment.baseUrl}insurances/xls/${this.pdfId}`, insurancePdf.filename)
     }
   }

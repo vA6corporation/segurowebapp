@@ -8,6 +8,7 @@ import { EditPaymentOrdersComponent } from './edit-payment-orders/edit-payment-o
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SystemModule } from '../system/system.module';
+import { ReportComponent } from './report/report.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { SystemModule } from '../system/system.module';
     PaymentOrdersComponent,
     CreatePaymentOrdersComponent,
     EditPaymentOrdersComponent,
+    ReportComponent,
   ],
   imports: [
     CommonModule,

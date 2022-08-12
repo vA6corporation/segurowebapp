@@ -9,7 +9,10 @@
     </form>
     <mat-selection-list [multiple]="false">
       <mat-list-option *ngFor="let customer of customers" [mat-dialog-close]="customer">
-        {{ customer.name | uppercase }}
+        <div class="text-truncate">
+          {{ customer.name | uppercase }}
+        </div>
+        <span class="text-muted">{{ customer.typeDocument }}: {{ customer.document }}</span>
       </mat-list-option>
     </mat-selection-list>
   </div>

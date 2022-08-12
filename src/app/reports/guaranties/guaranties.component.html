@@ -2,7 +2,7 @@
   <!-- <h1>Cumplimiento de Fianzas</h1> -->
   <form [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
-      <mat-label>Seleccine un rango de fechas</mat-label>
+      <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
         <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
@@ -82,7 +82,7 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-info': row.status === 'RENEW', 'bg-warning': row.status === 'NOTRENEW', 'bg-danger': row.status === 'FREE' }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
     </table>
   </div>
 </section>

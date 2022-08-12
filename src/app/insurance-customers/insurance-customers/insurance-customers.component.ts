@@ -54,7 +54,7 @@ export class InsuranceCustomersComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.customersService.getCustomersByAny(key).subscribe(customers => {
+      this.customersService.getCustomersByKey(key).subscribe(customers => {
         this.navigationService.loadBarFinish();
         this.dataSource = customers;
       }, (error: HttpErrorResponse) => {

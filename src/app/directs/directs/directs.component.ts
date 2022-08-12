@@ -39,7 +39,7 @@ export class DirectsComponent implements OnInit {
     this.fetchData();
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.directsService.getDirectsByAny(key).subscribe(directs => {
+      this.directsService.getDirectsByKey(key).subscribe(directs => {
         this.navigationService.loadBarFinish();
         this.dataSource = directs;
       }, (error: HttpErrorResponse) => {

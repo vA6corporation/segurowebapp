@@ -13,7 +13,7 @@ export class CustomersService {
     private readonly httpService: HttpService,
   ) { }
 
-  getCustomersByAny(key: string): Observable<CustomerModel[]> {
+  getCustomersByKey(key: string): Observable<CustomerModel[]> {
     return this.httpService.get(`customers/byAny/${key}`);
   }
 

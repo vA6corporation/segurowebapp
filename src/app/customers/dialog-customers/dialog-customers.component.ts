@@ -30,7 +30,7 @@ export class DialogCustomersComponent implements OnInit {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.reset();
-      this.customersService.getCustomersByAny(key).subscribe(customers => {
+      this.customersService.getCustomersByKey(key).subscribe(customers => {
         this.navigationService.loadBarFinish();
         this.customers = customers;
       }, (error: HttpErrorResponse) => {

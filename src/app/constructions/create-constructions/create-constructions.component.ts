@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
@@ -37,10 +38,17 @@ export class CreateConstructionsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
+    beneficiary: this.formBuilder.group({
+      name: [ null, Validators.required ],
+      _id: [ null, Validators.required ],
+    }),
     object: [ null, Validators.required ],
-    workerId: null,
+    code: [ null, Validators.required ],
+    emitionAt: [ new Date(), Validators.required ],
+    workerId: [ null, Validators.required ],
     processStatusCode: '01',
     constructionCode: '01',
+    commission: null
   });
 
   public workers: WorkerModel[] = [];
@@ -73,6 +81,19 @@ export class CreateConstructionsComponent implements OnInit {
     });
   }
 
+  openDialogBeneficiaries() {
+    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(beneficiary => {
+      if (beneficiary) {
+        this.formGroup.patchValue({ beneficiary });
+      }
+    });
+  }
+
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
       width: '600px',
@@ -92,9 +113,10 @@ export class CreateConstructionsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, partnership, ...construction } = this.formGroup.value;
+      const { customer, partnership, beneficiary, ...construction } = this.formGroup.value;
       construction.customerId = customer._id;
       construction.partnershipId = partnership._id;
+      construction.beneficiaryId = beneficiary._id;
       this.constructionsService.create(construction).subscribe(res => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();

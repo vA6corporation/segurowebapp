@@ -1,10 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BusinessModel } from 'src/app/auth/business.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -133,15 +131,15 @@ export class ProvidersComponent implements OnInit {
     });
   }
 
-  onDelete(providersId: string) {
+  onDelete(providerId: string) {
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
-      // this.providersService.delete(customerId).subscribe(() => {
-      //   this.navigationService.showMessage('Eliminado correctamente');
-      //   this.fetchData();
-      // }, (error: HttpErrorResponse) => {
-      //   this.navigationService.showMessage(error.error.message);
-      // });
+      this.providersService.delete(providerId).subscribe(() => {
+        this.navigationService.showMessage('Eliminado correctamente');
+        this.fetchData();
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.showMessage(error.error.message);
+      });
     }
   }
 

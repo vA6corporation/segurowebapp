@@ -3,19 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-// import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
-// import { InsurancesService } from 'src/app/insurances/insurances.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
-// import { Location } from '@angular/common'
 import { CreditsService } from '../credits.service';
 
 @Component({
@@ -30,10 +27,8 @@ export class CreateCreditsComponent implements OnInit {
     private readonly creditsService: CreditsService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
-    // private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly matDialog: MatDialog,
-    // private readonly location: Location,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -55,8 +50,8 @@ export class CreateCreditsComponent implements OnInit {
     credit: this.formBuilder.group({
       days: [null, Validators. required ],
       emitionAt: [ null, Validators.required ],
-      prima: [ null, Validators.required ],
-      commission: [ null, Validators.required ],
+      prima: null,
+      commission: null,
       charge: [ null, Validators.required ],
     }),
   });

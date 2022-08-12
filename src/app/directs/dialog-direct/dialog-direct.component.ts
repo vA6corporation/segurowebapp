@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Beneficiary } from 'src/app/beneficiaries/beneficiary.model';
+import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
 import { CustomerModel } from 'src/app/customers/customer.model';
 import { FinancierModel } from 'src/app/financiers/financier.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
@@ -24,7 +24,7 @@ export class DialogDirectComponent implements OnInit {
   public customer: CustomerModel|null = null;
   public financier: FinancierModel|null = null;
   public partnership: PartnershipModel|null = null;
-  public beneficiary: Beneficiary|null = null;
+  public beneficiary: BeneficiaryModel|null = null;
 
   ngOnInit(): void { 
     this.directsService.getDirectById(this.data).subscribe(direct => {

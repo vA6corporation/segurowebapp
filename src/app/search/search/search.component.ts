@@ -2,7 +2,10 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { OfficeModel } from 'src/app/auth/office.model';
 import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
@@ -10,9 +13,10 @@ import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-dire
 import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material } from 'src/app/materials/material.model';
+import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { OfficesService } from 'src/app/offices/offices.service';
 import { Guarantee } from 'src/app/reports/guarantee.interface';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { buildExcel } from 'src/app/xlsx';
@@ -31,6 +35,8 @@ export class SearchComponent implements OnInit {
     private readonly materialsService: MaterialsService,
     private readonly directsService: DirectsService,
     private readonly compliancesService: CompliancesService,
+    private readonly officesService: OfficesService,
+    private readonly authService: AuthService,
   ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
@@ -43,9 +49,18 @@ export class SearchComponent implements OnInit {
   private key: string = '';
   public processStatusCode = '';
   public status = '';
+  public officeId = '';
+  public offices: OfficeModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
+    this.handleSearch$.unsubscribe();
+    this.handleAuth$.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Buscar');
@@ -53,6 +68,14 @@ export class SearchComponent implements OnInit {
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.key = key;
       this.fetchData();
+    });
+
+    this.officesService.getActiveOffices().subscribe(offices => {
+      this.offices = offices;
+    });
+
+    this.authService.handleAuth().subscribe(auth => {
+      this.officeId = auth.office._id;
     });
     
     this.navigationService.setMenu([
@@ -72,14 +95,13 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    this.handleClickMenu$.unsubscribe();
-    this.handleSearch$.unsubscribe();
-  }
-
   private fetchData() {
     this.navigationService.loadBarStart();
-      this.reportsService.getGuarantiesByAny(this.key).subscribe(guaranties => {
+    const params: Params = {
+      key: this.key, 
+      officeId: this.officeId 
+    };
+      this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
         this.navigationService.loadBarFinish();
         this.guaranties = guaranties;
         if (this.processStatusCode) {
@@ -92,15 +114,6 @@ export class SearchComponent implements OnInit {
         this.navigationService.showMessage(error.error.message);
       });
   }
-
-  // onProcessStatusChange() {
-  //   console.log(this.processStatusCode);
-  //   if (this.processStatusCode) {
-  //     this.dataSource = this.guaranties.filter(e => e.processStatusCode === this.processStatusCode);
-  //   } else {
-  //     this.dataSource = this.guaranties;
-  //   }
-  // }
 
   downloadExcel() {
     const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];

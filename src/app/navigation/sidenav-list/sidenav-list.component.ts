@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BusinessModel } from 'src/app/auth/business.model';
+import { OfficeModel } from 'src/app/auth/office.model';
 import { UserModel } from 'src/app/users/user.model';
 
 @Component({
@@ -15,26 +16,38 @@ export class SidenavListComponent implements OnInit {
     private readonly authService: AuthService,
   ) { }
 
-  @Output() sidenavClose = new EventEmitter<void>();
-  public user$: Subscription = new Subscription();
-  public business$: Subscription = new Subscription();
-
+  @Output() 
+  sidenavClose = new EventEmitter<void>();
+  
   public user: UserModel|null = null
-  public business: BusinessModel|null = null
-
+  public office: OfficeModel|null = null;
+  public business: BusinessModel|null = null;
   public panelOpenState = false;
+  public privileges: any = {};
+  
+  private auth$: Subscription = new Subscription();
 
-  onClose() {
-    this.sidenavClose.emit();
+  ngOnDestroy() {
+    this.auth$.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.business$ = this.authService.getBusiness().subscribe(business => {
-      this.business = business;
+    console.log('holaxxxx');
+    
+    this.auth$ = this.authService.handleAuth().subscribe(auth => {
+      console.log('xxxxx');
+      
+      console.log(auth);
+      
+      this.user = auth.user;
+      this.business = auth.business;
+      this.office = auth.office;
+      Object.assign(this.privileges, this.user.privileges || {});
     });
-    this.user$ = this.authService.getUser().subscribe(user => {
-      this.user = user;
-    });
+  }
+ 
+  onClose() {
+    this.sidenavClose.emit();
   }
 
   onLogout() {

@@ -15,6 +15,8 @@ import { InsurancesService } from '../insurances.service';
 import { Location } from '@angular/common'
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogInsuranceCustomersComponent } from 'src/app/insurance-customers/dialog-insurance-customers/dialog-insurance-customers.component';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
+import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
 
 @Component({
   selector: 'app-create-insurances',
@@ -34,6 +36,10 @@ export class CreateInsurancesComponent implements OnInit {
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
+    construction: this.formBuilder.group({
+      object: null,
+      _id: null,
+    }),
     partnership: this.formBuilder.group({
       name: null,
       _id: null,
@@ -59,6 +65,7 @@ export class CreateInsurancesComponent implements OnInit {
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
+      currency: 'PEN',
       isPaid: false,
       isEmition: false,
     }),
@@ -85,6 +92,19 @@ export class CreateInsurancesComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.type = params.type;
       this.navigationService.setTitle('Nuevo ' + this.type);
+    });
+  }
+
+  openDialogConstruction() {
+    const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
+      width: '100vw',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(construction => {
+      if (construction) {
+        this.formGroup.patchValue({ construction });
+      }
     });
   }
 
@@ -151,7 +171,8 @@ export class CreateInsurancesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, broker, worker, partnership, insurance } = this.formGroup.value;
+      const { customer, financier, broker, worker, partnership, insurance, construction } = this.formGroup.value;
+      insurance.constructionId = construction?._id || null;
       insurance.partnershipId = partnership?._id || null;
       insurance.customerId = customer._id;
       insurance.financierId = financier._id;

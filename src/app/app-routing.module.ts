@@ -1,10 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomeComponent,
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
+  },
+  {
+    path: 'shareholders',
+    loadChildren: () => import('./shareholders/shareholders.module').then(m => m.ShareholdersModule)
+  },
+  {
+    path: 'templates',
+    loadChildren: () => import('./templates/templates.module').then(m => m.TemplatesModule)
   },
   {
     path: 'insurances',
@@ -113,6 +126,22 @@ const routes: Routes = [
   {
     path: 'insurancePartnerships',
     loadChildren: () => import('./insurance-partnerships/insurance-partnerships.module').then(m => m.InsurancePartnershipsModule)
+  },
+  {
+    path: 'insuranceConstructions',
+    loadChildren: () => import('./insurance-constructions/insurance-constructions.module').then(m => m.InsuranceConstructionsModule)
+  },
+  {
+    path: 'privileges',
+    loadChildren: () => import('./privileges/privileges.module').then(m => m.PrivilegesModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
+  },
+  {
+    path: 'offices',
+    loadChildren: () => import('./offices/offices.module').then(m => m.OfficesModule)
   },
 ];
 

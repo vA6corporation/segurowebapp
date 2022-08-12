@@ -1,9 +1,13 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { OfficesService } from 'src/app/offices/offices.service';
 import { UserModel } from 'src/app/users/user.model';
 import { AuthService } from '../auth.service';
+import { BusinessModel } from '../business.model';
+import { OfficeModel } from '../office.model';
 
 @Component({
   selector: 'app-logout',
@@ -13,25 +17,49 @@ import { AuthService } from '../auth.service';
 export class LogoutComponent implements OnInit {
 
   constructor(
-    private readonly authService: AuthService,
     private readonly navigationService: NavigationService,
+    private readonly authService: AuthService,
+    private readonly officesService: OfficesService,
     private readonly router: Router,
   ) { }
 
-  private user$: Subscription = new Subscription();
-
+  public business: BusinessModel|null = new BusinessModel();
+  public office: OfficeModel = new OfficeModel();
   public user: UserModel|null = null;
+  public offices: OfficeModel[] = [];
+
+  private auth$: Subscription = new Subscription();
+  private offices$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.auth$.unsubscribe();
+    this.offices$.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Cerrar sesion');
     
-    this.user$ = this.authService.getUser().subscribe(user => {
-      this.user = user;
+    this.auth$ = this.authService.handleAuth().subscribe(auth => {
+      this.business = auth.business;
+      this.user = auth.user;
+      // this.office = auth.office;
+    });
+
+    this.offices$ = this.officesService.getActiveOffices().subscribe(offices => {
+      this.offices = offices;
+    }, (error: HttpErrorResponse) => {
+      console.log(error.error.message);
     });
   }
 
-  ngOnDestroy() {
-    this.user$.unsubscribe();
+  onOfficeSelected(office: OfficeModel,) {
+    this.authService.setOffice(office).subscribe(res => {
+      console.log(res);
+      this.authService.setAccessToken(res.accessToken);
+      this.router.navigate(['']).then(() => {
+        location.reload();
+      });
+    });
   }
 
   onLogout() {

@@ -12,7 +12,7 @@ export class InsuranceCustomersService {
     private readonly httpService: HttpService,
   ) { }
 
-  getCustomersByAny(key: string): Observable<CustomerModel[]> {
+  getCustomersByKey(key: string): Observable<CustomerModel[]> {
     return this.httpService.get(`insuranceCustomers/byAny/${key}`);
   }
 

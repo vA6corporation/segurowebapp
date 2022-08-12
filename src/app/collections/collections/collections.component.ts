@@ -13,6 +13,10 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { formatDate } from '@angular/common';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { buildExcel } from 'src/app/xlsx';
 Chart.register(...registerables);
 
 @Component({
@@ -24,7 +28,7 @@ export class CollectionsComponent implements OnInit {
 
   constructor(
     private readonly reportsService: ReportsService,
-    private readonly usersService: UsersService,
+    private readonly workersService: WorkersService,
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
@@ -50,13 +54,12 @@ export class CollectionsComponent implements OnInit {
   });
   
   public formGroup = this.formBuilder.group({
-    userId: '',
+    workerId: '',
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
   });
 
-  private users$: Subscription = new Subscription();
-  public users: UserModel[] = [];
+  public workers: WorkerModel[] = [];
   public compliancePrima: number = 0;
   public materialPrima: number = 0;
   public directPrima: number = 0;
@@ -69,7 +72,10 @@ export class CollectionsComponent implements OnInit {
   public renovationCount: number = 0;
   public isEmition: boolean|null = null;
 
-  private guaranties: string[] = ["GFCF", "GADF", "GAMF"]
+  private guaranties: string[] = ["GFCF", "GADF", "GAMF"];
+
+  private workers$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
 
   onSetEmition(isEmition: boolean) {
     this.isEmition = isEmition;
@@ -77,7 +83,8 @@ export class CollectionsComponent implements OnInit {
   }
   
   ngOnDestroy() {
-    this.users$.unsubscribe();
+    this.workers$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
@@ -88,8 +95,170 @@ export class CollectionsComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.users$ = this.usersService.getActiveUsers().subscribe(users => {
-      this.users = users;
+    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      switch (id) {
+        case 'excel_simple':
+          if (this.formGroup.valid) {
+            this.navigationService.loadBarStart();
+            const { startDate, endDate, workerId } = this.formGroup.value;
+      
+            const params: Params = {
+              startDate, endDate, workerId,
+            };
+      
+            if (this.financierForm.valid) {
+              params.financierId = this.financierForm.value._id;
+            }
+      
+            if (this.customerForm.valid) {
+              params.customerId = this.customerForm.value._id;
+            }
+      
+            params.isEmition = this.isEmition;
+            
+            this.reportsService.getPrimasByRangeDateWorker(
+              params
+            ).subscribe(collection => {
+              console.log(collection);
+              const { payedDirect, notPayedDirect, payedCompliance, notPayedCompliance, payedMaterial, notPayedMaterial } = collection;
+              this.navigationService.loadBarFinish();
+              const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+              let body = [];
+              body.push([
+                'GARANTIA',
+                'FINANCIERA',
+                'CONSORCIO',
+                'CLIENTE',
+                'N° DE POLIZA',
+                'SUMA ASEGURADA',
+                'PRIMA',
+                'PAGADO',
+                'E. DE TRAMITE',
+                'E. DE REVISION',
+                'F. CUMPLIMIENTO',
+                'OBRA'
+              ]);
+
+              for (const guarantee of payedDirect) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+
+              for (const guarantee of notPayedDirect) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'NO PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+
+              for (const guarantee of payedCompliance) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+
+              for (const guarantee of notPayedCompliance) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'NO PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+
+              for (const guarantee of payedMaterial) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+              
+              for (const guarantee of notPayedMaterial) {
+                const { customer, partnership, financier } = guarantee;
+                body.push([
+                  guarantee.guaranteeType,
+                  financier?.name || null,
+                  partnership?.name || null,
+                  customer?.name || null,
+                  guarantee.policyNumber,
+                  guarantee.price,
+                  guarantee.prima,
+                  'NO PAGADO',
+                  guarantee.processStatus,
+                  guarantee.statusLabel,
+                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.construction?.object
+                ]);
+              }
+              const name = `SUMAS_ASEGURADAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+              buildExcel(body, name, wscols, [], []);
+            });
+          }
+          break;
+      
+        default:
+          break;
+      }
     });
   }
 
@@ -117,10 +286,12 @@ export class CollectionsComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
-      const { startDate, endDate, userId } = this.formGroup.value;
+      const { startDate, endDate, workerId } = this.formGroup.value;
+      
       const params: Params = {
-        startDate, endDate, userId
-      };
+        startDate, endDate, workerId
+      }
+      
       if (this.financierForm.valid) {
         params.financierId = this.financierForm.value._id;
       }
@@ -131,20 +302,36 @@ export class CollectionsComponent implements OnInit {
         params.customerId = this.customerForm.value._id;
       }
 
-      this.reportsService.getCollectionGuarantiesByRangeDateUser(
+      this.reportsService.getCollectionGuarantiesByRangeDateWorker(
         params
       ).subscribe(collection => {
         this.navigationService.loadBarFinish();
         const { material, direct, compliance } = collection;
         const colors = [randomColor(), randomColor(), randomColor()];
 
-        this.emitionCount = material.emitionCount + direct.emitionCount + compliance.emitionCount;
-        this.renovationCount = material.renovationCount + direct.renovationCount + compliance.renovationCount;
+        this.emitionCount = 
+          material.emitionCount + 
+          direct.emitionCount + 
+          compliance.emitionCount;
+        
+        this.renovationCount = 
+          material.renovationCount + 
+          direct.renovationCount + 
+          compliance.renovationCount;
 
         this.chartPrice?.destroy();
-        this.compliancePrice = compliance.emitionPrice + compliance.renovationPrice;
-        this.directPrice = direct.emitionPrice + direct.renovationPrice;
-        this.materialPrice = material.emitionPrice + material.renovationPrice;
+        
+        this.compliancePrice = 
+          compliance.emitionPrice + 
+          compliance.renovationPrice;
+        
+        this.directPrice = 
+          direct.emitionPrice + 
+          direct.renovationPrice;
+        
+        this.materialPrice = 
+          material.emitionPrice + 
+          material.renovationPrice;
 
         const dataPrice = {
           datasets: [
@@ -187,53 +374,6 @@ export class CollectionsComponent implements OnInit {
         };
         const canvasPrice = this.collectionChartPrice.nativeElement;
         this.chartPrice = new Chart(canvasPrice, configPrice);
-
-        // this.chartPrima?.destroy();
-        // this.compliancePrima = compliance.emitionPrima + compliance.renovationPrima;
-        // this.directPrima = direct.emitionPrima + direct.renovationPrima;
-        // this.materialPrima = material.emitionPrima + material.renovationPrima;
-
-        // const dataPrima = {
-        //   datasets: [
-        //     {
-        //       label: 'Dataset 1',
-        //       data: [this.compliancePrima, this.directPrima, this.materialPrima],
-        //       backgroundColor: colors,
-        //       fill: true
-        //     },
-        //   ]
-        // };
-    
-        // const configPrima = {
-        //   type: 'pie' as ChartType,
-        //   data: dataPrima,
-        //   plugins: [ChartDataLabels],
-        //   options: {
-        //     maintainAspectRatio: false,
-        //     plugins: {
-        //       datalabels: {
-        //         backgroundColor: function(ctx) {
-        //           return 'rgba(73, 79, 87, 0.5)'
-        //         },
-        //         borderRadius: 4,
-        //         color: 'white',
-        //         font: {
-        //           weight: 'bold'
-        //         },
-        //         formatter: (value, ctx) => {
-        //           if (value) {
-        //             return this.guaranties[ctx.dataIndex];
-        //           } else {
-        //             return null;
-        //           }
-        //         },
-        //         padding: 6
-        //       },
-        //     }
-        //   } as ChartOptions,
-        // };
-        // const canvasPrima = this.collectionChartPrima.nativeElement;
-        // this.chartPrima = new Chart(canvasPrima, configPrima);
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
         this.navigationService.loadBarFinish();
@@ -261,7 +401,7 @@ export class CollectionsComponent implements OnInit {
     this.fetchData();
   }
 
-  onChangeUser() {
+  onChangeWorker() {
     this.fetchData();
   }
 
@@ -274,3 +414,4 @@ export class CollectionsComponent implements OnInit {
   }
 
 }
+

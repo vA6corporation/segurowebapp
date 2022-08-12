@@ -1,7 +1,7 @@
 <section class="container">
   <form [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="standard">
-      <mat-label>Seleccine un rango de fechas</mat-label>
+      <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
         <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
@@ -149,7 +149,7 @@
                   <mat-icon>info</mat-icon>
                   <span>Detalles</span>
                 </button>
-                <a [routerLink]="['/customers', element._id, 'edit']" mat-menu-item>
+                <a [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
                   <mat-icon>edit</mat-icon>
                   <span>Editar</span>
                 </a>

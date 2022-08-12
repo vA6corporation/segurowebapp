@@ -5,12 +5,18 @@
         <ng-container *ngFor="let guarantee of guaranties">
           <a [href]=" 'materials/' + guarantee._id + '/edit' " target="_blank" mat-list-item *ngIf="guarantee.guaranteeType === 'GAMF'">
             {{ guarantee.policyNumber | uppercase }}
+            <span class="spacer"></span>
+              {{ guarantee.guaranteeType }}
           </a>
           <a [href]=" 'directs/' + guarantee._id + '/edit' " target="_blank" mat-list-item *ngIf="guarantee.guaranteeType === 'GADF'">
             {{ guarantee.policyNumber | uppercase }}
+            <span class="spacer"></span>
+              {{ guarantee.guaranteeType }}
           </a>
           <a [href]=" 'compliances/' + guarantee._id + '/edit' " target="_blank" mat-list-item *ngIf="guarantee.guaranteeType === 'GFCF'">
             {{ guarantee.policyNumber | uppercase }}
+            <span class="spacer"></span>
+              {{ guarantee.guaranteeType }}
           </a>
         </ng-container>
       </mat-action-list>

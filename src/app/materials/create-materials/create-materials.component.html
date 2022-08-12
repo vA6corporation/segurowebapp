@@ -1,20 +1,34 @@
 <section class="container py-4">
-  <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 mb-3 text-truncate">
-    <span class="mat-h1">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
-  </button>
+    <div class="d-flex">
+        <a mat-icon-button [href]="[ '/constructions/' + construction._id + '/edit' ]" type="button" target="_blank" *ngIf="construction !== null">
+            <mat-icon>open_in_new</mat-icon>
+        </a>
+        <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
+            <mat-icon>content_copy</mat-icon>
+        </button>
+        <div>
+            <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 p-0">
+              <span class="mat-h1">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}</span>
+            </button>
+            <span>{{ construction?.code }}</span>
+        </div>
+    </div>
   <h3 class="text-center">{{ partnership?.name }}</h3>
-  <h4 class="text-center">{{ customer?.name }}</h4>
+  <h4 class="text-center mb-0">{{ customer?.name }}</h4>
+  <span class="mat-divider"></span>
+  <h4 class="text-center">{{ beneficiary?.name || 'SIN BENEFICIARIO' }}</h4>
+  <h4 class="text-center text-muted">{{ worker?.name }}</h4>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="financier">
       <mat-form-field>
         <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
       </mat-form-field>
     </div>
-    <div formGroupName="beneficiary">
+    <!-- <div formGroupName="beneficiary">
       <mat-form-field>
         <input type="text" matInput placeholder="Beneficiario *" formControlName="name" (click)="openDialogBeneficiaries()" readonly>
       </mat-form-field>
-    </div>
+    </div> -->
     <div formGroupName="material">
       <mat-form-field>
         <input type="text" matInput placeholder="N° de poliza *" formControlName="policyNumber">

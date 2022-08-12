@@ -19,9 +19,6 @@ export class PartnershipsComponent implements OnInit {
     private readonly partnershipsService: PartnershipsService,
     private readonly navigationService: NavigationService,
   ) { }
-    
-  private handleSearch$: Subscription = new Subscription();
-  private handleClickMenu$: Subscription = new Subscription();
 
   public displayedColumns: string[] = [ 'document', 'name', 'customer', 'actions' ];
   public dataSource: PartnershipModel[] = [];
@@ -29,6 +26,9 @@ export class PartnershipsComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+
+  private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
@@ -53,7 +53,7 @@ export class PartnershipsComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.partnershipsService.getPartnershipsByAny(key).subscribe(partnerships => {
+      this.partnershipsService.getPartnershipsByKey(key).subscribe(partnerships => {
         this.navigationService.loadBarFinish();
         this.dataSource = partnerships;
       }, (error: HttpErrorResponse) => {

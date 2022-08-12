@@ -1,17 +1,17 @@
 <section class="container">
     <form [formGroup]="formGroup" autocomplete="off">
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Seguro</mat-label>
         <mat-select (selectionChange)="fetchData()" formControlName="type">
           <mat-option *ngFor="let type of types" [value]="type">{{ type }}</mat-option>
         </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
+      </mat-form-field> -->
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Año</mat-label>
         <mat-select (selectionChange)="fetchData()" formControlName="year">
           <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>Promotor</mat-label>
         <mat-select (selectionChange)="fetchData()" formControlName="workerId">
@@ -19,12 +19,26 @@
           <mat-option *ngFor="let element of workers" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Seleccione un rango de fechas</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Desde" formControlName="startDate">
+        <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
     </form>
     <div class="d-flex">
-        <div>
-            <div>
-                <canvas #insurancesChart width="900" height="300"></canvas>
-            </div>
-        </div>
+      <canvas #creditsChart></canvas>
     </div>
+    <mat-list role="list">
+      <mat-list-item role="listitem" *ngFor="let element of summaries; let i = index">
+        {{ element._id }} ({{ element.count }})
+        <span class="spacer"></span>
+        {{ element.totalPrima.toFixed(2) }}
+      </mat-list-item>
+      <!-- <mat-list-item role="listitem">Item 2</mat-list-item>
+      <mat-list-item role="listitem">Item 3</mat-list-item> -->
+    </mat-list>
   </section>

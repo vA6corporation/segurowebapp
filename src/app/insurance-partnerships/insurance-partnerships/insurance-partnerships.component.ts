@@ -54,7 +54,7 @@ export class InsurancePartnershipsComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.partnershipsService.getPartnershipsByAny(key).subscribe(partnerships => {
+      this.partnershipsService.getPartnershipsByKey(key).subscribe(partnerships => {
         this.navigationService.loadBarFinish();
         this.dataSource = partnerships;
       }, (error: HttpErrorResponse) => {

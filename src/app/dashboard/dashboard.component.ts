@@ -7,7 +7,7 @@ import { DialogComplianceComponent } from '../compliances/dialog-compliance/dial
 import { DialogDirectComponent } from '../directs/dialog-direct/dialog-direct.component';
 import { Direct } from '../directs/direct.model';
 import { DialogMaterialComponent } from '../materials/dialog-material/dialog-material.component';
-import { Material } from '../materials/material.model';
+import { Material }from '../materials/material.model';
 import { NavigationService } from '../navigation/navigation.service';
 import { ReportsService } from '../reports/reports.service';
 
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.reportsService.getGuarantiesByAny(key).subscribe(materials => {
+      this.reportsService.getGuarantiesByKey(key).subscribe(materials => {
         this.navigationService.loadBarFinish();
         console.log(materials);
         this.dataSource = materials;

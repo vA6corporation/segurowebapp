@@ -21,7 +21,7 @@ export class MailsService {
     return this.httpService.get(`mails/${pageIndex}/${pageSize}`);
   }
 
-  getManyByAny(key: string): Observable<Mail[]> {
+  getManyByKey(key: string): Observable<Mail[]> {
     return this.httpService.get(`mails/byAny/${key}`);
   }
 }

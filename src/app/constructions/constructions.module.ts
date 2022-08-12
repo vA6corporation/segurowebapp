@@ -12,10 +12,11 @@ import { DialogDetailConstructionsComponent } from './dialog-detail-construction
 import { LessConstructionsComponent } from './less-constructions/less-constructions.component';
 import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 import { WithoutDocumentationComponent } from './without-documentation/without-documentation.component';
+import { DialogAddBailComponent } from './dialog-add-bail/dialog-add-bail.component';
 
 
 @NgModule({
-  declarations: [ConstructionsComponent, CreateConstructionsComponent, EditConstructionsComponent, DialogConstructionsComponent, DialogDetailConstructionsComponent, LessConstructionsComponent, DialogAttachPdfComponent, WithoutDocumentationComponent],
+  declarations: [ConstructionsComponent, CreateConstructionsComponent, EditConstructionsComponent, DialogConstructionsComponent, DialogDetailConstructionsComponent, LessConstructionsComponent, DialogAttachPdfComponent, WithoutDocumentationComponent, DialogAddBailComponent],
   imports: [
     CommonModule,
     ConstructionsRoutingModule,
