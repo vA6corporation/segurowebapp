@@ -23,7 +23,7 @@ export class CreateUsersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],
-    allGuaranties: false,
+    // allGuaranties: false,
   });
   public isLoading: boolean = false;
   public hide: boolean = true;

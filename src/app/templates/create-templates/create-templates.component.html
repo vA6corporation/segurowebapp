@@ -9,36 +9,32 @@
       <input type="text" matInput formControlName="executionPlace">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Nombre del contratante *</mat-label>
-      <input type="text" matInput formControlName="contractorName">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Direccion del contratante *</mat-label>
-      <input type="text" matInput formControlName="contractorAddress">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Celular del contratante *</mat-label>
-      <input type="text" matInput formControlName="contractorMobileNumber">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Modalidad de fianza *</mat-label>
-      <input type="text" matInput formControlName="guaranteeModality">
+      <mat-label>Tipo de fianza</mat-label>
+      <mat-select formControlName="guaranteeCode">
+        <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
+        <mat-option value="GADF">ADELANTO DIRECTO</mat-option>
+        <mat-option value="GFCF">FIEL CUMPLIMIENTO</mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Plazo de la fianza *</mat-label>
-      <input type="number" matInput formControlName="timeLimitGuarantee">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Presupuesto base *</mat-label>
-      <input type="number" matInput formControlName="baseBudget">
+      <input type="number" matInput formControlName="guaranteeTimeLimit">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Monto de la fianza *</mat-label>
       <input type="number" matInput formControlName="guaranteeMount">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Presupuesto base *</mat-label>
+      <input type="number" matInput formControlName="guaranteeBaseBudget">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Monto del contrato *</mat-label>
-      <input type="number" matInput formControlName="contractMount">
+      <input type="number" matInput formControlName="guaranteeContractMount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre del depositante *</mat-label>
+      <input type="text" matInput formControlName="depositorName">
     </mat-form-field>
     <div formGroupName="partnership">
       <mat-form-field appearance="fill">

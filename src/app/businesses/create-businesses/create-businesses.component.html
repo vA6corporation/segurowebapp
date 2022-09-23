@@ -42,6 +42,7 @@
       <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
     </mat-form-field>
+    
     <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
@@ -84,6 +85,51 @@
       <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
+
+    <h2>Mienbros del directorio</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Presidente del directorio</mat-label>
+      <input type="text" matInput formControlName="directoryPresident">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Vice presidente</mat-label>
+      <input type="text" matInput formControlName="directorySubPresident">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Directores</mat-label>
+      <input type="text" matInput formControlName="directoryDirectories">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gerente general</mat-label>
+      <input type="text" matInput formControlName="directoryGeneralManager">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gerente financiero</mat-label>
+      <input type="text" matInput formControlName="directoryFinancierManager">
+    </mat-form-field>
+
+    <h2>Operaciones</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Sector</mat-label>
+      <input type="text" matInput formControlName="operationSector">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Vice presidente</mat-label>
+      <input type="text" matInput formControlName="operationActivity">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Directores</mat-label>
+      <input type="text" matInput formControlName="operationPlace">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gerente general</mat-label>
+      <input type="text" matInput formControlName="operationFinanciers">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gerente financiero</mat-label>
+      <input type="text" matInput formControlName="operationBanks">
+    </mat-form-field>
+
     <mat-list class="mb-3">
       <div mat-subheader>Accionistas</div>
       <mat-list-item *ngFor="let shareholder of shareholders; let i = index">
@@ -169,6 +215,25 @@
       </mat-list-item>
     </mat-list>
     <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogExperiences()">AGREGAR EXPERIENCIA</button>
+    
+    <mat-list class="mb-3">
+      <div mat-subheader>Facilidades crediticias</div>
+      <mat-list-item *ngFor="let facilityCredit of facilityCredits; let i = index">
+        <div>
+          {{ facilityCredit.financier | uppercase }}
+          <br>
+          <span class="text-muted">
+            {{ facilityCredit.creditLine }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveFacilityCredit(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogFacilityCredits()">AGREGAR FACILIDAD CREDITICIA</button>
+
     <div class="d-flex">
       <span class="spacer"></span>
       <button type="button" mat-stroked-button color="primary" routerLink="/businesses">CANCELAR</button>

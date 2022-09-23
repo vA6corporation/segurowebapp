@@ -29,7 +29,7 @@ export class EditUsersComponent implements OnInit {
     password: [ null, Validators.required ],
     isActive: false,
     isAdmin: false,
-    allGuaranties: false,
+    // allGuaranties: false,
     workerId: ''
   });
 

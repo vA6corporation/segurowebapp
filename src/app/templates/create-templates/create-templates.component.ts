@@ -28,14 +28,12 @@ export class CreateTemplatesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
-    contractorName: [ null, Validators.required ],
-    contractorAddress: [ null, Validators.required ],
-    contractorMobileNumber: [ null, Validators.required ],
-    guaranteeModality: [ null, Validators.required ],
+    guaranteeCode: [ null, Validators.required ],
     guaranteeTimeLimit: [ null, Validators.required ],
     guaranteeBaseBudget: [ null, Validators.required ],
     guaranteeMount: [ null, Validators.required ],
-    contractMount: [ null, Validators.required ],
+    guaranteeContractMount: [ null, Validators.required ],
+    depositorName: [ null, Validators.required ],
     partnership: this.formBuilder.group({
       _id: null,
       name: null,

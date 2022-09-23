@@ -38,8 +38,22 @@ export class BusinessesService {
     return this.httpService.get('businesses/count');
   }
 
-  create(business: BusinessModel): Observable<BusinessModel> {
-    return this.httpService.post('businesses', { business });
+  create(
+    business: BusinessModel, 
+    experiences: ExperienceModel[],
+    investments: InvestmentModel[],
+    properties: PropertyModel[],
+    movableProperties: MovablePropertyModel[],
+    facilityCredits: FacilityCreditModel[],
+  ): Observable<BusinessModel> {
+    return this.httpService.post('businesses', { 
+      business, 
+      experiences,
+      investments,
+      properties,
+      facilityCredits,
+      movableProperties, 
+    });
   }
 
   update(

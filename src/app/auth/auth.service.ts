@@ -124,7 +124,7 @@ export class AuthService {
   }
 
   register(signupForm: any): Observable<void> {
-    return this.httpService.post('businesses', signupForm);
+    return this.httpService.post('signup', signupForm);
   }
 
   logout(): void {

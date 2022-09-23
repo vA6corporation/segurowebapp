@@ -15,6 +15,8 @@ import { PropertyModel } from 'src/app/properties/property.model';
 import { DialogShareholdersComponent } from 'src/app/shareholders/dialog-shareholders/dialog-shareholders.component';
 import { ShareholderModel } from 'src/app/shareholders/shareholder.model';
 import { BusinessesService } from '../businesses.service';
+import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
+import { FacilityCreditModel } from '../facility-credit.model';
 
 @Component({
   selector: 'app-create-businesses',
@@ -49,6 +51,18 @@ export class CreateBusinessesComponent implements OnInit {
     representativeMaritalStatus: 'SOLTERO',
     representativePropertyRegime: '',
     representativeBirthDate: null,
+
+    directoryPresident: null,
+    directorySubPresident: null,
+    directoryDirectories: null,
+    directoryGeneralManager: null,
+    directoryFinancierManager: null,
+
+    operationSector: null,
+    operationActivity: null,
+    operationPlace: null,
+    operationFinanciers: null,
+    operationBanks: null
   });
 
   public isLoading: boolean = false;
@@ -58,6 +72,7 @@ export class CreateBusinessesComponent implements OnInit {
   public movableProperties: MovablePropertyModel[] = [];
   public investments: InvestmentModel[] = [];
   public experiences: ExperienceModel[] = [];
+  public facilityCredits: FacilityCreditModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nueva empresa');
@@ -142,6 +157,19 @@ export class CreateBusinessesComponent implements OnInit {
     });
   }
 
+  onDialogFacilityCredits() {
+    const dialogRef = this.matDialog.open(DialogFacilityCreditsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(facilityCredit => {
+      if (facilityCredit) {
+        this.facilityCredits.push(facilityCredit);
+      }
+    });
+  }
+
   onRemoveShareholder(index: number) {
     this.shareholders.splice(index, 1);
   }
@@ -162,11 +190,27 @@ export class CreateBusinessesComponent implements OnInit {
     this.experiences.splice(index, 1);
   }
 
+  onRemoveFacilityCredit(index: number) {
+    this.facilityCredits.splice(index, 1);
+  }
+
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      this.businessesService.create(this.formGroup.value).subscribe(res => {
+
+      const business = this.formGroup.value;
+      const shareholderIds = this.shareholders.map(e => e._id);
+      Object.assign(business, { shareholderIds });
+
+      this.businessesService.create(
+        business, 
+        this.experiences, 
+        this.investments,
+        this.properties,
+        this.movableProperties,
+        this.facilityCredits,
+      ).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

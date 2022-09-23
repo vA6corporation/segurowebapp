@@ -23,12 +23,12 @@ export class SignupComponent implements OnInit {
     user: this.formBuilder.group({
       email: [ null, [ Validators.required, Validators.email ] ],
       password: '123',
-      allGuaranties: true,
+      // allGuaranties: true,
     }),
-    business: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
-    }),
+    // business: this.formBuilder.group({
+    //   name: [ null, Validators.required ],
+    //   document: [ null, [ Validators.required, Validators.minLength(11), Validators.maxLength(11) ] ],
+    // }),
   });
   public isLoading: boolean = false;
 

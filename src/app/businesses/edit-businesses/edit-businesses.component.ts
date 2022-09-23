@@ -96,8 +96,6 @@ export class EditBusinessesComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.businessId = params.businessId;
       this.businessesService.getBusinessById(this.businessId).subscribe(business => {
-        console.log(business);
-        
         this.shareholders = business.shareholders;
         this.properties = business.properties;
         this.movableProperties = business.movableProperties;
