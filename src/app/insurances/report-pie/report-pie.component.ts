@@ -99,7 +99,7 @@ export class ReportPieComponent implements OnInit {
             for (const insurance of insurances) {
               body.push([
                 insurance.partnership?.name.toUpperCase(),
-                insurance.customer?.name.toUpperCase(),
+                insurance.business.name.toUpperCase(),
                 insurance.policyNumber,
                 insurance.construction?.object,
                 formatDate(insurance.emitionAt, 'dd/MM/yyyy', 'en-US'),

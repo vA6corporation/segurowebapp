@@ -1,4 +1,4 @@
-import { CustomerModel } from "../customers/customer.model"
+import { BusinessModel } from "../businesses/business.model"
 import { FinancierModel } from "../financiers/financier.model"
 import { PartnershipModel } from "../partnerships/partnership.model"
 import { WorkerModel } from "../workers/worker.model"
@@ -12,11 +12,11 @@ export interface CreditModel {
     commission: number
     charge: string
     financierId: string
-    customerId: string
+    businessId: string
     brokerId: string
     workerId: string
     partnership?: PartnershipModel
-    financier?: FinancierModel
-    customer?: CustomerModel
-    worker?: WorkerModel
+    financier: FinancierModel
+    business: BusinessModel
+    worker: WorkerModel
 }

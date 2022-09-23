@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
+import { PartnershipItemModel } from './partnership-item.model';
 import { PartnershipModel } from './partnership.model';
 
 @Injectable({
@@ -13,7 +14,11 @@ export class PartnershipsService {
   ) { }
 
   getPartnershipsByKey(key: string): Observable<PartnershipModel[]> {
-    return this.httpService.get(`partnerships/byAny/${key}`);
+    return this.httpService.get(`partnerships/byKey/${key}`);
+  }
+
+  getTemplatePartnershipsByKey(key: string): Observable<PartnershipModel[]> {
+    return this.httpService.get(`partnerships/templatePartnershipsByKey/${key}`);
   }
 
   getPartnerships(): Observable<PartnershipModel[]> {
@@ -21,22 +26,35 @@ export class PartnershipsService {
   }
 
   getPartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
-    return this.httpService.get(`partnerships/${pageIndex}/${pageSize}`); 
+    return this.httpService.get(`partnerships/byPage/${pageIndex}/${pageSize}`); 
+  }
+
+  getTemplatePartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
+    return this.httpService.get(`partnerships/templatePartnershipsByPage/${pageIndex}/${pageSize}`); 
   }
 
   getPartnershipsCount(): Observable<number> {
     return this.httpService.get('partnerships/count');
   }
 
-  getPartnershipById(partnershipId: string) {
-    return this.httpService.get(`partnerships/${partnershipId}`);
+  getTemplatePartnershipsCount(): Observable<number> {
+    return this.httpService.get('partnerships/countTemplatePartnerships');
   }
 
-  create(partnership: PartnershipModel): Observable<PartnershipModel> {
-    return this.httpService.post('partnerships', { partnership });
+  getPartnershipById(partnershipId: string): Observable<PartnershipModel> {
+    return this.httpService.get(`partnerships/byId/${partnershipId}`);
   }
 
-  update(partnership: PartnershipModel, partnershipId: string): Observable<PartnershipModel> {
-    return this.httpService.put(`partnerships/${partnershipId}`, { partnership });
+  create(partnership: PartnershipModel, partnershipItems: PartnershipItemModel[]): Observable<PartnershipModel> {
+    return this.httpService.post('partnerships', { partnership, partnershipItems });
   }
+
+  update(partnership: PartnershipModel, partnershipItems: PartnershipItemModel[], partnershipId: string): Observable<PartnershipModel> {
+    return this.httpService.put(`partnerships/${partnershipId}`, { partnership, partnershipItems });
+  }
+
+  delete(partnershipId: string): Observable<void> {
+    return this.httpService.delete(`partnerships/${partnershipId}`);
+  }
+  
 }

@@ -2,12 +2,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { Compliance } from '../compliances/compliance.model';
+import { ComplianceModel } from '../compliances/compliance.model';
 import { DialogComplianceComponent } from '../compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from '../directs/dialog-direct/dialog-direct.component';
-import { Direct } from '../directs/direct.model';
+import { DirectModel } from '../directs/direct.model';
 import { DialogMaterialComponent } from '../materials/dialog-material/dialog-material.component';
-import { Material }from '../materials/material.model';
+import { MaterialModel }from '../materials/material.model';
 import { NavigationService } from '../navigation/navigation.service';
 import { ReportsService } from '../reports/reports.service';
 
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   private handleSearch$: Subscription = new Subscription();
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Deposit } from '../deposit.model';
+import { DepositModel } from '../deposit.model';
 
 @Component({
   selector: 'app-dialog-deposits',
@@ -12,7 +12,7 @@ export class DialogDepositsComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) 
-    public deposit: Deposit|null,
+    public deposit: DepositModel|null,
     private readonly formBuilder: FormBuilder,
     private readonly dialogRef: MatDialogRef<DialogDepositsComponent>,
   ) { }

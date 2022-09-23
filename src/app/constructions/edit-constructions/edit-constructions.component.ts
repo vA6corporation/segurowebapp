@@ -4,12 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
+import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { ConstructionsService } from '../constructions.service';
@@ -24,6 +26,7 @@ export class EditConstructionsComponent implements OnInit {
 
   constructor(
     private readonly constructionsService: ConstructionsService,
+    private readonly  authService: AuthService,
     private readonly navigationService: NavigationService,
     private readonly officesService: OfficesService,
     private readonly route: ActivatedRoute,
@@ -38,7 +41,7 @@ export class EditConstructionsComponent implements OnInit {
       _id: null,
       name: null,
     }),
-    customer: this.formBuilder.group({
+    business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -46,6 +49,8 @@ export class EditConstructionsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
+    // timeLimit: [ null, Validators.required ],
+    // place: [ null, Validators.required ],
     object: [ null, Validators.required ],
     code: [ null, Validators.required ],
     emitionAt: [ new Date(), Validators.required ],
@@ -57,12 +62,15 @@ export class EditConstructionsComponent implements OnInit {
   });
   public offices: OfficeModel[] = [];
   public workers: WorkerModel[] = [];
+  public user: UserModel|null = null;
   private constructionId: string = '';
 
   private workers$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription(); 
 
   ngOnDestroy() {
     this.workers$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -74,17 +82,21 @@ export class EditConstructionsComponent implements OnInit {
     });
 
     this.officesService.getActiveOffices().subscribe(offices => {
-        this.offices = offices;
+      this.offices = offices;
+    });
+
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
     });
 
     this.route.params.subscribe(params => {
       this.constructionId = params.constructionId;
       this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
         console.log(construction);
-        const { partnership, customer, beneficiary, ...value } = construction;
+        const { partnership, business, beneficiary, ...value } = construction;
         this.formGroup.patchValue(value);
         this.formGroup.patchValue({ partnership: partnership || {} });
-        this.formGroup.patchValue({ customer });
+        this.formGroup.patchValue({ business });
         this.formGroup.patchValue({ beneficiary })
       });
     });
@@ -93,8 +105,8 @@ export class EditConstructionsComponent implements OnInit {
   onChangeOffice() {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
-      const { customer, beneficiary, partnership, ...construction } = this.formGroup.value;
-      construction.customerId = customer._id;
+      const { business, beneficiary, partnership, ...construction } = this.formGroup.value;
+      construction.businessId = business._id;
       construction.beneficiaryId = beneficiary._id;
       construction.partnershipId = partnership._id;
       this.constructionsService.updateOffice(this.constructionId, construction).subscribe(() => {
@@ -120,15 +132,15 @@ export class EditConstructionsComponent implements OnInit {
     });
   }
   
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
       }
     });
   }
@@ -141,8 +153,8 @@ export class EditConstructionsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -161,8 +173,8 @@ export class EditConstructionsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, partnership, beneficiary, ...construction } = this.formGroup.value;
-      construction.customerId = customer._id;
+      const { business, partnership, beneficiary, ...construction } = this.formGroup.value;
+      construction.businessId = business._id;
       construction.partnershipId = partnership._id;
       construction.beneficiaryId = beneficiary._id;
       this.constructionsService.update(construction, this.constructionId).subscribe(res => {

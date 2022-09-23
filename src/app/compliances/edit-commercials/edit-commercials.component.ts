@@ -4,15 +4,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { Cheque } from 'src/app/cheques/cheque.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { ChequeModel } from 'src/app/cheques/cheque.model';
 import { ChequesService } from 'src/app/cheques/cheques.service';
 import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-cheques.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogAttachPdfComponent } from 'src/app/constructions/dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
-import { CustomerModel } from 'src/app/customers/customer.model';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
-import { Deposit } from 'src/app/deposits/deposit.model';
+import { DepositModel } from 'src/app/deposits/deposit.model';
 import { DepositsService } from 'src/app/deposits/deposits.service';
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
@@ -65,19 +65,12 @@ export class EditCommercialsComponent implements OnInit {
   });
 
   public construction: ConstructionModel|null = null;
-  public customer: CustomerModel|null = null;
+  public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public isLoading: boolean = false;
   private complianceId: string = '';
-  public deposits: Deposit[] = [];
-  public cheques: Cheque[] = [];
-  // public workers: WorkerModel[] = [];
-
-  // private workers$: Subscription = new Subscription();
-
-  // ngOnDestroy() {
-  //   this.workers$.unsubscribe();
-  // }
+  public deposits: DepositModel[] = [];
+  public cheques: ChequeModel[] = [];
 
   ngOnInit(): void { 
     this.navigationService.backTo();
@@ -86,23 +79,17 @@ export class EditCommercialsComponent implements OnInit {
       this.complianceId = params.complianceId;
       this.compliancesService.getComplianceById(this.complianceId).subscribe(compliance => {
         console.log(compliance);
-        const { customer, financier, beneficiary, partnership, cheques = [], deposits = [], construction } = compliance;
-        this.formGroup.patchValue({ customer });
+        const { financier, beneficiary, cheques = [], deposits = [], construction } = compliance;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ beneficiary });
-        this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ compliance });
         this.construction = construction;
-        this.customer = construction?.customer || null;
+        this.business = construction.business || null;
         this.partnership = construction?.partnership || null;
         this.cheques = cheques;
         this.deposits = deposits;
       });
     });
-
-    // this.workers$ = this.workersService.getWorkers().subscribe(workers => {
-    //   this.workers = workers;
-    // });
   }
 
   onEditConstruction() {
@@ -144,7 +131,7 @@ export class EditCommercialsComponent implements OnInit {
     }
   }
 
-  onEditDeposit(deposit: Deposit): void {
+  onEditDeposit(deposit: DepositModel): void {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
       width: '600px',
       position: { top: '20px' },
@@ -160,7 +147,7 @@ export class EditCommercialsComponent implements OnInit {
     });
   }
 
-  onEditCheque(cheque: Cheque): void {
+  onEditCheque(cheque: ChequeModel): void {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
       width: '600px',
       position: { top: '20px' },
@@ -176,15 +163,15 @@ export class EditCommercialsComponent implements OnInit {
     });
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
       }
     });
   }
@@ -223,30 +210,12 @@ export class EditCommercialsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
   }
-
-  // openDialogCheques() {
-  //   const dialogRef = this.matDialog.open(DialogChequesComponent, {
-  //     width: '600px',
-  //     position: { top: '20px' }
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(cheque => {
-  //     if (cheque) {
-  //       cheque.onModel = 'Compliance';
-  //       cheque.guaranteeId = this.complianceId;
-  //       this.chequesService.create(cheque).subscribe(cheque => {
-  //         this.cheques.push(cheque);
-  //         this.navigationService.showMessage('Se han guardado los cambios');
-  //       });
-  //     }
-  //   });
-  // }
 
   openDialogDeposits() {
     const dialogRef = this.matDialog.open(DialogDepositsComponent, {
@@ -270,8 +239,6 @@ export class EditCommercialsComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       const { financier, beneficiary, compliance } = this.formGroup.value;
-      // compliance.customerId = customer._id;
-      // compliance.partnershipId = partnership._id;
       compliance.financierId = financier._id;
       compliance.beneficiaryId = beneficiary._id;
       this.compliancesService.update(compliance, this.complianceId).subscribe(res => {
@@ -289,87 +256,105 @@ export class EditCommercialsComponent implements OnInit {
   }
 
   onAttachPdfInvoice() {
-    const data: CompliancePdfData = {
-      type: 'invoice',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'invoice',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfTicket() {
-    const data: CompliancePdfData = {
-      type: 'voucher',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'voucher',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfDocuments() {
-    const data: CompliancePdfData = {
-      type: 'document',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'document',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfCheques() {
-    const data: CompliancePdfData = {
-      type: 'cheque',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'cheque',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfDeposits() {
-    const data: CompliancePdfData = {
-      type: 'deposit',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'deposit',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfFianzas() {
-    const data: CompliancePdfData = {
-      type: 'fianza',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'fianza',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfConstruction() {
@@ -382,17 +367,20 @@ export class EditCommercialsComponent implements OnInit {
   }
 
   onAttachPdfConstructions() {
-    const data: CompliancePdfData = {
-      type: 'construction',
-      complianceId: this.complianceId
+    if (this.construction) {
+      const data: CompliancePdfData = {
+        type: 'construction',
+        constructionId: this.construction._id,
+        complianceId: this.complianceId
+      }
+  
+      this.matDialog.open(DialogPdfCompliancesComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfCompliancesComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
 

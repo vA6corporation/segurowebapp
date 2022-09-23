@@ -36,9 +36,9 @@
         <th mat-header-cell *matHeaderCellDef>N° de Poliza</th>
         <td mat-cell *matCellDef="let cheque" class="truncate-cell">{{ cheque.guarantee?.policyNumber }}</td>
       </ng-container>
-      <ng-container matColumnDef="customer">
-        <th mat-header-cell *matHeaderCellDef>Cliente</th>
-        <td mat-cell *matCellDef="let cheque" class="truncate-cell">{{ cheque.guarantee?.customer.name }}</td>
+      <ng-container matColumnDef="business">
+        <th mat-header-cell *matHeaderCellDef>Empresa</th>
+        <td mat-cell *matCellDef="let cheque" class="truncate-cell">{{ cheque.guarantee?.business.name }}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -58,7 +58,7 @@
               <mat-icon>monetization_on</mat-icon>
               <span>Desmarcar pago</span>
             </button>
-            <button type="button" (click)="onPaid(cheque)" *ngIf="!cheque.isPaid" mat-menu-item>
+            <button type="button" (click)="onNotPaid(cheque)" *ngIf="!cheque.isPaid" mat-menu-item>
               <mat-icon>monetization_on</mat-icon>
               <span>Marcar pago</span>
             </button>

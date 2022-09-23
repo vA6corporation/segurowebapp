@@ -1,10 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { Guarantee } from 'src/app/reports/guarantee.interface';
-import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 
 @Component({
@@ -17,36 +14,23 @@ export class DialogDetailConstructionsComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) 
     private readonly constructionId: string,
-    private readonly formBuilder: FormBuilder,
     private readonly constructionsService: ConstructionsService,
     private readonly navigationService: NavigationService,
   ) { }
 
-  public guaranties: Guarantee[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
-    key: [ null, Validators.required ],
-  });
+  public guaranties: GuaranteeModel[] = [];
+  public guarantiesGAMF: any[] = [];
+  public guarantiesGADF: any[] = [];
+  public guarantiesGFCF: any[] = [];
 
   ngOnInit(): void { 
+    // this.navigationService.loadBarStart();
     this.constructionsService.getGuarantiesByConstructionId(this.constructionId).subscribe(guaranties => {
-      console.log(guaranties);
-      this.guaranties = guaranties;
+      this.navigationService.loadBarFinish();
+      this.guarantiesGAMF = guaranties.filter(e => e.guaranteeType === 'GAMF');
+      this.guarantiesGADF = guaranties.filter(e => e.guaranteeType === 'GADF');
+      this.guarantiesGFCF = guaranties.filter(e => e.guaranteeType === 'GFCF');
     });
-  }
-
-  onSubmit(): void {
-    // if (this.formGroup.valid) {
-    //   this.navigationService.loadBarStart();
-    //   const key = this.formGroup.get('key')?.value;
-    //   this.formGroup.reset();
-    //   this.constructionsService.getConstructionsByKey(key).subscribe(constructions => {
-    //     this.navigationService.loadBarFinish();
-    //     this.guara = constructions;
-    //   }, (error: HttpErrorResponse) => {
-    //     this.navigationService.loadBarFinish();
-    //     this.navigationService.showMessage(error.error.message);
-    //   });
-    // }
   }
 
 }

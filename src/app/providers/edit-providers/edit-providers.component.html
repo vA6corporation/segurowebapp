@@ -2,14 +2,14 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="standard">
       <mat-label>Tipo de Documento *</mat-label>
-      <mat-select formControlName="identificationType">
+      <mat-select formControlName="documentType">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
         <mat-option value="CE">CE</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="N° de Documento *" formControlName="identificationNumber" [maxlength]="maxLength">
+      <input type="text" matInput placeholder="N° de Documento *" formControlName="document" [maxlength]="maxLength">
     </mat-form-field>
     <mat-form-field>
       <input type="text" matInput placeholder="Nombres/Razon Social *" formControlName="name">
@@ -31,6 +31,7 @@
             <mat-option value="BBVA">BBVA</mat-option>
             <mat-option value="INTERBANK">INTERBANK</mat-option>
             <mat-option value="SCOTIABANK">SCOTIABANK</mat-option>
+            <mat-option value="BANCO DE LA NACION">BANCO DE LA NACION</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="standard">

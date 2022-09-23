@@ -8,11 +8,14 @@
       <mat-icon>open_in_new</mat-icon>
     </a>
     <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
-        <mat-icon>content_copy</mat-icon>
+      <mat-icon>content_copy</mat-icon>
+    </button>
+    <button (click)="onShowDetails(construction._id)" mat-icon-button type="button" *ngIf="construction !== null">
+      <mat-icon class="mr-2">text_snippet</mat-icon>
     </button>
   </div>
   <h3 class="text-center">{{ partnership?.name }}</h3>
-  <h4 class="text-center mb-0">{{ customer?.name }}</h4>
+  <h4 class="text-center mb-0">{{ business?.name }}</h4>
   <span class="mat-divider"></span>
   <h4 class="text-center">{{ beneficiary?.name }}</h4>
   <h4 class="text-center text-muted">{{ worker?.name }}</h4>
@@ -27,7 +30,7 @@
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdfFianzas()" [disabled]="isLoading" mat-raised-button color="primary">FIANZAS</button>
     <span class="divider"></span>
-    <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">ESTADO DE OBRA</button>
+    <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">{{ formGroup.value.direct.isEmition ? 'CONTRATO DE OBRA' : 'ESTADO DE OBRA' }}</button>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="financier">
@@ -147,7 +150,7 @@
         <mat-list-item *ngFor="let deposit of deposits; let i = index;">
           <mat-icon mat-list-icon>monetization_on</mat-icon>
           <div mat-line>{{ deposit.price.toFixed(2) }} {{ deposit.currency }}</div>
-          <!-- <div mat-line>{{ customer.document }}</div> -->
+          <!-- <div mat-line>{{ business.document }}</div> -->
           <div class="spancer"></div>
           <button type="button" mat-icon-button (click)="removeDeposit(i)">
             <mat-icon>delete</mat-icon>

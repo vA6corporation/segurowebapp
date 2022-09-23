@@ -39,6 +39,7 @@ export class DocumentationComponent implements OnInit {
     'deposit', 
     'fianza', 
     'construction', 
+    'contract',
     'actions'
   ];
   public dataSourceCompliance: any[] = [];
@@ -63,6 +64,7 @@ export class DocumentationComponent implements OnInit {
   public deposit1 = 0;
   public fianza1 = 0;
   public construction1 = 0;
+  public contract1 = 0;
 
   public invoice2 = 0;
   public voucher2 = 0;
@@ -71,6 +73,7 @@ export class DocumentationComponent implements OnInit {
   public deposit2 = 0;
   public fianza2 = 0;
   public construction2 = 0;
+  public contract2 = 0;
 
   public invoice3 = 0;
   public voucher3 = 0;
@@ -79,6 +82,7 @@ export class DocumentationComponent implements OnInit {
   public deposit3 = 0;
   public fianza3 = 0;
   public construction3 = 0;
+  public contract3 = 0;
 
   public formGroup: FormGroup = this.formBuilder.group({
     startDate: [ null, Validators.required ],
@@ -118,7 +122,7 @@ export class DocumentationComponent implements OnInit {
 
   onRangeChange() {
 
-    const { startDate, endDate, isEmition} = this.formGroup.value;
+    const { startDate, endDate, isEmition } = this.formGroup.value;
 
     const queryParams: Params = { pageIndex: 0, isEmition };
     
@@ -206,13 +210,6 @@ export class DocumentationComponent implements OnInit {
         });
       }
       this.fetchData();
-      // this.bankId = params.bankId;
-
-      // this.banksService.getBankById(this.bankId).subscribe(bank => {
-      //   console.log(bank);
-        
-      //   this.formGroup.patchValue(bank);
-      // });
     });
   }
 
@@ -224,7 +221,6 @@ export class DocumentationComponent implements OnInit {
     }
     this.documentationService.getGuaranties(params).subscribe(guaranties => {
       this.navigationService.loadBarFinish();
-      // console.log(guaranties);
       const { materialsDocumentation, directsDocumentation, compliancesDocumentation } = guaranties;
       this.dataSourceDirect = directsDocumentation;
       this.dataSourceMaterial = materialsDocumentation;
@@ -250,6 +246,7 @@ export class DocumentationComponent implements OnInit {
     this.deposit1 = 0;
     this.fianza1 = 0;
     this.construction1 = 0;
+    this.contract1 = 0;
 
     for (const item of this.dataSourceDirect) {
       if (!item.documentation.find((e: string) => 'invoice' == e)) {
@@ -270,8 +267,15 @@ export class DocumentationComponent implements OnInit {
       if (!item.documentation.find((e: string) => 'fianza' == e)) {
         this.fianza1 += 1;
       }
-      if (!item.documentation.find((e: string) => 'construction' == e)) {
-        this.construction1 += 1;
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (!item.isEmition) {
+          this.construction1 += 1;
+        }
+      }
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (item.isEmition) {
+          this.contract1 += 1;
+        }
       }
     }
 
@@ -282,6 +286,7 @@ export class DocumentationComponent implements OnInit {
     this.deposit2 = 0;
     this.fianza2 = 0;
     this.construction2 = 0;
+    this.contract2 = 0;
 
     for (const item of this.dataSourceMaterial) {
       if (!item.documentation.find((e: string) => 'invoice' == e)) {
@@ -302,8 +307,15 @@ export class DocumentationComponent implements OnInit {
       if (!item.documentation.find((e: string) => 'fianza' == e)) {
         this.fianza2 += 1;
       }
-      if (!item.documentation.find((e: string) => 'construction' == e)) {
-        this.construction2 += 1;
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (!item.isEmition) {
+          this.construction2 += 1;
+        }
+      }
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (item.isEmition) {
+          this.contract2 += 1;
+        }
       }
     }  
 
@@ -314,6 +326,7 @@ export class DocumentationComponent implements OnInit {
     this.deposit3 = 0;
     this.fianza3 = 0;
     this.construction3 = 0;
+    this.contract3 = 0;
     
     for (const item of this.dataSourceCompliance) {
       if (!item.documentation.find((e: string) => 'invoice' == e)) {
@@ -334,8 +347,15 @@ export class DocumentationComponent implements OnInit {
       if (!item.documentation.find((e: string) => 'fianza' == e)) {
         this.fianza3 += 1;
       }
-      if (!item.documentation.find((e: string) => 'construction' == e)) {
-        this.construction3 += 1;
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (!item.isEmition) {
+          this.construction3 += 1;
+        }
+      }
+      if (!item.documentation.find((e: string) => 'construction' == e) ) {
+        if (item.isEmition) {
+          this.contract3 += 1;
+        }
       }
     }  
 
@@ -367,14 +387,20 @@ export class DocumentationComponent implements OnInit {
     }
   }
 
+  findContract(element: any, type: string) {
+    return !element.documentation.find((e: string) => e == type) && element.isEmition;
+  }
+
+  findConstruction(element: any, type: string) {
+    return !element.documentation.find((e: string) => e == type) && !element.isEmition;
+  }
+
   findDocumentation(element: any, type: string) {
     return !element.documentation.find((e: string) => e == type);
   }
 
   handlePageEvent(event: PageEvent): void {
-    // this.customersService.getCustomerModelsByPage(event.pageIndex + 1, event.pageSize).subscribe(customers => {
-    //   this.dataSource = customers;
-    // });
+
   }
 
 }

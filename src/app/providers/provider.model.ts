@@ -1,7 +1,7 @@
 export interface ProviderModel {
   _id: string,
-  identificationType: string,
-  identificationNumber: string,
+  documentType: string,
+  document: string,
   name: string,
   email: string,
   mobileNumber: string,

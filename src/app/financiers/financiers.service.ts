@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
+import { GuaranteeModel } from '../guarantees/guarantee.model';
 import { HttpService } from '../http.service';
-import { Guarantee } from '../reports/guarantee.interface';
 import { FinancierModel } from './financier.model'
 
 @Injectable({
@@ -19,7 +18,7 @@ export class FinancierModelsService {
   }
 
   getFinancierModelsByKey(key: string): Observable<FinancierModel[]> {
-    return this.httpService.get(`financiers/byAny/${key}`)
+    return this.httpService.get(`financiers/byKey/${key}`)
   }
 
   getFinancierModelById(financierId: string): Observable<any> {
@@ -30,7 +29,7 @@ export class FinancierModelsService {
     return this.httpService.get('financiers/count')
   }
 
-  getEmitionGuaranties(financierId: string): Observable<Guarantee[]> {
+  getEmitionGuaranties(financierId: string): Observable<GuaranteeModel[]> {
     return this.httpService.get(`reports/${financierId}/emitionGuaranties`);
   }
 

@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { Compliance } from '../compliance.model';
+import { ComplianceModel } from '../compliance.model';
 import { CompliancesService } from '../compliances.service';
 import { DialogComplianceComponent } from '../dialog-compliance/dialog-compliance.component';
 
@@ -23,8 +24,8 @@ export class CompliancesComponent implements OnInit {
 
   private handleSearch$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
-  public dataSource: Compliance[] = [];
+  public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
+  public dataSource: ComplianceModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
@@ -49,7 +50,7 @@ export class CompliancesComponent implements OnInit {
     });
   }
 
-  async onRenewGuarantee(guarantee: any) {
+  async onRenewGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '02';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':

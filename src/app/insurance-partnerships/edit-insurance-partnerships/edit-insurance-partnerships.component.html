@@ -1,50 +1,47 @@
 <section class="container py-4">
     <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-      <!-- <h1>Editar Consorcio</h1> -->
-      <div formGroupName="partnership">
-        <mat-form-field>
-          <input type="text" matInput placeholder="N° de RUC" formControlName="document" maxlength="11">
-        </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Razon Social *" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Direccion" formControlName="address">
-        </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Representante legal *" formControlName="representative">
-        </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Documento representante legal *" formControlName="representativeDocument">
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Operador tributario</mat-label>
-          <mat-select formControlName="customerId">
-            <mat-option class="text-uppercase" *ngFor="let customer of customers" [value]="customer._id">
-              {{ customer.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-list class="mb-1">
-          <div mat-subheader>
-            Empresas
-            <div class="spacer"></div>
-            <button type="button" mat-mini-fab color="primary" (click)="openDialogCustomer()">
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
-          <mat-list-item *ngFor="let customer of customers; let i = index;">
-            <mat-icon mat-list-icon>face</mat-icon>
-            <div mat-line>{{ customer.name | uppercase }}</div>
-            <div mat-line>{{ customer.document }}</div>
-            <div class="spancer"></div>
-            <button type="button" mat-icon-button (click)="removeCustomer(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </div>
+      <mat-form-field>
+        <input type="text" matInput placeholder="N° de RUC" formControlName="document" maxlength="11">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Razon Social *" formControlName="name">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Direccion" formControlName="address">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Representante legal *" formControlName="representative">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" matInput placeholder="Documento representante legal *" formControlName="representativeDocument">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Operador tributario</mat-label>
+        <mat-select formControlName="businessId">
+          <mat-option class="text-uppercase" *ngFor="let business of businesses" [value]="business._id">
+            {{ business.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-list class="mb-1">
+        <div mat-subheader>
+          Empresas
+          <div class="spacer"></div>
+          <button type="button" mat-mini-fab color="primary" (click)="openDialogBusinesses()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-list-item *ngFor="let business of businesses; let i = index;">
+          <mat-icon mat-list-icon>face</mat-icon>
+          <div mat-line>{{ business.name | uppercase }}</div>
+          <div mat-line>{{ business.document }}</div>
+          <div class="spancer"></div>
+          <button type="button" mat-icon-button (click)="removeBusiness(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-list>
       <div class="mt-3 d-flex">
         <span class="spacer"></span>
         <button type="button" mat-stroked-button color="primary" routerLink="/insurancePartnerships">CANCELAR</button>

@@ -6,7 +6,6 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { UserModel } from 'src/app/users/user.model';
 import { AuthService } from '../auth.service';
-import { BusinessModel } from '../business.model';
 import { OfficeModel } from '../office.model';
 
 @Component({
@@ -23,7 +22,6 @@ export class LogoutComponent implements OnInit {
     private readonly router: Router,
   ) { }
 
-  public business: BusinessModel|null = new BusinessModel();
   public office: OfficeModel = new OfficeModel();
   public user: UserModel|null = null;
   public offices: OfficeModel[] = [];
@@ -40,9 +38,7 @@ export class LogoutComponent implements OnInit {
     this.navigationService.setTitle('Cerrar sesion');
     
     this.auth$ = this.authService.handleAuth().subscribe(auth => {
-      this.business = auth.business;
       this.user = auth.user;
-      // this.office = auth.office;
     });
 
     this.offices$ = this.officesService.getActiveOffices().subscribe(offices => {

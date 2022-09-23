@@ -3,5 +3,5 @@ export interface InsurancePdfModel {
     pdfId: string
     type: string
     filename: string
-    fileType: string   
+    fileType: string
 }

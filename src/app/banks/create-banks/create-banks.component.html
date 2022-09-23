@@ -1,6 +1,10 @@
 <section class="container">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="standard">
+      <mat-label>Titular de la cuenta</mat-label>
+      <input type="text" matInput formControlName="providerName">
+    </mat-form-field>
+    <mat-form-field appearance="standard">
       <mat-label>Banco *</mat-label>
       <mat-select formControlName="bankName">
         <mat-option value="BCP">BCP</mat-option>

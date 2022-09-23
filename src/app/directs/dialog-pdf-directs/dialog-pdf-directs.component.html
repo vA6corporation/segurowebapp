@@ -4,6 +4,9 @@
         <mat-action-list>
           <button mat-list-item (click)="onChangePdf(directPdf)" *ngFor="let directPdf of directPdfs">{{ directPdf.filename }}</button>
         </mat-action-list>
+        <div class="m-5">
+          <mat-slide-toggle #toggleAll (change)="attachAll = toggleAll.checked">Adjuntar a todas las renovaciones</mat-slide-toggle>
+        </div>
       </mat-tab>
       <mat-tab label="Preview" style="overflow: hidden;">
         <iframe [src]="url" frameborder="0" style="overflow:hidden;height:100%;width:100%"></iframe>

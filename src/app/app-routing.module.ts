@@ -12,12 +12,20 @@ const routes: Routes = [
     loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
   },
   {
+    path: 'templatePartnerships',
+    loadChildren: () => import('./template-partnerships/template-partnerships.module').then(m => m.TemplatePartnershipsModule)
+  },
+  {
     path: 'shareholders',
     loadChildren: () => import('./shareholders/shareholders.module').then(m => m.ShareholdersModule)
   },
   {
     path: 'templates',
     loadChildren: () => import('./templates/templates.module').then(m => m.TemplatesModule)
+  },
+  {
+    path: 'businesses',
+    loadChildren: () => import('./businesses/businesses.module').then(m => m.BusinessesModule)
   },
   {
     path: 'insurances',
@@ -38,10 +46,6 @@ const routes: Routes = [
   {
     path: 'documentation',
     loadChildren: () => import('./documentation/documentation.module').then(m => m.DocumentationModule)
-  },
-  {
-    path: 'customers',
-    loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
   },
   {
     path: 'partnerships',
@@ -120,8 +124,8 @@ const routes: Routes = [
     loadChildren: () => import('./credits/credits.module').then(m => m.CreditsModule)
   },
   {
-    path: 'insuranceCustomers',
-    loadChildren: () => import('./insurance-customers/insurance-customers.module').then(m => m.InsuranceCustomersModule)
+    path: 'insuranceBusinesses',
+    loadChildren: () => import('./insurance-businesses/insurance-businesses.module').then(m => m.InsuranceBusinessesModule)
   },
   {
     path: 'insurancePartnerships',

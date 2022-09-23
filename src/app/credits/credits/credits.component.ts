@@ -22,7 +22,7 @@ export class CreditsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
 
-  public displayedColumns: string[] = [ 'customer', 'financier', 'partnership', 'emitionAt', 'days', 'prima', 'actions' ];
+  public displayedColumns: string[] = [ 'business', 'financier', 'partnership', 'emitionAt', 'days', 'prima', 'actions' ];
   public dataSource: CreditModel[] = [];
   public length: number = 0;
   public pageSize: number = 10;

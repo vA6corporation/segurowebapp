@@ -8,7 +8,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
-import { Cheque } from '../cheque.model';
+import { ChequeModel } from '../cheque.model';
 import { ChequesService } from '../cheques.service';
 import { DialogChequesComponent } from '../dialog-cheques/dialog-cheques.component';
 import { DialogDetailChequesComponent } from '../dialog-detail-cheques/dialog-detail-cheques.component';
@@ -33,7 +33,7 @@ export class ChequesPaymentComponent implements OnInit {
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
   });
-  public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'customer', 'actions' ];
+  public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -80,7 +80,7 @@ export class ChequesPaymentComponent implements OnInit {
           formatDate(cheque.extensionAt, 'dd/MM/yyyy', 'en-US'),
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
-          cheque.guarantee?.customer?.name,
+          cheque.guarantee?.business?.name,
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -157,7 +157,7 @@ export class ChequesPaymentComponent implements OnInit {
     this.fetchData();
   }
 
-  onEditCheque(cheque: Cheque): void {
+  onEditCheque(cheque: ChequeModel): void {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
       width: '600px',
       position: { top: '20px' },
@@ -177,7 +177,7 @@ export class ChequesPaymentComponent implements OnInit {
     this.fetchData();
   }
 
-  onPaid(cheque: Cheque) {
+  onPaid(cheque: ChequeModel) {
     const ok = confirm('Esta seguro de marcar pago?...');
     if (ok) {
       cheque.isPaid = true;

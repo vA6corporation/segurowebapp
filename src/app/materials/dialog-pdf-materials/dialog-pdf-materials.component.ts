@@ -8,6 +8,7 @@ import { MaterialsService } from '../materials.service';
 
 export interface MaterialPdfData {
   type: string
+  constructionId: string
   materialId: string
 }
 
@@ -33,6 +34,7 @@ export class DialogPdfMaterialsComponent implements OnInit {
   public tabIndex: number = 0;
   public pdfId: string = '';
   public materialPdfId: string = '';
+  public attachAll: boolean = false;
 
   ngOnInit(): void { 
     this.fetchData();
@@ -46,7 +48,7 @@ export class DialogPdfMaterialsComponent implements OnInit {
 
   onDeletePdf() {
     this.tabIndex = 0;
-    this.materialsService.deletePdf(this.materialPdfId, this.pdfId).subscribe(() => {
+    this.materialsService.deletePdf(this.pdfId).subscribe(() => {
       this.fetchData();
     });
   }
@@ -83,14 +85,14 @@ export class DialogPdfMaterialsComponent implements OnInit {
           pdf.addImage(result, 'JPEG', 0, 0, width, height);
           const data = pdf.output('blob');
           formData.append('file', data);
-          this.materialsService.uploadPdf(formData, this.data.materialId, this.data.type).subscribe(pdfId => {
+          this.materialsService.uploadPdf(formData, this.data.materialId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
             console.log(pdfId);
             this.fetchData();
           });
         });
       } else {
         formData.append('file', file),
-        this.materialsService.uploadPdf(formData, this.data.materialId, this.data.type).subscribe(pdfId => {
+        this.materialsService.uploadPdf(formData, this.data.materialId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
           console.log(pdfId);
           this.fetchData();
         });

@@ -21,8 +21,8 @@ export class EditProvidersComponent implements OnInit {
   
   public formArray: FormArray = this.formBuilder.array([]);
   public formGroup: FormGroup = this.formBuilder.group({
-    identificationType: [ null, Validators.required ],
-    identificationNumber: null,
+    documentType: [ null, Validators.required ],
+    document: null,
     name: [ null, Validators.required ],
     email: [ null, [ Validators.email ] ],
     mobileNumber: null,
@@ -38,22 +38,22 @@ export class EditProvidersComponent implements OnInit {
     this.navigationService.setTitle('Editar proveedor');
     this.navigationService.backTo();
 
-    this.formGroup.get('identificationType')?.valueChanges.subscribe(value => {
+    this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
-          this.formGroup.get('identificationNumber')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.formGroup.get('document')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
           this.maxLength = 11;
           break;
         case 'DNI':
-          this.formGroup.get('identificationNumber')?.setValidators([ Validators.minLength(8), Validators.maxLength(8) ]);
+          this.formGroup.get('document')?.setValidators([ Validators.minLength(8), Validators.maxLength(8) ]);
           this.maxLength = 8;
           break;
         default:
-          this.formGroup.get('identificationNumber')?.setValidators([]);
+          this.formGroup.get('document')?.setValidators([]);
           this.maxLength = 24;
           break;
       }
-      this.formGroup.get('identificationNumber')?.updateValueAndValidity();
+      this.formGroup.get('document')?.updateValueAndValidity();
     });
 
     this.activatedRoute.params.subscribe(params => {

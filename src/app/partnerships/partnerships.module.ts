@@ -8,6 +8,7 @@ import { EditPartnershipsComponent } from './edit-partnerships/edit-partnerships
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogPartnershipsComponent } from './dialog-partnerships/dialog-partnerships.component';
+import { DialogPartnershipItemsComponent } from './dialog-partnership-items/dialog-partnership-items.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { DialogPartnershipsComponent } from './dialog-partnerships/dialog-partne
     CreatePartnershipsComponent, 
     EditPartnershipsComponent,
     PartnershipsComponent,
-    DialogPartnershipsComponent
+    DialogPartnershipsComponent,
+    DialogPartnershipItemsComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-export interface Deposit {
+export interface DepositModel {
   _id?: string,
   price: number,
   onModel: any,

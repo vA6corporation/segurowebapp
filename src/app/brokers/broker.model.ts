@@ -1,9 +1,9 @@
-import { CustomerModel } from "../customers/customer.model"
+import { BusinessModel } from "../businesses/business.model"
 import { FinancierModel } from "../financiers/financier.model"
 
 export interface BrokerModel {
-    _id?: string
-    typeDocument: string
+    _id: string
+    documentType: string
     document: string
     name: string
     email: string
@@ -12,5 +12,5 @@ export interface BrokerModel {
 
     broker: BrokerModel
     financier: FinancierModel
-    customer: CustomerModel
+    business: BusinessModel
 }

@@ -16,7 +16,17 @@ import { DialogAddBailComponent } from './dialog-add-bail/dialog-add-bail.compon
 
 
 @NgModule({
-  declarations: [ConstructionsComponent, CreateConstructionsComponent, EditConstructionsComponent, DialogConstructionsComponent, DialogDetailConstructionsComponent, LessConstructionsComponent, DialogAttachPdfComponent, WithoutDocumentationComponent, DialogAddBailComponent],
+  declarations: [
+    ConstructionsComponent, 
+    CreateConstructionsComponent, 
+    EditConstructionsComponent, 
+    DialogConstructionsComponent, 
+    DialogDetailConstructionsComponent, 
+    LessConstructionsComponent, 
+    DialogAttachPdfComponent, 
+    WithoutDocumentationComponent, 
+    DialogAddBailComponent, 
+  ],
   imports: [
     CommonModule,
     ConstructionsRoutingModule,

@@ -2,48 +2,48 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
       <mat-label>Tipo de Documento *</mat-label>
-      <mat-select formControlName="typeDocument">
+      <mat-select formControlName="documentType">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
         <mat-option value="CE">CE</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="N° de Documento *" formControlName="document" [maxlength]="maxlength">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Nombres/Razon social *" formControlName="name">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="email" matInput placeholder="Email *" formControlName="email">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Nacionalidad" formControlName="nationality">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Celular" formControlName="phoneNumber">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Telefono" formControlName="mobileNumber">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Anexo" formControlName="annexed">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Direccion" formControlName="address">
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Documento *</mat-label>
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de nacimiento</mat-label>
-      <input matInput [matDatepicker]="birthDatePicker" formControlName="birthDate">
-      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #birthDatePicker></mat-datepicker>
+      <mat-label>Nombres/Razon Social *</mat-label>
+      <input type="text" matInput formControlName="name">
     </mat-form-field>
-    <!-- <mat-form-field>
-      <input type="text" matInput placeholder="Representante legal" formControlName="representativeName">
+    <mat-form-field appearance="fill">
+      <mat-label>Email *</mat-label>
+      <input type="email" matInput formControlName="email">
     </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="Documento del representante legal" formControlName="representativeDocument">
-    </mat-form-field> -->
+    <mat-form-field appearance="fill">
+      <mat-label>Nacionalidad *</mat-label>
+      <input type="text" matInput formControlName="nationality">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Porcentaje *</mat-label>
+      <input type="number" matInput formControlName="percent">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="mobileNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Anexo</mat-label>
+      <input type="text" matInput formControlName="annexed">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion</mat-label>
+      <input type="text" matInput formControlName="address">
+    </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>
       <button type="button" mat-stroked-button routerLink="/shareholders" color="primary">CANCELAR</button>

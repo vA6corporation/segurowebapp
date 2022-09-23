@@ -5,7 +5,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
-// import { PartnershipsService } from 'src/app/partnerships/partnerships.service';
 import { buildExcel } from 'src/app/xlsx';
 import { InsurancePartnershipsService } from '../insurance-partnerships.service';
 
@@ -24,7 +23,7 @@ export class InsurancePartnershipsComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'document', 'name', 'customer', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'business', 'actions' ];
   public dataSource: PartnershipModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -48,7 +47,6 @@ export class InsurancePartnershipsComponent implements OnInit {
     });
 
     this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
-      console.log(partnerships);
       this.dataSource = partnerships;
     });
 
@@ -81,7 +79,7 @@ export class InsurancePartnershipsComponent implements OnInit {
             body.push([
               item.document,
               item.name,
-              item.customer?.name,
+              item.business.name,
               item.representative,
             ]);
           }

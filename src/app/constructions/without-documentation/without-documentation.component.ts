@@ -30,7 +30,7 @@ export class WithoutDocumentationComponent implements OnInit {
   public displayedColumns: string[] = [ 
     'object', 
     'worker',
-    'customer',
+    'business',
     'partnership', 
     'createdAt',
     'actions' 
@@ -59,7 +59,7 @@ export class WithoutDocumentationComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
+      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.constructionsService.getCountConstructionsWithoutDocumentation().subscribe(count => {
@@ -68,7 +68,7 @@ export class WithoutDocumentationComponent implements OnInit {
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       switch (id) {
-        case 'export_customers':
+        case 'export_businesses':
           const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
           let body = [];
           body.push([
@@ -81,10 +81,10 @@ export class WithoutDocumentationComponent implements OnInit {
             'OBJETO'
           ]);
           for (const item of this.dataSource) {
-            const { customer, worker, partnership } = item;
+            const { business, worker, partnership } = item;
             body.push([
               worker?.name,
-              customer.name,
+              business.name,
               partnership?.name,
               formatDate(item.createdAt, 'MM/yy', 'en-US'),
               formatDate(item.createdAt, 'yy', 'en-US'),

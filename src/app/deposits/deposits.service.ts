@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
 import { HttpService } from '../http.service';
-import { Deposit } from './deposit.model';
+import { DepositModel } from './deposit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +12,11 @@ export class DepositsService {
     private readonly httpService: HttpService,
   ) { }
 
-  create(deposit: Deposit): Observable<Deposit> {
+  create(deposit: DepositModel): Observable<DepositModel> {
     return this.httpService.post('deposits', { deposit });
   }
 
-  update(deposit: Deposit, depositId: string): Observable<Deposit> {
+  update(deposit: DepositModel, depositId: string): Observable<DepositModel> {
     return this.httpService.put(`deposits/${depositId}`, { deposit });
   }
 

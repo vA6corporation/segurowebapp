@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { CustomerModel } from 'src/app/customers/customer.model';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { DialogPartnershipItemsComponent } from '../dialog-partnership-items/dialog-partnership-items.component';
+import { PartnershipItemModel } from '../partnership-item.model';
 import { PartnershipsService } from '../partnerships.service';
 
 @Component({
@@ -24,20 +25,19 @@ export class EditPartnershipsComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    partnership: this.formBuilder.group({
-      _id: [ null, Validators.required ],
-      document: null,
-      name: [ null, Validators.required ],
-      address: null,
-      customerId: [ null, Validators.required ],
-      representativeName: [ null, Validators.required ],
-      representativeDocument: [ null, Validators.required ],
-    }),
+    _id: [ null, Validators.required ],
+    document: null,
+    name: [ null, Validators.required ],
+    address: null,
+    businessId: [ null, Validators.required ],
+    representativeDocumentType: 'DNI',
+    representativeDocument: [ null, Validators.required ],
+    representativeName: [ null, Validators.required ],
   });
 
   public isLoading: boolean = false;
   private partnershipId: string = '';
-  public customers: CustomerModel[] = [];
+  public partnershipItems: PartnershipItemModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');
@@ -45,38 +45,44 @@ export class EditPartnershipsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
-        console.log(partnership)
-        const { customers } = partnership;
-        this.customers = customers;
-        this.formGroup.patchValue({ partnership });
+        this.partnershipItems = partnership.partnershipItems;
+        this.formGroup.patchValue(partnership);
       });
     });
   }
 
-  openDialogCustomer(): void {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  onDialogBusinesses(): void {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.customers.push(customer);
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        const dialogRef = this.matDialog.open(DialogPartnershipItemsComponent, {
+          width: '600px',
+          position: { top: '20px' },
+          data: business
+        });
+
+        dialogRef.afterClosed().subscribe(partnershipItem => {
+          if (partnershipItem) {
+            this.partnershipItems.push(partnershipItem);
+          }
+        });
       }
     });
   }
 
-  removeCustomer(index: number): void {
-    this.customers.splice(index, 1);
+  removeBusiness(index: number): void {
+    this.partnershipItems.splice(index, 1);
   }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { partnership } = this.formGroup.value;
-      partnership.customerIds = this.customers.map(e => e._id);
-      this.partnershipsService.update(partnership, this.partnershipId).subscribe(res => {
+      this.partnershipsService.update(this.formGroup.value, this.partnershipItems, this.partnershipId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

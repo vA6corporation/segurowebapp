@@ -123,7 +123,7 @@ export class ReportComponent implements OnInit {
           //   // fill: true
           // },
           {
-            label: 'Ordenes de pago',
+            label: 'Utilidades',
             data: utilities.map((e: any) => e),
             backgroundColor: colors[1],
             // fill: true

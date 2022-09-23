@@ -2,20 +2,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
-import { Location } from '@angular/common'
 import { CreditsService } from '../credits.service';
 import { CreditPdfData, DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 
 @Component({
   selector: 'app-edit-credits',
@@ -29,10 +28,8 @@ export class EditCreditsComponent implements OnInit {
     private readonly creditsService: CreditsService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly matDialog: MatDialog,
-    private readonly location: Location,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -44,7 +41,7 @@ export class EditCreditsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    customer: this.formBuilder.group({
+    business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -83,9 +80,9 @@ export class EditCreditsComponent implements OnInit {
       this.navigationService.setTitle('Editar linea de credito');
       this.creditsService.getCreditById(this.creditId).subscribe(credit => {
         console.log(credit);
-        const { partnership, customer, financier } = credit;
+        const { partnership, business, financier } = credit;
         this.formGroup.get('partnership')?.patchValue(partnership || {});
-        this.formGroup.get('customer')?.patchValue(customer);
+        this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('financier')?.patchValue(financier);
         this.formGroup.get('credit')?.patchValue(credit);
         this.formGroup.get('worker')?.patchValue({ _id: credit.workerId });
@@ -93,14 +90,14 @@ export class EditCreditsComponent implements OnInit {
     });
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      this.formGroup.patchValue({ customer: customer || {} });
+    dialogRef.afterClosed().subscribe(business => {
+      this.formGroup.patchValue({ business: business || {} });
     });
   }
 
@@ -145,8 +142,8 @@ export class EditCreditsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -198,8 +195,8 @@ export class EditCreditsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, partnership, worker, credit } = this.formGroup.value;
-      credit.customerId = customer._id;
+      const { business, financier, partnership, worker, credit } = this.formGroup.value;
+      credit.businessId = business._id;
       credit.financierId = financier._id;
       credit.partnershipId = partnership._id;
       credit.workerId = worker._id;

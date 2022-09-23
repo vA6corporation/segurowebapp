@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BeneficiariesService } from '../beneficiaries.service';
@@ -21,16 +20,14 @@ export class EditBeneficiariesComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    beneficiary: this.formBuilder.group({
-      _id: [ null ],
-      document: [ null, Validators.required ],
-      name: [ null, Validators.required ],
-      email: [ null, Validators.email ],
-      mobileNumber: null,
-      phoneNumber: null,
-      annexed: null,
-      address: null,
-    }),
+    _id: [ null ],
+    document: [ null, Validators.required ],
+    name: [ null, Validators.required ],
+    email: [ null, Validators.email ],
+    mobileNumber: null,
+    phoneNumber: null,
+    annexed: null,
+    address: null,
   });
 
   public isLoading: boolean = false;
@@ -45,7 +42,7 @@ export class EditBeneficiariesComponent implements OnInit {
       this.beneficiaryId = params.beneficiaryId;
       this.beneficiariesService.getBeneficiaryById(this.beneficiaryId).subscribe(beneficiary => {
         console.log(beneficiary);
-        this.formGroup.get('beneficiary')?.setValue(beneficiary);
+        this.formGroup.patchValue(beneficiary);
       });
     });
   }
@@ -54,8 +51,7 @@ export class EditBeneficiariesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { beneficiary } = this.formGroup.value;
-      this.beneficiariesService.update(beneficiary, this.beneficiaryId).subscribe(res => {
+      this.beneficiariesService.update(this.formGroup.value, this.beneficiaryId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

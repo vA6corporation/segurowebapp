@@ -14,41 +14,26 @@
         </div>
     </div>
   <h3 class="text-center">{{ partnership?.name }}</h3>
-  <h4 class="text-center mb-0">{{ customer?.name }}</h4>
+  <h4 class="text-center mb-0">{{ business?.name }}</h4>
   <span class="mat-divider"></span>
   <h4 class="text-center">{{ beneficiary?.name || 'SIN BENEFICIARIO' }}</h4>
   <h4 class="text-center text-muted">{{ worker?.name }}</h4>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <!-- <div formGroupName="partnership">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Consorcio" formControlName="name" (click)="openDialogPartnerships()" readonly>
-      </mat-form-field>
-    </div>
-    <div formGroupName="customer">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Cliente *" formControlName="name" (click)="openopenDialogCustomers()" readonly>
-      </mat-form-field>
-    </div> -->
     <div formGroupName="financier">
       <mat-form-field>
         <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
       </mat-form-field>
     </div>
-    <!-- <div formGroupName="beneficiary">
-      <mat-form-field>
-        <input type="text" matInput placeholder="Beneficiario *" formControlName="name" (click)="openDialogBeneficiaries()" readonly>
-      </mat-form-field>
-    </div> -->
     <div formGroupName="compliance">
       <mat-form-field>
         <input type="text" matInput placeholder="N° de poliza *" formControlName="policyNumber">
       </mat-form-field>
-      <!-- <mat-form-field>
-        <input type="text" matInput placeholder="Objeto *" formControlName="object">
-      </mat-form-field> -->
       <mat-form-field>
         <input type="number" matInput placeholder="Suma asegurada *" formControlName="price">
       </mat-form-field>
+      <!-- <mat-form-field>
+        <input type="number" matInput placeholder="Plazo *" formControlName="timeLimit">
+      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>Fecha de inicio *</mat-label>
         <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
@@ -77,12 +62,6 @@
       <mat-form-field>
         <input type="number" matInput placeholder="Comision" formControlName="commission">
       </mat-form-field>
-      <!-- <mat-form-field appearance="standard">
-        <mat-label>Personal a cargo</mat-label>
-        <mat-select formControlName="workerId">
-          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
-        </mat-select>
-      </mat-form-field> -->
       <mat-list class="mb-1">
         <div mat-subheader>
           Cheques

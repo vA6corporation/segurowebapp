@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UserModel } from 'src/app/users/user.model';
 import { buildExcel } from 'src/app/xlsx';
-import { Cheque } from '../cheque.model';
+import { ChequeModel } from '../cheque.model';
 import { ChequesService } from '../cheques.service';
 import { DialogChequesComponent } from '../dialog-cheques/dialog-cheques.component';
 import { DialogDetailChequesComponent } from '../dialog-detail-cheques/dialog-detail-cheques.component';
@@ -30,7 +30,7 @@ export class CommercialChequesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
   ) { }
 
-  public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'customer', 'actions' ];
+  public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -58,7 +58,6 @@ export class CommercialChequesComponent implements OnInit {
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
-    // this.fetchData();
     this.user$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
       if (!this.user?.workerId) {
@@ -66,15 +65,6 @@ export class CommercialChequesComponent implements OnInit {
       } else {
         this.workerId = this.user.workerId || '';
         this.fetchData();
-        // this.materialsService.getMaterialsByCommercialPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(materials => {
-        //   this.dataSourceMaterials = materials;
-        // });
-        // this.compliancesService.getCompliancesByCommercialPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(compliances => {
-        //   this.dataSourceCompliances = compliances;
-        // });
-        // this.directsService.getDirectsByCommercialPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(directs => {
-        //   this.dataSourceDirects = directs;
-        // });
       }
     });
 
@@ -103,7 +93,7 @@ export class CommercialChequesComponent implements OnInit {
           formatDate(cheque.extensionAt, 'dd/MM/yyyy', 'en-US'),
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
-          cheque.guarantee?.customer?.name
+          cheque.guarantee?.business?.name
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -170,7 +160,7 @@ export class CommercialChequesComponent implements OnInit {
     this.fetchData();
   }
 
-  onEditCheque(cheque: Cheque): void {
+  onEditCheque(cheque: ChequeModel): void {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
       width: '600px',
       position: { top: '20px' },
@@ -190,7 +180,7 @@ export class CommercialChequesComponent implements OnInit {
     this.fetchData();
   }
 
-  onPaid(cheque: Cheque) {
+  onPaid(cheque: ChequeModel) {
     const ok = confirm('Esta seguro de marcar pago?...');
     if (ok) {
       cheque.isPaid = true;
@@ -199,6 +189,17 @@ export class CommercialChequesComponent implements OnInit {
         this.fetchData();
       });
     }
+  }
+
+  onNotPaid(cheque: ChequeModel) {
+    // const ok = confirm('Esta seguro de marcar pago?...');
+    cheque.isPaid = false;
+    this.chequesService.update(cheque, cheque._id || '').subscribe(cheque => {
+      this.navigationService.showMessage('Desmarcado correctamente');
+      this.fetchData();
+    });
+    // if (ok) {
+    // }
   }
 
   onRangeChange() {

@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
-import { DialogInsuranceCustomersComponent } from 'src/app/insurance-customers/dialog-insurance-customers/dialog-insurance-customers.component';
+import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
 import { DialogAttachPdfComponent } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
@@ -28,7 +27,7 @@ export class EditInsuranceConstructionsComponent implements OnInit {
   public isLoading: boolean = false;
 
   public formGroup: FormGroup = this.formBuilder.group({
-    customer: this.formBuilder.group({
+    business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -43,22 +42,22 @@ export class EditInsuranceConstructionsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.constructionId = params.constructionId;
       this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
-        const { customer, ...value } = construction;
+        const { business, ...value } = construction;
         this.formGroup.patchValue(value);
-        this.formGroup.patchValue({ customer });
+        this.formGroup.patchValue({ business });
       });
     });
   }
   
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogInsuranceCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
       }
     });
   }
@@ -71,8 +70,8 @@ export class EditInsuranceConstructionsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -91,8 +90,8 @@ export class EditInsuranceConstructionsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, ...construction } = this.formGroup.value;
-      construction.customerId = customer._id;
+      const { business, ...construction } = this.formGroup.value;
+      construction.businessId = business._id;
       this.constructionsService.update(construction, this.constructionId).subscribe(res => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();

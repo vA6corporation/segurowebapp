@@ -46,6 +46,8 @@ export class EditPrivilegesComponent implements OnInit {
         this.navigationService.setTitle(`Permisos ${user.name}`);
         console.log(user);
         this.user = user;
+        console.log(user.privileges);
+        
         this.formGroup.patchValue(user.privileges || {});
       });
     });

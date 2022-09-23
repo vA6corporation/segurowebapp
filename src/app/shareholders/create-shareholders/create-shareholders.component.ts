@@ -20,11 +20,12 @@ export class CreateShareholdersComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    typeDocument: [ null, Validators.required ],
+    documentType: [ null, Validators.required ],
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
-    nationality: null,
+    nationality: [ null, Validators.required ],
+    percent: [ null, Validators.required ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
@@ -38,7 +39,7 @@ export class CreateShareholdersComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo accionista');
     this.navigationService.backTo();
-    this.formGroup.get('typeDocument')?.valueChanges.subscribe(value => {
+    this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
           this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);

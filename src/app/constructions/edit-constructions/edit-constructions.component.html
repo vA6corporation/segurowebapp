@@ -10,6 +10,12 @@
       <mat-form-field>
         <input type="text" matInput placeholder="Codigo *" formControlName="code">
       </mat-form-field>
+      <!-- <mat-form-field>
+        <input type="number" matInput placeholder="Plazo *" formControlName="timeLimit">
+      </mat-form-field> -->
+      <!-- <mat-form-field>
+        <input type="text" matInput placeholder="Lugar de ejecucion *" formControlName="place">
+      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>Fecha de emision *</mat-label>
         <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
@@ -28,10 +34,10 @@
           <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
         </mat-form-field>
       </div>
-      <div formGroupName="customer">
+      <div formGroupName="business">
         <mat-form-field>
-          <mat-label>Cliente *</mat-label>
-          <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+          <mat-label>Empresa *</mat-label>
+          <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="beneficiary">
@@ -67,7 +73,7 @@
           <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }} - {{ element.office.name | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field *ngIf="user?.isAdmin">
         <input type="number" matInput placeholder="Comision" formControlName="commission">
       </mat-form-field>
       <div class="d-flex">

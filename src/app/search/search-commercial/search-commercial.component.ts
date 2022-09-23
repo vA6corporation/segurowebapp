@@ -4,14 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
-import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ReportsService } from 'src/app/reports/reports.service';
@@ -34,8 +32,8 @@ export class SearchCommercialComponent implements OnInit {
     private readonly compliancesService: CompliancesService,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
-  public displayedColumnsGuarantee: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
+  public displayedColumnsGuarantee: string[] = [ 'partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
   public guaranties: any[] = [];
   public dataSource: any[] = [];
   public dataSourceMaterials: any[] = [];
@@ -124,7 +122,7 @@ export class SearchCommercialComponent implements OnInit {
       });
   }
 
-  onShowDetails(guarantee: Direct|Compliance|Material) {
+  onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
       case 'GAMF':
         this.matDialog.open(DialogMaterialComponent, {

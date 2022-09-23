@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
-import { BusinessModel } from 'src/app/auth/business.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ProviderModel } from '../provider.model';
 import { ProvidersService } from '../providers.service';
@@ -21,7 +19,6 @@ export class ProvidersComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
   ) { }
     
   public displayedColumns: string[] = [ 'document', 'name', 'address', 'email', 'mobileNumber', 'actions' ];
@@ -30,7 +27,6 @@ export class ProvidersComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private business: BusinessModel = new BusinessModel();
 
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
@@ -45,41 +41,10 @@ export class ProvidersComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Proveedores');
 
-    // this.auth$ = this.authService.getAuth().pipe(first()).subscribe(auth => {
-    //   this.business = auth.business;
-    // });
-
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       switch (id) {
         case 'export_excel': {
-          // this.navigationService.loadBarStart();
-          // this.customersService.getCustomerModels().subscribe(customers => {
-          //   this.navigationService.loadBarFinish();
-          //   const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          //   let body = [];
-          //   body.push([
-          //     'T. DOCUMENTO',
-          //     'DOCUMENTO',
-          //     'NOMBRES',
-          //     'DIRECCION',
-          //     'EMAIL',
-          //     'CELULAR',
-          //   ]);
-          //   for (const customer of customers) {
-          //     body.push([
-          //       customer.identificationType,
-          //       customer.identificationNumber,
-          //       customer.name,
-          //       customer.address,
-          //       customer.email,
-          //       customer.mobileNumber,
-          //     ]);
-          //   }
-          //   const name = `Clientes_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}_${this.business.businessName.replace(/ /g, '_')}`;
-          //   buildExcel(body, name, wscols, []);
-          // }, (error: HttpErrorResponse) => {
-          //   this.navigationService.showMessage(error.error.message);
-          // });
+
         }
       }
     });

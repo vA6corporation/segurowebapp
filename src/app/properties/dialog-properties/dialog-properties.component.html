@@ -1,0 +1,63 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2>Agregar bien inmueble</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Inscripcion en registros publicos *</mat-label>
+      <input type="text" matInput formControlName="inscription">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de inscripcion *</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="purchaseAt">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Descripcion *</mat-label>
+      <input type="text" matInput formControlName="description">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Ubicacion *</mat-label>
+      <input type="text" matInput formControlName="location">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Area terreno *</mat-label>
+      <input type="number" matInput formControlName="landArea">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Area construccion *</mat-label>
+      <input type="number" matInput formControlName="constructionArea">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Valor comercial *</mat-label>
+      <input type="number" matInput formControlName="commercialPrice">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Valor hipoteca</mat-label>
+      <input type="number" matInput formControlName="mortgagePrice">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Deuda relacionada</mat-label>
+      <input type="number" matInput formControlName="debt">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Gravamenes</mat-label>
+      <input type="number" matInput formControlName="encumbrance">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Banco o institucion</mat-label>
+      <input type="text" matInput formControlName="financier">
+    </mat-form-field>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isMortgage">Hipoteca</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isFamiliarPatrimony">Patrimonio familiar</mat-slide-toggle>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="d-flex">
+    <span class="spacer"></span>
+    <button type="button" mat-button mat-dialog-close>CANCELAR</button>
+    <div class="divider"></div>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

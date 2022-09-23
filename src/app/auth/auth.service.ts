@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpService } from 'src/app/http.service';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { BusinessModel } from './business.model';
 import { ModuleModel } from '../privileges/module.model';
 import { AuthModel } from './auth.model';
 import { OfficeModel } from './office.model';
@@ -16,22 +15,18 @@ export class AuthService {
     private readonly httpService: HttpService,
   ) { }
   
-  private business$: Subject<BusinessModel|null> = new Subject();
   private auth$: Subject<AuthModel> = new Subject();
   private authStatus$: Subject<boolean> = new Subject();
-
   private auth: AuthModel|null = null;
-  private business: BusinessModel|null = null;
-
   private modules: ModuleModel[] = [
     { label: 'Busqueda Admin', name: 'search' },
     { label: 'Busqueda', name: 'searchCommercial', info: 'Area comercial' },
     { label: 'Obras', name: 'constructions' },
-    { label: 'Clientes', name: 'customers' },
+    { label: 'Empresas', name: 'businesses' },
     { label: 'Consorsios', name: 'partnerships' },
-    { label: 'Accionistas', name: 'shareholders' },
     { label: 'Beneficiarios', name: 'beneficiaries' },
     { label: 'Financieras', name: 'financiers' },
+    { label: 'Formatos', name: 'templates' },
     { label: 'Usuarios', name: 'users' },
     { label: 'Egresos', name: 'expenses' },
     { label: 'Personal', name: 'workers' },
@@ -54,9 +49,9 @@ export class AuthService {
     search: false,
     searchCommercial: false,
     constructions: false,
-    customers: false,
+    businesses: false,
     partnerships: false,
-    shareholders: false,
+    templates: false,
     beneficiaries: false,
     financiers: false,
     users: false,
@@ -126,13 +121,6 @@ export class AuthService {
   setAuth(auth: AuthModel) {
     this.auth = auth;
     this.auth$.next(this.auth);
-  }
-
-  getBusiness(): Observable<BusinessModel|null> {
-    setTimeout(() => {
-      this.business$.next(this.business);
-    });
-    return this.business$.asObservable();
   }
 
   register(signupForm: any): Observable<void> {

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Cheque } from '../cheque.model';
+import { ChequeModel } from '../cheque.model';
 import { ChequesService } from '../cheques.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class DialogDetailChequesComponent implements OnInit {
     private readonly chequesService: ChequesService,
   ) { }
 
-  cheque: Cheque|null = null;
+  cheque: ChequeModel|null = null;
 
   ngOnInit(): void {
     this.chequesService.getChequeById(this.chequeId).subscribe(cheque => {

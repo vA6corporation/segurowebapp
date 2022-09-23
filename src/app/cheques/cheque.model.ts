@@ -1,6 +1,6 @@
-import { Guarantee } from "../reports/guarantee.interface";
+import { GuaranteeModel } from "../guarantees/guarantee.model"
 
-export interface Cheque {
+export interface ChequeModel {
   _id: string
   price: number
   paymentType: string
@@ -12,6 +12,6 @@ export interface Cheque {
   currency: string
   isPaid: boolean
   guaranteeId: string
-  guarantee: Guarantee|null
+  guarantee: GuaranteeModel
   businessId: string
 }

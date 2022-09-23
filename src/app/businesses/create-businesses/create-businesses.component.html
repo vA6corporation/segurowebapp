@@ -1,0 +1,179 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Documento *</mat-label>
+      <mat-select formControlName="documentType">
+      <mat-option value="RUC">RUC</mat-option>
+      <mat-option value="DNI">DNI</mat-option>
+      <mat-option value="CE">CE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Documento *</mat-label>
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres/Razon Social *</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email *</mat-label>
+      <input type="email" matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="mobileNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Anexo</mat-label>
+      <input type="text" matInput formControlName="annexed">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion</mat-label>
+      <input type="text" matInput formControlName="address">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de registro mercantil</mat-label>
+      <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt">
+      <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
+      <mat-datepicker #inscriptionAt></mat-datepicker>
+    </mat-form-field>
+    <h2>Representante legal</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de documento</mat-label>
+      <mat-select formControlName="representativeDocumentType">
+        <mat-option value="DNI">DNI</mat-option>
+        <mat-option value="CE">CE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Documento del representante</mat-label>
+      <input type="text" matInput formControlName="representativeDocument">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres del representante</mat-label>
+      <input type="text" matInput formControlName="representativeName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nacionalidad</mat-label>
+      <input type="text" matInput formControlName="representativeNationality">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado civil</mat-label>
+      <mat-select formControlName="representativeMaritalStatus">
+        <mat-option value="SOLTERO">SOLTERO</mat-option>
+        <mat-option value="CASADO">CASADO</mat-option>
+        <mat-option value="DIVORCIADO">DIVORCIADO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Regimen de bienes</mat-label>
+      <mat-select formControlName="representativePropertyRegime">
+        <mat-option value="">NINGUNO</mat-option>
+        <mat-option value="SOCIEDAD">SOCIEDAD</mat-option>
+        <mat-option value="COLECTIVIDAD">COLECTIVIDAD</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="representativeBirthDate">
+      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #birthDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-list class="mb-3">
+      <div mat-subheader>Accionistas</div>
+      <mat-list-item *ngFor="let shareholder of shareholders; let i = index">
+        <div>
+          {{ shareholder.name | uppercase }}
+          <br>
+          <span class="text-muted">
+            {{ shareholder.documentType }}: {{ shareholder.document }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveShareholder(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogShareholders()">AGREGAR ACCIONISTA</button>
+    <mat-list class="mb-3">
+      <div mat-subheader>Bienes inmubles</div>
+      <mat-list-item *ngFor="let property of properties; let i = index">
+        <div>
+          {{ property.location | uppercase }}
+          <br>
+          <span class="text-muted">
+            {{ property.inscription }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveProperty(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogProperties()">AGREGAR INMUEBLE</button>
+    <mat-list class="mb-3">
+      <div mat-subheader>Bienes mubles</div>
+      <mat-list-item *ngFor="let movableProperty of movableProperties; let i = index">
+        <div>
+          {{ movableProperty.description | uppercase }}
+          <br>
+          <span class="text-muted">
+            {{ movableProperty.placa }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveMovableProperty(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogMovableProperties()">AGREGAR MUEBLE</button>
+    <mat-list class="mb-3">
+      <div mat-subheader>Inversiones</div>
+      <mat-list-item *ngFor="let investment of investments; let i = index">
+        <div>
+          {{ investment.type }}
+          <br>
+          <span class="text-muted">
+            {{ investment.price.toFixed(2) }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveInvestment(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogInvestments()">AGREGAR INVERSION</button>
+    <mat-list class="mb-3">
+      <div mat-subheader>Experiencia</div>
+      <mat-list-item *ngFor="let experience of experiences; let i = index">
+        <div>
+          {{ experience.object }}
+          <br>
+          <span class="text-muted">
+            {{ experience.contractor }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveExperience(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogExperiences()">AGREGAR EXPERIENCIA</button>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/businesses">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+  </section>

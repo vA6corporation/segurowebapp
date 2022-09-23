@@ -10,15 +10,6 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
       <div class="d-flex">
-        <!-- <mat-form-field appearance="fill">
-          <mat-label>Categoria</mat-label>
-          <mat-select (selectionChange)="onChangeCategory()" formControlName="categoryId">
-            <mat-option value="">TODAS LAS CATEGORIAS</mat-option>
-            <mat-option class="text-uppercase" *ngFor="let category of categories" [value]="category._id">
-              {{ category.name | uppercase }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
         <mat-form-field appearance="fill">
           <mat-label>Personal</mat-label>
           <mat-select (selectionChange)="onChangeWorker()" formControlName="workerId">
@@ -35,10 +26,10 @@
       </mat-form-field>
     </form>
 
-    <form [formGroup]="customerForm" autocomplete="off">
+    <form [formGroup]="businessForm" autocomplete="off">
       <mat-form-field appearance="fill">
-        <mat-label>Cliente</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogCustomer()" readonly>
+        <mat-label>Empresa</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
       </mat-form-field>
     </form>
   

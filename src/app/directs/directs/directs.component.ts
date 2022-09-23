@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogDirectComponent } from '../dialog-direct/dialog-direct.component';
-import { Direct } from '../direct.model';
+import { DirectModel } from '../direct.model';
 import { DirectsService } from '../directs.service';
 
 @Component({
@@ -23,8 +24,8 @@ export class DirectsComponent implements OnInit {
 
   private handleSearch$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
-  public dataSource: Direct[] = [];
+  public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
+  public dataSource: DirectModel[] = [];
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageSize: number = 10;
   public pageIndex: number = 0;
@@ -49,7 +50,7 @@ export class DirectsComponent implements OnInit {
     });
   }
 
-  async onRenewGuarantee(guarantee: any) {
+  async onRenewGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '02';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':
@@ -65,7 +66,7 @@ export class DirectsComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotRenewGuarantee(guarantee: any) {
+  async onNotRenewGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '03';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':
@@ -81,7 +82,7 @@ export class DirectsComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onFreeGuarantee(guarantee: any) {
+  async onFreeGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '04';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':
@@ -97,7 +98,7 @@ export class DirectsComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotLookGuarantee(guarantee: any) {
+  async onNotLookGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '01';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':

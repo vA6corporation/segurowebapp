@@ -26,7 +26,7 @@ export class InsurancesComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'financier', 'policyNumber', 'insuranceNumber', 'emitionAt', 'expirationAt', 'prima', 'actions' ];
+  public displayedColumns: string[] = [ 'partnership', 'business', 'financier', 'policyNumber', 'insuranceNumber', 'emitionAt', 'expirationAt', 'prima', 'actions' ];
   public dataSource: InsuranceModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;

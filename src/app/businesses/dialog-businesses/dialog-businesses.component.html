@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Seleccione un empresa</h2>
+<div mat-dialog-content>
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Busqueda" formControlName="key">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </form>
+  <mat-selection-list [multiple]="false">
+    <mat-list-option *ngFor="let business of businesses" [mat-dialog-close]="business">
+      <div class="text-truncate">
+        {{ business.name | uppercase }}
+      </div>
+      <span class="text-muted">{{ business.documentType }}: {{ business.document }}</span>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div class="spacer"></div>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>CANCELAR</button>
+</mat-dialog-actions>

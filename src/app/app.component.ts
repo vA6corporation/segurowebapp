@@ -27,7 +27,6 @@ export class AppComponent {
     });
     const accessToken = localStorage.getItem('accessToken');
     this.authService.getSession(accessToken).subscribe(auth => {
-      console.log(auth);
       this.authService.setAccessToken(accessToken);
       this.authService.setAuth(auth);
       this.navigationService.loadSpinnerFinish();

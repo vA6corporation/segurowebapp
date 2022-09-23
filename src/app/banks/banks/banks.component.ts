@@ -22,7 +22,7 @@ export class BanksComponent implements OnInit {
   ) { }
 
   public users: UserModel[] = [];
-  public displayedColumns: string[] = [ 'bankName', 'accountNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'providerName', 'bankName', 'accountNumber', 'actions' ];
   public dataSource: BankModel[] = [];
   public length: number = 0;
   public pageSize: number = 10;

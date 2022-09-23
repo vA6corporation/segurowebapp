@@ -8,9 +8,9 @@ import jsPDF from "jspdf";
 
 export interface DirectPdfData {
   type: string
+  constructionId: string
   directId: string
 }
-
 
 @Component({
   selector: 'app-dialog-pdf-directs',
@@ -35,6 +35,7 @@ export class DialogPdfDirectsComponent implements OnInit {
   public tabIndex: number = 0;
   public pdfId: string = '';
   public directPdfId: string = '';
+  public attachAll: boolean = false;
 
   ngOnInit(): void { 
     this.fetchData();
@@ -48,7 +49,7 @@ export class DialogPdfDirectsComponent implements OnInit {
 
   onDeletePdf() {
     this.tabIndex = 0;
-    this.directsService.deletePdf(this.directPdfId, this.pdfId).subscribe(() => {
+    this.directsService.deletePdf(this.pdfId).subscribe(() => {
       this.fetchData();
     });
   }
@@ -87,14 +88,14 @@ export class DialogPdfDirectsComponent implements OnInit {
           pdf.addImage(result, 'JPEG', 0, 0, width, height);
           const data = pdf.output('blob');
           formData.append('file', data);
-          this.directsService.uploadPdf(formData, this.data.directId, this.data.type).subscribe(pdfId => {
+          this.directsService.uploadPdf(formData, this.data.directId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
             console.log(pdfId);
             this.fetchData();
           });
         });
       } else {
         formData.append('file', file),
-        this.directsService.uploadPdf(formData, this.data.directId, this.data.type).subscribe(pdfId => {
+        this.directsService.uploadPdf(formData, this.data.directId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
           console.log(pdfId);
           this.fetchData();
         });

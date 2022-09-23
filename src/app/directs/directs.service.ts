@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth/auth.service';
-import { Cheque } from '../cheques/cheque.model';
-import { Deposit } from '../deposits/deposit.model';
+import { ChequeModel } from '../cheques/cheque.model';
+import { DepositModel } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
-import { Mail } from '../mails/mail.interface';
+import { MailModel } from '../mails/mail.model';
 import { DirectPdfModel } from './direct-pdf.model';
-import { Direct } from './direct.model';
+import { DirectModel } from './direct.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +16,11 @@ export class DirectsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getDirectsByKey(key: string): Observable<Direct[]> {
-    return this.httpService.get(`directs/byAny/${key}`);
+  getDirectsByKey(key: string): Observable<DirectModel[]> {
+    return this.httpService.get(`directs/byKey/${key}`);
   }
 
-  sendMail(directId: string): Observable<Mail> {
+  sendMail(directId: string): Observable<MailModel> {
     return this.httpService.get(`mails/${directId}/mailDirect`);
   }
 
@@ -29,24 +28,16 @@ export class DirectsService {
     return this.httpService.get('directs/count');
   }
 
-  getDirectById(directId: string): Observable<Direct> {
+  getDirectById(directId: string): Observable<DirectModel> {
     return this.httpService.get(`directs/byId/${directId}`);
   }
 
-  getDirectsByPage(pageIndex: number, pageSize: number): Observable<Direct[]> {
+  getDirectsByPage(pageIndex: number, pageSize: number): Observable<DirectModel[]> {
     return this.httpService.get(`directs/byPage/${pageIndex}/${pageSize}`)
   }
 
-  getDirectsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<Direct[]> {
+  getDirectsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<DirectModel[]> {
     return this.httpService.get(`directs/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`)
-  }
-
-  create(direct: Direct, cheques: Cheque[], deposits: Deposit[]): Observable<Direct> {
-    return this.httpService.post('directs', { direct, cheques, deposits });
-  }
-
-  update(direct: Direct, directId: string): Observable<Direct> {
-    return this.httpService.put(`directs/${directId}`, { direct });
   }
 
   delete(directId: string): Observable<any> {
@@ -57,12 +48,22 @@ export class DirectsService {
     return this.httpService.get(`directs/pdfs/${directId}/${type}`);
   }
 
-  uploadPdf(formData: FormData, directId: string, type: string): Observable<string> {
-    return this.httpService.postForm(`directs/uploadPdf/${directId}/${type}`, formData);
+  uploadPdf(formData: FormData, directId: string, type: string, constructionId: string, attachAll: boolean): Observable<string> {
+    console.log(attachAll);
+    
+    return this.httpService.postForm(`directs/uploadPdf/${directId}/${type}/${constructionId}/${attachAll}`, formData);
   }
 
-  deletePdf(directPdfId: string, pdfId: string): Observable<string> {
-    return this.httpService.delete(`directs/deletePdf/${directPdfId}/${pdfId}`);
+  deletePdf(pdfId: string): Observable<string> {
+    return this.httpService.delete(`directs/deletePdf/${pdfId}`);
+  }
+
+  create(direct: any, cheques: ChequeModel[], deposits: DepositModel[]): Observable<DirectModel> {
+    return this.httpService.post('directs', { direct, cheques, deposits });
+  }
+
+  update(direct: any, directId: string): Observable<DirectModel> {
+    return this.httpService.put(`directs/${directId}`, { direct });
   }
 
 }

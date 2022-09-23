@@ -4,13 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { MaterialsService } from '../materials.service';
-import { Cheque } from 'src/app/cheques/cheque.model';
-import { Deposit } from 'src/app/deposits/deposit.model';
 import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-cheques.component';
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { ChequesService } from 'src/app/cheques/cheques.service';
@@ -18,10 +15,13 @@ import { DepositsService } from 'src/app/deposits/deposits.service';
 import { DialogPdfMaterialsComponent, MaterialPdfData } from '../dialog-pdf-materials/dialog-pdf-materials.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
-import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
+import { ChequeModel } from 'src/app/cheques/cheque.model';
+import { DepositModel } from 'src/app/deposits/deposit.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 
 @Component({
   selector: 'app-edit-materials',
@@ -64,10 +64,10 @@ export class EditMaterialsComponent implements OnInit {
 
   public isLoading: boolean = false;
   private materialId: string = '';
-  public cheques: Cheque[] = [];
-  public deposits: Deposit[] = [];
+  public cheques: ChequeModel[] = [];
+  public deposits: DepositModel[] = [];
   public construction: ConstructionModel|null = null;
-  public customer: CustomerModel|null = null;
+  public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public beneficiary: BeneficiaryModel|null = null;
   public worker: WorkerModel|null = null;
@@ -78,14 +78,12 @@ export class EditMaterialsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
-        const { customer, financier, partnership, beneficiary, cheques = [], deposits = [], construction } = material;
-        this.formGroup.patchValue({ customer });
+        const { financier, beneficiary, cheques = [], deposits = [], construction } = material;
         this.formGroup.patchValue({ financier });
-        this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ material });
         this.construction = construction;
         this.beneficiary = beneficiary || null;
-        this.customer = construction?.customer || null;
+        this.business = construction?.business || null;
         this.partnership = construction?.partnership || null;
         this.worker = material.worker;
         this.cheques = cheques;
@@ -112,101 +110,122 @@ export class EditMaterialsComponent implements OnInit {
   }
 
   onAttachPdfInvoice() {
-    const data: MaterialPdfData = {
-      type: 'invoice',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'invoice',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfTicket() {
-    const data: MaterialPdfData = {
-      type: 'voucher',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'voucher',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfDocuments() {
-    const data: MaterialPdfData = {
-      type: 'document',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'document',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfCheques() {
-    const data: MaterialPdfData = {
-      type: 'cheque',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'cheque',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfDeposits() {
-    const data: MaterialPdfData = {
-      type: 'deposit',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'deposit',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfFianzas() {
-    const data: MaterialPdfData = {
-      type: 'fianza',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'fianza',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   onAttachPdfConstructions() {
-    const data: MaterialPdfData = {
-      type: 'construction',
-      materialId: this.materialId
+    if (this.construction) {
+      const data: MaterialPdfData = {
+        type: 'construction',
+        constructionId: this.construction._id,
+        materialId: this.materialId
+      }
+  
+      this.matDialog.open(DialogPdfMaterialsComponent, {
+        width: '100vw',
+        height: '90vh',
+        position: { top: '20px' },
+        data,
+      });
     }
-
-    this.matDialog.open(DialogPdfMaterialsComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
   }
 
   removeCheque(index: number): void {
@@ -233,14 +252,16 @@ export class EditMaterialsComponent implements OnInit {
     }
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      this.formGroup.patchValue({ customer: customer || {} });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
+      }
     });
   }
 
@@ -274,8 +295,8 @@ export class EditMaterialsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -299,7 +320,7 @@ export class EditMaterialsComponent implements OnInit {
     });
   }
 
-  onEditCheque(cheque: Cheque): void {
+  onEditCheque(cheque: ChequeModel): void {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
       width: '600px',
       position: { top: '20px' },

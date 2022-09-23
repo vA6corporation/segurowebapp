@@ -21,8 +21,8 @@ export class EditWorkersComponent implements OnInit {
   ) {
     this.formGroup = this.formBuilder.group({
       worker: this.formBuilder.group({
-        identificationType: [ null, Validators.required ],
-        identificationNumber: [ null, Validators.required ],
+        documentType: [ null, Validators.required ],
+        document: [ null, Validators.required ],
         name: [ null, Validators.required ],
         email: null,
         mobileNumber: null,

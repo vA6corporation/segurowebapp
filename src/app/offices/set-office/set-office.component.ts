@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { BusinessModel } from 'src/app/auth/business.model';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UserModel } from 'src/app/users/user.model';
@@ -23,7 +22,6 @@ export class SetOfficeComponent implements OnInit {
     private readonly router: Router,
   ) { }
 
-  public business: BusinessModel|null = new BusinessModel();
   public office: OfficeModel = new OfficeModel();
   public user: UserModel|null = null;
   public offices: OfficeModel[] = [];
@@ -39,9 +37,7 @@ export class SetOfficeComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Seleccione oficina');
     this.auth$ = this.authService.handleAuth().subscribe(auth => {
-      this.business = auth.business;
       this.user = auth.user;
-      // this.office = auth.office;
     });
 
     this.offices$ = this.officesService.getActiveOffices().subscribe(offices => {

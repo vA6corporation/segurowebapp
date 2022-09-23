@@ -11,10 +11,11 @@ import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.
 import { ReportComponent } from './report/report.component';
 import { ReportPieComponent } from './report-pie/report-pie.component';
 import { RenewComponent } from './renew/renew.component';
+import { DialogSelectPdfComponent } from './dialog-select-pdf/dialog-select-pdf.component';
 
 
 @NgModule({
-  declarations: [InsurancesComponent, CreateInsurancesComponent, EditInsurancesComponent, DialogAttachPdfComponent, ReportComponent, ReportPieComponent, RenewComponent],
+  declarations: [InsurancesComponent, CreateInsurancesComponent, EditInsurancesComponent, DialogAttachPdfComponent, ReportComponent, ReportPieComponent, RenewComponent, DialogSelectPdfComponent],
   imports: [
     CommonModule,
     InsurancesRoutingModule,

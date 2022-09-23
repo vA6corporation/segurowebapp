@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { CustomerModel } from 'src/app/customers/customer.model';
-import { DialogInsuranceCustomersComponent } from 'src/app/insurance-customers/dialog-insurance-customers/dialog-insurance-customers.component';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { InsurancePartnershipsService } from '../insurance-partnerships.service';
 
@@ -30,40 +30,40 @@ export class CreateInsurancePartnershipsComponent implements OnInit {
       address: [ null ],
       representative: [ null, Validators.required ],
       representativeDocument: [ null, Validators.required ],
-      customerId: [ null, Validators.required ],
+      businessId: [ null, Validators.required ],
     }),
   });
   public isLoading: boolean = false;
-  public customers: CustomerModel[] = [];
+  public businesses: BusinessModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio');
     this.navigationService.backTo();
   }
 
-  openDialogCustomer(): void {
-    const dialogRef = this.matDialog.open(DialogInsuranceCustomersComponent, {
+  openDialogBusinesses(): void {
+    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.customers.push(customer);
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.businesses.push(business);
       }
     });
   }
 
-  removeCustomerModel(index: number): void {
-    this.customers.splice(index, 1);
+  removeBusiness(index: number): void {
+    this.businesses.splice(index, 1);
   }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { partnership } = this.formGroup.value;
-      partnership.customerIds = this.customers.map(e => e._id);
+      const partnership = this.formGroup.value;
+      partnership.businessIds = this.businesses.map(e => e._id);
       this.partnershipsService.create(partnership).subscribe(res => {
         console.log(res);
         this.isLoading = false;

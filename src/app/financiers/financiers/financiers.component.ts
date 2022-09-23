@@ -20,7 +20,7 @@ export class FinancierModelsComponent implements OnInit {
     
   private handleSearch$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'email', 'mobileNumber', 'actions' ];
   public dataSource: FinancierModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;

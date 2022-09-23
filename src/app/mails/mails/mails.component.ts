@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { Mail } from 'src/app/mails/mail.interface';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { MailModel } from '../mail.model';
 import { MailsService } from '../mails.service';
 
 @Component({
@@ -19,8 +19,8 @@ export class MailsComponent implements OnInit {
 
   private handleSearch$: Subscription = new Subscription();
 
-  public displayedColumns: string[] = [ 'date', 'user', 'to', 'policyNumber', 'customer', 'actions' ];
-  public dataSource: Mail[] = [];
+  public displayedColumns: string[] = [ 'date', 'user', 'to', 'policyNumber', 'business', 'actions' ];
+  public dataSource: MailModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];

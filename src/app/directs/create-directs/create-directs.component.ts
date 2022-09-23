@@ -4,24 +4,24 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DirectsService } from '../directs.service';
 import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-cheques.component';
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
-import { Cheque } from 'src/app/cheques/cheque.model';
-import { Deposit } from 'src/app/deposits/deposit.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { Subscription } from 'rxjs';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
-import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { ConstructionsService } from 'src/app/constructions/constructions.service';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { ChequeModel } from 'src/app/cheques/cheque.model';
+import { DepositModel } from 'src/app/deposits/deposit.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 
 @Component({
   selector: 'app-create-directs',
@@ -46,12 +46,9 @@ export class CreateDirectsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    // beneficiary: this.formBuilder.group({
-    //   name: [ null, Validators.required ],
-    //   _id: [ null, Validators.required ],
-    // }),
     direct: this.formBuilder.group({
       constructionId: '',
+      // timeLimit: [ null, Validators.required ],
       policyNumber: [ null, Validators.required ],
       price: [ null, Validators.required ],
       startDate: [ null, Validators.required ],
@@ -64,13 +61,13 @@ export class CreateDirectsComponent implements OnInit {
   });
 
   public construction: ConstructionModel|null = null;
-  public customer: CustomerModel|null = null;
+  public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public worker: WorkerModel|null = null;
   public beneficiary: BeneficiaryModel|null = null;
   public isLoading: boolean = false;
-  public cheques: Cheque[] = [];
-  public deposits: Deposit[] = [];
+  public cheques: ChequeModel[] = [];
+  public deposits: DepositModel[] = [];
   public workers: WorkerModel[] = [];
 
   private workers$: Subscription = new Subscription();
@@ -94,7 +91,7 @@ export class CreateDirectsComponent implements OnInit {
         this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
           if (construction) {
             this.construction = construction;
-            this.customer = construction.customer;
+            this.business = construction.business;
             this.partnership = construction.partnership;
             this.worker = construction.worker;
             this.beneficiary = construction.beneficiary;
@@ -116,7 +113,7 @@ export class CreateDirectsComponent implements OnInit {
       
       if (construction) {
         this.construction = construction;
-        this.customer = construction.customer;
+        this.business = construction.business;
         this.partnership = construction.partnership;
         this.worker = construction.worker;
         this.beneficiary = construction.beneficiary;
@@ -133,15 +130,15 @@ export class CreateDirectsComponent implements OnInit {
     this.deposits.splice(index, 1);
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
       }
     });
   }
@@ -180,8 +177,8 @@ export class CreateDirectsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -219,7 +216,7 @@ export class CreateDirectsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, direct } = this.formGroup.value;
       direct.partnershipId = this.partnership?._id;
-      direct.customerId = this.customer?._id;
+      direct.businessId = this.business?._id;
       direct.beneficiaryId = this.beneficiary?._id;
       direct.financierId = financier._id;
       direct.workerId = this.worker?._id;

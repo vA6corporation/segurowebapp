@@ -3,12 +3,12 @@
   <div mat-dialog-content>
     <mat-form-field appearance="standard">
       <mat-label>Tipo de Documento *</mat-label>
-      <mat-select formControlName="identificationType" tabindex="-1">
-        <mat-option *ngFor="let element of identificationTypes" [value]="element">{{ element }}</mat-option>
+      <mat-select formControlName="documentType" tabindex="-1">
+        <mat-option *ngFor="let element of documentTypes" [value]="element">{{ element }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="N° de Documento *" formControlName="identificationNumber">
+      <input type="text" matInput placeholder="N° de Documento *" formControlName="document">
     </mat-form-field>
     <mat-form-field>
       <input type="text" matInput placeholder="Nombres/Razon Social *" formControlName="name">

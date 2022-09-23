@@ -52,8 +52,7 @@ export class WorkersService {
 
   loadWorkers() {
     this.httpService.get('workers').subscribe(workers => {
-      this.workers = workers;
-      this.workers$.next(this.workers || []);
+      this.workers$.next(workers || []);
     });
   }
 

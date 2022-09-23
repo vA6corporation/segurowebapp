@@ -8,7 +8,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
-import { Cheque } from '../cheque.model';
+import { ChequeModel } from '../cheque.model';
 import { ChequesService } from '../cheques.service';
 import { DialogChequesComponent } from '../dialog-cheques/dialog-cheques.component';
 import { DialogDetailChequesComponent } from '../dialog-detail-cheques/dialog-detail-cheques.component';
@@ -36,7 +36,7 @@ export class ChequesComponent implements OnInit {
     'extensionAt', 
     'policyNumber', 
     'partnership', 
-    'customer', 
+    'business', 
     'actions' 
   ];
   public dataSource: any[] = [];
@@ -79,7 +79,7 @@ export class ChequesComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
+      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
@@ -102,7 +102,7 @@ export class ChequesComponent implements OnInit {
           formatDate(cheque.extensionAt, 'dd/MM/yyyy', 'en-US'),
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
-          cheque.guarantee?.customer?.name,
+          cheque.guarantee?.business?.name,
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -119,6 +119,17 @@ export class ChequesComponent implements OnInit {
         this.navigationService.showMessage(error.error.message);
       });
     });
+  }
+
+  onNotPaid(cheque: ChequeModel) {
+    // const ok = confirm('Esta seguro de marcar pago?...');
+    cheque.isPaid = false;
+    this.chequesService.update(cheque, cheque._id || '').subscribe(cheque => {
+      this.navigationService.showMessage('Desmarcado correctamente');
+      this.fetchData();
+    });
+    // if (ok) {
+    // }
   }
 
   onRangeChange() {
@@ -173,17 +184,9 @@ export class ChequesComponent implements OnInit {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.fetchData();
-
-    // const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
-
-    // this.router.navigate([], {
-    //   relativeTo: this.route,
-    //   queryParams: queryParams, 
-    //   queryParamsHandling: 'merge', // remove to replace all query params by provided
-    // });
   }
 
-  onEditCheque(cheque: Cheque): void {
+  onEditCheque(cheque: ChequeModel): void {
     const dialogRef = this.matDialog.open(DialogChequesComponent, {
       width: '600px',
       position: { top: '20px' },
@@ -201,16 +204,8 @@ export class ChequesComponent implements OnInit {
       }
     });
   }
-
-  onNotPaid(cheque: Cheque) {
-    cheque.isPaid = false;
-    this.chequesService.update(cheque, cheque._id || '').subscribe(cheque => {
-      this.navigationService.showMessage('Pago desmarcado');
-      this.fetchData();
-    });
-  }
   
-  onPaid(cheque: Cheque) {
+  onPaid(cheque: ChequeModel) {
     const ok = confirm('Esta seguro de marcar pago?...');
     if (ok) {
       cheque.isPaid = true;

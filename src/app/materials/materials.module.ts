@@ -13,6 +13,7 @@ import { DialogMaterialComponent } from './dialog-material/dialog-material.compo
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogPdfMaterialsComponent } from './dialog-pdf-materials/dialog-pdf-materials.component';
 import { EditCommercialsComponent } from './edit-commercials/edit-commercials.component';
+import { GuaranteesModule } from '../guarantees/guarantees.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { EditCommercialsComponent } from './edit-commercials/edit-commercials.co
     ChequesModule,
     DepositsModule,
     MatDialogModule,
+    GuaranteesModule
   ]
 })
 export class MaterialsModule { }

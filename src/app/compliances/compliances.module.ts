@@ -7,11 +7,11 @@ import { CreateCompliancesComponent } from './create-compliances/create-complian
 import { EditCompliancesComponent } from './edit-compliances/edit-compliances.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CustomersModule } from '../customers/customers.module';
 import { PartnershipsModule } from '../partnerships/partnerships.module';
 import { DialogComplianceComponent } from './dialog-compliance/dialog-compliance.component';
 import { DialogPdfCompliancesComponent } from './dialog-pdf-compliances/dialog-pdf-compliances.component';
 import { EditCommercialsComponent } from './edit-commercials/edit-commercials.component';
+import { BusinessesModule } from '../businesses/businesses.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { EditCommercialsComponent } from './edit-commercials/edit-commercials.co
     CompliancesRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    CustomersModule,
+    BusinessesModule,
     PartnershipsModule,
   ]
 })

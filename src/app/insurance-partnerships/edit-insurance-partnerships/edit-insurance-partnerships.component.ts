@@ -3,10 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { CustomerModel } from 'src/app/customers/customer.model';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-// import { PartnershipsService } from 'src/app/partnerships/partnerships.service';
 import { InsurancePartnershipsService } from '../insurance-partnerships.service';
 
 @Component({
@@ -25,20 +24,18 @@ export class EditInsurancePartnershipsComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    partnership: this.formBuilder.group({
-      _id: [ null, Validators.required ],
-      document: null,
-      name: [ null, Validators.required ],
-      address: null,
-      customerId: [ null, Validators.required ],
-      representative: [ null, Validators.required ],
-      representativeDocument: [ null, Validators.required ],
-    }),
+    _id: [ null, Validators.required ],
+    document: null,
+    name: [ null, Validators.required ],
+    address: null,
+    businessId: [ null, Validators.required ],
+    representative: [ null, Validators.required ],
+    representativeDocument: [ null, Validators.required ],
   });
 
   public isLoading: boolean = false;
   private partnershipId: string = '';
-  public customers: CustomerModel[] = [];
+  public businesses: BusinessModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');
@@ -46,37 +43,36 @@ export class EditInsurancePartnershipsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
-        console.log(partnership)
-        const { customers } = partnership;
-        this.customers = customers;
-        this.formGroup.patchValue({ partnership });
+        const { businesses } = partnership;
+        this.businesses = businesses;
+        this.formGroup.patchValue(partnership);
       });
     });
   }
 
-  openDialogCustomer(): void {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses(): void {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.customers.push(customer);
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.businesses.push(business);
       }
     });
   }
 
-  removeCustomer(index: number): void {
-    this.customers.splice(index, 1);
+  removeBusiness(index: number): void {
+    this.businesses.splice(index, 1);
   }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { partnership } = this.formGroup.value;
-      partnership.customerIds = this.customers.map(e => e._id);
+      const partnership = this.formGroup.value;
+      partnership.businessIds = this.businesses.map(e => e._id);
       this.partnershipsService.update(partnership, this.partnershipId).subscribe(res => {
         console.log(res);
         this.isLoading = false;

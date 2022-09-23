@@ -47,25 +47,25 @@
       </tr>
       <tr>
         <td>Operador tributario:</td>
-        <td>{{ (partnership?.customer?.name || 'Ninguno') }}</td>
+        <td>{{ (partnership?.business?.name || 'Ninguno') }}</td>
       </tr>
     </tbody>
   </table>
   <br>
-  <h3>Cliente</h3>
+  <h3>Empresa</h3>
   <table>
     <tbody>
       <tr>
         <td style="width: 13rem">Razon social:</td>
-        <td class="text-uppercase">{{ customer?.name }}</td>
+        <td class="text-uppercase">{{ business?.name }}</td>
       </tr>
       <tr>
         <td>Documento:</td>
-        <td>{{ customer?.document }}</td>
+        <td>{{ business?.document }}</td>
       </tr>
       <tr>
         <td>Email:</td>
-        <td>{{ customer?.email }}</td>
+        <td>{{ business?.email }}</td>
       </tr>
     </tbody>
   </table>

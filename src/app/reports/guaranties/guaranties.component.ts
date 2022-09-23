@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
-import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { Mail } from 'src/app/mails/mail.interface';
 import { ReportsService } from '../reports.service';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
 import { Subscription } from 'rxjs';
+import { MailModel } from 'src/app/mails/mail.model';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 
 @Component({
   selector: 'app-guaranties',
@@ -34,7 +32,7 @@ export class GuarantiesComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'worker', 'policyNumber', 'endDate', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -55,7 +53,7 @@ export class GuarantiesComponent implements OnInit {
     this.navigationService.setTitle('Renovaciones de fianzas');
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
+      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
@@ -75,12 +73,12 @@ export class GuarantiesComponent implements OnInit {
       ]);
 
       for (const guarantee of this.dataSource) {
-        const { customer, partnership, financier } = guarantee;
+        const { business, partnership, financier } = guarantee;
         body.push([
           guarantee.guaranteeType,
           financier?.name || null,
           partnership?.name || null,
-          customer?.name || null,
+          business?.name || null,
           guarantee.policyNumber,
           guarantee.price,
           guarantee.prima,
@@ -106,7 +104,7 @@ export class GuarantiesComponent implements OnInit {
     }
   }
 
-  onShowDetails(guarantee: Direct|Compliance|Material) {
+  onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
       case 'GAMF':
         this.matDialog.open(DialogMaterialComponent, {
@@ -195,7 +193,7 @@ export class GuarantiesComponent implements OnInit {
 
   async sendMail(guarantee: any): Promise<any> {
     this.navigationService.loadBarStart();
-    let mail: Mail;
+    let mail: MailModel;
     try {
       switch (guarantee.guaranteeType) {
         case 'GFCF':

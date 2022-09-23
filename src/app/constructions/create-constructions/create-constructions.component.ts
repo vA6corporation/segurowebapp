@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { WorkerModel } from 'src/app/workers/worker.model';
@@ -34,7 +34,7 @@ export class CreateConstructionsComponent implements OnInit {
       _id: null,
       name: null,
     }),
-    customer: this.formBuilder.group({
+    business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -68,15 +68,15 @@ export class CreateConstructionsComponent implements OnInit {
     });
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
       }
     });
   }
@@ -102,8 +102,10 @@ export class CreateConstructionsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        console.log(partnership);
+        
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -113,8 +115,8 @@ export class CreateConstructionsComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, partnership, beneficiary, ...construction } = this.formGroup.value;
-      construction.customerId = customer._id;
+      const { business, partnership, beneficiary, ...construction } = this.formGroup.value;
+      construction.businessId = business._id;
       construction.partnershipId = partnership._id;
       construction.beneficiaryId = beneficiary._id;
       this.constructionsService.create(construction).subscribe(res => {

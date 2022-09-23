@@ -1,34 +1,33 @@
 import { BeneficiaryModel } from "../beneficiaries/beneficiary.model";
-import { Cheque } from "../cheques/cheque.model";
+import { BusinessModel } from "../businesses/business.model";
+import { ChequeModel } from "../cheques/cheque.model";
 import { ConstructionModel } from "../constructions/construction.model";
-import { CustomerModel } from "../customers/customer.model";
-import { Deposit } from "../deposits/deposit.model";
+import { DepositModel } from "../deposits/deposit.model";
 import { FinancierModel } from "../financiers/financier.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
 import { WorkerModel } from "../workers/worker.model";
 
-export interface Compliance {
-  _id?: string,
+export interface ComplianceModel {
+  _id: string,
   price: number,
   startDate: Date,
   endDate: Date,
   policyNumber: string,
   object: string,
   guarantee: number,
-  customerId: string,
+  businessId: string,
   financierId: string,
-  customer?: CustomerModel,
-  financier?: FinancierModel,
-  beneficiary?: BeneficiaryModel,
-  partnership?: PartnershipModel,
-  construction: ConstructionModel|null,
-  worker: WorkerModel|null,
-  guaranteeType?: string,
-  isMarked?: boolean,
-  cheques?: Cheque[],
-  deposits?: Deposit[],
+  business: BusinessModel,
+  financier: FinancierModel,
+  beneficiary: BeneficiaryModel,
+  partnership: PartnershipModel|null,
+  construction: ConstructionModel,
+  worker: WorkerModel,
+  guaranteeType: string,
+  isMarked: boolean,
+  cheques: ChequeModel[],
+  deposits: DepositModel[],
   createdAt: any,
   updatedAt: any,
   userId: string,
-  businessId: string,
 }

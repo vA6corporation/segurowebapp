@@ -20,7 +20,7 @@ export class PartnershipsComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'document', 'name', 'customer', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'business', 'actions' ];
   public dataSource: PartnershipModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -80,7 +80,7 @@ export class PartnershipsComponent implements OnInit {
             body.push([
               item.document,
               item.name,
-              item.customer?.name,
+              item.business.name,
               item.representative,
             ]);
           }
@@ -90,6 +90,18 @@ export class PartnershipsComponent implements OnInit {
         });
       }
     });
+  }
+
+  onDelete(partnershipId: string) {
+    const ok = confirm('Estas seguro de anular?...');
+    if (ok) {
+      this.navigationService.loadBarStart();
+      this.partnershipsService.delete(partnershipId).subscribe(() => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = this.dataSource.filter(e => e._id !== partnershipId);
+        this.navigationService.showMessage('Eliminado correctamente');
+      });
+    }
   }
 
   handlePageEvent(event: PageEvent): void {

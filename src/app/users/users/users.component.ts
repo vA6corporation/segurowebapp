@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'name', 'email', 'actions' ];
+  public displayedColumns: string[] = [ 'name', 'email', 'isAdmin', 'actions' ];
   public dataSource: UserModel[] = [];
   public dataSourceDisabled: UserModel[] = [];
   public length: number = 100;

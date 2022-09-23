@@ -1,0 +1,64 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Objeto *</mat-label>
+      <input type="text" matInput formControlName="object">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Lugar de ejecucion *</mat-label>
+      <input type="text" matInput formControlName="executionPlace">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de fianza</mat-label>
+      <mat-select formControlName="guaranteeCode">
+        <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
+        <mat-option value="GADF">ADELANTO DIRECTO</mat-option>
+        <mat-option value="GFCF">FIEL CUMPLIMIENTO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Plazo de la fianza *</mat-label>
+      <input type="number" matInput formControlName="guaranteeTimeLimit">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Monto de la fianza *</mat-label>
+      <input type="number" matInput formControlName="guaranteeMount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Presupuesto base *</mat-label>
+      <input type="number" matInput formControlName="guaranteeBaseBudget">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Monto del contrato *</mat-label>
+      <input type="number" matInput formControlName="guaranteeContractMount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre del depositante *</mat-label>
+      <input type="text" matInput formControlName="depositorName">
+    </mat-form-field>
+    <div formGroupName="partnership">
+      <mat-form-field appearance="fill">
+        <mat-label>Consorcio</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="business">
+      <mat-form-field appearance="fill">
+        <mat-label>Empresa *</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="beneficiary">
+      <mat-form-field appearance="fill">
+        <mat-label>Beneficiario *</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
+      </mat-form-field>
+    </div>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/constructions" class="mr-2">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+</section>

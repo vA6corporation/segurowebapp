@@ -6,18 +6,15 @@ import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
-import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
-import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
-import { Guarantee } from 'src/app/reports/guarantee.interface';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { buildExcel } from 'src/app/xlsx';
 
@@ -39,7 +36,7 @@ export class SearchComponent implements OnInit {
     private readonly authService: AuthService,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
   public guaranties: any[] = [];
   public dataSource: any[] = [];
   public length: number = 100;
@@ -131,12 +128,12 @@ export class SearchComponent implements OnInit {
       'F. CUMPLIMIENTO',
     ]);
     for (const guarantee of this.dataSource) {
-      const { customer, partnership, financier } = guarantee;
+      const { business, partnership, financier } = guarantee;
       body.push([
         guarantee.guaranteeType,
         financier?.name || null,
         partnership?.name || null,
-        customer?.name || null,
+        business?.name || null,
         guarantee.policyNumber,
         guarantee.price,
         guarantee.prima,
@@ -224,7 +221,7 @@ export class SearchComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onDelete(guarantee: Guarantee) {
+  async onDelete(guarantee: GuaranteeModel) {
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
       this.navigationService.loadBarStart();
@@ -266,7 +263,7 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  onShowDetails(guarantee: Direct|Compliance|Material) {
+  onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
       case 'GAMF':
         this.matDialog.open(DialogMaterialComponent, {

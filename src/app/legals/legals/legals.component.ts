@@ -33,7 +33,7 @@ export class LegalsComponent implements OnInit {
     private readonly matDialog: MatDialog
   ) { }
 
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'endDate', 'actions' ];
+  public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'endDate', 'actions' ];
   public dataSource: ConstructionModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -97,37 +97,25 @@ export class LegalsComponent implements OnInit {
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+      const wscols = [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ];
       let body = [];
       body.push([
-        'GARANTIA',
-        'FINANCIERA',
-        'CONSORCIO',
         'CLIENTE',
-        'N° DE POLIZA',
-        'SUMA ASEGURADA',
-        'PRIMA',
-        'E. DE TRAMITE',
-        'E. DE REVISION',
-        'F. CUMPLIMIENTO',
+        'CONSORCIO',
+        'PERSONAL',
+        'ASEGURADORA',
+        'OBJETO',
       ]);
 
-      // for (const guarantee of this.dataSource) {
-      //   const { customer, partnership, financier } = guarantee;
-      //   body.push([
-      //     guarantee.guaranteeType,
-      //     financier?.name || null,
-      //     partnership?.name || null,
-      //     customer?.name || null,
-      //     guarantee.policyNumber,
-      //     guarantee.price,
-      //     guarantee.prima,
-      //     guarantee.processStatus,
-      //     guarantee.statusLabel,
-      //     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-      //   ]);
-      // }
-      const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+      for (const construction of this.dataSource) {
+        body.push([
+          construction.business.name,
+          construction.partnership?.name,
+          construction.worker?.name,
+          construction.object,
+        ]);
+      }
+      const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
       buildExcel(body, name, wscols, [], []);
     });
   }
@@ -140,7 +128,6 @@ export class LegalsComponent implements OnInit {
       data: constructionId,
     });
   }
-  
 
   onDelete(constructionId: string) {
     const ok = confirm('Esta seguro de anular?...');

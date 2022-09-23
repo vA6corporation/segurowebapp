@@ -21,35 +21,35 @@ export class DialogCreateProvidersComponent implements OnInit {
 
   public formArray: FormArray = this.formBuilder.array([]);
   public formGroup: FormGroup = this.formBuilder.group({
-    identificationType: 'RUC',
-    identificationNumber: null,
+    documentType: 'RUC',
+    document: null,
     name: [ null, Validators.required ],
     address: null,
     mobileNumber: null,
     email: [ null, Validators.email ],
     banks: this.formArray,
   });
-  public identificationTypes: string[] = ['RUC', 'DNI', 'CE'];
+  public documentTypes: string[] = ['RUC', 'DNI', 'CE'];
   public isLoading: boolean = false;
   public maxLength: number = 11;
 
   ngOnInit(): void {
-    this.formGroup.get('identificationType')?.valueChanges.subscribe(value => {
+    this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
-          this.formGroup.get('identificationNumber')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.formGroup.get('document')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
           this.maxLength = 11;
           break;
         case 'DNI':
-          this.formGroup.get('identificationNumber')?.setValidators([ Validators.minLength(8), Validators.maxLength(8) ]);
+          this.formGroup.get('document')?.setValidators([ Validators.minLength(8), Validators.maxLength(8) ]);
           this.maxLength = 8;
           break;
         default:
-          this.formGroup.get('identificationNumber')?.setValidators([]);
+          this.formGroup.get('document')?.setValidators([]);
           this.maxLength = 24;
           break;
       }
-      this.formGroup.get('identificationNumber')?.updateValueAndValidity();
+      this.formGroup.get('document')?.updateValueAndValidity();
     });
   }
 

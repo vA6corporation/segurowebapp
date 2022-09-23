@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
-import { Cheque } from './cheque.model';
+import { ChequeModel } from './cheque.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ChequesService {
     private readonly httpService: HttpService,
   ) { }
 
-  forPaid(): Observable<Cheque[]> {
+  forPaid(): Observable<ChequeModel[]> {
     return this.httpService.get('cheques/forPaid');
   }
 
@@ -25,35 +25,35 @@ export class ChequesService {
     return this.httpService.get(`cheques/countCheques`);
   }
 
-  getChequesByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<Cheque[]> {
+  getChequesByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<ChequeModel[]> {
     return this.httpService.get(`cheques/byRangeDate/${startDate}/${endDate}`, { params });
   }
 
-  getChequesByCommercialPage(startDate: Date, endDate: Date, workerId: string, pageIndex: number, pageSize: number, params: Params): Observable<Cheque[]> {
+  getChequesByCommercialPage(startDate: Date, endDate: Date, workerId: string, pageIndex: number, pageSize: number, params: Params): Observable<ChequeModel[]> {
     return this.httpService.get(`cheques/byCommercialPageRangeDate/${startDate}/${endDate}/${workerId}/${pageIndex}/${pageSize}`, { params });
   }
 
-  getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<Cheque[]> {
+  getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<ChequeModel[]> {
     return this.httpService.get(`cheques/byRangeDatePage/${startDate}/${endDate}/${pageIndex}/${pageSize}`);
   }
 
-  getCountByRangeDate(startDate: Date, endDate: Date): Observable<Cheque[]> {
+  getCountByRangeDate(startDate: Date, endDate: Date): Observable<ChequeModel[]> {
     return this.httpService.get(`cheques/countByRangeDate/${startDate}/${endDate}`);
   }
 
-  getChequeById(chequeId: string): Observable<Cheque> {
+  getChequeById(chequeId: string): Observable<ChequeModel> {
     return this.httpService.get(`cheques/byId/${chequeId}`);
   }
 
-  getByKey(key: string): Observable<Cheque[]> {
+  getByKey(key: string): Observable<ChequeModel[]> {
     return this.httpService.get(`cheques/byKey/${key}`);
   }
 
-  update(cheque: Cheque, chequeId: string) {
+  update(cheque: ChequeModel, chequeId: string) {
     return this.httpService.put(`cheques/${chequeId}`, { cheque });
   }
 
-  create(cheque: Cheque): Observable<Cheque> {
+  create(cheque: ChequeModel): Observable<ChequeModel> {
     return this.httpService.post('cheques', { cheque });
   }
 

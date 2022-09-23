@@ -1,0 +1,46 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2 mat-dialog-title>Agregar expericia</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Objeto del contrato *</mat-label>
+      <input type="text" matInput formControlName="object">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Entidad contratante *</mat-label>
+      <input type="text" matInput formControlName="contractor">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de inicio de obra *</mat-label>
+      <input matInput [matDatepicker]="startAt" formControlName="startAt">
+      <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>
+      <mat-datepicker #startAt></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Ubicacion geografica de la obra *</mat-label>
+      <input type="text" matInput formControlName="location">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Precio *</mat-label>
+      <input type="number" matInput formControlName="price">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Plazo de la obra en dias *</mat-label>
+      <input type="number" matInput formControlName="timeLimit">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Avance a la fecha *</mat-label>
+      <input type="number" matInput formControlName="advancePercent">
+    </mat-form-field>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isArbitration">Arbitraje</mat-slide-toggle>
+    </div>
+  </div>
+  <mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-button mat-button mat-dialog-close>CANCELAR</button>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

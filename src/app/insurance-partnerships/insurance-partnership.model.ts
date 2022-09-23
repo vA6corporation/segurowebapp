@@ -1,4 +1,4 @@
-import { CustomerModel } from "../customers/customer.model";
+import { BusinessModel } from "../businesses/business.model";
 
 export interface InsurancePartnershipModel {
   _id?: string,
@@ -9,7 +9,7 @@ export interface InsurancePartnershipModel {
   annexed: string,
   representative: string,
   representativeDocument: string,
-  customer?: CustomerModel,
+  business: BusinessModel,
   createdAt: any,
   updatedAt: any,
   userId: string,

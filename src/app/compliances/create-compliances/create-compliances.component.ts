@@ -4,24 +4,24 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CompliancesService } from '../compliances.service';
 import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-cheques.component';
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
-import { Cheque } from 'src/app/cheques/cheque.model';
-import { Deposit } from 'src/app/deposits/deposit.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { Subscription } from 'rxjs';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
-import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { ConstructionsService } from 'src/app/constructions/constructions.service';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DepositModel } from 'src/app/deposits/deposit.model';
+import { ChequeModel } from 'src/app/cheques/cheque.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 
 @Component({
   selector: 'app-create-compliances',
@@ -46,10 +46,6 @@ export class CreateCompliancesComponent implements OnInit {
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
     }),
-    // beneficiary: this.formBuilder.group({
-    //   _id: [ null, Validators.required ],
-    //   name: [ null, Validators.required ],
-    // }),
     compliance: this.formBuilder.group({
       constructionId: '',
       policyNumber: [ null, Validators.required ],
@@ -64,13 +60,13 @@ export class CreateCompliancesComponent implements OnInit {
   });
 
   public construction: ConstructionModel|null = null;
-  public customer: CustomerModel|null = null;
+  public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public worker: WorkerModel|null = null;
   public beneficiary: BeneficiaryModel|null = null;
   public isLoading: boolean = false;
-  public deposits: Deposit[] = [];
-  public cheques: Cheque[] = [];
+  public deposits: DepositModel[] = [];
+  public cheques: ChequeModel[] = [];
   public workers: WorkerModel[] = [];
 
   private workers$: Subscription = new Subscription();
@@ -94,7 +90,7 @@ export class CreateCompliancesComponent implements OnInit {
         this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
           if (construction) {
             this.construction = construction;
-            this.customer = construction.customer;
+            this.business = construction.business;
             this.partnership = construction.partnership;
             this.worker = construction.worker;
             this.beneficiary = construction.beneficiary;
@@ -112,11 +108,9 @@ export class CreateCompliancesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(construction => {
-      console.log(construction);
-      
       if (construction) {
         this.construction = construction;
-        this.customer = construction.customer;
+        this.business = construction.business;
         this.partnership = construction.partnership;
         this.worker = construction.worker;
         this.beneficiary = construction.beneficiary;
@@ -133,14 +127,16 @@ export class CreateCompliancesComponent implements OnInit {
     this.deposits.splice(index, 1);
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      this.formGroup.patchValue({ customer: customer || {} });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
+      }
     });
   }
 
@@ -174,8 +170,8 @@ export class CreateCompliancesComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -213,7 +209,7 @@ export class CreateCompliancesComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, compliance } = this.formGroup.value;
       compliance.partnershipId = this.partnership?._id;
-      compliance.customerId = this.customer?._id;
+      compliance.businessId = this.business?._id;
       compliance.beneficiaryId = this.beneficiary?._id;
       compliance.financierId = financier._id;
       compliance.workerId = this.worker?._id;

@@ -8,6 +8,7 @@ import { CompliancesService } from '../compliances.service';
 
 export interface CompliancePdfData {
   type: string
+  constructionId: string
   complianceId: string
 }
 
@@ -34,14 +35,13 @@ export class DialogPdfCompliancesComponent implements OnInit {
   public tabIndex: number = 0;
   public pdfId: string = '';
   public compliancePdfId: string = '';
+  public attachAll: boolean = false;
 
   ngOnInit(): void { 
     this.fetchData();
   }
 
   fetchData() {
-    console.log(this.data);
-    
     this.compliancesService.getCompliancePdfs(this.data.complianceId, this.data.type).subscribe(compliancePdfs => {
       this.compliancePdfs = compliancePdfs;
     });
@@ -49,7 +49,7 @@ export class DialogPdfCompliancesComponent implements OnInit {
 
   onDeletePdf() {
     this.tabIndex = 0;
-    this.compliancesService.deletePdf(this.compliancePdfId, this.pdfId).subscribe(() => {
+    this.compliancesService.deletePdf(this.pdfId).subscribe(() => {
       this.fetchData();
     });
   }
@@ -88,14 +88,14 @@ export class DialogPdfCompliancesComponent implements OnInit {
           pdf.addImage(result, 'JPEG', 0, 0, width, height);
           const data = pdf.output('blob');
           formData.append('file', data);
-          this.compliancesService.uploadPdf(formData, this.data.complianceId, this.data.type).subscribe(pdfId => {
+          this.compliancesService.uploadPdf(formData, this.data.complianceId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
             console.log(pdfId);
             this.fetchData();
           });
         });
       } else {
         formData.append('file', file),
-        this.compliancesService.uploadPdf(formData, this.data.complianceId, this.data.type).subscribe(pdfId => {
+        this.compliancesService.uploadPdf(formData, this.data.complianceId, this.data.type, this.data.constructionId, this.attachAll).subscribe(pdfId => {
           console.log(pdfId);
           this.fetchData();
         });

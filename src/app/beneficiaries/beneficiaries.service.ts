@@ -13,7 +13,7 @@ export class BeneficiariesService {
   ) { }
 
   getBeneficiariesByKey(key: string):Observable<BeneficiaryModel[]> {
-    return this.httpService.get(`beneficiaries/byAny/${key}`);
+    return this.httpService.get(`beneficiaries/byKey/${key}`);
   }
 
   getBeneficiariesByPage(pageIndex: number, pageSize: number): Observable<BeneficiaryModel[]> {

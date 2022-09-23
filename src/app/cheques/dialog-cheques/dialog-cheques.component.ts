@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Cheque } from '../cheque.model';
+import { ChequeModel } from '../cheque.model';
 
 @Component({
   selector: 'app-dialog-cheques',
@@ -12,7 +12,7 @@ export class DialogChequesComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) 
-    public readonly cheque: Cheque|null,
+    public readonly cheque: ChequeModel|null,
     private readonly formBuilder: FormBuilder,
     private readonly dialogRef: MatDialogRef<DialogChequesComponent>,
   ) { }

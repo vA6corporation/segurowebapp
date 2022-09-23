@@ -54,8 +54,6 @@ export class ToolbarComponent implements OnInit {
     });
   
     this.authService.handleAuthStatus().subscribe(isAuth => {
-      console.log('isLogin', isAuth);
-      
       this.isAuth = isAuth;
     });
 

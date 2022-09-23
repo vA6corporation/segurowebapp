@@ -5,6 +5,9 @@
         <button mat-list-item (click)="onChangePdf(materialPdf)" *ngFor="let materialPdf of materialPdfs">{{ materialPdf.filename }}</button>
       </mat-action-list>
     </mat-tab>
+    <div class="m-5">
+      <mat-slide-toggle #toggleAll (change)="attachAll = toggleAll.checked">Adjuntar a todas las renovaciones</mat-slide-toggle>
+    </div>
     <mat-tab label="Preview" style="overflow: hidden;">
       <iframe [src]="url" frameborder="0" style="overflow:hidden;height:100%;width:100%"></iframe>
     </mat-tab>

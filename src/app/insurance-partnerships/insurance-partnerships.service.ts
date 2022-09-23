@@ -13,7 +13,7 @@ export class InsurancePartnershipsService {
   ) { }
 
   getPartnershipsByKey(key: string): Observable<PartnershipModel[]> {
-    return this.httpService.get(`insurancePartnerships/byAny/${key}`);
+    return this.httpService.get(`insurancePartnerships/byKey/${key}`);
   }
 
   getPartnerships(): Observable<PartnershipModel[]> {

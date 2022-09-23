@@ -11,12 +11,12 @@ import { UserModel } from 'src/app/users/user.model';
 import { UsersService } from 'src/app/users/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { buildExcel } from 'src/app/xlsx';
 import { formatDate } from '@angular/common';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 Chart.register(...registerables);
 
 @Component({
@@ -49,7 +49,7 @@ export class PrimasComponent implements OnInit {
     _id: [ null, Validators.required ],
   });
 
-  public customerForm = this.formBuilder.group({
+  public businessForm = this.formBuilder.group({
     name: [ null, Validators.required ],
     _id: [ null, Validators.required ],
   });
@@ -117,8 +117,8 @@ export class PrimasComponent implements OnInit {
               params.financierId = this.financierForm.value._id;
             }
       
-            if (this.customerForm.valid) {
-              params.customerId = this.customerForm.value._id;
+            if (this.businessForm.valid) {
+              params.businessId = this.businessForm.value._id;
             }
       
             params.isEmition = this.isEmition;
@@ -147,12 +147,12 @@ export class PrimasComponent implements OnInit {
               ]);
 
               for (const guarantee of payedDirect) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -165,12 +165,12 @@ export class PrimasComponent implements OnInit {
               }
 
               for (const guarantee of notPayedDirect) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -183,12 +183,12 @@ export class PrimasComponent implements OnInit {
               }
 
               for (const guarantee of payedCompliance) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -201,12 +201,12 @@ export class PrimasComponent implements OnInit {
               }
 
               for (const guarantee of notPayedCompliance) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -219,12 +219,12 @@ export class PrimasComponent implements OnInit {
               }
 
               for (const guarantee of payedMaterial) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -237,12 +237,12 @@ export class PrimasComponent implements OnInit {
               }
               
               for (const guarantee of notPayedMaterial) {
-                const { customer, partnership, financier } = guarantee;
+                const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
-                  customer?.name || null,
+                  business?.name || null,
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
@@ -286,17 +286,17 @@ export class PrimasComponent implements OnInit {
     });
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.customerForm.patchValue(customer);
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.businessForm.patchValue(business);
       } else {
-        this.customerForm.patchValue({ name: null, _id: null });
+        this.businessForm.patchValue({ name: null, _id: null });
       }
       this.fetchData();
     });
@@ -319,8 +319,8 @@ export class PrimasComponent implements OnInit {
         params.financierId = this.financierForm.value._id;
       }
 
-      if (this.customerForm.valid) {
-        params.customerId = this.customerForm.value._id;
+      if (this.businessForm.valid) {
+        params.businessId = this.businessForm.value._id;
       }
 
       params.isEmition = this.isEmition;

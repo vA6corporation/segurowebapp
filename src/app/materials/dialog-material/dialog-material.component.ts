@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
-import { CustomerModel } from 'src/app/customers/customer.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
 import { FinancierModel } from 'src/app/financiers/financier.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
-import { Material }from '../material.model';
+import { MaterialModel } from '../material.model';
 import { MaterialsService } from '../materials.service';
 
 @Component({
@@ -20,20 +20,18 @@ export class DialogMaterialComponent implements OnInit {
     private readonly materialsService: MaterialsService,
   ) { }
 
-  public material: Material|null = null;
-  public customer: CustomerModel|null = null;
+  public material: MaterialModel|null = null;
+  public business: BusinessModel|null = null;
   public financier: FinancierModel|null = null;
   public partnership: PartnershipModel|null = null;
   public beneficiary: BeneficiaryModel|null = null;
 
   ngOnInit(): void { 
     this.materialsService.getMaterialById(this.data).subscribe(material => {
-      console.log(material);
-      
-      const { customer = null, financier = null, partnership = null, beneficiary = null } = material;
+      const { business = null, financier = null, partnership = null, beneficiary = null } = material;
       this.material = material;
       this.partnership = partnership;
-      this.customer = customer;
+      this.business = business;
       this.financier = financier;
       this.beneficiary = beneficiary;
     });

@@ -3,9 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { CustomerModel } from 'src/app/customers/customer.model';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { DialogPartnershipItemsComponent } from '../dialog-partnership-items/dialog-partnership-items.component';
+import { PartnershipItemModel } from '../partnership-item.model';
 import { PartnershipsService } from '../partnerships.service';
 
 @Component({
@@ -24,47 +26,55 @@ export class CreatePartnershipsComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    partnership: this.formBuilder.group({
-      document: null,
-      name: [ null, Validators.required ],
-      address: [ null ],
-      representativeName: [ null, Validators.required ],
-      representativeDocument: [ null, Validators.required ],
-      customerId: [ null, Validators.required ],
-    }),
+    document: null,
+    name: [ null, Validators.required ],
+    address: null,
+    representativeDocumentType: 'DNI',
+    representativeDocument: [ null, Validators.required ],
+    representativeName: [ null, Validators.required ],
+    businessId: [ null, Validators.required ],
   });
   public isLoading: boolean = false;
-  public customers: CustomerModel[] = [];
+  public businesses: BusinessModel[] = [];
+  public partnershipItems: PartnershipItemModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio');
     this.navigationService.backTo();
   }
 
-  openDialogCustomer(): void {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  onDialogBusinesses(): void {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.customers.push(customer);
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        const dialogRef = this.matDialog.open(DialogPartnershipItemsComponent, {
+          width: '600px',
+          position: { top: '20px' },
+          data: business
+        });
+
+        dialogRef.afterClosed().subscribe(partnershipItem => {
+          if (partnershipItem) {
+            this.partnershipItems.push(partnershipItem);
+          }
+        });
       }
     });
   }
 
-  removeCustomerModel(index: number): void {
-    this.customers.splice(index, 1);
+  removeBusiness(index: number): void {
+    this.businesses.splice(index, 1);
   }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { partnership } = this.formGroup.value;
-      partnership.customerIds = this.customers.map(e => e._id);
-      this.partnershipsService.create(partnership).subscribe(res => {
+      this.partnershipsService.create(this.formGroup.value, this.partnershipItems).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

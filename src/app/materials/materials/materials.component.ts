@@ -4,10 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { DialogMaterialComponent } from '../dialog-material/dialog-material.component';
-import { Material }from '../material.model';
+import { MaterialModel } from '../material.model';
 import { MaterialsService } from '../materials.service';
 
 @Component({
@@ -23,8 +24,8 @@ export class MaterialsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
   
-  public displayedColumns: string[] = [ 'partnership', 'customer', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
-  public dataSource: Material[] = [];
+  public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions' ];
+  public dataSource: MaterialModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
@@ -85,20 +86,27 @@ export class MaterialsComponent implements OnInit {
         // for (const item of this.dataSource) {
         //   body.push([
         //     .document,
-        //     customer.name,
-        //     customer.email,
-        //     customer.mobileNumber,
+        //     business.name,
+        //     business.email,
+        //     business.mobileNumber,
         //   ]);
         // }
 
         const name = `ADELANTO_DE_MATERIALES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
         buildExcel(body, name, wscols, [], []);
       }
-
     });
   }
 
-  async onRenewGuarantee(guarantee: any) {
+  // onDialogDocumentations(guarantee: GuaranteeModel) {
+  //   this.matDialog.open(DialogDocumentationGuarantiesComponent, {
+  //     width: '600px',
+  //     position: { top: '20px' },
+  //     data: guarantee,
+  //   });
+  // }
+
+  async onRenewGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '02';
     switch (guarantee.guaranteeType) {
       case 'GAMF':

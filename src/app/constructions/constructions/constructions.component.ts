@@ -8,15 +8,15 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { OfficeModel } from 'src/app/auth/office.model';
+// import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { WorkersService } from 'src/app/workers/workers.service';
 import { buildExcel } from 'src/app/xlsx';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 import { DialogAddBailComponent } from '../dialog-add-bail/dialog-add-bail.component';
 import { DialogDetailConstructionsComponent } from '../dialog-detail-constructions/dialog-detail-constructions.component';
+// import { DialogTemplatesComponent } from '../dialog-templates/dialog-templates.component';
 
 @Component({
   selector: 'app-constructions',
@@ -41,7 +41,7 @@ export class ConstructionsComponent implements OnInit {
     'object', 
     'worker',
     'office',
-    'customer',
+    'business',
     'partnership', 
     'actions' 
   ];
@@ -111,7 +111,7 @@ export class ConstructionsComponent implements OnInit {
           ]);
           for (const construction of this.dataSource) {
             body.push([
-              construction.customer.name,
+              construction.business.name,
               construction.partnership?.name,
               construction.worker?.name,
               construction.object,
@@ -133,7 +133,7 @@ export class ConstructionsComponent implements OnInit {
             ]);
             for (const construction of constructions) {
               body.push([
-                construction.customer.name,
+                construction.business.name,
                 construction.partnership?.name,
                 construction.worker?.name,
                 construction.object,
@@ -150,6 +150,14 @@ export class ConstructionsComponent implements OnInit {
 
     });
   }
+
+  // onDialogTemplates(construction: ConstructionModel) {
+  //   this.matDialog.open(DialogTemplatesComponent, {
+  //     width: '600px',
+  //     position: { top: '20px' },
+  //     data: construction,
+  //   });
+  // }
 
   onAddBail(constructionId: string) {
     this.matDialog.open(DialogAddBailComponent, {

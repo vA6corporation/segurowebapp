@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
+import { GuaranteeModel } from '../guarantees/guarantee.model';
 import { HttpService } from '../http.service';
-import { Guarantee } from '../reports/guarantee.interface';
 import { ConstructionPdfModel } from './construction-pdf.model';
 import { ConstructionModel } from './construction.model';
 
@@ -23,8 +23,8 @@ export class ConstructionsService {
     return this.httpService.get('constructions');
   }
 
-  getConstructionsByCustomer(customerId: string): Observable<ConstructionModel[]> {
-    return this.httpService.get(`constructions/byCustomer/${customerId}`);
+  getConstructionsByBusiness(businessId: string): Observable<ConstructionModel[]> {
+    return this.httpService.get(`constructions/byBusiness/${businessId}`);
   }
 
   getConstructionsByRangeDateFinancierWorkerStatus(params: Params): Observable<ConstructionModel[]> {
@@ -59,7 +59,7 @@ export class ConstructionsService {
     return this.httpService.get(`constructions/byId/${constructionId}`);
   }
 
-  getGuarantiesByConstructionId(constructionId: string): Observable<Guarantee[]> {
+  getGuarantiesByConstructionId(constructionId: string): Observable<GuaranteeModel[]> {
     return this.httpService.get(`reports/byConstructionId/${constructionId}`);
   }
 

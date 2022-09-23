@@ -1,29 +1,26 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <div formGroupName="beneficiary">
-      <!-- <h1>Editar Beneficiario</h1> -->
-      <mat-form-field>
-        <input type="text" matInput placeholder="N° de RUC *" formControlName="document" [maxlength]="maxlength">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput placeholder="Razon Social *" formControlName="name">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="email" matInput placeholder="Email" formControlName="email">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput placeholder="Celular" maxlength="12" formControlName="mobileNumber">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput placeholder="Telefono" maxlength="12" formControlName="phoneNumber">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput placeholder="Anexo" formControlName="annexed">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput placeholder="Direccion" formControlName="address">
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <input type="text" matInput placeholder="N° de RUC *" formControlName="document" [maxlength]="maxlength">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Razon Social *" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="email" matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Celular" maxlength="12" formControlName="mobileNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Telefono" maxlength="12" formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Anexo" formControlName="annexed">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Direccion" formControlName="address">
+    </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>
       <button type="button" mat-stroked-button color="primary" routerLink="/beneficiaries">CANCELAR</button>

@@ -3,18 +3,15 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Compliance } from 'src/app/compliances/compliance.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
-import { Direct } from 'src/app/directs/direct.model';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { FinancierModelsService } from 'src/app/financiers/financiers.service';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
-import { Material }from 'src/app/materials/material.model';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { Guarantee } from 'src/app/reports/guarantee.interface';
 
 @Component({
   selector: 'app-construction-status',
@@ -33,16 +30,16 @@ export class ConstructionStatusComponent implements OnInit {
     private readonly route: ActivatedRoute,
   ) { }
     
-  private handleSearch$: Subscription = new Subscription();
-
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'customer', 'policyNumber', 'endDate', 'price', 'actions' ];
-  public dataSource: Guarantee[] = [];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'price', 'actions' ];
+  public dataSource: GuaranteeModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   private financierId: string = '';
 
+  private handleSearch$: Subscription = new Subscription();
+  
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
   }
@@ -61,25 +58,6 @@ export class ConstructionStatusComponent implements OnInit {
       this.financierId = params.financierId;
       this.fetchData();
     });
-
-    // this.financiersService.getCount().subscribe(count => {
-    //   this.length = count;
-    // });
-    
-    // this.financiersService.getFinancierModelsByPage(this.pageIndex + 1, this.pageSize).subscribe(financiers => {
-    //   this.dataSource = financiers;
-    // });
-
-    // this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
-    //   this.navigationService.loadBarStart();
-    //   this.financiersService.getFinancierModelsByKey(key).subscribe(financiers => {
-    //     this.navigationService.loadBarFinish();
-    //     this.dataSource = financiers;
-    //   }, (error: HttpErrorResponse) => {
-    //     this.navigationService.loadBarFinish();
-    //     this.navigationService.showMessage(error.error.message);
-    //   });
-    // });
   }
 
   fetchData() {
@@ -153,7 +131,7 @@ export class ConstructionStatusComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onDelete(guarantee: Guarantee) {
+  async onDelete(guarantee: GuaranteeModel) {
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
       this.navigationService.loadBarStart();
@@ -192,7 +170,7 @@ export class ConstructionStatusComponent implements OnInit {
     }
   }
 
-  onShowDetails(guarantee: Direct|Compliance|Material) {
+  onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
       case 'GAMF':
         this.matDialog.open(DialogMaterialComponent, {

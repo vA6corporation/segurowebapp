@@ -4,13 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialsService } from '../materials.service';
-import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { Deposit } from 'src/app/deposits/deposit.model';
-import { Cheque } from 'src/app/cheques/cheque.model';
 import { DialogChequesComponent } from 'src/app/cheques/dialog-cheques/dialog-cheques.component';
 import { DialogDepositsComponent } from 'src/app/deposits/dialog-deposits/dialog-deposits.component';
 import { WorkerModel } from 'src/app/workers/worker.model';
@@ -18,10 +15,13 @@ import { Subscription } from 'rxjs';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
-import { CustomerModel } from 'src/app/customers/customer.model';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { ConstructionsService } from 'src/app/constructions/constructions.service';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { DepositModel } from 'src/app/deposits/deposit.model';
+import { ChequeModel } from 'src/app/cheques/cheque.model';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 
 @Component({
   selector: 'app-create-materials',
@@ -60,13 +60,13 @@ export class CreateMaterialsComponent implements OnInit {
   });
 
   public construction: ConstructionModel|null = null;
-  public customer: CustomerModel|null = null;
+  public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public worker: WorkerModel|null = null;
   public beneficiary: BeneficiaryModel| null = null;
   public isLoading: boolean = false;
-  public deposits: Deposit[] = [];
-  public cheques: Cheque[] = [];
+  public deposits: DepositModel[] = [];
+  public cheques: ChequeModel[] = [];
   public workers: WorkerModel[] = [];
 
   private workers$: Subscription = new Subscription();
@@ -92,7 +92,7 @@ export class CreateMaterialsComponent implements OnInit {
           
           if (construction) {
             this.construction = construction;
-            this.customer = construction.customer;
+            this.business = construction.business;
             this.partnership = construction.partnership;
             this.worker = construction.worker;
             this.beneficiary = construction.beneficiary;
@@ -114,7 +114,7 @@ export class CreateMaterialsComponent implements OnInit {
       
       if (construction) {
         this.construction = construction;
-        this.customer = construction.customer;
+        this.business = construction.business;
         this.partnership = construction.partnership;
         this.worker = construction.worker;
         this.beneficiary = construction.beneficiary;
@@ -131,14 +131,16 @@ export class CreateMaterialsComponent implements OnInit {
     this.deposits.splice(index, 1);
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      this.formGroup.patchValue({ customer: customer || {} });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
+      }
     });
   }
 
@@ -172,8 +174,8 @@ export class CreateMaterialsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -211,7 +213,7 @@ export class CreateMaterialsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, material } = this.formGroup.value;
       material.partnershipId = this.partnership?._id;
-      material.customerId = this.customer?._id;
+      material.businessId = this.business?._id;
       material.beneficiaryId = this.beneficiary?._id;
       material.financierId = financier._id;
       material.workerId = this.worker?._id;

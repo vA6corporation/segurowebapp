@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPdfComponent } from 'src/app/system/dialog-pdf/dialog-pdf.component';
 import { PaymentOrderModel } from '../payment-order.model';
@@ -23,7 +22,6 @@ export class PaymentOrdersComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
   ) { }
     
   public displayedColumns: string[] = [ 'provider', 'concept', 'charge', 'paymentAt', 'actions' ];
@@ -34,11 +32,9 @@ export class PaymentOrdersComponent implements OnInit {
   public pageIndex: number = 0;
 
   private handleClickMenu$: Subscription = new Subscription();
-  private handleSearch$: Subscription = new Subscription();
   private auth$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
     this.auth$.unsubscribe();
   }
@@ -49,34 +45,7 @@ export class PaymentOrdersComponent implements OnInit {
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       switch (id) {
         case 'export_excel': {
-          // this.navigationService.loadBarStart();
-          // this.customersService.getCustomerModels().subscribe(customers => {
-          //   this.navigationService.loadBarFinish();
-          //   const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          //   let body = [];
-          //   body.push([
-          //     'T. DOCUMENTO',
-          //     'DOCUMENTO',
-          //     'NOMBRES',
-          //     'DIRECCION',
-          //     'EMAIL',
-          //     'CELULAR',
-          //   ]);
-          //   for (const customer of customers) {
-          //     body.push([
-          //       customer.identificationType,
-          //       customer.identificationNumber,
-          //       customer.name,
-          //       customer.address,
-          //       customer.email,
-          //       customer.mobileNumber,
-          //     ]);
-          //   }
-          //   const name = `Clientes_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}_${this.business.businessName.replace(/ /g, '_')}`;
-          //   buildExcel(body, name, wscols, []);
-          // }, (error: HttpErrorResponse) => {
-          //   this.navigationService.showMessage(error.error.message);
-          // });
+
         }
       }
     });
@@ -92,14 +61,6 @@ export class PaymentOrdersComponent implements OnInit {
       this.pageIndex = Number(pageIndex || 0);
       this.pageSize = Number(pageSize || 10);
       this.fetchData();
-    });
-
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
-      // this.customersService.getCustomerModelsByKey(key).subscribe(customers => {
-      //   this.dataSource = customers;
-      // }, (error: HttpErrorResponse) => {
-      //   this.navigationService.showMessage(error.error.message);
-      // });
     });
   }
 

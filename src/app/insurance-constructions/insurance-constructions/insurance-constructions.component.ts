@@ -21,7 +21,7 @@ export class InsuranceConstructionsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
     
-  public displayedColumns: string[] = [ 'object', 'customer', 'actions' ];
+  public displayedColumns: string[] = [ 'object', 'business', 'actions' ];
   public dataSource: ConstructionModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -41,7 +41,7 @@ export class InsuranceConstructionsComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
+      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.navigationService.loadBarStart();

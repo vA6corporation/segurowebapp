@@ -20,6 +20,7 @@ export class CreateBanksComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
+    providerName: [ null, Validators.required ],
     bankName: 'BCP',
     accountNumber: [ null, Validators.required ],
   });

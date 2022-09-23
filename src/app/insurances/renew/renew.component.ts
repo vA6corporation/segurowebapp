@@ -2,9 +2,9 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { InsuranceModel } from '../insurance.model';
@@ -21,13 +21,12 @@ export class RenewComponent implements OnInit {
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly formBuilder: FormBuilder,
-    private readonly matDialog: MatDialog,
   ) { }
 
   public displayedColumns: string[] = [ 
     'expirationAt', 
     'policyNumber', 
-    'customer', 
+    'business', 
     'worker', 
     'actions' 
   ];
@@ -56,6 +55,10 @@ export class RenewComponent implements OnInit {
 
   private handleClickMenu$: Subscription = new Subscription();
 
+  ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.navigationService.setTitle('Renovaciones de seguros');
 
@@ -82,7 +85,7 @@ export class RenewComponent implements OnInit {
           for (const insurance of this.dataSource) {
             body.push([
               insurance.partnership?.name,
-              insurance.customer?.name,
+              insurance.business.name,
               insurance.policyNumber,
               formatDate(insurance.emitionAt, 'dd/MM/yyyy', 'en-US'),
               formatDate(insurance.expirationAt, 'dd/MM/yyyy', 'en-US'),
@@ -107,7 +110,7 @@ export class RenewComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotRenewGuarantee(guarantee: any) {
+  async onNotRenewGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '03';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':
@@ -123,7 +126,7 @@ export class RenewComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onFreeGuarantee(guarantee: any) {
+  async onFreeGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '04';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':
@@ -139,7 +142,7 @@ export class RenewComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotLookGuarantee(guarantee: any) {
+  async onNotLookGuarantee(guarantee: GuaranteeModel) {
     guarantee.status = '01';
     switch (guarantee.guaranteeType) {
       // case 'GAMF':

@@ -1,0 +1,48 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2>Agregar bien mueble</h2>
+  <mat-form-field appearance="fill">
+    <mat-label>Descripcion *</mat-label>
+    <input type="text" matInput formControlName="description">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Modelo *</mat-label>
+    <input type="text" matInput formControlName="modelo">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Placa *</mat-label>
+    <input type="text" matInput formControlName="placa">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Serie *</mat-label>
+    <input type="text" matInput formControlName="serie">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Valor comercial *</mat-label>
+    <input type="number" matInput formControlName="commercialPrice">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Gravamenes *</mat-label>
+    <input type="number" matInput formControlName="encumbrance">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Valor prenda</mat-label>
+    <input type="number" matInput formControlName="warrantyPrice">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Deuda relacionada</mat-label>
+    <input type="number" matInput formControlName="debtPrice">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Banco o institucion</mat-label>
+    <input type="number" matInput formControlName="financier">
+  </mat-form-field>
+  <div class="mb-3">
+    <mat-slide-toggle formControlName="isWarranty">Prenda</mat-slide-toggle>
+  </div>
+  <div class="d-flex">
+    <span class="spacer"></span>
+    <button type="button" mat-button mat-dialog-close>CANCELAR</button>
+    <div class="divider"></div>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </div>
+</form>

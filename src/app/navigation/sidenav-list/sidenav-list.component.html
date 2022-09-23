@@ -1,6 +1,6 @@
 <mat-nav-list class="pt-0">
   <div class="nav-header p-2 text-white overflow-hidden">
-    <p class="text-capitalize text-bold mb-1">{{ business?.name }}</p>
+    <p class="text-capitalize text-bold mb-1">Horvi</p>
     <span class="m-0 text-capitalize text-truncate">{{ office?.name }}</span>
   </div>
   <a href="#" #search mat-list-item routerLink="/search" (click)="onClose()" *ngIf="privileges.search">
@@ -15,18 +15,26 @@
     <mat-icon class="mr-2">construction</mat-icon>
     <span>Obras</span>
   </a>
-  <a href="#" #customers mat-list-item routerLink="/customers" (click)="onClose()" *ngIf="privileges.customers">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Clientes</span>
-  </a>
   <a href="#" #partnerships mat-list-item routerLink="/partnerships" (click)="onClose()" *ngIf="privileges.partnerships">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Consorcios</span>
   </a>
-  <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()" *ngIf="privileges.shareholders">
+  <a href="#" #businesses mat-list-item routerLink="/businesses" (click)="onClose()" *ngIf="privileges.businesses">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Empresas</span>
+  </a>
+  <!-- <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()" *ngIf="privileges.shareholders">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Accionistas</span>
   </a>
+  <a href="#" #shareholders mat-list-item routerLink="/properties" (click)="onClose()" *ngIf="privileges.properties">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Bienes inmuebles</span>
+  </a>
+  <a href="#" #shareholders mat-list-item routerLink="/movableProperties" (click)="onClose()" *ngIf="privileges.movableProperties">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Bienes muebles</span>
+  </a> -->
   <a href="#" #beneficiaries mat-list-item routerLink="/beneficiaries" (click)="onClose()" *ngIf="privileges.beneficiaries">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Beneficiarios</span>
@@ -55,11 +63,41 @@
     <mat-icon class="mr-2">text_snippet</mat-icon>
     <span>Lineas de credito</span>
   </a>
-  <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
+  <!-- <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
     <mat-icon class="mr-2">task</mat-icon>
-    <span>Documentacion</span>
-  </a>
+    <span>Formatos</span>
+  </a> -->
   <mat-accordion>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header #expenses *ngIf="privileges.templates">
+        <mat-panel-title>
+          <!-- <mat-icon class="mr-2">local_atm</mat-icon> -->
+          <mat-icon class="mr-2">task</mat-icon>
+          Formatos
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">task</mat-icon> -->
+        <span>Formatos</span>
+      </a>
+      <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">people</mat-icon> -->
+        <span>Accionistas</span>
+      </a>
+      <a href="#" #shareholders mat-list-item routerLink="/templatePartnerships" (click)="onClose()">
+        <!-- <mat-icon class="mr-2">people</mat-icon> -->
+        <span>Consorcios</span>
+      </a>
+      <!-- <a href="#" #shareholders mat-list-item routerLink="/properties" (click)="onClose()">
+        <span>Bienes inmuebles</span>
+      </a> -->
+      <!-- <a href="#" #shareholders mat-list-item routerLink="/movableProperties" (click)="onClose()">
+        <span>Bienes muebles</span>
+      </a> -->
+      <!-- <a href="#" #shareholders mat-list-item routerLink="/investments" (click)="onClose()">
+        <span>Inversiones</span>
+      </a> -->
+    </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.expenses">
         <mat-panel-title>
@@ -147,8 +185,8 @@
         <span>ACCIDENTES P.</span>
       </a>
       <mat-divider></mat-divider>
-      <a href="#" mat-list-item routerLink="/insuranceCustomers" (click)="onClose()">
-        <span>Clientes</span>
+      <a href="#" mat-list-item routerLink="/insuranceBusinesses" (click)="onClose()">
+        <span>Empresas</span>
       </a>
       <a href="#" mat-list-item routerLink="/insurancePartnerships" (click)="onClose()">
         <span>Consorcios</span>

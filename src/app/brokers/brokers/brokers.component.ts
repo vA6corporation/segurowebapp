@@ -18,7 +18,7 @@ export class BrokersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
     
-  public displayedColumns: string[] = [ 'document', 'name', 'email', 'phoneNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'email', 'mobileNumber', 'actions' ];
   public dataSource: BrokerModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -38,7 +38,7 @@ export class BrokersComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_customers', label: 'Exportar excel', icon: 'download', show: false }
+      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.navigationService.loadBarStart();

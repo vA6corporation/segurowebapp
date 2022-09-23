@@ -25,8 +25,8 @@ export class DialogEditProvidersComponent implements OnInit {
   public formArray: FormArray = this.formBuilder.array([]);
   public formGroup: FormGroup = this.formBuilder.group({
     _id: this.provider._id,
-    identificationType: this.provider.identificationType,
-    identificationNumber: this.provider.identificationNumber,
+    documentType: this.provider.documentType,
+    document: this.provider.document,
     name: [ this.provider.name, Validators.required ],
     address: this.provider.address,
     mobileNumber: this.provider.mobileNumber,
@@ -34,7 +34,7 @@ export class DialogEditProvidersComponent implements OnInit {
     banks: this.formArray,
   });
 
-  public identificationTypes: string[] = ['RUC', 'DNI', 'CE'];
+  public documentTypes: string[] = ['RUC', 'DNI', 'CE'];
   public maxlength: number = 11;
   public isLoading: boolean = false;
   private providerId: string = this.provider._id;

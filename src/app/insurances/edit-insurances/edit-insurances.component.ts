@@ -14,11 +14,11 @@ import { InsurancesService } from '../insurances.service';
 import { Location } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogAttachPdfComponent, InsurancePdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
-import { DialogInsuranceCustomersComponent } from 'src/app/insurance-customers/dialog-insurance-customers/dialog-insurance-customers.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { OfficesService } from 'src/app/offices/offices.service';
+import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
 
 @Component({
   selector: 'app-edit-insurances',
@@ -48,7 +48,7 @@ export class EditInsurancesComponent implements OnInit {
       _id: null,
       name: null,
     }),
-    customer: this.formBuilder.group({
+    business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
@@ -80,7 +80,6 @@ export class EditInsurancesComponent implements OnInit {
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
   public offices: OfficeModel[] = [];
-  // private type: string = '';
   private insuranceId: string = '';
 
   private workers$: Subscription = new Subscription;
@@ -105,10 +104,10 @@ export class EditInsurancesComponent implements OnInit {
       this.navigationService.setTitle('Editar seguro');
       this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
         console.log(insurance);
-        const { broker, customer, financier, construction } = insurance;
+        const { broker, business, financier, construction } = insurance;
         this.formGroup.get('construction')?.patchValue(construction || {});
         this.formGroup.get('broker')?.patchValue(broker);
-        this.formGroup.get('customer')?.patchValue(customer);
+        this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('financier')?.patchValue(financier);
         this.formGroup.get('insurance')?.patchValue(insurance);
         this.formGroup.get('worker')?.patchValue({ _id: insurance.workerId });
@@ -120,9 +119,6 @@ export class EditInsurancesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
       const { insurance } = this.formGroup.value;
-      // construction.customerId = customer._id;
-      // construction.beneficiaryId = beneficiary._id;
-      // construction.partnershipId = partnership._id;
       this.insurancesService.updateOffice(this.insuranceId, insurance.officeId).subscribe(() => {
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Se han guardado los cambios');
@@ -146,14 +142,16 @@ export class EditInsurancesComponent implements OnInit {
     });
   }
 
-  openDialogCustomer() {
-    const dialogRef = this.matDialog.open(DialogInsuranceCustomersComponent, {
+  openDialogBusinesses() {
+    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
       width: '600px',
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(customer => {
-      this.formGroup.patchValue({ customer: customer || {} });
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.formGroup.patchValue({ business });
+      }
     });
   }
 
@@ -198,8 +196,8 @@ export class EditInsurancesComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { customer } = partnership;
-        this.formGroup.patchValue({ customer: customer || {} });
+        const { business } = partnership;
+        this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }
     });
@@ -265,10 +263,10 @@ export class EditInsurancesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { customer, financier, broker, worker, insurance, partnership, construction } = this.formGroup.value;
+      const { business, financier, broker, worker, insurance, partnership, construction } = this.formGroup.value;
       insurance.constructionId = construction?._id || null;
       insurance.partnershipId = partnership?._id || null,
-      insurance.customerId = customer._id;
+      insurance.businessId = business._id;
       insurance.financierId = financier._id;
       insurance.brokerId = broker._id;
       insurance.workerId = worker._id;

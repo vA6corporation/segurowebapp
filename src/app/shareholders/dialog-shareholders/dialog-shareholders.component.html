@@ -1,0 +1,25 @@
+<div class="fixActionRow">
+  <h2 mat-dialog-title>Seleccione un accionista</h2>
+  <div mat-dialog-content>
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+      <mat-form-field>
+        <input type="text" matInput placeholder="Busqueda" formControlName="key">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </form>
+    <mat-action-list>
+      <button mat-list-item *ngFor="let shareholder of shareholders" [mat-dialog-close]="shareholder">
+        <div>
+          <div class="text-truncate">
+            {{ shareholder.name | uppercase }}
+          </div>
+          <span class="text-muted">{{ shareholder.documentType }}: {{ shareholder.document }}</span>
+        </div>
+      </button>
+    </mat-action-list>
+  </div>
+  <div class="spacer"></div>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>CANCELAR</button>
+  </mat-dialog-actions>
+</div>
