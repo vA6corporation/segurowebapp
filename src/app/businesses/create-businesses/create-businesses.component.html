@@ -21,6 +21,14 @@
       <input type="email" matInput formControlName="email">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Empresa(s) relacionada(s)</mat-label>
+      <input type="text" matInput formControlName="relatedBusinesses">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Firma(s) autorizada(s</mat-label>
+      <input type="text" matInput formControlName="authorizedSignatures">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
       <input type="text" matInput formControlName="mobileNumber">
     </mat-form-field>
@@ -86,7 +94,7 @@
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
 
-    <h2>Mienbros del directorio</h2>
+    <h2>Miembros del directorio</h2>
     <mat-form-field appearance="fill">
       <mat-label>Presidente del directorio</mat-label>
       <input type="text" matInput formControlName="directoryPresident">

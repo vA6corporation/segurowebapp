@@ -20,8 +20,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
+import {MatGridListModule} from '@angular/material/grid-list';
 import {ClipboardModule} from '@angular/cdk/clipboard';
-
 @NgModule({
   imports: [
     ClipboardModule,
@@ -69,6 +69,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     MatProgressSpinnerModule,
     MatMenuModule,
     MatSlideToggleModule,
+    MatGridListModule
   ],
 })
 export class MaterialModule {}

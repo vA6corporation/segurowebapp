@@ -3,4 +3,8 @@ export interface InvestmentModel {
   type: string
   quantity: number
   price: number
+  typeAccount: string
+  bankDetail: string
+  gravamen: number
+  comercialPrice: number
 }

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DialogInvestmentsComponent } from 'src/app/investments/dialog-investments/dialog-investments.component';
+import { InvestmentModel } from 'src/app/investments/investment.model';
 import { DialogMovablePropertiesComponent } from 'src/app/movable-properties/dialog-movable-properties/dialog-movable-properties.component';
 import { MovablePropertyModel } from 'src/app/movable-properties/movable-property.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -34,12 +36,20 @@ export class EditShareholdersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     nationality: [ null, Validators.required ],
+    maritalStatus: [ null, Validators.required ],
     percent: [ null, Validators.required ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
     birthDate: null,
     address: null,
+    // Spouse
+    documentTypeSpouse: [ null, Validators.required ],
+    documentSpouse: [ null, Validators.required ],
+    nameSpouse: [ null, Validators.required ],
+    nationalitySpouse: [ null, Validators.required ],
+    maritalStatusSpouse: [ null, Validators.required ],
+    birthDateSpouse: null,
   });
   public isLoading: boolean = false;
   public maxlength: number = 11;
@@ -49,6 +59,7 @@ export class EditShareholdersComponent implements OnInit {
   public properties: PropertyModel[] = [];
   public movableProperties: MovablePropertyModel[] = [];
   public incomes: IncomeModel[] = [];
+  public investments: InvestmentModel[] = [];
 
   ngOnDestroy() {
     this.params$.unsubscribe();
@@ -71,6 +82,20 @@ export class EditShareholdersComponent implements OnInit {
       this.formGroup.get('documento')?.updateValueAndValidity();
     });
 
+    this.formGroup.get('documentTypeSpouse')?.valueChanges.subscribe(value => {
+      switch (value) {
+        case 'RUC':
+          this.formGroup.get('documentoSpouse')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.maxlength = 11;
+          break;
+        case 'DNI':
+          this.formGroup.get('documentoSpouse')?.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
+          this.maxlength = 8;
+          break;
+      }
+      this.formGroup.get('documentoSpouse')?.updateValueAndValidity();
+    });
+
     this.params$ = this.activatedRoute.params.subscribe(params => {
       this.shareholderId = params.shareholderId;
       this.shareholdersService.getShareholdersById(this.shareholderId).subscribe(shareholder => {
@@ -79,6 +104,7 @@ export class EditShareholdersComponent implements OnInit {
         this.properties = shareholder.properties;
         this.movableProperties = shareholder.movableProperties;
         this.incomes = shareholder.incomes;
+        this.investments = shareholder.investments;
       });
     });
 
@@ -88,7 +114,7 @@ export class EditShareholdersComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      this.shareholdersService.update(this.formGroup.value, this.properties, this.movableProperties, this.incomes, this.shareholderId).subscribe(res => {
+      this.shareholdersService.update(this.formGroup.value, this.properties, this.movableProperties, this.incomes, this.investments, this.shareholderId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
@@ -148,6 +174,23 @@ export class EditShareholdersComponent implements OnInit {
     dialogRef.afterClosed().subscribe(movableProperty => {
       if (movableProperty) {
         this.movableProperties.push(movableProperty);
+      }
+    });
+  }
+
+  onRemoveInvestment(index: number) {
+    this.investments.splice(index, 1);
+  }
+
+  onDialogInvestments() {
+    const dialogRef = this.matDialog.open(DialogInvestmentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(investment => {
+      if (investment) {
+        this.investments.push(investment);
       }
     });
   }

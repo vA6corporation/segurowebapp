@@ -18,6 +18,10 @@ export class DialogInvestmentsComponent implements OnInit {
     type: [ null, Validators.required ],
     quantity: [ null, Validators.required ],
     price: [ null, Validators.required ],
+    typeAccount: [ null, Validators.required ],
+    bankDetail: [ null, Validators.required ],
+    gravamen: [ null, Validators.required ],
+    comercialPrice: [ null, Validators.required ],
   }); 
 
   ngOnInit(): void {

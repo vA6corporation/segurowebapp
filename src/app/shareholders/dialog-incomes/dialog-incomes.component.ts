@@ -17,6 +17,8 @@ export class DialogIncomesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     description: [ null, Validators.required ],
     amount: [ null, Validators.required ],
+    typeIncome: [ null, Validators.required ],
+    origin: [ null, Validators.required ],
   });
 
   ngOnInit(): void {

@@ -39,6 +39,8 @@ export class EditBusinessesComponent implements OnInit {
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
+    relatedBusinesses: null,
+    authorizedSignatures: null,
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,

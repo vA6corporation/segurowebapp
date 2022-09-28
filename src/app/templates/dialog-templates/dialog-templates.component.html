@@ -18,6 +18,19 @@
       EXPERIENCIA ESPECIFICA DE CADA CONSORCIADO EN OBRAS
     </button>
   </ng-template>
+
+  <!-- Formatos avla -->
+  <hr><b>AVLA</b><hr>
+  <a [href]="[ baseUrl + 'templatesAvla/solicitudDeEmision/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">C1 SOLICITUD DE EMISIÓN OBRAS</a>
+  <!-- Formatos crecer -->
+  <hr><b>CRECER</b><hr>
+  <a [href]="[ baseUrl + 'templatesCrecer/basicInformation/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">INFORMACIÓN BASICA</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/swornDeclarationOfOriginOfFunds/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">DECLARACION JURADA DE ORIGEN DE FONDOS PERSONA JURIDICA</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/swornAssetsDeclaration/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">DECLARACIÓN JURADA PATRIMONIAL</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/dueDiligenceForm/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">FORMULARIO DE DEBIDA DILIGENCIA</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/experienceOfEachConsortiateInWorks/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">EXPERIENCIA DE CADA CONSORCIADO EN OBRAS</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/tableOfCurrentDepositsOfEachConsortiate/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">CUADRO DE FIANZAS VIGENTES DE CADA CONSORCIADO</a>
+  <a [href]="[ baseUrl + 'templatesCrecer/IssueRequest/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">SOLICITUD DE EMISIÓN</a>
 </div>
 
 <mat-dialog-actions>

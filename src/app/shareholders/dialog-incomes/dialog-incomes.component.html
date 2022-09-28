@@ -1,6 +1,14 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
   <h2>Agregar ingreso</h2>
   <mat-form-field appearance="fill">
+    <mat-label>Tipo *</mat-label>
+    <input type="text" matInput formControlName="typeIncome">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Origen *</mat-label>
+    <input type="text" matInput formControlName="origin">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>Descripcion *</mat-label>
     <input type="text" matInput formControlName="description">
   </mat-form-field>

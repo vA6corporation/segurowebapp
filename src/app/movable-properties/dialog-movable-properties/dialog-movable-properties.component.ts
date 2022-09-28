@@ -24,7 +24,8 @@ export class DialogMovablePropertiesComponent implements OnInit {
     warrantyPrice: null,
     debtPrice: null,
     financier: null,
-    isWarranty: false
+    isWarranty: false,
+    year: null,
   });
 
   ngOnInit(): void {

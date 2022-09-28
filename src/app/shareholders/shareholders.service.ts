@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
+import { InvestmentModel } from '../investments/investment.model';
 import { MovablePropertyModel } from '../movable-properties/movable-property.model';
 import { PropertyModel } from '../properties/property.model';
 import { IncomeModel } from './income.model';
@@ -42,9 +43,10 @@ export class ShareholdersService {
     properties: PropertyModel[],
     movableProperties: MovablePropertyModel[],
     incomes: IncomeModel[],
+    investments: InvestmentModel[],
     shareholderId: string
   ) {
-    return this.httpService.put(`shareholders/${shareholderId}`, { shareholder, properties, movableProperties, incomes });
+    return this.httpService.put(`shareholders/${shareholderId}`, { shareholder, properties, movableProperties, incomes, investments });
   }
 
 }

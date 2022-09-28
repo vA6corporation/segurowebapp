@@ -9,6 +9,7 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogShareholdersComponent } from './dialog-shareholders/dialog-shareholders.component';
 import { DialogIncomesComponent } from './dialog-incomes/dialog-incomes.component';
+import { InvestmentsModule } from '../investments/investments.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { DialogIncomesComponent } from './dialog-incomes/dialog-incomes.componen
     ShareholdersRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    InvestmentsModule
   ]
 })
 export class ShareholdersModule { }
