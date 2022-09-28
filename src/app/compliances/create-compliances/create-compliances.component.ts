@@ -69,11 +69,11 @@ export class CreateCompliancesComponent implements OnInit {
   public cheques: ChequeModel[] = [];
   public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.queryParams$.unsubscribe();
   }
 
@@ -81,7 +81,7 @@ export class CreateCompliancesComponent implements OnInit {
     this.navigationService.backTo();
     this.navigationService.setTitle('Nuevo fiel cumplimiento');
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 

@@ -18,20 +18,20 @@ export class InsurancesService {
     return this.httpService.get(`insurances/byId/${insuranceId}`);
   }
 
-  getInsurancesByPageType(pageIndex: number, pageSize: number, type: string): Observable<InsuranceModel[]> {
-    return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`);
+  getInsurancesByPageType(pageIndex: number, pageSize: number, type: string, params: Params): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`, { params });
   }
 
   getInsurancesByKeyType(key: string, type: string): Observable<InsuranceModel[]> {
     return this.httpService.get(`insurances/byKeyType/${key}/${type}`);
   }
 
-  getCountInsurancesByType(type: string): Observable<number> {
-    return this.httpService.get(`insurances/countInsurancesByType/${type}`);
+  getCountInsurancesByType(type: string, params: Params): Observable<number> {
+    return this.httpService.get(`insurances/countInsurancesByType/${type}`, { params });
   }
 
-  getInsurancesByRangeDateTypeWorker(pageIndex: number, pageSize: number, params: Params): Observable<InsuranceModel[]> {
-    return this.httpService.get(`insurances/byRangeDateTypeWorker/${pageIndex}/${pageSize}`, { params });
+  getInsurancesByRangeDateTypeWorker(startDate: Date, endDate: Date, params: Params): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/byRangeDateTypeWorker/${startDate}/${endDate}`, { params });
   }
 
   getPdfs(insuranceId: string, type: string): Observable<InsurancePdfModel[]> {

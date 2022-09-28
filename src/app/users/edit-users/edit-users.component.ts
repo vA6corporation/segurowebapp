@@ -38,10 +38,10 @@ export class EditUsersComponent implements OnInit {
   public workers: WorkerModel[] = [];
   private userId: string = '';
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class EditUsersComponent implements OnInit {
       });
     });
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
   }

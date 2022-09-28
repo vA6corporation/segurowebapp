@@ -52,7 +52,7 @@ export class LegalsComponent implements OnInit {
   public isEmition: boolean|null = null;
 
   private users$: Subscription = new Subscription();
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
   public statusForm = this.formBuilder.group({
@@ -76,7 +76,7 @@ export class LegalsComponent implements OnInit {
 
   ngOnDestroy() {
     this.users$.unsubscribe();
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
@@ -92,7 +92,7 @@ export class LegalsComponent implements OnInit {
       this.users = users;
     });
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 

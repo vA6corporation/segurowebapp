@@ -9,7 +9,9 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { InsurancesService } from '../insurances.service';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { buildExcel } from 'src/app/xlsx';
+import { formatDate } from '@angular/common';
+import { Params } from '@angular/router';
 Chart.register(...registerables);
 
 @Component({
@@ -45,19 +47,20 @@ export class ReportComponent implements OnInit {
     'EPS',
     'SALUD',
   ];
-
   public formGroup = this.formBuilder.group({
     workerId: '',
     type: 'SCTR',
     year: new Date().getFullYear()
   });
-
-  private workers$: Subscription = new Subscription();
   public workers: WorkerModel[] = [];
   public summaries: any[] = [];
+  
+  private handleWorkers$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
@@ -75,8 +78,55 @@ export class ReportComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      switch (id) {
+        case 'excel_simple':
+          const { year, workerId } = this.formGroup.value;
+          const startDate = new Date(year, 0, 1);
+          const endDate = new Date(year, 0, 1);
+          endDate.setFullYear(endDate.getFullYear() + 1);
+          const params: Params = { workerId };
+          this.insurancesService.getInsurancesByRangeDateTypeWorker(startDate, endDate, params).subscribe(insurances => {
+            const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+            let body = [];
+            body.push([
+              'CONSORCIO',
+              'CLIENTE',
+              'N° POLIZA',
+              'OBJETO',
+              'F. DE EMISION',
+              'F. DE VENCIMIENTO',
+              'PRIMA',
+              'COMISION',
+              'ESTADO DE PAGO',
+              'PROMOTOR'
+            ]);
+            for (const insurance of insurances) {
+              body.push([
+                insurance.partnership?.name.toUpperCase(),
+                insurance.business.name.toUpperCase(),
+                insurance.policyNumber,
+                insurance.construction?.object,
+                formatDate(insurance.emitionAt, 'dd/MM/yyyy', 'en-US'),
+                formatDate(insurance.expirationAt, 'dd/MM/yyyy', 'en-US'),
+                insurance.prima,
+                insurance.commission,
+                insurance.isPaid ? 'PAGADO' : 'PENDIENTE',
+                insurance.worker?.name.toUpperCase(),
+              ]);
+            }
+            const name = `SEGUROS_DESDE_${formatDate(startDate, 'dd/MM/yyyy', 'en-US')}_HASTA_${formatDate(endDate, 'dd/MM/yyyy', 'en-US')}`;
+            buildExcel(body, name, wscols, [], []);
+          });
+          break;
+      
+        default:
+          break;
+      }
     });
 
   }

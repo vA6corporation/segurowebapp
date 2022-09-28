@@ -7,7 +7,6 @@ import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { Params } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { formatDate } from '@angular/common';
@@ -15,6 +14,7 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { buildExcel } from 'src/app/xlsx';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 Chart.register(...registerables);
 
 @Component({
@@ -34,9 +34,6 @@ export class CollectionsComponent implements OnInit {
     
   @ViewChild('collectionChartPrice') 
   private collectionChartPrice!: ElementRef<HTMLCanvasElement>;
-
-  // @ViewChild('collectionChartPrima') 
-  // private collectionChartPrima!: ElementRef<HTMLCanvasElement>;
 
   public chartPrice: Chart|null = null;
   public chartPrima: Chart|null = null;
@@ -72,16 +69,11 @@ export class CollectionsComponent implements OnInit {
 
   private guaranties: string[] = ["GFCF", "GADF", "GAMF"];
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
-  onSetEmition(isEmition: boolean) {
-    this.isEmition = isEmition;
-    this.fetchData();
-  }
-  
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
@@ -93,7 +85,7 @@ export class CollectionsComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 
@@ -260,6 +252,11 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
+  onSetEmition(isEmition: boolean) {
+    this.isEmition = isEmition;
+    this.fetchData();
+  }
+  
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
       width: '600px',

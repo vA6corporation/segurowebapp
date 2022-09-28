@@ -13,7 +13,7 @@ export class WorkersService {
   ) { }
 
   private workers$: Subject<WorkerModel[]> = new Subject();
-  private workers: WorkerModel[]|null = null;
+  private workers: WorkerModel[] = [];
 
   getWorkersByPage(pageIndex: number, pageSize: number) {
     return this.httpService.get(`workers/activeWorkersByPage/${pageIndex}/${pageSize}`);
@@ -27,10 +27,6 @@ export class WorkersService {
     return this.httpService.get('workers/count');
   }
 
-  clearWorkers() {
-    this.workers = null;
-  }
-
   create(worker: WorkerModel) {
     return this.httpService.post('workers', { worker });
   }
@@ -39,12 +35,12 @@ export class WorkersService {
     return this.httpService.put(`workers/${workerId}`, { worker });
   }
 
-  getWorkers() {
-    if (this.workers === null) {
+  handleWorkers(): Observable<WorkerModel[]> {
+    if (!this.workers.length) {
       this.loadWorkers();
     } else {
       setTimeout(() => {
-        this.workers$.next(this.workers || []);
+        this.workers$.next(this.workers);
       });
     }
     return this.workers$.asObservable();
@@ -52,7 +48,8 @@ export class WorkersService {
 
   loadWorkers() {
     this.httpService.get('workers').subscribe(workers => {
-      this.workers$.next(workers || []);
+      this.workers = workers;
+      this.workers$.next(workers);
     });
   }
 

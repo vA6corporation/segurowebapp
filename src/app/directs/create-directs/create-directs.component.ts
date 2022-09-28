@@ -48,7 +48,6 @@ export class CreateDirectsComponent implements OnInit {
     }),
     direct: this.formBuilder.group({
       constructionId: '',
-      // timeLimit: [ null, Validators.required ],
       policyNumber: [ null, Validators.required ],
       price: [ null, Validators.required ],
       startDate: [ null, Validators.required ],
@@ -70,11 +69,11 @@ export class CreateDirectsComponent implements OnInit {
   public deposits: DepositModel[] = [];
   public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.queryParams$.unsubscribe();
   }
 
@@ -82,7 +81,7 @@ export class CreateDirectsComponent implements OnInit {
     this.navigationService.setTitle('Nuevo adelanto directo');
     this.navigationService.backTo();
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 
@@ -108,9 +107,7 @@ export class CreateDirectsComponent implements OnInit {
       position: { top: '20px' }
     });
 
-    dialogRef.afterClosed().subscribe(construction => {
-      console.log(construction);
-      
+    dialogRef.afterClosed().subscribe(construction => {    
       if (construction) {
         this.construction = construction;
         this.business = construction.business;

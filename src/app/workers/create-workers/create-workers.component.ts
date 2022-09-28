@@ -50,7 +50,7 @@ export class CreateWorkersComponent implements OnInit {
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();
         this.router.navigate(['/workers']);
-        this.workersService.clearWorkers();
+        this.workersService.loadWorkers();
         this.navigationService.showMessage('Registrado correctamente');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

@@ -77,12 +77,12 @@ export class PrimasComponent implements OnInit {
   private guaranties: string[] = ["GFCF", "GADF", "GAMF"];
 
   private users$: Subscription = new Subscription();
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   
   ngOnDestroy() {
     this.users$.unsubscribe();
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
@@ -98,7 +98,7 @@ export class PrimasComponent implements OnInit {
       this.users = users;
     });
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 

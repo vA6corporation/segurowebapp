@@ -69,11 +69,11 @@ export class CreateMaterialsComponent implements OnInit {
   public cheques: ChequeModel[] = [];
   public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.queryParams$.unsubscribe();
   }
 
@@ -81,15 +81,13 @@ export class CreateMaterialsComponent implements OnInit {
     this.navigationService.setTitle('Nuevo adelanto de materiales');
     this.navigationService.backTo();
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 
     this.queryParams$ = this.route.queryParams.subscribe(params => {
       if (params.constructionId) {
         this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
-          console.log(construction);
-          
           if (construction) {
             this.construction = construction;
             this.business = construction.business;
