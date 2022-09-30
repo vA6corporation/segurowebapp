@@ -19,6 +19,7 @@ export class DialogExperiencesComponent implements OnInit {
     contractor: [ null, Validators.required ],
     startAt: [ null, Validators.required ],
     location: [ null, Validators.required ],
+    tenderObjectContract: [ null, Validators.required ],
     price: [ null, Validators.required ],
     timeLimit: [ null, Validators.required ],
     advancePercent: [ null, Validators.required ],

@@ -31,10 +31,16 @@ export class CreateShareholdersComponent implements OnInit {
     annexed: null,
     birthDate: null,
     address: null,
+
+    residence: null,
+    professionOccupation: null,
+    PEPInstitution: null,
+    PEPPositionn: null,
   });
 
   public isLoading: boolean = false;
   public maxlength: number = 11;
+  public isCheckedPEP = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo accionista');

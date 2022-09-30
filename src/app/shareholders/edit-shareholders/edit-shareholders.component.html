@@ -27,8 +27,16 @@
           <input type="email" matInput formControlName="email" />
         </mat-form-field>
         <mat-form-field appearance="fill">
+          <mat-label>País de residencia</mat-label>
+          <input type="text" matInput formControlName="residence">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Nacionalidad *</mat-label>
           <input type="text" matInput formControlName="nationality" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Profesión / Ocupación</mat-label>
+          <input type="text" matInput formControlName="professionOccupation">
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Estado civil *</mat-label>
@@ -70,6 +78,18 @@
           <mat-label>Direccion</mat-label>
           <input type="text" matInput formControlName="address" />
         </mat-form-field>
+        <div class="mb-3">
+          <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{standalone: true}">PEP</mat-slide-toggle>
+        </div>
+        <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
+          <mat-label>Institución</mat-label>
+          <input type="text" matInput formControlName="PEPInstitution">
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
+          <mat-label>Cargo</mat-label>
+          <input type="text" matInput formControlName="PEPPositionn">
+        </mat-form-field>
+
     <h3>Conyuge</h3>
         <mat-form-field appearance="fill">
           <mat-label>Tipo de Documento *</mat-label>

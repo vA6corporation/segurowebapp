@@ -21,10 +21,6 @@
       <input type="email" matInput formControlName="email">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Empresa(s) relacionada(s)</mat-label>
-      <input type="text" matInput formControlName="relatedBusinesses">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
       <mat-label>Firma(s) autorizada(s</mat-label>
       <input type="text" matInput formControlName="authorizedSignatures">
     </mat-form-field>
@@ -41,6 +37,10 @@
       <input type="text" matInput formControlName="annexed">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>País</mat-label>
+      <input type="text" matInput formControlName="country">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Direccion</mat-label>
       <input type="text" matInput formControlName="address">
     </mat-form-field>
@@ -50,6 +50,29 @@
       <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
     </mat-form-field>
+
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="UIF">Ley que crea a la Unidad de Inteligencia Financiera – UIF</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="hasComplianceOfficer">¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="managementManualLAFT">¿Cuenta con Manual de Prevención y Gestión de LAFT?</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="codeEthicsConduct">¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="carryReviewClients">¿Lleva a cabo una revisión de sus Clientes, Proveedores y Contrapartes para verificar si están incluidos en Listas Internacionales de personas vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="madeMakeInvestments">¿Ha realizado o tiene pensado realizar inversiones en países que presentan baja regulación frente a delitos de LAFT? (Ejemplo: Irán, North Corea, Siria)</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="companyEverBeenInvestigated">¿Su empresa ha sido alguna vez investigada, procesada o sancionada por incumplimiento de las regulaciones sobre Prevención de LAFT?</mat-slide-toggle>
+    </div>
+    <hr><br>
     
     <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
@@ -68,6 +91,14 @@
       <input type="text" matInput formControlName="representativeName">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="representativeEmail">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>País de residencia</mat-label>
+      <input type="text" matInput formControlName="representativeCountryResidence">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Nacionalidad</mat-label>
       <input type="text" matInput formControlName="representativeNationality">
     </mat-form-field>
@@ -78,6 +109,29 @@
         <mat-option value="CASADO">CASADO</mat-option>
         <mat-option value="DIVORCIADO">DIVORCIADO</mat-option>
       </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Profesión / Ocupación</mat-label>
+      <input type="text" matInput formControlName="representativeProfessionOccupation">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Cargo</mat-label>
+      <input type="text" matInput formControlName="representativePosition">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Años de servicio</mat-label>
+      <input type="number" matInput formControlName="representativeYearsOfService">
+    </mat-form-field>
+    <div class="mb-3">
+      <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{standalone: true}">PEP</mat-slide-toggle>
+    </div>
+    <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
+      <mat-label>Institución</mat-label>
+      <input type="text" matInput formControlName="representativePEPInstitution">
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
+      <mat-label>Cargo</mat-label>
+      <input type="text" matInput formControlName="representativePEPPositionn">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Regimen de bienes</mat-label>
@@ -93,6 +147,24 @@
       <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
+    <div class="mb-3">
+      <mat-slide-toggle [(ngModel)]="isCheckedCrime" [ngModelOptions]="{standalone: true}">¿han sido sentenciada o se encuentran investigada por actividades criminales?</mat-slide-toggle>
+    </div>
+    <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
+      <mat-label>Estatus (sentenciado / investigado)</mat-label>
+      <input type="text" matInput formControlName="representativeCrimeStatus">
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
+      <mat-label>Delito</mat-label>
+      <input type="text" matInput formControlName="representativeCrime">
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
+      <mat-label>Año</mat-label>
+      <input matInput [matDatepicker]="representativeCrimeYear" formControlName="representativeCrimeYear">
+      <mat-datepicker-toggle matSuffix [for]="representativeCrimeYear"></mat-datepicker-toggle>
+      <mat-datepicker #representativeCrimeYear></mat-datepicker>
+    </mat-form-field>
+    <hr><br>
 
     <h2>Miembros del directorio</h2>
     <mat-form-field appearance="fill">
@@ -137,6 +209,33 @@
       <mat-label>Gerente financiero</mat-label>
       <input type="text" matInput formControlName="operationBanks">
     </mat-form-field>
+
+    <mat-list class="mb-3">
+      <div mat-subheader>PERSONAS JURÍDICAS VINCULADAS</div>
+      <mat-list-item *ngFor="let linkedBusinesse of linkedBusinesses; let i = index">
+        <div>
+          {{ linkedBusinesse.name | uppercase }}
+          <br />
+          <span class="text-muted">
+            {{ linkedBusinesse.documentType }}: {{ linkedBusinesse.document }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveLinkedBusinesses(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      class="w-100 mb-3"
+      [disabled]="isLoading"
+      (click)="onDialogLinkedBusinesses()"
+    >
+      AGREGAR PERSONAS JURÍDICAS VINCULADAS
+    </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>Accionistas</div>

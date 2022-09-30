@@ -6,7 +6,7 @@ import { ShareholdersComponent } from './shareholders/shareholders.component';
 import { CreateShareholdersComponent } from './create-shareholders/create-shareholders.component';
 import { EditShareholdersComponent } from './edit-shareholders/edit-shareholders.component';
 import { MaterialModule } from '../material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogShareholdersComponent } from './dialog-shareholders/dialog-shareholders.component';
 import { DialogIncomesComponent } from './dialog-incomes/dialog-incomes.component';
 import { InvestmentsModule } from '../investments/investments.module';
@@ -18,6 +18,7 @@ import { InvestmentsModule } from '../investments/investments.module';
     CommonModule,
     ShareholdersRoutingModule,
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule,
     InvestmentsModule
   ]

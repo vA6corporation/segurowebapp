@@ -10,6 +10,10 @@
       <input type="text" matInput formControlName="contractor">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>N° de Licitación y Objeto del Contrato *</mat-label>
+      <input type="text" matInput formControlName="tenderObjectContract">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Fecha de inicio de obra *</mat-label>
       <input matInput [matDatepicker]="startAt" formControlName="startAt">
       <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>

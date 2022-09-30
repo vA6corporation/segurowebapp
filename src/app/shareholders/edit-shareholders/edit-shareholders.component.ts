@@ -43,6 +43,12 @@ export class EditShareholdersComponent implements OnInit {
     annexed: null,
     birthDate: null,
     address: null,
+
+    residence: null,
+    professionOccupation: null,
+    PEPInstitution: null,
+    PEPPositionn: null,
+
     // Spouse
     documentTypeSpouse: [ null, Validators.required ],
     documentSpouse: [ null, Validators.required ],
@@ -60,6 +66,7 @@ export class EditShareholdersComponent implements OnInit {
   public movableProperties: MovablePropertyModel[] = [];
   public incomes: IncomeModel[] = [];
   public investments: InvestmentModel[] = [];
+  public isCheckedPEP = false;
 
   ngOnDestroy() {
     this.params$.unsubscribe();

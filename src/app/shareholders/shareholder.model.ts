@@ -14,6 +14,12 @@ export interface ShareholderModel {
   annexed: string
   birthDate: string
   address: string
+
+  residence: string
+  professionOccupation: string
+  PEPInstitution: string
+  PEPPositionn: string
+
   createdAt: any
   updatedAt: any
   userId: string

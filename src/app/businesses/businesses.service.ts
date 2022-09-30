@@ -7,6 +7,7 @@ import { MovablePropertyModel } from '../movable-properties/movable-property.mod
 import { PropertyModel } from '../properties/property.model';
 import { BusinessPdfModel } from './business-pdf.model';
 import { BusinessModel } from './business.model';
+import { GuarantiesModel } from './dialog-add-guaranties/guaranties.model';
 import { FacilityCreditModel } from './facility-credit.model';
 
 @Injectable({
@@ -40,6 +41,7 @@ export class BusinessesService {
 
   create(
     business: BusinessModel, 
+    guaranties: GuarantiesModel[],
     experiences: ExperienceModel[],
     investments: InvestmentModel[],
     properties: PropertyModel[],
@@ -48,6 +50,7 @@ export class BusinessesService {
   ): Observable<BusinessModel> {
     return this.httpService.post('businesses', { 
       business, 
+      guaranties,
       experiences,
       investments,
       properties,
@@ -58,6 +61,7 @@ export class BusinessesService {
 
   update(
     business: BusinessModel, 
+    guaranties: GuarantiesModel[],
     experiences: ExperienceModel[],
     investments: InvestmentModel[],
     properties: PropertyModel[],
@@ -67,6 +71,7 @@ export class BusinessesService {
   ): Observable<BusinessModel> {
     return this.httpService.put(`businesses/${businessId}`, { 
       business, 
+      guaranties,
       experiences,
       investments,
       properties,

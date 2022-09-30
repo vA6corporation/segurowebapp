@@ -5,4 +5,5 @@ export interface ExperienceModel {
   location: string
   timeLimit: string
   advancePercent: string
+  tenderObjectContract: string
 }

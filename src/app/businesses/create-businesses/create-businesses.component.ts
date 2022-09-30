@@ -14,7 +14,11 @@ import { DialogPropertiesComponent } from 'src/app/properties/dialog-properties/
 import { PropertyModel } from 'src/app/properties/property.model';
 import { DialogShareholdersComponent } from 'src/app/shareholders/dialog-shareholders/dialog-shareholders.component';
 import { ShareholderModel } from 'src/app/shareholders/shareholder.model';
+import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
+import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
+import { GuarantiesModel } from '../dialog-add-guaranties/guaranties.model';
+import { DialogBusinessesComponent } from '../dialog-businesses/dialog-businesses.component';
 import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
 import { FacilityCreditModel } from '../facility-credit.model';
 
@@ -38,13 +42,29 @@ export class CreateBusinessesComponent implements OnInit {
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
-    relatedBusinesses: null,
     authorizedSignatures: null,
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
+    country: null,
     address: null,
     inscriptionAt: null,
+
+    UIF: null,
+    hasComplianceOfficer: null,
+    managementManualLAFT: null,
+    codeEthicsConduct: null,
+    carryReviewClients: null,
+    madeMakeInvestments: null,
+    companyEverBeenInvestigated: null,
+
+    representativePosition: null,
+    representativeYearsOfService: null,
+    representativeCountryResidence: null,
+    representativeProfessionOccupation: null,
+    representativeEmail: null,
+    representativePEPInstitution: null,
+    representativePEPPositionn: null,
     
     representativeDocumentType: 'DNI',
     representativeDocument: null,
@@ -53,6 +73,9 @@ export class CreateBusinessesComponent implements OnInit {
     representativeMaritalStatus: 'SOLTERO',
     representativePropertyRegime: '',
     representativeBirthDate: null,
+    representativeCrimeStatus: null,
+    representativeCrimeYear: null,
+    representativeCrime: null,
 
     directoryPresident: null,
     directorySubPresident: null,
@@ -75,6 +98,10 @@ export class CreateBusinessesComponent implements OnInit {
   public investments: InvestmentModel[] = [];
   public experiences: ExperienceModel[] = [];
   public facilityCredits: FacilityCreditModel[] = [];
+  public linkedBusinesses: BusinessModel[] = [];
+  public guaranties: GuarantiesModel[] = [];
+  public isCheckedPEP = false;
+  public isCheckedCrime = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nueva empresa');
@@ -91,6 +118,19 @@ export class CreateBusinessesComponent implements OnInit {
           break;
       }
       this.formGroup.get('documento')?.updateValueAndValidity();
+    });
+  }
+
+  onDialogLinkedBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(business => {
+      if (business) {
+        this.linkedBusinesses.push(business);
+      }
     });
   }
 
@@ -172,6 +212,23 @@ export class CreateBusinessesComponent implements OnInit {
     });
   }
 
+  onDialogAddGuaranties() {
+    const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((guarantee) => {
+      if (guarantee) {
+        this.guaranties.push(guarantee);
+      }
+    });
+  }
+
+  onRemoveLinkedBusinesses(index: number) {
+    this.linkedBusinesses.splice(index, 1);
+  }
+
   onRemoveShareholder(index: number) {
     this.shareholders.splice(index, 1);
   }
@@ -196,6 +253,10 @@ export class CreateBusinessesComponent implements OnInit {
     this.facilityCredits.splice(index, 1);
   }
 
+  onRemoveGuaranties(index: number) {
+    this.guaranties.splice(index, 1);
+  }
+
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
@@ -203,17 +264,28 @@ export class CreateBusinessesComponent implements OnInit {
 
       const business = this.formGroup.value;
       const shareholderIds = this.shareholders.map(e => e._id);
-      Object.assign(business, { shareholderIds });
+      const linkedBusinessesIds = this.linkedBusinesses.map((e) => e._id);
+      Object.assign(business, { shareholderIds, linkedBusinessesIds });
+
+      if(!this.isCheckedPEP){
+        business.representativePEPInstitution = '';
+        business.representativePEPPositionn = '';
+      }
+      if(!this.isCheckedCrime){
+        business.representativeCrimeStatus = '';
+        business.representativeCrimeYearme = '';
+        business.representativeCrime = '';
+      }
 
       this.businessesService.create(
         business, 
+        this.guaranties,
         this.experiences, 
         this.investments,
         this.properties,
         this.movableProperties,
         this.facilityCredits,
       ).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.router.navigate(['/businesses']);
