@@ -52,14 +52,49 @@
       <mat-label>Anexo</mat-label>
       <input type="text" matInput formControlName="annexed" />
     </mat-form-field>
+
     <mat-form-field appearance="fill">
-      <mat-label>País</mat-label>
-      <input type="text" matInput formControlName="country" />
+      <mat-label>País de Origen</mat-label>
+      <input type="text" matInput formControlName="countryOrigin" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Direccion</mat-label>
-      <input type="text" matInput formControlName="address" />
+      <mat-label>Distrito de Origen</mat-label>
+      <input type="text" matInput formControlName="districtOrigin" />
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Provincia de Origen</mat-label>
+      <input type="text" matInput formControlName="provinceOrigin" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Departamento de Origen</mat-label>
+      <input type="text" matInput formControlName="departmentOrigin" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion de Origen</mat-label>
+      <input type="text" matInput formControlName="addressOrigin" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>País de Residencia</mat-label>
+      <input type="text" matInput formControlName="countryResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Distrito de Residencia</mat-label>
+      <input type="text" matInput formControlName="districtResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Provincia de Residencia</mat-label>
+      <input type="text" matInput formControlName="provinceResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Departamento de Residencia</mat-label>
+      <input type="text" matInput formControlName="departmentResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion de Residencia</mat-label>
+      <input type="text" matInput formControlName="addressResidence" />
+    </mat-form-field>
+    
     <mat-form-field appearance="fill">
       <mat-label>Fecha de registro mercantil</mat-label>
       <input
@@ -72,6 +107,10 @@
         [for]="inscriptionAt"
       ></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Giro del Negocio</mat-label>
+      <input type="text" matInput formControlName="turnOfBusiness" />
     </mat-form-field>
 
     <div class="mb-3">
@@ -140,16 +179,44 @@
       <input type="email" matInput formControlName="representativeEmail" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>País de residencia</mat-label>
+      <mat-label>País de origen</mat-label>
       <input
         type="text"
         matInput
-        formControlName="representativeCountryResidence"
+        formControlName="representativeCountryOrigin"
       />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nacionalidad</mat-label>
       <input type="text" matInput formControlName="representativeNationality" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>País de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeCountryResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Distrito de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeDistrictResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Provincia de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeProvinceResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Departamento de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeDepartmentResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeAddressResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="representativeMobileNumber" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="representativePhoneNumber" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Estado civil</mat-label>

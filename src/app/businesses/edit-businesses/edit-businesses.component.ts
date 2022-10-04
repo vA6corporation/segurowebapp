@@ -46,9 +46,19 @@ export class EditBusinessesComponent implements OnInit {
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    country: null,
-    address: null,
     inscriptionAt: null,
+
+    turnOfBusiness: null,
+    countryOrigin: null,
+    districtOrigin: null,
+    provinceOrigin: null,
+    departmentOrigin: null,
+    addressOrigin: null,
+    countryResidence: null,
+    districtResidence: null,
+    provinceResidence: null,
+    departmentResidence: null,
+    addressResidence: null,
 
     UIF: null,
     hasComplianceOfficer: null,
@@ -60,7 +70,16 @@ export class EditBusinessesComponent implements OnInit {
 
     representativePosition: null,
     representativeYearsOfService: null,
+    representativeCountryOrigin: null,
     representativeCountryResidence: null,
+
+    representativeDistrictResidence: null,
+    representativeProvinceResidence: null,
+    representativeDepartmentResidence: null,
+    representativeAddressResidence: null,
+    representativeMobileNumber: null,
+    representativePhoneNumber: null,
+
     representativeProfessionOccupation: null,
     representativeEmail: null,
     representativePEPInstitution: null,
@@ -138,19 +157,21 @@ export class EditBusinessesComponent implements OnInit {
       this.businessesService
         .getBusinessById(this.businessId)
         .subscribe((business) => {
-          this.linkedBusinesses = business.linkedBusinesses ? business.linkedBusinesses : [];
+          this.linkedBusinesses = business.linkedBusinesses
+            ? business.linkedBusinesses
+            : [];
           this.shareholders = business.shareholders;
           this.properties = business.properties;
           this.movableProperties = business.movableProperties;
           this.investments = business.investments;
           this.experiences = business.experiences;
-          this.guaranties  = business.guaranties ? business.guaranties : [];
+          this.guaranties = business.guaranties ? business.guaranties : [];
           this.facilityCredits = business.facilityCredits;
           this.formGroup.patchValue(business);
-          if(business.representativePEPInstitution != ''){
+          if (business.representativePEPInstitution != '') {
             this.isCheckedPEP = true;
           }
-          if(business.representativeCrimeStatus != ''){
+          if (business.representativeCrimeStatus != '') {
             this.isCheckedCrime = true;
           }
         });
@@ -160,10 +181,10 @@ export class EditBusinessesComponent implements OnInit {
   onDialogLinkedBusinesses() {
     const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(business => {
+    dialogRef.afterClosed().subscribe((business) => {
       if (business) {
         this.linkedBusinesses.push(business);
       }
@@ -312,11 +333,11 @@ export class EditBusinessesComponent implements OnInit {
       const linkedBusinessesIds = this.linkedBusinesses.map((e) => e._id);
       Object.assign(business, { shareholderIds, linkedBusinessesIds });
 
-      if(!this.isCheckedPEP){
+      if (!this.isCheckedPEP) {
         business.representativePEPInstitution = '';
         business.representativePEPPositionn = '';
       }
-      if(!this.isCheckedCrime){
+      if (!this.isCheckedCrime) {
         business.representativeCrimeStatus = '';
         business.representativeCrimeYearme = '';
         business.representativeCrime = '';

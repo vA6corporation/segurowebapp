@@ -42,12 +42,24 @@ export class EditShareholdersComponent implements OnInit {
     phoneNumber: null,
     annexed: null,
     birthDate: null,
-    address: null,
 
-    residence: null,
+    countryOrigin: null,
+    addressResidence: null,
+    countryResidence: null,
+    districtResidence: null,
+    provinceResidence: null,
+    departmentResidence: null,
+
     professionOccupation: null,
+    position: null,
     PEPInstitution: null,
     PEPPositionn: null,
+
+    publicCompaniesCurrently: null,
+    publicCompaniesLast5year: null,
+    publicCompaniesInstitute: null,
+    publicCompaniesPosition: null,
+    publicCompaniesTime: null,
 
     // Spouse
     documentTypeSpouse: [ null, Validators.required ],
@@ -67,6 +79,7 @@ export class EditShareholdersComponent implements OnInit {
   public incomes: IncomeModel[] = [];
   public investments: InvestmentModel[] = [];
   public isCheckedPEP = false;
+  public isCheckedPC = false;
 
   ngOnDestroy() {
     this.params$.unsubscribe();
@@ -106,7 +119,12 @@ export class EditShareholdersComponent implements OnInit {
     this.params$ = this.activatedRoute.params.subscribe(params => {
       this.shareholderId = params.shareholderId;
       this.shareholdersService.getShareholdersById(this.shareholderId).subscribe(shareholder => {
-        console.log(shareholder);
+        if (shareholder.PEPInstitution != '' && shareholder.PEPInstitution != null) {
+          this.isCheckedPEP = true;
+        }
+        if (shareholder.publicCompaniesInstitute != '' && shareholder.publicCompaniesInstitute != null) {
+          this.isCheckedPC = true;
+        }
         this.formGroup.patchValue(shareholder);
         this.properties = shareholder.properties;
         this.movableProperties = shareholder.movableProperties;
@@ -121,8 +139,16 @@ export class EditShareholdersComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
+      if (!this.isCheckedPEP) {
+        this.formGroup.controls['PEPInstitution'].setValue('');
+        this.formGroup.controls['PEPPositionn'].setValue('');
+      }
+      if (!this.isCheckedPC) {
+        this.formGroup.controls['publicCompaniesInstitute'].setValue('');
+        this.formGroup.controls['publicCompaniesPosition'].setValue('');
+        this.formGroup.controls['publicCompaniesTime'].setValue('');
+      }
       this.shareholdersService.update(this.formGroup.value, this.properties, this.movableProperties, this.incomes, this.investments, this.shareholderId).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Se han guardado los cambios');

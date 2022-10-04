@@ -38,17 +38,27 @@ export class CreateBusinessesComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    documentType: [ null, Validators.required ],
-    document: [ null, Validators.required ],
-    name: [ null, Validators.required ],
-    email: [ null, [ Validators.required, Validators.email ] ],
+    documentType: [null, Validators.required],
+    document: [null, Validators.required],
+    name: [null, Validators.required],
+    email: [null, [Validators.required, Validators.email]],
     authorizedSignatures: null,
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    country: null,
-    address: null,
     inscriptionAt: null,
+
+    turnOfBusiness: null,
+    countryOrigin: null,
+    districtOrigin: null,
+    provinceOrigin: null,
+    departmentOrigin: null,
+    addressOrigin: null,
+    countryRecidence: null,
+    districtRecidence: null,
+    provinceRecidence: null,
+    departmentRecidence: null,
+    addressRecidence: null,
 
     UIF: null,
     hasComplianceOfficer: null,
@@ -60,12 +70,13 @@ export class CreateBusinessesComponent implements OnInit {
 
     representativePosition: null,
     representativeYearsOfService: null,
+    representativeCountryOrigin: null,
     representativeCountryResidence: null,
     representativeProfessionOccupation: null,
     representativeEmail: null,
     representativePEPInstitution: null,
     representativePEPPositionn: null,
-    
+
     representativeDocumentType: 'DNI',
     representativeDocument: null,
     representativeName: null,

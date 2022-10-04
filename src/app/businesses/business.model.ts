@@ -16,8 +16,18 @@ export interface BusinessModel {
   phoneNumber: string;
   annexed: string;
   birthDate: string;
-  country: string;
-  address: string;
+
+  turnOfBusiness: string;
+  countryOrigin: string;
+  districtOrigin: string;
+  provinceOrigin: string;
+  departmentOrigin: string;
+  addressOrigin: string;
+  countryResidence: string;
+  districtResidence: string;
+  provinceResidence: string;
+  departmentResidence: string;
+  addressResidence: string;
 
   UIF: string;
   hasComplianceOfficer: string;
@@ -30,6 +40,7 @@ export interface BusinessModel {
   representativeName: string;
   representativePosition: string;
   representativeYearsOfService: string;
+  representativeCountryOrigin: string;
   representativeCountryResidence: string;
   representativeProfessionOccupation: string;
   representativeEmail: string;

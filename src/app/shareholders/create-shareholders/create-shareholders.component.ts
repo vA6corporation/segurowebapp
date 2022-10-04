@@ -25,22 +25,44 @@ export class CreateShareholdersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     nationality: [ null, Validators.required ],
+    maritalStatus: [ null, Validators.required ],
     percent: [ null, Validators.required ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
     birthDate: null,
-    address: null,
 
-    residence: null,
+    countryOrigin: null,
+    addressResidence: null,
+    countryResidence: null,
+    districtResidence: null,
+    provinceResidence: null,
+    departmentResidence: null,
+
     professionOccupation: null,
+    position: null,
     PEPInstitution: null,
     PEPPositionn: null,
+
+    publicCompaniesCurrently: null,
+    publicCompaniesLast5year: null,
+    publicCompaniesInstitute: null,
+    publicCompaniesPosition: null,
+    publicCompaniesTime: null,
+
+    // Spouse
+    documentTypeSpouse: [ null, Validators.required ],
+    documentSpouse: [ null, Validators.required ],
+    nameSpouse: [ null, Validators.required ],
+    nationalitySpouse: [ null, Validators.required ],
+    maritalStatusSpouse: [ null, Validators.required ],
+    birthDateSpouse: null,
   });
 
   public isLoading: boolean = false;
   public maxlength: number = 11;
   public isCheckedPEP = false;
+  public isCheckedPC = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo accionista');
@@ -64,8 +86,16 @@ export class CreateShareholdersComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
+      if (!this.isCheckedPEP) {
+        this.formGroup.controls['PEPInstitution'].setValue('');
+        this.formGroup.controls['PEPPositionn'].setValue('');
+      }
+      if (!this.isCheckedPC) {
+        this.formGroup.controls['publicCompaniesInstitute'].setValue('');
+        this.formGroup.controls['publicCompaniesPosition'].setValue('');
+        this.formGroup.controls['publicCompaniesTime'].setValue('');
+      }
       this.shareholdersService.create(this.formGroup.value).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.router.navigate(['/shareholders']);
