@@ -1,3 +1,5 @@
+import { BoardMembersModel } from '../board-members/board-members.model';
+import { BoardMembersModule } from '../board-members/board-members.module';
 import { ExperienceModel } from '../experiences/experience.model';
 import { InvestmentModel } from '../investments/investment.model';
 import { MovablePropertyModel } from '../movable-properties/movable-property.model';
@@ -37,6 +39,12 @@ export interface BusinessModel {
   madeMakeInvestments: string;
   companyEverBeenInvestigated: string;
 
+  osceRegister: string;
+  osceHiring: string;
+  osceExpiration: string;
+  osceCertifiedDate: string;
+  osceObservation: string;
+
   representativeName: string;
   representativePosition: string;
   representativeYearsOfService: string;
@@ -55,6 +63,7 @@ export interface BusinessModel {
   updatedAt: any;
   userId: string;
   businessId: string;
+  boardMembers: BoardMembersModel[];
   shareholders: ShareholderModel[];
   properties: PropertyModel[];
   movableProperties: MovablePropertyModel[];

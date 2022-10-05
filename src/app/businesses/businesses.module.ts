@@ -16,6 +16,7 @@ import { MovablePropertiesModule } from '../movable-properties/movable-propertie
 import { ExperiencesModule } from '../experiences/experiences.module';
 import { DialogFacilityCreditsComponent } from './dialog-facility-credits/dialog-facility-credits.component';
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
+import { BoardMembersModule } from '../board-members/board-members.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add
     InvestmentsModule,
     PropertiesModule,
     MovablePropertiesModule,
-    ExperiencesModule
+    ExperiencesModule,
+    BoardMembersModule
   ]
 })
 export class BusinessesModule { }

@@ -158,6 +158,30 @@
     <hr />
     <br />
 
+    <h2>Inscripción en el osce</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Registro</mat-label>
+      <input type="text" matInput formControlName="osceRegister" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Capacidad de Contratación</mat-label>
+      <input type="text" matInput formControlName="osceHiring" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Año de Caducidad</mat-label>
+      <input type="text" matInput formControlName="osceExpiration" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha Certificada</mat-label>
+      <input type="text" matInput formControlName="osceCertifiedDate" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez? De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>
+      <input type="text" matInput formControlName="osceObservation" />
+    </mat-form-field>
+    <hr />
+    <br />
+
     <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
@@ -322,7 +346,7 @@
     <hr />
     <br />
 
-    <h2>Miembros del directorio</h2>
+    <!-- <h2>Miembros del directorio</h2>
     <mat-form-field appearance="fill">
       <mat-label>Presidente del directorio</mat-label>
       <input type="text" matInput formControlName="directoryPresident" />
@@ -342,7 +366,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Gerente financiero</mat-label>
       <input type="text" matInput formControlName="directoryFinancierManager" />
-    </mat-form-field>
+    </mat-form-field> -->
 
     <h2>Operaciones</h2>
     <mat-form-field appearance="fill">
@@ -365,6 +389,33 @@
       <mat-label>Gerente financiero</mat-label>
       <input type="text" matInput formControlName="operationBanks" />
     </mat-form-field>
+
+    <mat-list class="mb-3">
+      <div mat-subheader>Miembros del directorio</div>
+      <mat-list-item *ngFor="let boardMember of boardMembers; let i = index">
+        <div>
+          {{ boardMember.name | uppercase }}
+          <br />
+          <span class="text-muted">
+            {{ boardMember.typeDocument }}: {{ boardMember.document }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveBoardMembers(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      class="w-100 mb-3"
+      [disabled]="isLoading"
+      (click)="onDialogBoardMembers()"
+    >
+      AGREGAR MIEMBROS DEL DIRECTORIO
+    </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>PERSONAS JURÍDICAS VINCULADAS</div>
@@ -419,6 +470,7 @@
     >
       AGREGAR ACCIONISTA
     </button>
+
     <mat-list class="mb-3">
       <div mat-subheader>Bienes inmubles</div>
       <mat-list-item *ngFor="let property of properties; let i = index">
