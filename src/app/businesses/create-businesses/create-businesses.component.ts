@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { BoardMembersModel } from 'src/app/board-members/board-members.model';
+import { DialogBoardMembersComponent } from 'src/app/board-members/dialog-board-members/dialog-board-members.component';
 import { DialogExperiencesComponent } from 'src/app/experiences/dialog-experiences/dialog-experiences.component';
 import { ExperienceModel } from 'src/app/experiences/experience.model';
 import { DialogInvestmentsComponent } from 'src/app/investments/dialog-investments/dialog-investments.component';
@@ -68,6 +70,12 @@ export class CreateBusinessesComponent implements OnInit {
     madeMakeInvestments: null,
     companyEverBeenInvestigated: null,
 
+    osceRegister: null,
+    osceHiring: null,
+    osceExpiration: null,
+    osceCertifiedDate: null,
+    osceObservation: null,
+
     representativePosition: null,
     representativeYearsOfService: null,
     representativeCountryOrigin: null,
@@ -107,6 +115,7 @@ export class CreateBusinessesComponent implements OnInit {
   public guaranties: GuarantiesModel[] = [];
   public isCheckedPEP = false;
   public isCheckedCrime = false;
+  public boardMembers: BoardMembersModel[] = [];
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nueva empresa');
@@ -123,6 +132,19 @@ export class CreateBusinessesComponent implements OnInit {
           break;
       }
       this.formGroup.get('documento')?.updateValueAndValidity();
+    });
+  }
+
+  onDialogBoardMembers() {
+    const dialogRef = this.matDialog.open(DialogBoardMembersComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((boardMemberItem) => {
+      if (boardMemberItem) {
+        this.boardMembers.push(boardMemberItem);
+      }
     });
   }
 
@@ -230,6 +252,10 @@ export class CreateBusinessesComponent implements OnInit {
     });
   }
 
+  onRemoveBoardMembers(index: number) {
+    this.boardMembers.splice(index, 1);
+  }
+
   onRemoveLinkedBusinesses(index: number) {
     this.linkedBusinesses.splice(index, 1);
   }
@@ -271,7 +297,7 @@ export class CreateBusinessesComponent implements OnInit {
       const shareholderIds = this.shareholders.map(e => e._id);
       const linkedBusinessesIds = this.linkedBusinesses.map((e) => e._id);
       Object.assign(business, { shareholderIds, linkedBusinessesIds });
-
+      business.boardMembers = this.boardMembers;
       if(!this.isCheckedPEP){
         business.representativePEPInstitution = '';
         business.representativePEPPositionn = '';
