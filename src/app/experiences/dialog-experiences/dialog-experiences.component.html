@@ -14,10 +14,22 @@
       <input type="text" matInput formControlName="tenderObjectContract" />
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Fecha Firma de Contrato *</mat-label>
+      <input matInput [matDatepicker]="signaturetAt" formControlName="signaturetAt" />
+      <mat-datepicker-toggle matSuffix [for]="signaturetAt"></mat-datepicker-toggle>
+      <mat-datepicker #signaturetAt></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Fecha de inicio de obra *</mat-label>
       <input matInput [matDatepicker]="startAt" formControlName="startAt" />
       <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>
       <mat-datepicker #startAt></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de Fin *</mat-label>
+      <input matInput [matDatepicker]="endingDate" formControlName="endingDate" />
+      <mat-datepicker-toggle matSuffix [for]="endingDate"></mat-datepicker-toggle>
+      <mat-datepicker #endingDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Ubicacion geografica de la obra *</mat-label>
@@ -39,12 +51,6 @@
     <mat-form-field appearance="fill">
       <mat-label>Tipo de obra / servicio *</mat-label>
       <input type="text" matInput formControlName="typeWork" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de Fin *</mat-label>
-      <input matInput [matDatepicker]="endingDate" formControlName="endingDate" />
-      <mat-datepicker-toggle matSuffix [for]="endingDate"></mat-datepicker-toggle>
-      <mat-datepicker #endingDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fiel Cumplimiento *</mat-label>
@@ -111,10 +117,26 @@
       <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="isConsorcio"
-        >Consircio</mat-slide-toggle
+      <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio"
+        >Consorcio</mat-slide-toggle
       >
     </div>
+    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+      <mat-label>Afianzados</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="bondedConsortium"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+      <mat-label>% Participación</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="participationConsortium"
+      />
+    </mat-form-field>
   </div>
   <mat-dialog-actions>
     <span class="spacer"></span>

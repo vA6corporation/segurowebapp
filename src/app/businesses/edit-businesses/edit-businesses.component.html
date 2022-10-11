@@ -343,6 +343,53 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #representativeCrimeYear></mat-datepicker>
     </mat-form-field>
+
+    <h1>Conyuge del representante legal</h1>
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo de Documento *</mat-label>
+          <mat-select formControlName="representativeSpouseDocumentType">
+            <mat-option value="RUC">RUC</mat-option>
+            <mat-option value="DNI">DNI</mat-option>
+            <mat-option value="CE">CE</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>N° de Documento *</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="representativeSpouseDocument"
+            [maxlength]="maxlength"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Nombres/Razon Social *</mat-label>
+          <input type="text" matInput formControlName="representativeSpouseName" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Nacionalidad *</mat-label>
+          <input type="text" matInput formControlName="representativeSpouseNationality" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Estado civil *</mat-label>
+          <mat-select formControlName="representativeSpouseMaritalStatus">
+            <mat-option value="Soltero(a)">Soltero(a)</mat-option>
+            <mat-option value="Casado(a)">Casado(a)</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input
+            matInput
+            [matDatepicker]="representativeSpouseBirthDatePicker"
+            formControlName="representativeSpouseBirthDate"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="representativeSpouseBirthDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
+        </mat-form-field>
     <hr />
     <br />
 

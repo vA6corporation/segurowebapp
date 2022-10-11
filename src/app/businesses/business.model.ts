@@ -59,6 +59,14 @@ export interface BusinessModel {
   representativeCrimeYear: string;
   representativeCrime: string;
 
+  representativeSpouseDocumentType: string;
+  representativeSpouseDocument: string;
+  representativeSpouseName: string;
+  representativeSpouseNationality: string;
+  representativeSpouseMaritalStatus: string;
+  representativeSpousePropertyRegime: string;
+  representativeSpouseBirthDate: string;
+
   createdAt: any;
   updatedAt: any;
   userId: string;

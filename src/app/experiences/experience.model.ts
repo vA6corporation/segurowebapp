@@ -9,6 +9,7 @@ export interface ExperienceModel {
 
   typeWork: string
   endingDate: string
+  signaturetAt: string
   faithfulCompliance: string
   directAdvance: string
   advanceMaterials: string

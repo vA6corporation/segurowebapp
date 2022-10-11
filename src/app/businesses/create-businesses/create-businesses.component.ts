@@ -96,6 +96,14 @@ export class CreateBusinessesComponent implements OnInit {
     representativeCrimeYear: null,
     representativeCrime: null,
 
+    representativeSpouseDocumentType: null,
+    representativeSpouseDocument: null,
+    representativeSpouseName: null,
+    representativeSpouseNationality: null,
+    representativeSpouseMaritalStatus: null,
+    representativeSpousePropertyRegime: null,
+    representativeSpouseBirthDate: null,
+
     operationSector: null,
     operationActivity: null,
     operationPlace: null,

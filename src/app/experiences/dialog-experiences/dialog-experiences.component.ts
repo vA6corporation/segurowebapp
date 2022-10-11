@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ExperienceModel, ExperienceModelIncome } from '../experience.model';
+import { ExperienceModelIncome } from '../experience.model';
 
 @Component({
   selector: 'app-dialog-experiences',
@@ -30,14 +30,19 @@ export class DialogExperiencesComponent implements OnInit {
 
     typeWork: null,
     endingDate: null,
+    signaturetAt: null,
     faithfulCompliance: null,
     directAdvance: null,
     advanceMaterials: null,
     bondingEntity: null,
+
+    bondedConsortium: null,
+    participationConsortium: null,
   });
   incomes: ExperienceModelIncome[] = [];
   incomesYear = '';
   incomesAmount = 0;
+  isCheckedConsortium = false;
   ngOnInit(): void {}
   addIncomes() {
     if (this.incomesYear != '' && this.incomesAmount > 0) {
