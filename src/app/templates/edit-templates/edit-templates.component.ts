@@ -8,6 +8,7 @@ import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-benef
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogTemplatePartnershipsComponent } from 'src/app/template-partnerships/dialog-template-partnerships/dialog-template-partnerships.component';
+import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
 import { TemplatesService } from '../templates.service';
 
 @Component({
@@ -29,11 +30,11 @@ export class EditTemplatesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
-    guaranteeCode: [ null, Validators.required ],
-    guaranteeTimeLimit: [ null, Validators.required ],
-    guaranteeBaseBudget: [ null, Validators.required ],
-    guaranteeMount: [ null, Validators.required ],
-    guaranteeContractMount: [ null, Validators.required ],
+    // guaranteeCode: [ null, Validators.required ],
+    // guaranteeTimeLimit: [ null, Validators.required ],
+    // guaranteeMount: [ null, Validators.required ],
+    baseBudget: [ null, Validators.required ],
+    contractMount: [ null, Validators.required ],
     depositorName: [ null, Validators.required ],
     partnership: this.formBuilder.group({
       _id: null,
@@ -48,6 +49,7 @@ export class EditTemplatesComponent implements OnInit {
       _id: [ null, Validators.required ],
     }),
   });
+  public guaranties: any[] = [];
   private templateId: string = '';
 
   private activatedRoute$: Subscription = new Subscription();
@@ -63,10 +65,12 @@ export class EditTemplatesComponent implements OnInit {
     this.activatedRoute$ = this.activatedRoute.params.subscribe(params => {
       this.templateId = params.templateId;
       this.templatesService.getTemplateById(this.templateId).subscribe(template => {
-        const { business, partnership, beneficiary, ...rest } = template;
+        console.log(template);
+        const { business, partnership, beneficiary, guaranties, ...rest } = template;
         this.formGroup.patchValue(rest);
         this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('beneficiary')?.patchValue(beneficiary);
+        this.guaranties = guaranties;
         if (partnership) {
           this.formGroup.get('partnership')?.patchValue(partnership);
         }
@@ -100,6 +104,23 @@ export class EditTemplatesComponent implements OnInit {
     });
   }
 
+  openDialogAddGuaranties() {
+    const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(guarantee => {
+      if (guarantee) {
+        this.guaranties.push(guarantee);
+      }
+    });
+  }
+
+  onRemoveGuarantee(index: number) {
+    this.guaranties.splice(index, 1);
+  }
+
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogTemplatePartnershipsComponent, {
       width: '600px',
@@ -123,6 +144,7 @@ export class EditTemplatesComponent implements OnInit {
       template.businessId = business._id;
       template.partnershipId = partnership._id;
       template.beneficiaryId = beneficiary._id;
+      Object.assign(template, { guaranties: this.guaranties });
       this.templatesService.update(template, this.templateId).subscribe(() => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();

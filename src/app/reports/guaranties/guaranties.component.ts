@@ -12,8 +12,10 @@ import { ReportsService } from '../reports.service';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
 import { Subscription } from 'rxjs';
-import { MailModel } from 'src/app/mails/mail.model';
 import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-guaranties',
@@ -28,8 +30,10 @@ export class GuarantiesComponent implements OnInit {
     private readonly compliancesService: CompliancesService,
     private readonly reportsService: ReportsService,
     private readonly navigationService: NavigationService,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
+    private readonly router: Router,
   ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'actions' ];
@@ -43,6 +47,7 @@ export class GuarantiesComponent implements OnInit {
     endDate: [ null, Validators.required ],
   });
 
+  private queryParams$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
@@ -55,6 +60,18 @@ export class GuarantiesComponent implements OnInit {
       { id: 'search', label: 'search', icon: 'search', show: true },
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
+
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+
+      const { startDate, endDate } = params;
+
+      if (startDate && endDate) {
+        this.formGroup.get('startDate')?.patchValue(new Date(Number(startDate)));
+        this.formGroup.get('endDate')?.patchValue(new Date(Number(endDate)));
+      }
+
+      this.fetchData();
+    });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
@@ -92,7 +109,7 @@ export class GuarantiesComponent implements OnInit {
     });
   }
 
-  onRangeChange() {
+  fetchData() {
     if (this.formGroup.valid) {
       const { startDate, endDate } = this.formGroup.value;
       this.navigationService.loadBarStart();
@@ -102,6 +119,20 @@ export class GuarantiesComponent implements OnInit {
         this.dataSource = guaranties;
       });
     }
+  }
+
+  onRangeChange() {
+    const { startDate, endDate } = this.formGroup.value;
+
+    const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0, key: null };
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchData();   
   }
 
   onShowDetails(guarantee: GuaranteeModel) {
@@ -193,20 +224,32 @@ export class GuarantiesComponent implements OnInit {
 
   async sendMail(guarantee: any): Promise<any> {
     this.navigationService.loadBarStart();
-    let mail: MailModel;
+    // let mail: MailModel;
     try {
       switch (guarantee.guaranteeType) {
         case 'GFCF':
-          mail = await this.compliancesService.sendMail(guarantee._id).toPromise();
+          this.compliancesService.sendMail(guarantee._id).subscribe(() => {
+
+          }, (error: HttpErrorResponse) => {
+            this.navigationService.showMessage(error.error.message);
+          });
           break;
         case 'GAMF':
-          mail = await this.materialsService.sendMail(guarantee._id).toPromise();
+          this.materialsService.sendMail(guarantee._id).subscribe(() => {
+
+          }, (error: HttpErrorResponse) => {
+            this.navigationService.showMessage(error.error.message);
+          });
           break;
         case 'GADF':
-          mail = await this.directsService.sendMail(guarantee._id).toPromise();
+          this.directsService.sendMail(guarantee._id).subscribe(() => {
+
+          }, (error: HttpErrorResponse) => {
+            this.navigationService.showMessage(error.error.message);
+          });
           break;
         default:
-          mail = { to: '' };
+          // mail = { to: '' };
           break;
       }
       this.navigationService.showMessage('Email enviado');

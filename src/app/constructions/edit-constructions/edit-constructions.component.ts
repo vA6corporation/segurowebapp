@@ -53,6 +53,7 @@ export class EditConstructionsComponent implements OnInit {
     // place: [ null, Validators.required ],
     object: [ null, Validators.required ],
     code: [ null, Validators.required ],
+    percentageOfCompletion: [ null, Validators.required ],
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',

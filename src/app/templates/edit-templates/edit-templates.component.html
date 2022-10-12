@@ -1,5 +1,30 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-list class="mb-3">
+      <div mat-subheader>Fianzas</div>
+      <mat-list-item *ngFor="let guarantee of guaranties; let i = index">
+        <div>
+          <span *ngIf="guarantee.guaranteeCode === 'GAMF'">
+            ADELANTO DE MATERIALES
+          </span>
+          <span *ngIf="guarantee.guaranteeCode === 'GADF'">
+            ADELANTO DIRECTO
+          </span>
+          <span *ngIf="guarantee.guaranteeCode === 'GFCF'">
+            FIEL CUMPLIMIENTO
+          </span>
+          <br>
+          <span class="text-muted"> 
+            Monto: {{ guarantee.mount }} - Plazo {{ guarantee.timeLimit }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemoveGuarantee(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="openDialogAddGuaranties()">AGREGAR FIANZA</button>
     <mat-form-field appearance="fill">
       <mat-label>Objeto *</mat-label>
       <input type="text" matInput formControlName="object">
@@ -8,7 +33,7 @@
       <mat-label>Lugar de ejecucion *</mat-label>
       <input type="text" matInput formControlName="executionPlace">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <!-- <mat-form-field appearance="fill">
       <mat-label>Tipo de fianza</mat-label>
       <mat-select formControlName="guaranteeCode">
         <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
@@ -23,14 +48,14 @@
     <mat-form-field appearance="fill">
       <mat-label>Monto de la fianza *</mat-label>
       <input type="number" matInput formControlName="guaranteeMount">
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field appearance="fill">
       <mat-label>Presupuesto base *</mat-label>
-      <input type="number" matInput formControlName="guaranteeBaseBudget">
+      <input type="number" matInput formControlName="baseBudget">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Monto del contrato *</mat-label>
-      <input type="number" matInput formControlName="guaranteeContractMount">
+      <input type="number" matInput formControlName="contractMount">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nombre del depositante *</mat-label>

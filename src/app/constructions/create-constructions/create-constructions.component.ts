@@ -44,6 +44,7 @@ export class CreateConstructionsComponent implements OnInit {
     }),
     object: [ null, Validators.required ],
     code: [ null, Validators.required ],
+    percentageOfCompletion: [ null, Validators.required ],
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',

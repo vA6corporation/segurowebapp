@@ -23,6 +23,10 @@ export class ConstructionsService {
     return this.httpService.get('constructions');
   }
 
+  getConstructionsByOffice(): Observable<ConstructionModel[]> {
+    return this.httpService.get('constructions/byOffice');
+  }
+
   getConstructionsByBusiness(businessId: string): Observable<ConstructionModel[]> {
     return this.httpService.get(`constructions/byBusiness/${businessId}`);
   }

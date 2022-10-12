@@ -6,18 +6,18 @@
   <a [href]="[ baseUrl + 'templates/affidavitOfOriginOfFunds/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">DECLARACION JURADA DE ORIGEN DE FONDOS</a>
   <a [href]="[ baseUrl + 'templates/specificExperienceOfEachConsorciate/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">RELACION DE OBRAS EN EJECUCION A LA FECHA</a>
   <a [href]="[ baseUrl + 'templates/patrimonialRelationshipOfNaturalPerson/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">RELACION PATRIMONIAL DE  PERSONA NATURAL</a>
+  <a [href]="[ baseUrl + 'templates/specificExperienceOfEachConsorciateCompleted/' + template._id ]" mat-raised-button color="primary" class="w-100 mb-3">EXPERIENCIA ESPECIFICA DE CADA CONSORCIADO EN OBRAS</a>
   <a [href]="[ baseUrl + 'templates/consortiunConsolidatedInformation/' + template.partnershipId ]" *ngIf="template.partnershipId; else elseBlock" mat-raised-button color="primary" class="w-100 mb-3">INFORMACION CONSOLIDADA CONSORCIO</a>
   <ng-template #elseBlock>
     <button mat-raised-button disabled color="primary" class="w-100 mb-3">
       INFORMACION CONSOLIDADA CONSORCIO
     </button>
   </ng-template>
-  <a [href]="[ baseUrl + 'templates/specificExperienceOfEachConsorciateCompleted/' + template._id ]" *ngIf="template.partnershipId; else elseBlock2" mat-raised-button color="primary" class="w-100 mb-3">EXPERIENCIA ESPECIFICA DE CADA CONSORCIADO EN OBRAS</a>
-  <ng-template #elseBlock2>
+  <!-- <ng-template #elseBlock2>
     <button mat-raised-button disabled color="primary" class="w-100 mb-3">
       EXPERIENCIA ESPECIFICA DE CADA CONSORCIADO EN OBRAS
     </button>
-  </ng-template>
+  </ng-template> -->
 
   <!-- Formatos avla -->
   <hr><b>AVLA</b><hr>

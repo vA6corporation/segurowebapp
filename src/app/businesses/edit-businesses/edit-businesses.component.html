@@ -23,10 +23,10 @@
       <mat-label>Email *</mat-label>
       <input type="email" matInput formControlName="email">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <!-- <mat-form-field appearance="fill">
       <mat-label>Empresa(s) relacionada(s)</mat-label>
       <input type="text" matInput formControlName="relatedBusinesses">
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field appearance="fill">
       <mat-label>Firma(s) autorizada(s</mat-label>
       <input type="text" matInput formControlName="authorizedSignatures">
@@ -176,7 +176,7 @@
     </mat-list>
     <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogProperties()">AGREGAR INMUEBLE</button>
     <mat-list class="mb-3">
-      <div mat-subheader>Bienes mubles</div>
+      <div mat-subheader>Bienes muebles</div>
       <mat-list-item *ngFor="let movableProperty of movableProperties; let i = index">
         <div>
           {{ movableProperty.description | uppercase }}
