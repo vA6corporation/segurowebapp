@@ -58,8 +58,7 @@ export class EditWorkersComponent implements OnInit {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();
-        // this.router.navigate(['/workers']);
-        this.workersService.clearWorkers();
+        this.workersService.loadWorkers();
         this.navigationService.showMessage('Se han guardado los cambios');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;

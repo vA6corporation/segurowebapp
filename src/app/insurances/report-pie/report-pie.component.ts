@@ -53,11 +53,11 @@ export class ReportPieComponent implements OnInit {
   public workers: WorkerModel[] = [];
   public summaries: any[] = [];
 
-  private workers$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
@@ -120,7 +120,7 @@ export class ReportPieComponent implements OnInit {
       }
     });
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
     

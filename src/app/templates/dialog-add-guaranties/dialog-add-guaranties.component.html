@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo de fianza</mat-label>
+    <mat-select formControlName="guaranteeCode">
+      <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
+      <mat-option value="GADF">ADELANTO DIRECTO</mat-option>
+      <mat-option value="GFCF">FIEL CUMPLIMIENTO</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Plazo de la fianza *</mat-label>
+    <input type="number" matInput formControlName="timeLimit">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Monto de la fianza *</mat-label>
+    <input type="number" matInput formControlName="mount">
+  </mat-form-field>
+  <div class="d-flex">
+    <span class="spacer"></span>
+    <button type="button" mat-button mat-dialog-close>CANCELAR</button>
+    <div class="divider"></div>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </div>
+</form>

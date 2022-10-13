@@ -54,20 +54,19 @@ export class ReportComponent implements OnInit {
     'EPS',
     'SALUD',
   ];
-
   public formGroup = this.formBuilder.group({
     workerId: '',
     type: 'SCTR',
     year: new Date().getFullYear()
   });
-
-  private workers$: Subscription = new Subscription();
   public workers: WorkerModel[] = [];
   private expensesSummaries: any[] = [];
   private incomesSummaries: any[] = [];
+  
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit() {
@@ -85,7 +84,7 @@ export class ReportComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 

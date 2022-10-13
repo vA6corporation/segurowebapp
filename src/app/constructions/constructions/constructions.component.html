@@ -7,7 +7,7 @@
         <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="standard">
+    <mat-form-field appearance="fill">
       <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
@@ -54,10 +54,6 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <!-- <button (click)="onDialogTemplates(element)" mat-menu-item>
-              <mat-icon>task</mat-icon>
-              <span>Documentacion</span>
-            </button> -->
             <button type="button" (click)="onAddBail(element._id)" mat-menu-item>
               <mat-icon>add</mat-icon>
               <span>Agregar renovacion</span>

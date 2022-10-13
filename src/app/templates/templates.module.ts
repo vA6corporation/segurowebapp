@@ -8,6 +8,7 @@ import { CreateTemplatesComponent } from './create-templates/create-templates.co
 import { EditTemplatesComponent } from './edit-templates/edit-templates.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogTemplatesComponent } from './dialog-templates/dialog-templates.component';
+import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { DialogTemplatesComponent } from './dialog-templates/dialog-templates.co
     CreateTemplatesComponent, 
     EditTemplatesComponent,
     DialogTemplatesComponent,
+    DialogAddGuarantiesComponent,
   ],
   imports: [
     CommonModule,

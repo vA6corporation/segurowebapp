@@ -9,6 +9,8 @@ export interface ConstructionModel {
   _id: string
   emitionAt: string
   code: string
+  constructionCodeType: string
+  percentageOfCompletion: number
   object: string
   businessId: string
   user: UserModel

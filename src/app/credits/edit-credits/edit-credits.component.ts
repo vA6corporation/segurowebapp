@@ -62,16 +62,16 @@ export class EditCreditsComponent implements OnInit {
   public workers: WorkerModel[] = [];
   private creditId: string = '';
 
-  private workers$: Subscription = new Subscription;
+  private handleWorkers$: Subscription = new Subscription;
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.backTo();
     
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
     

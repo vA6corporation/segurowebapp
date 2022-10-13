@@ -51,14 +51,14 @@ export class ReportComponent implements OnInit {
     type: 'SCTR',
     year: new Date().getFullYear()
   });
-
-  private workers$: Subscription = new Subscription();
   public workers: WorkerModel[] = [];
   public summaries: any[] = [];
   private months: string[] = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-
+  
+  private handleWorkers$: Subscription = new Subscription();
+  
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit() {
@@ -76,7 +76,7 @@ export class ReportComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
 

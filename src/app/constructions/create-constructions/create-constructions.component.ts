@@ -44,6 +44,7 @@ export class CreateConstructionsComponent implements OnInit {
     }),
     object: [ null, Validators.required ],
     code: [ null, Validators.required ],
+    percentageOfCompletion: [ null, Validators.required ],
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',
@@ -53,17 +54,17 @@ export class CreateConstructionsComponent implements OnInit {
 
   public workers: WorkerModel[] = [];
 
-  private workers$: Subscription = new Subscription;
+  private handleWorkers$: Subscription = new Subscription;
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nueva obra');
     this.navigationService.backTo();
 
-    this.workers$ = this.workersService.getWorkers().subscribe(workers => {
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
   }

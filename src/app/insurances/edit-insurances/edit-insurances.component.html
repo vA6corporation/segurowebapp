@@ -11,37 +11,37 @@
         <span class="divider"></span>
       </div>
       <div formGroupName="construction">
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Obra</mat-label>
           <input type="text" matInput formControlName="object" (click)="openDialogConstruction()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="partnership">
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Consorcio</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="business">
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Empresa *</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="broker">
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Broker *</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogBrokers()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="financier">
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Aseguradora *</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="worker">
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Promotor *</mat-label>
           <mat-select formControlName="_id">
             <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
@@ -55,14 +55,17 @@
             <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
-          <input type="text" matInput placeholder="N° de poliza *" formControlName="policyNumber">
+        <mat-form-field appearance="fill">
+          <mat-label>N° de poliza *</mat-label>
+          <input type="text" matInput formControlName="policyNumber">
         </mat-form-field>
-        <mat-form-field>
-          <input type="number" matInput placeholder="Prima *" formControlName="prima">
+        <mat-form-field appearance="fill">
+          <mat-label>Prima *</mat-label>
+          <input type="number" matInput formControlName="prima">
         </mat-form-field>
-        <mat-form-field>
-          <input type="number" matInput placeholder="Comision *" formControlName="commission">
+        <mat-form-field appearance="fill">
+          <mat-label>Comision *</mat-label>
+          <input type="number" matInput formControlName="commission">
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Divisa *</mat-label>
@@ -71,12 +74,6 @@
             <mat-option value="USD">USD</mat-option>
           </mat-select>
         </mat-form-field>
-        <div class="mb-3">
-          <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
-        </div>
-        <div class="mb-3">
-          <mat-slide-toggle formControlName="isEmition">Emision</mat-slide-toggle>
-        </div>
         <mat-form-field appearance="fill">
           <mat-label>Fecha de emision *</mat-label>
           <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
@@ -89,6 +86,12 @@
           <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker></mat-datepicker>
         </mat-form-field>
+        <div class="mb-3">
+          <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+          <mat-slide-toggle formControlName="isEmition">Emision</mat-slide-toggle>
+        </div>
       </div>
       <div class="mt-3 d-flex">
         <span class="spacer"></span>
