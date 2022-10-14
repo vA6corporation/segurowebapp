@@ -7,6 +7,7 @@ import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-benef
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogTemplatePartnershipsComponent } from 'src/app/template-partnerships/dialog-template-partnerships/dialog-template-partnerships.component';
+import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
 import { TemplatesService } from '../templates.service';
 
 @Component({
@@ -28,11 +29,8 @@ export class CreateTemplatesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
-    guaranteeCode: [ null, Validators.required ],
-    guaranteeTimeLimit: [ null, Validators.required ],
-    guaranteeBaseBudget: [ null, Validators.required ],
-    guaranteeMount: [ null, Validators.required ],
-    guaranteeContractMount: [ null, Validators.required ],
+    baseBudget: [ null, Validators.required ],
+    contractMount: [ null, Validators.required ],
     depositorName: [ null, Validators.required ],
     partnership: this.formBuilder.group({
       _id: null,
@@ -46,7 +44,9 @@ export class CreateTemplatesComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
+    executionPeriodWork: [ null, Validators.required ],
   });
+  public guaranties: any[] = [];
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nueva documentacion');
@@ -77,6 +77,30 @@ export class CreateTemplatesComponent implements OnInit {
         this.formGroup.patchValue({ beneficiary });
       }
     });
+  }
+
+  openDialogAddGuaranties() {
+    if(this.formGroup.controls['contractMount'].value == null){
+      this.navigationService.showMessage('Debe agregar el monto del contrato');
+      return
+    }
+    const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: {
+        amount: this.formGroup.controls['contractMount'].value
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(guarantee => {
+      if (guarantee) {
+        this.guaranties.push(guarantee);
+      }
+    });
+  }
+
+  onRemoveGuarantee(index: number) {
+    this.guaranties.splice(index, 1);
   }
 
   openDialogPartnerships() {

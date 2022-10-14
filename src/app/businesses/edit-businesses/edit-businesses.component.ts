@@ -18,8 +18,13 @@ import { DialogShareholdersComponent } from 'src/app/shareholders/dialog-shareho
 import { ShareholderModel } from 'src/app/shareholders/shareholder.model';
 import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
+import { DialogAddAccessCreditComponent } from '../dialog-add-access-credit/dialog-add-access-credit.component';
+import { DialogAddAccountRotationComponent } from '../dialog-add-account-rotation/dialog-add-account-rotation.component';
 import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
 import { GuarantiesModel } from '../dialog-add-guaranties/guaranties.model';
+import { DialogAddMainCustomersComponent } from '../dialog-add-main-customers/dialog-add-main-customers.component';
+import { DialogAddMainSuppliersComponent } from '../dialog-add-main-suppliers/dialog-add-main-suppliers.component';
+import { DialogAddSalesmixComponent } from '../dialog-add-salesmix/dialog-add-salesmix.component';
 import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogBusinessesComponent } from '../dialog-businesses/dialog-businesses.component';
 import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
@@ -133,7 +138,11 @@ export class EditBusinessesComponent implements OnInit {
   public isCheckedPEP = false;
   public isCheckedCrime = false;
   public boardMembers: BoardMembersModel[] = [];
-
+  public salesMix: any[] = [];
+  public mainSuppliers: any[] = [];
+  public mainCustomers: any[] = [];
+  public accessCredit: any[] = [];
+  public accountRotation: any[] = [];
   ngOnInit(): void {
     this.navigationService.setTitle('Editar empresa');
     this.navigationService.backTo();
@@ -305,6 +314,91 @@ export class EditBusinessesComponent implements OnInit {
         this.guaranties.push(guarantee);
       }
     });
+  }
+
+  onDialogAddSalesmix() {
+    const dialogRef = this.matDialog.open(DialogAddSalesmixComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((salesMixItem) => {
+      if (salesMixItem) {
+        this.salesMix.push(salesMixItem);
+      }
+    });
+  }
+
+  onDialogAddMainSuppliers() {
+    const dialogRef = this.matDialog.open(DialogAddMainSuppliersComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((mainSupplier) => {
+      if (mainSupplier) {
+        this.mainSuppliers.push(mainSupplier);
+      }
+    });
+  }
+
+  onDialogAddMainCustomers() {
+    const dialogRef = this.matDialog.open(DialogAddMainCustomersComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((mainCustomer) => {
+      if (mainCustomer) {
+        this.mainCustomers.push(mainCustomer);
+      }
+    });
+  }
+
+  onDialogAddAccessCredit() {
+    const dialogRef = this.matDialog.open(DialogAddAccessCreditComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((accessCreditItem) => {
+      if (accessCreditItem) {
+        this.accessCredit.push(accessCreditItem);
+      }
+    });
+  }
+
+  onDialogAddAccountRotation() {
+    const dialogRef = this.matDialog.open(DialogAddAccountRotationComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((accountRotationItem) => {
+      if (accountRotationItem) {
+        this.accountRotation.push(accountRotationItem);
+      }
+    });
+  }
+
+  onRemoveAccountRotation(index: number) {
+    this.accountRotation.splice(index, 1);
+  }
+
+  onRemoveAccessCredit(index: number) {
+    this.accessCredit.splice(index, 1);
+  }
+
+  onRemoveMainCustomers(index: number) {
+    this.mainCustomers.splice(index, 1);
+  }
+
+  onRemoveMainSuppliers(index: number) {
+    this.mainSuppliers.splice(index, 1);
+  }
+
+  onRemoveSalesmix(index: number) {
+    this.salesMix.splice(index, 1);
   }
 
   onRemoveBoardMembers(index: number) {

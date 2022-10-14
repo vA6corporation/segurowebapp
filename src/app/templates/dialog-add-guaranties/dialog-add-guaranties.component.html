@@ -1,19 +1,45 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
   <mat-form-field appearance="fill">
     <mat-label>Tipo de fianza</mat-label>
-    <mat-select formControlName="guaranteeCode">
+    <mat-select formControlName="guaranteeCode" [(ngModel)]="typeBail" (selectionChange)="setPercentage('10')">
+      <mat-option value="GAOS">SERIEDAD EN LA OFERTA</mat-option>
       <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
       <mat-option value="GADF">ADELANTO DIRECTO</mat-option>
       <mat-option value="GFCF">FIEL CUMPLIMIENTO</mat-option>
+      <mat-option value="GFWE">GARANTIA DE BUENA EJECUCIÓN DE OBRA</mat-option>
     </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Moneda *</mat-label>
+    <input type="text" matInput formControlName="currency">
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Plazo de la fianza *</mat-label>
     <input type="number" matInput formControlName="timeLimit">
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Monto de la fianza *</mat-label>
-    <input type="number" matInput formControlName="mount">
+    <mat-label>Vigencia desde *</mat-label>
+    <input matInput [matDatepicker]="dateValidSincer" formControlName="validSincer">
+    <mat-datepicker-toggle matSuffix [for]="dateValidSincer"></mat-datepicker-toggle>
+    <mat-datepicker #dateValidSincer></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Vigencia hasta *</mat-label>
+    <input matInput [matDatepicker]="dateValidUntil" formControlName="validUntil">
+    <mat-datepicker-toggle matSuffix [for]="dateValidUntil"></mat-datepicker-toggle>
+    <mat-datepicker #dateValidUntil></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Monto de la fianza * {{typeBail}}</mat-label>
+    <input type="number" readonly matInput formControlName="mount">
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="typeBail == 'GAMF'">
+    <mat-label>Porcentaje</mat-label>
+    <mat-select [value]="'10'" (selectionChange)="setPercentage($event.value)">
+      <mat-option value="10">10%</mat-option>
+      <mat-option value="15">15%</mat-option>
+      <mat-option value="20">20%</mat-option>
+    </mat-select>
   </mat-form-field>
   <div class="d-flex">
     <span class="spacer"></span>
