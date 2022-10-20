@@ -68,6 +68,10 @@
       <mat-label>Entidad Afianzadora *</mat-label>
       <input type="text" matInput formControlName="bondingEntity" />
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre de Entidades Afianzadoras </mat-label>
+      <input type="text" matInput formControlName="nameSuretyEntities" />
+    </mat-form-field>
 
     <mat-card>
       <mat-card-subtitle
@@ -117,10 +121,19 @@
       <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio"
-        >Consorcio</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio">Consorcio</mat-slide-toggle>
     </div>
+    <div class="mb-3">
+      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados</mat-slide-toggle>
+    </div>
+    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+      <mat-label>Nombre</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="nameConsortium"
+      />
+    </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
       <mat-label>Afianzados</mat-label>
       <input
@@ -135,6 +148,23 @@
         type="text"
         matInput
         formControlName="participationConsortium"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="isCheckedOthersConsortium">
+      <mat-label>Nombre</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="nameOtherConsortium"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="isCheckedOthersConsortium">
+      <mat-label>% Participación</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="participationOtherConsortium"
       />
     </mat-form-field>
   </div>

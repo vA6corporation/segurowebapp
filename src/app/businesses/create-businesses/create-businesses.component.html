@@ -176,7 +176,16 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha Certificada</mat-label>
-      <input type="text" matInput formControlName="osceCertifiedDate" />
+      <input
+        matInput
+        [matDatepicker]="osceCertifiedDate"
+        formControlName="osceCertifiedDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="osceCertifiedDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #osceCertifiedDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez? De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>

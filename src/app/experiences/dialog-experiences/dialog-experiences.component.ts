@@ -35,14 +35,20 @@ export class DialogExperiencesComponent implements OnInit {
     directAdvance: null,
     advanceMaterials: null,
     bondingEntity: null,
-
+    nameSuretyEntities: null,
+    
+    nameConsortium: null,
     bondedConsortium: null,
     participationConsortium: null,
+
+    nameOtherConsortium: null,
+    participationOtherConsortium: null,
   });
   incomes: ExperienceModelIncome[] = [];
   incomesYear = '';
   incomesAmount = 0;
   isCheckedConsortium = false;
+  isCheckedOthersConsortium = false;
   ngOnInit(): void {}
   addIncomes() {
     if (this.incomesYear != '' && this.incomesAmount > 0) {

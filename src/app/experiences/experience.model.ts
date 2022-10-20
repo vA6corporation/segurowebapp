@@ -15,6 +15,14 @@ export interface ExperienceModel {
   advanceMaterials: string
   bondingEntity: string
   income: ExperienceModelIncome[]
+
+  nameSuretyEntities: string
+  nameConsortium: string
+  bondedConsortium: string
+  participationConsortium: string
+
+  nameOtherConsortium: string
+  participationOtherConsortium: string
 }
 export interface ExperienceModelIncome {
   year: string
