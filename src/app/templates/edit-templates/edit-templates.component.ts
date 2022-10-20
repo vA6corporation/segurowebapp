@@ -30,6 +30,7 @@ export class EditTemplatesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
+    startDate: [ null, Validators.required ],
     baseBudget: [ null, Validators.required ],
     contractMount: [ null, Validators.required ],
     depositorName: [ null, Validators.required ],

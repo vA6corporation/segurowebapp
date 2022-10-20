@@ -102,6 +102,20 @@
       <input type="text" matInput formControlName="turnOfBusiness" />
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Fuentes de ingreso *</mat-label>
+      <input type="text" matInput formControlName="sourcesOfIncome" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pais de origen de los fondos *</mat-label>
+      <input type="text" matInput formControlName="countrySource" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Autorizo expresa e irrevocablemente a ustedes a utilizar el monto de</mat-label>
+      <input type="number" matInput formControlName="amountUse" />
+    </mat-form-field>
+
     <div class="mb-3">
       <mat-slide-toggle formControlName="UIF"
         >Ley que crea a la Unidad de Inteligencia Financiera –
@@ -384,6 +398,129 @@
       <input type="text" matInput formControlName="operationBanks" />
     </mat-form-field>
 
+    <hr>
+    <h3>MIX DE VENTAS</h3>
+    <mat-card *ngFor="let salesMixItem of salesMix; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ salesMixItem.activity | uppercase }}
+        <p class="text-muted">
+          {{ salesMixItem.amountOne }} - {{ salesMixItem.percentageOne }}
+        </p>
+        <p class="text-muted">
+          {{ salesMixItem.amountTwo }} - {{ salesMixItem.percentageTwo }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveSalesmix(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddSalesmix()">
+      MIX DE VENTAS
+    </button>
+
+    <h3>PRINCIPALES CLIENTES</h3>
+    <mat-card *ngFor="let mainSupplier of mainSuppliers; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ mainSupplier.name | uppercase }}
+        <p class="text-muted">
+          {{ mainSupplier.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainSupplier.turnBusiness }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveMainSuppliers(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainSuppliers()">
+      PRINCIPALES CLIENTES
+    </button>
+
+    <h3>PRINCIPALES PROVEEDORES</h3>
+    <mat-card *ngFor="let mainCustomer of mainCustomers; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ mainCustomer.name | uppercase }}
+        <p class="text-muted">
+          {{ mainCustomer.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainCustomer.turnBusiness }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveMainCustomers(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainCustomers()">
+      PRINCIPALES PROVEEDORES
+    </button>
+
+    <h3>POLÍTICAS DE ROTACIÓN DE CUENTAS</h3>
+    <mat-card *ngFor="let accountRotationItem of accountRotation; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ accountRotationItem.typeAccount | uppercase }}
+        <p class="text-muted">{{ accountRotationItem.rotation }} dias</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveAccountRotation(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccountRotation()">
+      POLÍTICAS DE ROTACIÓN DE CUENTAS
+    </button>
+
+    <h3>ACCESO AL CRÉDITO</h3>
+    <mat-card *ngFor="let accessCreditItem of accessCredit; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ accessCreditItem.insuranceCarrier | uppercase }}
+        <p class="text-muted">
+          {{ accessCreditItem.financialProducts }} -
+          {{ accessCreditItem.creditLine }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveAccessCredit(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccessCredit()">
+      ACCESO AL CRÉDITO
+    </button>
+
+    <h3>JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES</h3>
+    <mat-card *ngFor="let judgment of trials; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ judgment.name | uppercase }}
+        <p class="text-muted">
+          {{ judgment.reason }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveJudgment(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddJudgment()">
+      JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES
+    </button>
+    
     <mat-list class="mb-3">
       <div mat-subheader>Miembros del directorio</div>
       <mat-list-item *ngFor="let boardMember of boardMembers; let i = index">

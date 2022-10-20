@@ -22,6 +22,7 @@ import { DialogAddMainCustomersComponent } from './dialog-add-main-customers/dia
 import { DialogAddMainSuppliersComponent } from './dialog-add-main-suppliers/dialog-add-main-suppliers.component';
 import { DialogAddAccountRotationComponent } from './dialog-add-account-rotation/dialog-add-account-rotation.component';
 import { DialogAddAccessCreditComponent } from './dialog-add-access-credit/dialog-add-access-credit.component';
+import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { DialogAddAccessCreditComponent } from './dialog-add-access-credit/dialo
     EditBusinessesComponent, 
     DialogBusinessesComponent, 
     DialogConstructionBusinessesComponent, 
-    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent,
+    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent,
   ],
   imports: [
     CommonModule,

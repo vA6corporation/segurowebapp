@@ -1,1 +1,19 @@
-<p>dialog-add-account-rotation works!</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <h2 mat-dialog-title>Agregar políticas de rotación de cuentas</h2>
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de cuenta *</mat-label>
+        <input type="text" matInput formControlName="typeAccount" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Rotación (dias) *</mat-label>
+        <input type="number" matInput formControlName="rotation" />
+      </mat-form-field>
+    </div>
+    <mat-dialog-actions>
+      <span class="spacer"></span>
+      <button mat-button mat-button mat-dialog-close>CANCELAR</button>
+      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    </mat-dialog-actions>
+  </form>
+  

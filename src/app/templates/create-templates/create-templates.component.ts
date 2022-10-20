@@ -28,6 +28,7 @@ export class CreateTemplatesComponent implements OnInit {
   public isLoading: boolean = false;
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
+    startDate: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
     baseBudget: [ null, Validators.required ],
     contractMount: [ null, Validators.required ],

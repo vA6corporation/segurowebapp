@@ -4,27 +4,20 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-account-rotation',
   templateUrl: './dialog-add-account-rotation.component.html',
-  styleUrls: ['./dialog-add-account-rotation.component.sass']
+  styleUrls: ['./dialog-add-account-rotation.component.sass'],
 })
 export class DialogAddAccountRotationComponent implements OnInit {
-
-  constructor(private readonly formBuilder: FormBuilder,
-    private readonly dialogRef: MatDialogRef<DialogAddAccountRotationComponent>) { }
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly dialogRef: MatDialogRef<DialogAddAccountRotationComponent>
+  ) {}
 
   public formGroup: FormGroup = this.formBuilder.group({
-    tenderObjectContract: [ null, Validators.required ],
-    advancePercent: [ null, Validators.required ],
-    faithfulComplianceO: [ null, Validators.required ],
-    directAdvanceO: [ null, Validators.required ],
-    advanceMaterialsO: [ null, Validators.required ],
-    faithfulComplianceV: [ null, Validators.required ],
-    directAdvanceV: [ null, Validators.required ],
-    advanceMaterialsV: [ null, Validators.required ],
-    nameSuretyEntities: [ null, Validators.required ],
+    typeAccount: [null, Validators.required],
+    rotation: [null, Validators.required],
   });
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onSubmit() {
     if (this.formGroup.valid) {

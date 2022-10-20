@@ -1,12 +1,6 @@
 <section class="container py-4">
   <div class="mb-3">
-    <button
-      type="button"
-      (click)="onAttachPdfDocuments()"
-      [disabled]="isLoading"
-      mat-raised-button
-      color="primary"
-    >
+    <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">
       DOCUMENTOS
     </button>
   </div>
@@ -21,12 +15,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de Documento *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="document"
-        [maxlength]="maxlength"
-      />
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nombres/Razon Social *</mat-label>
@@ -97,15 +86,8 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Fecha de registro mercantil</mat-label>
-      <input
-        matInput
-        [matDatepicker]="inscriptionAt"
-        formControlName="inscriptionAt"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="inscriptionAt"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt" />
+      <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -113,47 +95,51 @@
       <input type="text" matInput formControlName="turnOfBusiness" />
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Fuentes de ingreso *</mat-label>
+      <input type="text" matInput formControlName="sourcesOfIncome" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pais de origen de los fondos *</mat-label>
+      <input type="text" matInput formControlName="countrySource" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Autorizo expresa e irrevocablemente a ustedes a utilizar el monto de</mat-label>
+      <input type="number" matInput formControlName="amountUse" />
+    </mat-form-field>
+
     <div class="mb-3">
-      <mat-slide-toggle formControlName="UIF"
-        >Ley que crea a la Unidad de Inteligencia Financiera –
-        UIF</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="UIF">Ley que crea a la Unidad de Inteligencia Financiera –
+        UIF</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="hasComplianceOfficer"
-        >¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="hasComplianceOfficer">¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="managementManualLAFT"
-        >¿Cuenta con Manual de Prevención y Gestión de LAFT?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="managementManualLAFT">¿Cuenta con Manual de Prevención y Gestión de LAFT?
+      </mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="codeEthicsConduct"
-        >¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="codeEthicsConduct">¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="carryReviewClients"
-        >¿Lleva a cabo una revisión de sus Clientes, Proveedores y Contrapartes
+      <mat-slide-toggle formControlName="carryReviewClients">¿Lleva a cabo una revisión de sus Clientes, Proveedores y
+        Contrapartes
         para verificar si están incluidos en Listas Internacionales de personas
-        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle
-      >
+        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="madeMakeInvestments"
-        >¿Ha realizado o tiene pensado realizar inversiones en países que
+      <mat-slide-toggle formControlName="madeMakeInvestments">¿Ha realizado o tiene pensado realizar inversiones en
+        países que
         presentan baja regulación frente a delitos de LAFT? (Ejemplo: Irán,
-        North Corea, Siria)</mat-slide-toggle
-      >
+        North Corea, Siria)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="companyEverBeenInvestigated"
-        >¿Su empresa ha sido alguna vez investigada, procesada o sancionada por
+      <mat-slide-toggle formControlName="companyEverBeenInvestigated">¿Su empresa ha sido alguna vez investigada,
+        procesada o sancionada por
         incumplimiento de las regulaciones sobre Prevención de
-        LAFT?</mat-slide-toggle
-      >
+        LAFT?</mat-slide-toggle>
     </div>
     <hr />
     <br />
@@ -176,10 +162,8 @@
       <input type="text" matInput formControlName="osceCertifiedDate" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label
-        >¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez?
-        De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label
-      >
+      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez?
+        De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>
       <input type="text" matInput formControlName="osceObservation" />
     </mat-form-field>
     <hr />
@@ -207,11 +191,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>País de origen</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeCountryOrigin"
-      />
+      <input type="text" matInput formControlName="representativeCountryOrigin" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nacionalidad</mat-label>
@@ -219,51 +199,27 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>País de Residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeCountryResidence"
-      />
+      <input type="text" matInput formControlName="representativeCountryResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Distrito de Residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeDistrictResidence"
-      />
+      <input type="text" matInput formControlName="representativeDistrictResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Provincia de Residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeProvinceResidence"
-      />
+      <input type="text" matInput formControlName="representativeProvinceResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Departamento de Residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeDepartmentResidence"
-      />
+      <input type="text" matInput formControlName="representativeDepartmentResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Direccion de Residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeAddressResidence"
-      />
+      <input type="text" matInput formControlName="representativeAddressResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeMobileNumber"
-      />
+      <input type="text" matInput formControlName="representativeMobileNumber" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Telefono</mat-label>
@@ -279,11 +235,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Profesión / Ocupación</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeProfessionOccupation"
-      />
+      <input type="text" matInput formControlName="representativeProfessionOccupation" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Cargo</mat-label>
@@ -291,34 +243,18 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Años de servicio</mat-label>
-      <input
-        type="number"
-        matInput
-        formControlName="representativeYearsOfService"
-      />
+      <input type="number" matInput formControlName="representativeYearsOfService" />
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedPEP"
-        [ngModelOptions]="{ standalone: true }"
-        >PEP</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{ standalone: true }">PEP</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Institución</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPInstitution"
-      />
+      <input type="text" matInput formControlName="representativePEPInstitution" />
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Cargo</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPPositionn"
-      />
+      <input type="text" matInput formControlName="representativePEPPositionn" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Regimen de bienes</mat-label>
@@ -330,24 +266,14 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha de nacimiento</mat-label>
-      <input
-        matInput
-        [matDatepicker]="birthDatePicker"
-        formControlName="representativeBirthDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="birthDatePicker"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="representativeBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedCrime"
-        [ngModelOptions]="{ standalone: true }"
-        >¿han sido sentenciada o se encuentran investigada por actividades
-        criminales?</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedCrime" [ngModelOptions]="{ standalone: true }">¿han sido sentenciada o se
+        encuentran investigada por actividades
+        criminales?</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Estatus (sentenciado / investigado)</mat-label>
@@ -359,15 +285,8 @@
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Año</mat-label>
-      <input
-        matInput
-        [matDatepicker]="representativeCrimeYear"
-        formControlName="representativeCrimeYear"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="representativeCrimeYear"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="representativeCrimeYear" formControlName="representativeCrimeYear" />
+      <mat-datepicker-toggle matSuffix [for]="representativeCrimeYear"></mat-datepicker-toggle>
       <mat-datepicker #representativeCrimeYear></mat-datepicker>
     </mat-form-field>
 
@@ -382,12 +301,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de Documento *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeSpouseDocument"
-        [maxlength]="maxlength"
-      />
+      <input type="text" matInput formControlName="representativeSpouseDocument" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nombres/Razon Social *</mat-label>
@@ -395,11 +309,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nacionalidad *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeSpouseNationality"
-      />
+      <input type="text" matInput formControlName="representativeSpouseNationality" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Estado civil *</mat-label>
@@ -410,15 +320,9 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha de nacimiento</mat-label>
-      <input
-        matInput
-        [matDatepicker]="representativeSpouseBirthDatePicker"
-        formControlName="representativeSpouseBirthDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="representativeSpouseBirthDatePicker"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="representativeSpouseBirthDatePicker"
+        formControlName="representativeSpouseBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="representativeSpouseBirthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
     </mat-form-field>
     <hr />
@@ -447,15 +351,16 @@
     </mat-form-field>
 
     <hr />
-    <mat-card
-      *ngFor="let salesMixItem of salesMix; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>MIX DE VENTAS</h3>
+    <mat-card *ngFor="let salesMixItem of salesMix; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
-      <!--   {{ boardMember.name | uppercase }}
+        {{ salesMixItem.activity | uppercase }}
         <p class="text-muted">
-          {{ boardMember.typeDocument }}: {{ boardMember.document }}
-        </p> -->
+          {{ salesMixItem.amountOne }} - {{ salesMixItem.percentageOne }}
+        </p>
+        <p class="text-muted">
+          {{ salesMixItem.amountTwo }} - {{ salesMixItem.percentageTwo }}
+        </p>
       </mat-card-content>
       <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveSalesmix(i)">
@@ -463,26 +368,21 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddSalesmix()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddSalesmix()">
       MIX DE VENTAS
     </button>
 
-    <mat-card
-      *ngFor="let mainSupplier of mainSuppliers; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>PRINCIPALES CLIENTES</h3>
+    <mat-card *ngFor="let mainSupplier of mainSuppliers; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
-      <!--   {{ boardMember.name | uppercase }}
+        {{ mainSupplier.name | uppercase }}
         <p class="text-muted">
-          {{ boardMember.typeDocument }}: {{ boardMember.document }}
-        </p> -->
+          {{ mainSupplier.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainSupplier.turnBusiness }}
+        </p>
       </mat-card-content>
       <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveMainSuppliers(i)">
@@ -490,26 +390,21 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddMainSuppliers()"
-    >
-    PRINCIPALES CLIENTES
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainSuppliers()">
+      PRINCIPALES CLIENTES
     </button>
 
-    <mat-card
-      *ngFor="let mainCustomer of mainCustomers; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>PRINCIPALES PROVEEDORES</h3>
+    <mat-card *ngFor="let mainCustomer of mainCustomers; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
-       <!--  {{ boardMember.name | uppercase }}
+        {{ mainCustomer.name | uppercase }}
         <p class="text-muted">
-          {{ boardMember.typeDocument }}: {{ boardMember.document }}
-        </p> -->
+          {{ mainCustomer.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainCustomer.turnBusiness }}
+        </p>
       </mat-card-content>
       <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveMainCustomers(i)">
@@ -517,26 +412,16 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddMainCustomers()"
-    >
-    PRINCIPALES PROVEEDORES
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainCustomers()">
+      PRINCIPALES PROVEEDORES
     </button>
 
-    <mat-card
-      *ngFor="let accountRotationItem of accountRotation; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>POLÍTICAS DE ROTACIÓN DE CUENTAS</h3>
+    <mat-card *ngFor="let accountRotationItem of accountRotation; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
-        <!-- {{ boardMember.name | uppercase }}
-        <p class="text-muted">
-          {{ boardMember.typeDocument }}: {{ boardMember.document }}
-        </p> -->
+        {{ accountRotationItem.typeAccount | uppercase }}
+        <p class="text-muted">{{ accountRotationItem.rotation }} dias</p>
       </mat-card-content>
       <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveAccountRotation(i)">
@@ -544,26 +429,19 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddAccountRotation()"
-    >
-    POLÍTICAS DE ROTACIÓN DE CUENTAS
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccountRotation()">
+      POLÍTICAS DE ROTACIÓN DE CUENTAS
     </button>
 
-    <mat-card
-      *ngFor="let accessCreditItem of accessCredit; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>ACCESO AL CRÉDITO</h3>
+    <mat-card *ngFor="let accessCreditItem of accessCredit; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
-        <!-- {{ boardMember.name | uppercase }}
+        {{ accessCreditItem.insuranceCarrier | uppercase }}
         <p class="text-muted">
-          {{ boardMember.typeDocument }}: {{ boardMember.document }}
-        </p> -->
+          {{ accessCreditItem.financialProducts }} -
+          {{ accessCreditItem.creditLine }}
+        </p>
       </mat-card-content>
       <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveAccessCredit(i)">
@@ -571,34 +449,32 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddAccessCredit()"
-    >
-    ACCESO AL CRÉDITO
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccessCredit()">
+      ACCESO AL CRÉDITO
     </button>
 
+    <h3>JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES</h3>
+    <mat-card *ngFor="let judgment of trials; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ judgment.name | uppercase }}
+        <p class="text-muted">
+          {{ judgment.reason }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveJudgment(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddJudgment()">
+      JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES
+    </button>
 
-
-
-
-
-
-
-
-
-
-
-    
-
-    <mat-card
-      *ngFor="let boardMember of boardMembers; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <h3>AGREGAR MIEMBROS DEL DIRECTORIO</h3>
+    <mat-card *ngFor="let boardMember of boardMembers; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
         {{ boardMember.name | uppercase }}
         <p class="text-muted">
@@ -611,47 +487,28 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogBoardMembers()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogBoardMembers()">
       AGREGAR MIEMBROS DEL DIRECTORIO
     </button>
 
-    <mat-list class="mb-3">
-      <div mat-subheader>PERSONAS JURÍDICAS VINCULADAS</div>
-      <mat-list-item
-        *ngFor="let linkedBusinesse of linkedBusinesses; let i = index"
-      >
-        <div>
-          {{ linkedBusinesse.name | uppercase }}
-          <br />
-          <span class="text-muted">
-            {{ linkedBusinesse.documentType }}: {{ linkedBusinesse.document }}
-          </span>
-        </div>
-        <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveLinkedBusinesses(i)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogLinkedBusinesses()"
-    >
+    <h3>PERSONAS JURÍDICAS VINCULADAS</h3>
+    <mat-card *ngFor="let linkedBusinesse of linkedBusinesses; let i = index">
+      <mat-card-content>
+        {{ linkedBusinesse.name | uppercase }}
+        <br />
+        <span class="text-muted">
+          {{ linkedBusinesse.documentType }}: {{ linkedBusinesse.document }}
+        </span>
+      </mat-card-content>
+      <mat-card-actions align="end">
+      <button type="button" mat-icon-button (click)="onRemoveLinkedBusinesses(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogLinkedBusinesses()">
       AGREGAR PERSONAS JURÍDICAS VINCULADAS
     </button>
 
@@ -671,14 +528,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogShareholders()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogShareholders()">
       AGREGAR ACCIONISTA
     </button>
 
@@ -698,21 +549,13 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogProperties()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogProperties()">
       AGREGAR INMUEBLE
     </button>
     <mat-list class="mb-3">
       <div mat-subheader>Bienes mubles</div>
-      <mat-list-item
-        *ngFor="let movableProperty of movableProperties; let i = index"
-      >
+      <mat-list-item *ngFor="let movableProperty of movableProperties; let i = index">
         <div>
           {{ movableProperty.description | uppercase }}
           <br />
@@ -721,23 +564,13 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveMovableProperty(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveMovableProperty(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogMovableProperties()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogMovableProperties()">
       AGREGAR MUEBLE
     </button>
     <mat-list class="mb-3">
@@ -756,21 +589,12 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogInvestments()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogInvestments()">
       AGREGAR INVERSION
     </button>
     <div mat-subheader>Experiencia</div>
-    <mat-card
-      *ngFor="let experience of experiences; let i = index"
-      style="margin-bottom: 5px"
-    >
+    <mat-card *ngFor="let experience of experiences; let i = index" style="margin-bottom: 5px">
       <mat-card-content>
         {{ experience.object }}
         <p class="text-muted">
@@ -783,22 +607,14 @@
         </button>
       </mat-card-actions>
     </mat-card>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogExperiences()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogExperiences()">
       AGREGAR EXPERIENCIA
     </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>Facilidades crediticias</div>
-      <mat-list-item
-        *ngFor="let facilityCredit of facilityCredits; let i = index"
-      >
+      <mat-list-item *ngFor="let facilityCredit of facilityCredits; let i = index">
         <div>
           {{ facilityCredit.financier | uppercase }}
           <br />
@@ -807,23 +623,13 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveFacilityCredit(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveFacilityCredit(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogFacilityCredits()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogFacilityCredits()">
       AGREGAR FACILIDAD CREDITICIA
     </button>
 
@@ -843,34 +649,18 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddGuaranties()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddGuaranties()">
       FIANZAS VIGENTES DE CADA CONSORCIADO
     </button>
 
     <div class="d-flex">
       <span class="spacer"></span>
-      <button
-        type="button"
-        mat-stroked-button
-        color="primary"
-        routerLink="/businesses"
-      >
+      <button type="button" mat-stroked-button color="primary" routerLink="/businesses">
         CANCELAR
       </button>
       <div class="divider"></div>
-      <button
-        type="submit"
-        [disabled]="isLoading"
-        mat-raised-button
-        color="primary"
-      >
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">
         GUARDAR
       </button>
     </div>
