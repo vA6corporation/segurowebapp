@@ -54,19 +54,33 @@ export interface BusinessModel {
   osceCertifiedDate: string;
   osceObservation: string;
 
-  representativeName: string;
-  representativePosition: string;
-  representativeYearsOfService: string;
-  representativeCountryOrigin: string;
-  representativeCountryResidence: string;
-  representativeProfessionOccupation: string;
-  representativeEmail: string;
-  representativePEPInstitution: string;
-  representativePEPPositionn: string;
-  representativeCriminalActivities: string;
-  representativeCrimeStatus: string;
-  representativeCrimeYear: string;
-  representativeCrime: string;
+  representativePosition: string
+  representativeYearsOfService: string
+  representativeCountryOrigin: string
+  representativeCountryResidence: string
+
+  representativeDistrictResidence: string
+  representativeProvinceResidence: string
+  representativeDepartmentResidence: string
+  representativeAddressResidence: string
+  representativeMobileNumber: string
+  representativePhoneNumber: string
+
+  representativeProfessionOccupation: string
+  representativeEmail: string
+  representativePEPInstitution: string
+  representativePEPPositionn: string
+
+  representativeDocumentType: string
+  representativeDocument: number
+  representativeName: string
+  representativeNationality: string
+  representativeMaritalStatus: string
+  representativePropertyRegime: string
+  representativeBirthDate: string
+  representativeCrimeStatus: string
+  representativeCrimeYear: number
+  representativeCrime: string
 
   representativeSpouseDocumentType: string;
   representativeSpouseDocument: string;

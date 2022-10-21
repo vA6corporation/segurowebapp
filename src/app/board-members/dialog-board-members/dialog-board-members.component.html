@@ -1,45 +1,50 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <h2>Agregar miembro del directorio</h2>
-    <mat-dialog-content>
-      <mat-form-field appearance="fill">
-        <mat-label>Cargo *</mat-label>
-        <input type="text" matInput formControlName="position">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre / Razón Social *</mat-label>
-        <input type="text" matInput formControlName="name">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Tipo de Documento *</mat-label>
-        <mat-select formControlName="typeDocument">
+  <h2>Agregar miembro del directorio</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Cargo *</mat-label>
+      <mat-select formControlName="position">
+        <mat-option value="Presidente del directorio">Presidente del directorio</mat-option>
+        <mat-option value="Directores">Directore</mat-option>
+        <mat-option value="Gerente General">Gerente General</mat-option>
+        <mat-option value="Gerente Financiero">Gerente Financiero</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre / Razón Social *</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Documento *</mat-label>
+      <mat-select formControlName="typeDocument">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
         <mat-option value="CE">CE</mat-option>
-        </mat-select>
+      </mat-select>
     </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>N° de Documento. *</mat-label>
-        <input type="number" matInput formControlName="document" [maxlength]="maxlength">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha Nacimiento *</mat-label>
-        <input matInput [matDatepicker]="datePicker" formControlName="birthDate">
-        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-        <mat-datepicker #datePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>País de Origen *</mat-label>
-        <input type="text" matInput formControlName="countryOrigin">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Profesión</mat-label>
-        <input type="text" matInput formControlName="profession">
-      </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions class="d-flex">
-      <span class="spacer"></span>
-      <button type="button" mat-button mat-dialog-close>CANCELAR</button>
-      <div class="divider"></div>
-      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
-    </mat-dialog-actions>
-  </form>
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Documento. *</mat-label>
+      <input type="number" matInput formControlName="document" [maxlength]="maxlength">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha Nacimiento *</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="birthDate">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>País de Origen *</mat-label>
+      <input type="text" matInput formControlName="countryOrigin">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Profesión</mat-label>
+      <input type="text" matInput formControlName="profession">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions class="d-flex">
+    <span class="spacer"></span>
+    <button type="button" mat-button mat-dialog-close>CANCELAR</button>
+    <div class="divider"></div>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

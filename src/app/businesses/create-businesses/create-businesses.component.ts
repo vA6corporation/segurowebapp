@@ -56,7 +56,6 @@ export class CreateBusinessesComponent implements OnInit {
     document: [null, Validators.required],
     name: [null, Validators.required],
     email: [null, [Validators.required, Validators.email]],
-    authorizedSignatures: null,
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
@@ -95,6 +94,14 @@ export class CreateBusinessesComponent implements OnInit {
     representativeYearsOfService: null,
     representativeCountryOrigin: null,
     representativeCountryResidence: null,
+
+    representativeDistrictResidence: null,
+    representativeProvinceResidence: null,
+    representativeDepartmentResidence: null,
+    representativeAddressResidence: null,
+    representativeMobileNumber: null,
+    representativePhoneNumber: null,
+
     representativeProfessionOccupation: null,
     representativeEmail: null,
     representativePEPInstitution: null,

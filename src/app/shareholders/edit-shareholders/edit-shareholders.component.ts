@@ -34,7 +34,7 @@ export class EditShareholdersComponent implements OnInit {
     documentType: [ null, Validators.required ],
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],
-    email: [ null, [ Validators.required, Validators.email ] ],
+    email: null,
     nationality: [ null, Validators.required ],
     maritalStatus: [ null, Validators.required ],
     percent: [ null, Validators.required ],
@@ -62,11 +62,11 @@ export class EditShareholdersComponent implements OnInit {
     publicCompaniesTime: null,
 
     // Spouse
-    documentTypeSpouse: [ null, Validators.required ],
-    documentSpouse: [ null, Validators.required ],
-    nameSpouse: [ null, Validators.required ],
-    nationalitySpouse: [ null, Validators.required ],
-    maritalStatusSpouse: [ null, Validators.required ],
+    documentTypeSpouse: null,
+    documentSpouse: null,
+    nameSpouse: null,
+    nationalitySpouse: null,
+    maritalStatusSpouse: null,
     birthDateSpouse: null,
   });
   public isLoading: boolean = false;

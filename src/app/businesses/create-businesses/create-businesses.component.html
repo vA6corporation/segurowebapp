@@ -26,10 +26,6 @@
       <input type="email" matInput formControlName="email" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Firma(s) autorizada(s</mat-label>
-      <input type="text" matInput formControlName="authorizedSignatures" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
       <input type="text" matInput formControlName="mobileNumber" />
     </mat-form-field>
@@ -216,23 +212,39 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>País de origen</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeCountryOrigin"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>País de residencia</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeCountryResidence"
-      />
+      <input type="text" matInput formControlName="representativeCountryOrigin" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nacionalidad</mat-label>
       <input type="text" matInput formControlName="representativeNationality" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>País de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeCountryResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Distrito de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeDistrictResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Provincia de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeProvinceResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Departamento de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeDepartmentResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion de Residencia</mat-label>
+      <input type="text" matInput formControlName="representativeAddressResidence" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="representativeMobileNumber" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="representativePhoneNumber" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Estado civil</mat-label>
@@ -244,11 +256,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Profesión / Ocupación</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeProfessionOccupation"
-      />
+      <input type="text" matInput formControlName="representativeProfessionOccupation" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Cargo</mat-label>
@@ -256,34 +264,18 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Años de servicio</mat-label>
-      <input
-        type="number"
-        matInput
-        formControlName="representativeYearsOfService"
-      />
+      <input type="number" matInput formControlName="representativeYearsOfService" />
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedPEP"
-        [ngModelOptions]="{ standalone: true }"
-        >PEP</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{ standalone: true }">PEP</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Institución</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPInstitution"
-      />
+      <input type="text" matInput formControlName="representativePEPInstitution" />
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Cargo</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPPositionn"
-      />
+      <input type="text" matInput formControlName="representativePEPPositionn" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Regimen de bienes</mat-label>
@@ -295,24 +287,14 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha de nacimiento</mat-label>
-      <input
-        matInput
-        [matDatepicker]="birthDatePicker"
-        formControlName="representativeBirthDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="birthDatePicker"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="representativeBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedCrime"
-        [ngModelOptions]="{ standalone: true }"
-        >¿han sido sentenciada o se encuentran investigada por actividades
-        criminales?</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedCrime" [ngModelOptions]="{ standalone: true }">¿han sido sentenciada o se
+        encuentran investigada por actividades
+        criminales?</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Estatus (sentenciado / investigado)</mat-label>
@@ -324,15 +306,8 @@
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Año</mat-label>
-      <input
-        matInput
-        [matDatepicker]="representativeCrimeYear"
-        formControlName="representativeCrimeYear"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="representativeCrimeYear"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="representativeCrimeYear" formControlName="representativeCrimeYear" />
+      <mat-datepicker-toggle matSuffix [for]="representativeCrimeYear"></mat-datepicker-toggle>
       <mat-datepicker #representativeCrimeYear></mat-datepicker>
     </mat-form-field>
 
