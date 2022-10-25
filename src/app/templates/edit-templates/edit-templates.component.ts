@@ -47,6 +47,7 @@ export class EditTemplatesComponent implements OnInit {
       _id: [ null, Validators.required ],
     }),
     executionPeriodWork: [ null, Validators.required ],
+    tenderNumber: null,
   });
   public guaranties: any[] = [];
   private templateId: string = '';

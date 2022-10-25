@@ -46,6 +46,7 @@ export class CreateTemplatesComponent implements OnInit {
       _id: [ null, Validators.required ],
     }),
     executionPeriodWork: [ null, Validators.required ],
+    tenderNumber: null,
   });
   public guaranties: any[] = [];
 

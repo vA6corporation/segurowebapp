@@ -15,4 +15,5 @@ export interface TemplateModel {
   guaranties: GuaranteeModel[]
   partnership: PartnershipModel|null
   beneficiary: BeneficiaryModel
+  tenderNumber: string
 }

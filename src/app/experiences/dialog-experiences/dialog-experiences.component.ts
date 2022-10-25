@@ -15,7 +15,6 @@ export class DialogExperiencesComponent implements OnInit {
   ) {}
 
   public formGroup: FormGroup = this.formBuilder.group({
-    object: [null, Validators.required],
     contractor: [null, Validators.required],
     startAt: [null, Validators.required],
     location: [null, Validators.required],

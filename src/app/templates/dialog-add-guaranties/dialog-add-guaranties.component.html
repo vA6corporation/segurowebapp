@@ -11,7 +11,10 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Moneda *</mat-label>
-    <input type="text" matInput formControlName="currency">
+    <mat-select formControlName="currency">
+      <mat-option value="Soles">Soles</mat-option>
+      <mat-option value="Dolar">Dolar</mat-option>
+    </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Plazo de la fianza *</mat-label>

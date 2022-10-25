@@ -32,6 +32,10 @@
         <input type="text" matInput formControlName="object">
       </mat-form-field>
       <mat-form-field appearance="fill">
+        <mat-label>Numero de licitación (nomenclatura) </mat-label>
+        <input type="text" matInput formControlName="tenderNumber">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Fecha de inicio</mat-label>
         <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" />
         <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
