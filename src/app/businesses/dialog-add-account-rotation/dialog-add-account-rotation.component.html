@@ -3,7 +3,11 @@
     <div mat-dialog-content>
       <mat-form-field appearance="fill">
         <mat-label>Tipo de cuenta *</mat-label>
-        <input type="text" matInput formControlName="typeAccount" />
+        <mat-select formControlName="typeAccount">
+          <mat-option value="Cuentas por Pagar">Cuentas por Pagar</mat-option>
+          <mat-option value="Cuentas por Cobrar">Cuentas por Cobrar</mat-option>
+          <mat-option value="Existencias">Existencias</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Rotación (dias) *</mat-label>
