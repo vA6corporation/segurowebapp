@@ -4,6 +4,8 @@ import { BusinessModel } from "../businesses/business.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
 import { UserModel } from "../users/user.model";
 import { WorkerModel } from "../workers/worker.model";
+import { PaymentModel } from "./payment.model";
+import { PercentCompletionModel } from "./percent-completion.model";
 
 export interface ConstructionModel {
   _id: string
@@ -12,6 +14,7 @@ export interface ConstructionModel {
   constructionCodeType: string
   percentageOfCompletion: number
   object: string
+  commission: number
   businessId: string
   user: UserModel
   worker: WorkerModel
@@ -19,5 +22,7 @@ export interface ConstructionModel {
   partnership: PartnershipModel|null
   business: BusinessModel
   beneficiary: BeneficiaryModel
+  percentCompletions: PercentCompletionModel[]
+  payments: PaymentModel[]
   createdAt: string
 }

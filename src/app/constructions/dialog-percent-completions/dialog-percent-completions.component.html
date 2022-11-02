@@ -1,0 +1,40 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2 mat-dialog-title>Porcentaje de avance</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Año *</mat-label>
+      <input type="number" matInput formControlName="year">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Mes *</mat-label>
+      <mat-select formControlName="month">
+        <mat-option value="0">ENERO</mat-option>
+        <mat-option value="1">FEBRERO</mat-option>
+        <mat-option value="2">MARZO</mat-option>
+        <mat-option value="3">ABRIL</mat-option>
+        <mat-option value="4">MAYO</mat-option>
+        <mat-option value="5">JUNIO</mat-option>
+        <mat-option value="6">JULIO</mat-option>
+        <mat-option value="7">AGOSTO</mat-option>
+        <mat-option value="8">SEPTIEMBRE</mat-option>
+        <mat-option value="9">OCTUBRE</mat-option>
+        <mat-option value="10">NOVIEMBRE</mat-option>
+        <mat-option value="11">DICIEMBRE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pocentaje programado *</mat-label>
+      <input type="number" matInput formControlName="percentProgrammated">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pocentaje de ejecucion *</mat-label>
+      <input type="number" matInput formControlName="percentCompletion">
+    </mat-form-field>
+  </div>
+  <div class="spacer"></div>
+  <mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-button mat-stroked-button color="primary" mat-dialog-close>CANCELAR</button>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

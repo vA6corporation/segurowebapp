@@ -6,6 +6,11 @@ import { environment } from 'src/environments/environment';
 import { ConstructionPdfModel } from '../construction-pdf.model';
 import { ConstructionsService } from '../constructions.service';
 
+export interface DialogAttachPdfData {
+  constructionId: string
+  type: string
+}
+
 @Component({
   selector: 'app-dialog-attach-pdf',
   templateUrl: './dialog-attach-pdf.component.html',
@@ -15,7 +20,7 @@ export class DialogAttachPdfComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private readonly constructionId: string,
+    private readonly data: DialogAttachPdfData,
     private readonly sanitizer: DomSanitizer,
     private readonly constructionsService: ConstructionsService,
   ) { }
@@ -34,7 +39,7 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   fetchData() {
-    this.constructionsService.getPdfs(this.constructionId).subscribe(constructionPdfs => {
+    this.constructionsService.getPdfs(this.data.type, this.data.constructionId).subscribe(constructionPdfs => {
       this.constructionPdfs = constructionPdfs;
     });
   }
@@ -77,11 +82,11 @@ export class DialogAttachPdfComponent implements OnInit {
       input.value = '';
       const formData = new FormData();
 
-      console.log(file);
+      // console.log(file);
       
       if (file.type === "application/pdf" || file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || file.type === "application/vnd.ms-excel" || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
         formData.append('file', file),
-        this.constructionsService.uploadPdf(formData, this.constructionId).subscribe(pdfId => {
+        this.constructionsService.uploadPdf(formData, this.data.type, this.data.constructionId).subscribe(pdfId => {
           console.log(pdfId);
           this.fetchData();
         });  
@@ -104,7 +109,7 @@ export class DialogAttachPdfComponent implements OnInit {
           pdf.addImage(result, 'JPEG', 0, 0, width, height);
           const data = pdf.output('blob');
           formData.append('file', data);
-          this.constructionsService.uploadPdf(formData, this.constructionId).subscribe(pdfId => {
+          this.constructionsService.uploadPdf(formData, this.data.type, this.data.constructionId).subscribe(pdfId => {
             console.log(pdfId);
             this.fetchData();
           });

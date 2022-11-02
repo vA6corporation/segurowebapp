@@ -95,9 +95,9 @@
       <div class="mb-3">
         <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
       </div>
-      <mat-form-field>
+      <!-- <mat-form-field>
         <input type="number" matInput placeholder="Comision" formControlName="commission">
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-list class="mb-1">
         <div mat-subheader>Cheques</div>
         <mat-list-item *ngFor="let cheque of cheques; let i = index;" class="my-3 py-3" [ngClass]="{ 'bg-danger': cheque.deletedAt }">

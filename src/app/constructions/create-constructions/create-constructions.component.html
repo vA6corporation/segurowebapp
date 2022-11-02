@@ -1,16 +1,22 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
+      <mat-label>Razon social *</mat-label>
+      <mat-select formControlName="companyId">
+        <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Objeto *</mat-label>
       <input type="text" matInput formControlName="object">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Codigo *</mat-label>
-      <input type="text" matInput formControlName="code">
+      <mat-label>Monto adjudicado *</mat-label>
+      <input type="number" matInput formControlName="awardedAmount">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de avance *</mat-label>
-      <input type="number" matInput formControlName="percentageOfCompletion">
+      <mat-label>Codigo *</mat-label>
+      <input type="text" matInput formControlName="code">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha de emision *</mat-label>
@@ -63,10 +69,46 @@
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Comision</mat-label>
+    <mat-form-field appearance="fill" *ngIf="user?.isAdmin">
+      <mat-label>Honorarios</mat-label>
       <input type="number" matInput formControlName="commission">
     </mat-form-field>
+    <ng-container *ngIf="user?.isAdmin">
+      <mat-list class="mb-3">
+        <div mat-subheader>Pagos</div>
+        <mat-list-item *ngFor="let payment of payments; let i = index">
+          <div>
+            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+            <br />
+            <span class="text-muted">
+              {{ payment.paymentAt | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+          <span class="spacer"></span>
+          <button type="button" mat-icon-button (click)="onRemovePayment(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogPayments()">AGREGAR PAGO</button>
+    </ng-container>
+    <mat-list class="mb-3">
+      <div mat-subheader>Porcentaje de avance</div>
+      <mat-list-item *ngFor="let percentCompletion of percentCompletions; let i = index">
+        <div>
+          P/E: {{ percentCompletion.percentProgrammated }} % - {{ percentCompletion.percentCompletion }} %
+          <br />
+          <span class="text-muted">
+            {{ months[percentCompletion.month] }} {{ percentCompletion.year }}
+          </span>
+        </div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="onRemovePercentCompletion(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogPercentCompletions()">AGREGAR AVANCE</button>
     <div class="d-flex">
       <span class="spacer"></span>
       <button type="button" mat-stroked-button color="primary" routerLink="/constructions" class="mr-2">CANCELAR</button>

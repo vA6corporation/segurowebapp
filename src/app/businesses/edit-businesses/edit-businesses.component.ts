@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { BoardMembersModel } from 'src/app/board-members/board-members.model';
+import { DialogBoardMembersComponent } from 'src/app/board-members/dialog-board-members/dialog-board-members.component';
 import { DialogExperiencesComponent } from 'src/app/experiences/dialog-experiences/dialog-experiences.component';
 import { ExperienceModel } from 'src/app/experiences/experience.model';
 import { DialogInvestmentsComponent } from 'src/app/investments/dialog-investments/dialog-investments.component';
@@ -14,39 +16,83 @@ import { DialogPropertiesComponent } from 'src/app/properties/dialog-properties/
 import { PropertyModel } from 'src/app/properties/property.model';
 import { DialogShareholdersComponent } from 'src/app/shareholders/dialog-shareholders/dialog-shareholders.component';
 import { ShareholderModel } from 'src/app/shareholders/shareholder.model';
+import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
+import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
+import { GuarantiesModel } from '../dialog-add-guaranties/guaranties.model';
 import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogBusinessesComponent } from '../dialog-businesses/dialog-businesses.component';
 import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
 import { FacilityCreditModel } from '../facility-credit.model';
 
 @Component({
   selector: 'app-edit-businesses',
   templateUrl: './edit-businesses.component.html',
-  styleUrls: ['./edit-businesses.component.sass']
+  styleUrls: ['./edit-businesses.component.sass'],
 })
 export class EditBusinessesComponent implements OnInit {
-
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
     private readonly route: ActivatedRoute,
-    private readonly matDialog: MatDialog,
-  ) { }
-  
+    private readonly matDialog: MatDialog
+  ) {}
+
   public formGroup: FormGroup = this.formBuilder.group({
-    documentType: [ null, Validators.required ],
-    document: [ null, Validators.required ],
-    name: [ null, Validators.required ],
-    email: [ null, [ Validators.required, Validators.email ] ],
-    // relatedBusinesses: null,
+    documentType: [null, Validators.required],
+    document: [null, Validators.required],
+    name: [null, Validators.required],
+    email: [null, [Validators.required, Validators.email]],
     authorizedSignatures: null,
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    address: null,
     inscriptionAt: null,
-    
+
+    turnOfBusiness: null,
+    countryOrigin: null,
+    districtOrigin: null,
+    provinceOrigin: null,
+    departmentOrigin: null,
+    addressOrigin: null,
+    countryResidence: null,
+    districtResidence: null,
+    provinceResidence: null,
+    departmentResidence: null,
+    addressResidence: null,
+
+    UIF: null,
+    hasComplianceOfficer: null,
+    managementManualLAFT: null,
+    codeEthicsConduct: null,
+    carryReviewClients: null,
+    madeMakeInvestments: null,
+    companyEverBeenInvestigated: null,
+
+    osceRegister: null,
+    osceHiring: null,
+    osceExpiration: null,
+    osceCertifiedDate: null,
+    osceObservation: null,
+
+    representativePosition: null,
+    representativeYearsOfService: null,
+    representativeCountryOrigin: null,
+    representativeCountryResidence: null,
+
+    representativeDistrictResidence: null,
+    representativeProvinceResidence: null,
+    representativeDepartmentResidence: null,
+    representativeAddressResidence: null,
+    representativeMobileNumber: null,
+    representativePhoneNumber: null,
+
+    representativeProfessionOccupation: null,
+    representativeEmail: null,
+    representativePEPInstitution: null,
+    representativePEPPositionn: null,
+
     representativeDocumentType: 'DNI',
     representativeDocument: null,
     representativeName: null,
@@ -54,20 +100,25 @@ export class EditBusinessesComponent implements OnInit {
     representativeMaritalStatus: 'SOLTERO',
     representativePropertyRegime: '',
     representativeBirthDate: null,
+    representativeCrimeStatus: null,
+    representativeCrimeYear: null,
+    representativeCrime: null,
 
-    directoryPresident: null,
-    directorySubPresident: null,
-    directoryDirectories: null,
-    directoryGeneralManager: null,
-    directoryFinancierManager: null,
+    representativeSpouseDocumentType: null,
+    representativeSpouseDocument: null,
+    representativeSpouseName: null,
+    representativeSpouseNationality: null,
+    representativeSpouseMaritalStatus: null,
+    representativeSpousePropertyRegime: null,
+    representativeSpouseBirthDate: null,
 
     operationSector: null,
     operationActivity: null,
     operationPlace: null,
     operationFinanciers: null,
-    operationBanks: null
+    operationBanks: null,
   });
-  
+
   private businessId: string = '';
   public isLoading: boolean = false;
   public maxlength: number = 11;
@@ -77,45 +128,101 @@ export class EditBusinessesComponent implements OnInit {
   public investments: InvestmentModel[] = [];
   public experiences: ExperienceModel[] = [];
   public facilityCredits: FacilityCreditModel[] = [];
+  public linkedBusinesses: BusinessModel[] = [];
+  public guaranties: GuarantiesModel[] = [];
+  public isCheckedPEP = false;
+  public isCheckedCrime = false;
+  public boardMembers: BoardMembersModel[] = [];
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.navigationService.setTitle('Editar empresa');
     this.navigationService.backTo();
-    this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
+    this.formGroup.get('documentType')?.valueChanges.subscribe((value) => {
       switch (value) {
         case 'RUC':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.formGroup
+            .get('documento')
+            ?.setValidators([
+              Validators.required,
+              Validators.minLength(11),
+              Validators.maxLength(11),
+            ]);
           this.maxlength = 11;
           break;
         case 'DNI':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
+          this.formGroup
+            .get('documento')
+            ?.setValidators([
+              Validators.required,
+              Validators.minLength(8),
+              Validators.maxLength(8),
+            ]);
           this.maxlength = 8;
           break;
       }
       this.formGroup.get('documento')?.updateValueAndValidity();
     });
 
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.businessId = params.businessId;
-      this.businessesService.getBusinessById(this.businessId).subscribe(business => {
-        this.shareholders = business.shareholders;
-        this.properties = business.properties;
-        this.movableProperties = business.movableProperties;
-        this.investments = business.investments;
-        this.experiences = business.experiences;
-        this.facilityCredits = business.facilityCredits;
-        this.formGroup.patchValue(business);
-      });
+      this.businessesService
+        .getBusinessById(this.businessId)
+        .subscribe((business) => {
+          this.linkedBusinesses = business.linkedBusinesses
+            ? business.linkedBusinesses
+            : [];
+          this.boardMembers = business.boardMembers;
+          this.shareholders = business.shareholders;
+          this.properties = business.properties;
+          this.movableProperties = business.movableProperties;
+          this.investments = business.investments;
+          this.experiences = business.experiences;
+          this.guaranties = business.guaranties ? business.guaranties : [];
+          this.facilityCredits = business.facilityCredits;
+          this.formGroup.patchValue(business);
+          if (business.representativePEPInstitution != '') {
+            this.isCheckedPEP = true;
+          }
+          if (business.representativeCrimeStatus != '') {
+            this.isCheckedCrime = true;
+          }
+        });
+    });
+  }
+
+  onDialogBoardMembers() {
+    const dialogRef = this.matDialog.open(DialogBoardMembersComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((boardMemberItem) => {
+      if (boardMemberItem) {
+        this.boardMembers.push(boardMemberItem);
+      }
+    });
+  }
+
+  onDialogLinkedBusinesses() {
+    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((business) => {
+      if (business) {
+        this.linkedBusinesses.push(business);
+      }
     });
   }
 
   onDialogShareholders() {
     const dialogRef = this.matDialog.open(DialogShareholdersComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(shareholder => {
+    dialogRef.afterClosed().subscribe((shareholder) => {
       if (shareholder) {
         this.shareholders.push(shareholder);
       }
@@ -125,10 +232,10 @@ export class EditBusinessesComponent implements OnInit {
   onDialogProperties() {
     const dialogRef = this.matDialog.open(DialogPropertiesComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(property => {
+    dialogRef.afterClosed().subscribe((property) => {
       if (property) {
         this.properties.push(property);
       }
@@ -138,10 +245,10 @@ export class EditBusinessesComponent implements OnInit {
   onDialogMovableProperties() {
     const dialogRef = this.matDialog.open(DialogMovablePropertiesComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(movableProperty => {
+    dialogRef.afterClosed().subscribe((movableProperty) => {
       if (movableProperty) {
         this.movableProperties.push(movableProperty);
       }
@@ -151,10 +258,10 @@ export class EditBusinessesComponent implements OnInit {
   onDialogInvestments() {
     const dialogRef = this.matDialog.open(DialogInvestmentsComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(investment => {
+    dialogRef.afterClosed().subscribe((investment) => {
       if (investment) {
         this.investments.push(investment);
       }
@@ -164,10 +271,10 @@ export class EditBusinessesComponent implements OnInit {
   onDialogExperiences() {
     const dialogRef = this.matDialog.open(DialogExperiencesComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(experience => {
+    dialogRef.afterClosed().subscribe((experience) => {
       if (experience) {
         this.experiences.push(experience);
       }
@@ -177,14 +284,35 @@ export class EditBusinessesComponent implements OnInit {
   onDialogFacilityCredits() {
     const dialogRef = this.matDialog.open(DialogFacilityCreditsComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
     });
 
-    dialogRef.afterClosed().subscribe(facilityCredit => {
+    dialogRef.afterClosed().subscribe((facilityCredit) => {
       if (facilityCredit) {
         this.facilityCredits.push(facilityCredit);
       }
     });
+  }
+
+  onDialogAddGuaranties() {
+    const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+    });
+
+    dialogRef.afterClosed().subscribe((guarantee) => {
+      if (guarantee) {
+        this.guaranties.push(guarantee);
+      }
+    });
+  }
+
+  onRemoveBoardMembers(index: number) {
+    this.boardMembers.splice(index, 1);
+  }
+
+  onRemoveLinkedBusinesses(index: number) {
+    this.linkedBusinesses.splice(index, 1);
   }
 
   onRemoveShareholder(index: number) {
@@ -211,6 +339,10 @@ export class EditBusinessesComponent implements OnInit {
     this.facilityCredits.splice(index, 1);
   }
 
+  onRemoveGuaranties(index: number) {
+    this.guaranties.splice(index, 1);
+  }
+
   onAttachPdfDocuments() {
     this.matDialog.open(DialogAttachPdfComponent, {
       width: '100vw',
@@ -226,28 +358,45 @@ export class EditBusinessesComponent implements OnInit {
       this.navigationService.loadBarStart();
 
       const business = this.formGroup.value;
-      const shareholderIds = this.shareholders.map(e => e._id);
-      Object.assign(business, { shareholderIds });
+      const shareholderIds = this.shareholders.map((e) => e._id);
+      const linkedBusinessesIds = this.linkedBusinesses.map((e) => e._id);
+      Object.assign(business, { shareholderIds, linkedBusinessesIds });
+      business.boardMembers = this.boardMembers;
 
-      this.businessesService.update(
-        business, 
-        this.experiences, 
-        this.investments,
-        this.properties,
-        this.movableProperties,
-        this.facilityCredits,
-        this.businessId
-      ).subscribe(res => {
-        console.log(res);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+      if (!this.isCheckedPEP) {
+        business.representativePEPInstitution = '';
+        business.representativePEPPositionn = '';
+      }
+      if (!this.isCheckedCrime) {
+        business.representativeCrimeStatus = '';
+        business.representativeCrimeYearme = '';
+        business.representativeCrime = '';
+      }
+
+      this.businessesService
+        .update(
+          business,
+          this.guaranties,
+          this.experiences,
+          this.investments,
+          this.properties,
+          this.movableProperties,
+          this.facilityCredits,
+          this.businessId
+        )
+        .subscribe(
+          (res) => {
+            console.log(res);
+            this.isLoading = false;
+            this.navigationService.loadBarFinish();
+            this.navigationService.showMessage('Se han guardado los cambios');
+          },
+          (error: HttpErrorResponse) => {
+            this.isLoading = false;
+            this.navigationService.loadBarFinish();
+            this.navigationService.showMessage(error.error.message);
+          }
+        );
     }
   }
-
 }

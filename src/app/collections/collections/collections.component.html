@@ -10,15 +10,6 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
     <div class="d-flex">
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Categoria</mat-label>
-        <mat-select (selectionChange)="onChangeCategory()" formControlName="categoryId">
-          <mat-option value="">TODAS LAS CATEGORIAS</mat-option>
-          <mat-option class="text-uppercase" *ngFor="let category of categories" [value]="category._id">
-            {{ category.name | uppercase }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>Personal</mat-label>
         <mat-select (selectionChange)="onChangeWorker()" formControlName="workerId">
@@ -81,29 +72,5 @@
         </mat-list-item>
       </mat-list>
     </div>
-    <!-- <div class="p-4"></div>
-    <div>
-      <h2>Prima</h2>
-      <div>
-        <canvas #collectionChartPrima width="300" height="300"></canvas>
-      </div>
-      <mat-list>
-        <mat-list-item class="text-uppercase">
-          GFCF
-          <span class="spacer"></span>
-          {{ compliancePrima.toFixed(2) }}
-        </mat-list-item>
-        <mat-list-item class="text-uppercase">
-          GADF
-          <span class="spacer"></span>
-          {{ directPrima.toFixed(2) }}
-        </mat-list-item>
-        <mat-list-item class="text-uppercase">
-          GAMF
-          <span class="spacer"></span>
-          {{ materialPrima.toFixed(2) }}
-        </mat-list-item>
-      </mat-list>
-    </div> -->
   </div>
 </section>

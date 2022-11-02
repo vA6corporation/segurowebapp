@@ -15,8 +15,8 @@ export class ConstructionsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getPdfs(constructionId: string): Observable<ConstructionPdfModel[]> {
-    return this.httpService.get(`constructions/pdfs/byConstructionId/${constructionId}`);
+  getPdfs(type: string, constructionId: string): Observable<ConstructionPdfModel[]> {
+    return this.httpService.get(`constructions/pdfs/byConstructionId/${type}/${constructionId}`);
   }
 
   getConstructions(): Observable<ConstructionModel[]> {
@@ -25,6 +25,15 @@ export class ConstructionsService {
 
   getConstructionsByOffice(): Observable<ConstructionModel[]> {
     return this.httpService.get('constructions/byOffice');
+  }
+
+  getSummaryCompletions(constructionCode: string): Observable<any> {
+    const params = { constructionCode };
+    return this.httpService.get(`constructions/summaryCompletions`, { params });
+  }
+
+  getDebtorConstructions(): Observable<any> {
+    return this.httpService.get(`constructions/debtorConstructions`);
   }
 
   getConstructionsByBusiness(businessId: string): Observable<ConstructionModel[]> {
@@ -39,8 +48,12 @@ export class ConstructionsService {
     return this.httpService.delete(`constructions/deletePdf/${constructionPdfId}/${pdfId}`);
   }
 
-  uploadPdf(formData: FormData, constructionId: string): Observable<string> {
-    return this.httpService.postForm(`constructions/uploadPdf/${constructionId}`, formData);
+  uploadPdf(
+    formData: FormData,
+    type: string, 
+    constructionId: string
+  ): Observable<string> {
+    return this.httpService.postForm(`constructions/uploadPdf/${type}/${constructionId}`, formData);
   }
 
   getConstructionsWithoutDocumentation(params: Params): Observable<ConstructionModel[]> {
@@ -71,8 +84,8 @@ export class ConstructionsService {
     return this.httpService.get(`constructions/byKey/${key}`);
   }
 
-  getCountConstructionsByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<number> {
-    return this.httpService.get(`constructions/countConstructionsByRangeDate/${startDate}/${endDate}`, { params });
+  getCountConstructionsByRangeDate(params: Params): Observable<number> {
+    return this.httpService.get(`constructions/countConstructionsByRangeDate`, { params });
   }
 
   getConstructionsByPage(pageIndex: number, pageSize: number): Observable<ConstructionModel[]> {
@@ -80,21 +93,21 @@ export class ConstructionsService {
   }
 
   getConstructionsByRangeDatePage(
-    startDate: Date, 
-    endDate: Date, 
+    // startDate: Date, 
+    // endDate: Date, 
     pageIndex: number, 
     pageSize: number, 
     params: Params
   ): Observable<ConstructionModel[]> {
-    return this.httpService.get(`constructions/${startDate}/${endDate}/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`constructions/byRangeDatePage/${pageIndex}/${pageSize}`, { params });
   }
 
-  create(construction: any): Observable<any> {
-    return this.httpService.post('constructions', { construction });
+  create(construction: any, percentCompletions: any[], payments: any[]): Observable<any> {
+    return this.httpService.post('constructions', { construction, percentCompletions, payments });
   }
 
-  update(construction: any, constructionId: string): Observable<void> {
-    return this.httpService.put(`constructions/${constructionId}`, { construction });
+  update(construction: any, percentCompletions: any[], payments: any[], constructionId: string): Observable<void> {
+    return this.httpService.put(`constructions/${constructionId}`, { construction, percentCompletions, payments });
   }
 
   updateOffice(constructionId: string, construction: any): Observable<void> {

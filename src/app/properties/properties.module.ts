@@ -4,8 +4,6 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogPropertiesComponent } from './dialog-properties/dialog-properties.component';
 
-
-
 @NgModule({
   declarations: [DialogPropertiesComponent],
   imports: [

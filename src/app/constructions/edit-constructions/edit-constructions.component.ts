@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { CompaniesService } from 'src/app/companies/companies.service';
+import { CompanyModel } from 'src/app/companies/company.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
@@ -15,7 +17,11 @@ import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { ConstructionsService } from '../constructions.service';
-import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogPaymentsComponent } from '../dialog-payments/dialog-payments.component';
+import { DialogPercentCompletionsComponent } from '../dialog-percent-completions/dialog-percent-completions.component';
+import { PaymentModel } from '../payment.model';
+import { PercentCompletionModel } from '../percent-completion.model';
 
 @Component({
   selector: 'app-edit-constructions',
@@ -26,6 +32,7 @@ export class EditConstructionsComponent implements OnInit {
 
   constructor(
     private readonly constructionsService: ConstructionsService,
+    private readonly companiesService: CompaniesService,
     private readonly  authService: AuthService,
     private readonly navigationService: NavigationService,
     private readonly officesService: OfficesService,
@@ -49,11 +56,10 @@ export class EditConstructionsComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
-    // timeLimit: [ null, Validators.required ],
-    // place: [ null, Validators.required ],
+    companyId: '',
     object: [ null, Validators.required ],
+    awardedAmount: [ null, Validators.required ],
     code: [ null, Validators.required ],
-    percentageOfCompletion: [ null, Validators.required ],
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',
@@ -62,21 +68,45 @@ export class EditConstructionsComponent implements OnInit {
     commission: null,
   });
   public offices: OfficeModel[] = [];
+  public companies: CompanyModel[] = [];
   public workers: WorkerModel[] = [];
   public user: UserModel|null = null;
+  public percentCompletions: PercentCompletionModel[] = [];
+  public payments: PaymentModel[] = [];
+
   private constructionId: string = '';
+  public months: any[] = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
 
   private workers$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription(); 
+  private handleCompanies$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.workers$.unsubscribe();
     this.handleAuth$.unsubscribe();
+    this.handleCompanies$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Editar obra');
     this.navigationService.backTo();
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
 
     this.workersService.getActiveWorkersGlobal().subscribe(workers => {
       this.workers = workers;
@@ -98,9 +128,45 @@ export class EditConstructionsComponent implements OnInit {
         this.formGroup.patchValue(value);
         this.formGroup.patchValue({ partnership: partnership || {} });
         this.formGroup.patchValue({ business });
-        this.formGroup.patchValue({ beneficiary })
+        this.formGroup.patchValue({ beneficiary });
+        this.percentCompletions = construction.percentCompletions;
+        this.payments = construction.payments;
       });
     });
+  }
+
+  onDialogPercentCompletions() {
+    const dialogRef = this.matDialog.open(DialogPercentCompletionsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(percentCompletion => {
+      if (percentCompletion) {
+        this.percentCompletions.push(percentCompletion);
+      }
+    });
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePercentCompletion(index: number) {
+    this.percentCompletions.splice(index, 1);
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   onChangeOffice() {
@@ -161,14 +227,48 @@ export class EditConstructionsComponent implements OnInit {
     });
   }
 
-  onAttachPdf() {
+  onAttachPdfDocument() {
+    const data: DialogAttachPdfData = {
+      constructionId: this.constructionId,
+      type: 'DOCUMENT',
+    }
+
     this.matDialog.open(DialogAttachPdfComponent, {
       width: '100vw',
       height: '90vh',
       position: { top: '20px' },
-      data: this.constructionId,
+      data,
     });
   }
+
+  onAttachPdfCompletion() {
+    const data: DialogAttachPdfData = {
+      constructionId: this.constructionId,
+      type: 'COMPLETION',
+    }
+
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onAttachPdfVoucher() {
+    const data: DialogAttachPdfData = {
+      constructionId: this.constructionId,
+      type: 'VOUCHER',
+    }
+
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
 
   async onSubmit() {
     if (this.formGroup.valid) {
@@ -178,7 +278,7 @@ export class EditConstructionsComponent implements OnInit {
       construction.businessId = business._id;
       construction.partnershipId = partnership._id;
       construction.beneficiaryId = beneficiary._id;
-      this.constructionsService.update(construction, this.constructionId).subscribe(res => {
+      this.constructionsService.update(construction, this.percentCompletions, this.payments, this.constructionId).subscribe(res => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Se han guardado los cambios');

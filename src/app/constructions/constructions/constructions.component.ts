@@ -52,8 +52,8 @@ export class ConstructionsComponent implements OnInit {
   public pageIndex: number = 0;
   public formGroup: FormGroup = this.formBuilder.group({
     officeId: '',
-    startDate: [ new Date(), Validators.required ],
-    endDate: [ new Date(), Validators.required ],
+    startDate: '',
+    endDate: '',
   });
   public offices: OfficeModel[] = [];
   private office: OfficeModel = new OfficeModel();
@@ -249,11 +249,11 @@ export class ConstructionsComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
       const { startDate, endDate, officeId } = this.formGroup.value;
-      const params = { officeId };
+      const params = { startDate, endDate, officeId };
       this.navigationService.loadBarStart();
       this.constructionsService.getConstructionsByRangeDatePage(
-        startDate, 
-        endDate, 
+        // startDate, 
+        // endDate, 
         this.pageIndex + 1, 
         this.pageSize, 
         params
@@ -266,7 +266,7 @@ export class ConstructionsComponent implements OnInit {
         this.navigationService.showMessage(error.error.message);
       });
   
-      this.constructionsService.getCountConstructionsByRangeDate(startDate, endDate, params).subscribe(count => {
+      this.constructionsService.getCountConstructionsByRangeDate(params).subscribe(count => {
         this.length = count;
       });
     }

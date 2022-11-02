@@ -76,19 +76,9 @@ export class CreateCreditsComponent implements OnInit {
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
-    
-    // this.route.params.subscribe(params => {
-    //   this.type = params.type;
-    //   this.navigationService.setTitle('Nueva linea de credito');
-    // });
   }
 
   onAttachPdfCarta() {
-    // const data: CreditPdfData = {
-    //   type: 'CARTA',
-    //   // creditId: this.creditId,
-    // }
-
     const dialogRef = this.matDialog.open(DialogSelectPdfComponent, {
       width: '100vw',
       height: '90vh',

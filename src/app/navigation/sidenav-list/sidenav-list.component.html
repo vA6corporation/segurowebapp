@@ -232,6 +232,14 @@
       <a href="#" mat-list-item routerLink="/credits/report" (click)="onClose()" *ngIf="privileges.r8">
         <span>Lineas de credito</span>
       </a>
+      <a href="#" mat-list-item routerLink="/constructions/percentCompletions" (click)="onClose()" *ngIf="privileges.r9">
+        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
+        <span>Avance de obras</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/constructions/debtors" (click)="onClose()" *ngIf="privileges.r10">
+        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
+        <span>Recaudacion</span>
+      </a>
     </mat-expansion-panel>
   </mat-accordion>
   <mat-divider></mat-divider>

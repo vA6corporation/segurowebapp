@@ -13,6 +13,10 @@ import { LessConstructionsComponent } from './less-constructions/less-constructi
 import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 import { WithoutDocumentationComponent } from './without-documentation/without-documentation.component';
 import { DialogAddBailComponent } from './dialog-add-bail/dialog-add-bail.component';
+import { DialogPercentCompletionsComponent } from './dialog-percent-completions/dialog-percent-completions.component';
+import { PercentCompletionsComponent } from './percent-completions/percent-completions.component';
+import { DialogPaymentsComponent } from './dialog-payments/dialog-payments.component';
+import { DebtorsComponent } from './debtors/debtors.component';
 
 
 @NgModule({
@@ -25,7 +29,7 @@ import { DialogAddBailComponent } from './dialog-add-bail/dialog-add-bail.compon
     LessConstructionsComponent, 
     DialogAttachPdfComponent, 
     WithoutDocumentationComponent, 
-    DialogAddBailComponent, 
+    DialogAddBailComponent, DialogPercentCompletionsComponent, PercentCompletionsComponent, DialogPaymentsComponent, DebtorsComponent 
   ],
   imports: [
     CommonModule,

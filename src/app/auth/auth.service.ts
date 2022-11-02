@@ -43,6 +43,8 @@ export class AuthService {
     { label: 'Seguro 1', name: 'r6', info: 'Reportes' },
     { label: 'Seguro 2', name: 'r7', info: 'Reportes' },
     { label: 'Lineas de credito', name: 'r8', info: 'Reportes' },
+    { label: 'Avance de obras', name: 'r9', info: 'Reportes' },
+    { label: 'Recaudacion', name: 'r10', info: 'Reportes' },
   ]
 
   private objectModules = {
@@ -70,6 +72,8 @@ export class AuthService {
     r6: false,
     r7: false,
     r8: false,
+    r9: false,
+    r10: false,
   }
 
   getObjectModules() {
@@ -130,6 +134,7 @@ export class AuthService {
   logout(): void {
     this.setAccessToken(null);
     this.authStatus$.next(false);
+    location.reload();
   }
 
   getSession(accessToken: string|null): Observable<AuthModel> {

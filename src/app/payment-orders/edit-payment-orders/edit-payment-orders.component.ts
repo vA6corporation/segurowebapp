@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
+import { CompaniesService } from 'src/app/companies/companies.service';
+import { CompanyModel } from 'src/app/companies/company.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BankModel } from 'src/app/providers/bank.model';
 import { DialogCreateProvidersComponent } from 'src/app/providers/dialog-create-providers/dialog-create-providers.component';
@@ -24,8 +26,9 @@ export class EditPaymentOrdersComponent implements OnInit {
 
   constructor(
     private readonly paymentOrdersService: PaymentOrdersService,
-    private readonly banksService: BanksService,
     private readonly navigationService: NavigationService,
+    private readonly companiesService: CompaniesService,
+    private readonly banksService: BanksService,
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
@@ -33,7 +36,7 @@ export class EditPaymentOrdersComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
-    paymentCode: '01',
+    companyId: [ '', Validators.required ],
     concept: [ null, Validators.required ],
     charge: [ null, Validators.required ],
     observations: null,
@@ -45,17 +48,17 @@ export class EditPaymentOrdersComponent implements OnInit {
     isPaid: false,
   });
 
-  public paymentTypes = [
-    { code: '01', name: 'EFECTIVO' },
-    { code: '02', name: 'VISA' },
-    { code: '03', name: 'MASTERCARD' },
-    { code: '04', name: 'AMERICAN EXPRESS' },
-    { code: '05', name: 'YAPE' },
-    { code: '06', name: 'PLIN' },
-    { code: '07', name: 'TRANSFERENCIA' },
-    { code: '08', name: 'DEPOSITO' },
-    { code: '09', name: 'ONLINE' },
-  ];
+  // public paymentTypes = [
+  //   { code: '01', name: 'EFECTIVO' },
+  //   { code: '02', name: 'VISA' },
+  //   { code: '03', name: 'MASTERCARD' },
+  //   { code: '04', name: 'AMERICAN EXPRESS' },
+  //   { code: '05', name: 'YAPE' },
+  //   { code: '06', name: 'PLIN' },
+  //   { code: '07', name: 'TRANSFERENCIA' },
+  //   { code: '08', name: 'DEPOSITO' },
+  //   { code: '09', name: 'ONLINE' },
+  // ];
  
   public isLoading: boolean = false;
   public provider: ProviderModel|null = null;
@@ -63,11 +66,14 @@ export class EditPaymentOrdersComponent implements OnInit {
   public banks: BankModel[] = [];
   private paymentOrderId: string = '';
   private pdfId: string = '';
+  public companies: CompanyModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
+  private handleCompanies$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
+    this.handleCompanies$.unsubscribe();
   }
   
   ngOnInit(): void { 
@@ -81,6 +87,10 @@ export class EditPaymentOrdersComponent implements OnInit {
 
     this.banksService.getBanks().subscribe(banks => {
       this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {

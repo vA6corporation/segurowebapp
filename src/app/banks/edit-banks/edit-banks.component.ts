@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BanksService } from '../banks.service';
 
@@ -17,7 +17,6 @@ export class EditBanksComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly banksService: BanksService,
     private readonly route: ActivatedRoute,
-    // private readonly router: Router,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -53,7 +52,6 @@ export class EditBanksComponent implements OnInit {
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();
         this.navigationService.showMessage('Se han guardado los cambios');
-        // this.router.navigate(['/banks']);
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();
