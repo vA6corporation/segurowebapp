@@ -5,7 +5,13 @@ import { InvestmentModel } from '../investments/investment.model';
 import { MovablePropertyModel } from '../movable-properties/movable-property.model';
 import { PropertyModel } from '../properties/property.model';
 import { ShareholderModel } from '../shareholders/shareholder.model';
+import { AccessCreditModel } from './dialog-add-access-credit/access-credit.model';
+import { AccountRotationModel } from './dialog-add-account-rotation/account-rotation.model';
 import { GuarantiesModel } from './dialog-add-guaranties/guaranties.model';
+import { MainCustomersModel } from './dialog-add-main-customers/main-customers.model';
+import { MainSuppliersModel } from './dialog-add-main-suppliers/main-suppliers.model';
+import { SalesMixModel } from './dialog-add-salesmix/sales-mix.model';
+import { TrialsModel } from './dialog-add-trials/trials.model';
 import { FacilityCreditModel } from './facility-credit.model';
 
 export interface BusinessModel {
@@ -20,6 +26,9 @@ export interface BusinessModel {
   birthDate: string;
 
   turnOfBusiness: string;
+  sourcesOfIncome: string,
+  countrySource: string,
+  amountUse: number;
   countryOrigin: string;
   districtOrigin: string;
   provinceOrigin: string;
@@ -45,19 +54,33 @@ export interface BusinessModel {
   osceCertifiedDate: string;
   osceObservation: string;
 
-  representativeName: string;
-  representativePosition: string;
-  representativeYearsOfService: string;
-  representativeCountryOrigin: string;
-  representativeCountryResidence: string;
-  representativeProfessionOccupation: string;
-  representativeEmail: string;
-  representativePEPInstitution: string;
-  representativePEPPositionn: string;
-  representativeCriminalActivities: string;
-  representativeCrimeStatus: string;
-  representativeCrimeYear: string;
-  representativeCrime: string;
+  representativePosition: string
+  representativeYearsOfService: string
+  representativeCountryOrigin: string
+  representativeCountryResidence: string
+
+  representativeDistrictResidence: string
+  representativeProvinceResidence: string
+  representativeDepartmentResidence: string
+  representativeAddressResidence: string
+  representativeMobileNumber: string
+  representativePhoneNumber: string
+
+  representativeProfessionOccupation: string
+  representativeEmail: string
+  representativePEPInstitution: string
+  representativePEPPositionn: string
+
+  representativeDocumentType: string
+  representativeDocument: number
+  representativeName: string
+  representativeNationality: string
+  representativeMaritalStatus: string
+  representativePropertyRegime: string
+  representativeBirthDate: string
+  representativeCrimeStatus: string
+  representativeCrimeYear: number
+  representativeCrime: string
 
   representativeSpouseDocumentType: string;
   representativeSpouseDocument: string;
@@ -71,6 +94,12 @@ export interface BusinessModel {
   updatedAt: any;
   userId: string;
   businessId: string;
+  salesMix: SalesMixModel[];
+  mainSuppliers: MainSuppliersModel[];
+  mainCustomers: MainCustomersModel[];
+  accessCredit: AccessCreditModel[];
+  accountRotation: AccountRotationModel[];
+  trials: TrialsModel[];
   boardMembers: BoardMembersModel[];
   shareholders: ShareholderModel[];
   properties: PropertyModel[];

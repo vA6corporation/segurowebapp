@@ -10,8 +10,10 @@ export interface TemplateModel {
   _id: string
   businessId: string
   partnershipId: string
+  startDate: string
   business: BusinessModel
   guaranties: GuaranteeModel[]
   partnership: PartnershipModel|null
   beneficiary: BeneficiaryModel
+  tenderNumber: string
 }

@@ -6,7 +6,7 @@ import { TemplatesComponent } from './templates/templates.component';
 import { MaterialModule } from '../material.module';
 import { CreateTemplatesComponent } from './create-templates/create-templates.component';
 import { EditTemplatesComponent } from './edit-templates/edit-templates.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogTemplatesComponent } from './dialog-templates/dialog-templates.component';
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
 
@@ -23,6 +23,7 @@ import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add
     CommonModule,
     TemplatesRoutingModule,
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule,
   ]
 })

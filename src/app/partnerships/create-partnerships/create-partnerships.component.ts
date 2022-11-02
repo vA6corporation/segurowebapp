@@ -29,6 +29,7 @@ export class CreatePartnershipsComponent implements OnInit {
     document: null,
     name: [ null, Validators.required ],
     address: null,
+    constitutedAt: null,
     representativeDocumentType: 'DNI',
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],

@@ -17,6 +17,12 @@ import { ExperiencesModule } from '../experiences/experiences.module';
 import { DialogFacilityCreditsComponent } from './dialog-facility-credits/dialog-facility-credits.component';
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
 import { BoardMembersModule } from '../board-members/board-members.module';
+import { DialogAddSalesmixComponent } from './dialog-add-salesmix/dialog-add-salesmix.component';
+import { DialogAddMainCustomersComponent } from './dialog-add-main-customers/dialog-add-main-customers.component';
+import { DialogAddMainSuppliersComponent } from './dialog-add-main-suppliers/dialog-add-main-suppliers.component';
+import { DialogAddAccountRotationComponent } from './dialog-add-account-rotation/dialog-add-account-rotation.component';
+import { DialogAddAccessCreditComponent } from './dialog-add-access-credit/dialog-add-access-credit.component';
+import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +31,7 @@ import { BoardMembersModule } from '../board-members/board-members.module';
     EditBusinessesComponent, 
     DialogBusinessesComponent, 
     DialogConstructionBusinessesComponent, 
-    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent,
+    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent,
   ],
   imports: [
     CommonModule,

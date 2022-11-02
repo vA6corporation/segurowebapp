@@ -30,25 +30,23 @@
       <input type="text" matInput formControlName="object">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Numero de licitación (nomenclatura) </mat-label>
+      <input type="text" matInput formControlName="tenderNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de inicio *</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" />
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Plazo de ejecución de la obra (Días calendarios) *</mat-label>
+      <input type="number" matInput formControlName="executionPeriodWork">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Lugar de ejecucion *</mat-label>
       <input type="text" matInput formControlName="executionPlace">
     </mat-form-field>
-    <!-- <mat-form-field appearance="fill">
-      <mat-label>Tipo de fianza</mat-label>
-      <mat-select formControlName="guaranteeCode">
-        <mat-option value="GAMF">ADELANTO DE MATERIALES</mat-option>
-        <mat-option value="GADF">ADELANTO DIRECTO</mat-option>
-        <mat-option value="GFCF">FIEL CUMPLIMIENTO</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Plazo de la fianza *</mat-label>
-      <input type="number" matInput formControlName="guaranteeTimeLimit">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Monto de la fianza *</mat-label>
-      <input type="number" matInput formControlName="guaranteeMount">
-    </mat-form-field> -->
     <mat-form-field appearance="fill">
       <mat-label>Presupuesto base *</mat-label>
       <input type="number" matInput formControlName="baseBudget">

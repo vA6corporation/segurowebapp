@@ -30,12 +30,10 @@ export class EditTemplatesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
-    // guaranteeCode: [ null, Validators.required ],
-    // guaranteeTimeLimit: [ null, Validators.required ],
-    // guaranteeMount: [ null, Validators.required ],
+    startDate: [ null, Validators.required ],
     baseBudget: [ null, Validators.required ],
     contractMount: [ null, Validators.required ],
-    depositorName: [ null, Validators.required ],
+    depositorName: null,
     partnership: this.formBuilder.group({
       _id: null,
       name: null,
@@ -48,6 +46,8 @@ export class EditTemplatesComponent implements OnInit {
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
+    executionPeriodWork: [ null, Validators.required ],
+    tenderNumber: null,
   });
   public guaranties: any[] = [];
   private templateId: string = '';
@@ -65,7 +65,6 @@ export class EditTemplatesComponent implements OnInit {
     this.activatedRoute$ = this.activatedRoute.params.subscribe(params => {
       this.templateId = params.templateId;
       this.templatesService.getTemplateById(this.templateId).subscribe(template => {
-        console.log(template);
         const { business, partnership, beneficiary, guaranties, ...rest } = template;
         this.formGroup.patchValue(rest);
         this.formGroup.get('business')?.patchValue(business);
@@ -105,9 +104,16 @@ export class EditTemplatesComponent implements OnInit {
   }
 
   openDialogAddGuaranties() {
+    if(this.formGroup.controls['contractMount'].value == null){
+      this.navigationService.showMessage('Debe agregar el monto del contrato');
+      return
+    }
     const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
       width: '600px',
-      position: { top: '20px' }
+      position: { top: '20px' },
+      data: {
+        amount: this.formGroup.controls['contractMount'].value
+      }
     });
 
     dialogRef.afterClosed().subscribe(guarantee => {

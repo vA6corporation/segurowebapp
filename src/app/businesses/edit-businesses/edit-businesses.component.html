@@ -1,12 +1,6 @@
 <section class="container py-4">
   <div class="mb-3">
-    <button
-      type="button"
-      (click)="onAttachPdfDocuments()"
-      [disabled]="isLoading"
-      mat-raised-button
-      color="primary"
-    >
+    <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">
       DOCUMENTOS
     </button>
   </div>
@@ -21,12 +15,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de Documento *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="document"
-        [maxlength]="maxlength"
-      />
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nombres/Razon Social *</mat-label>
@@ -35,10 +24,6 @@
     <mat-form-field appearance="fill">
       <mat-label>Email *</mat-label>
       <input type="email" matInput formControlName="email" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Firma(s) autorizada(s</mat-label>
-      <input type="text" matInput formControlName="authorizedSignatures" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
@@ -94,18 +79,11 @@
       <mat-label>Direccion de Residencia</mat-label>
       <input type="text" matInput formControlName="addressResidence" />
     </mat-form-field>
-    
+
     <mat-form-field appearance="fill">
       <mat-label>Fecha de registro mercantil</mat-label>
-      <input
-        matInput
-        [matDatepicker]="inscriptionAt"
-        formControlName="inscriptionAt"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="inscriptionAt"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt" />
+      <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -113,47 +91,51 @@
       <input type="text" matInput formControlName="turnOfBusiness" />
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Fuentes de ingreso *</mat-label>
+      <input type="text" matInput formControlName="sourcesOfIncome" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pais de origen de los fondos *</mat-label>
+      <input type="text" matInput formControlName="countrySource" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Autorizo expresa e irrevocablemente a ustedes a utilizar el monto de</mat-label>
+      <input type="number" matInput formControlName="amountUse" />
+    </mat-form-field>
+
     <div class="mb-3">
-      <mat-slide-toggle formControlName="UIF"
-        >Ley que crea a la Unidad de Inteligencia Financiera –
-        UIF</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="UIF">Ley que crea a la Unidad de Inteligencia Financiera –
+        UIF</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="hasComplianceOfficer"
-        >¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="hasComplianceOfficer">¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="managementManualLAFT"
-        >¿Cuenta con Manual de Prevención y Gestión de LAFT?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="managementManualLAFT">¿Cuenta con Manual de Prevención y Gestión de LAFT?
+      </mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="codeEthicsConduct"
-        >¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="codeEthicsConduct">¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="carryReviewClients"
-        >¿Lleva a cabo una revisión de sus Clientes, Proveedores y Contrapartes
+      <mat-slide-toggle formControlName="carryReviewClients">¿Lleva a cabo una revisión de sus Clientes, Proveedores y
+        Contrapartes
         para verificar si están incluidos en Listas Internacionales de personas
-        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle
-      >
+        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="madeMakeInvestments"
-        >¿Ha realizado o tiene pensado realizar inversiones en países que
+      <mat-slide-toggle formControlName="madeMakeInvestments">¿Ha realizado o tiene pensado realizar inversiones en
+        países que
         presentan baja regulación frente a delitos de LAFT? (Ejemplo: Irán,
-        North Corea, Siria)</mat-slide-toggle
-      >
+        North Corea, Siria)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="companyEverBeenInvestigated"
-        >¿Su empresa ha sido alguna vez investigada, procesada o sancionada por
+      <mat-slide-toggle formControlName="companyEverBeenInvestigated">¿Su empresa ha sido alguna vez investigada,
+        procesada o sancionada por
         incumplimiento de las regulaciones sobre Prevención de
-        LAFT?</mat-slide-toggle
-      >
+        LAFT?</mat-slide-toggle>
     </div>
     <hr />
     <br />
@@ -173,16 +155,33 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha Certificada</mat-label>
-      <input type="text" matInput formControlName="osceCertifiedDate" />
+      <input
+        matInput
+        [matDatepicker]="osceCertifiedDate"
+        formControlName="osceCertifiedDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="osceCertifiedDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #osceCertifiedDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez? De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>
+      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez?
+        De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>
       <input type="text" matInput formControlName="osceObservation" />
     </mat-form-field>
     <hr />
     <br />
 
     <h2>Representante legal</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
       <mat-select formControlName="representativeDocumentType">
@@ -199,16 +198,21 @@
       <input type="text" matInput formControlName="representativeName" />
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Estudios *</mat-label>
+      <mat-select formControlName="representativeStudies">
+        <mat-option value="PRIMARIA">PRIMARIA</mat-option>
+        <mat-option value="SECUNDARIA">SECUNDARIA</mat-option>
+        <mat-option value="TÉCNICO">TÉCNICO</mat-option>
+        <mat-option value="UNIVERSITARIA">UNIVERSITARIA</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
       <input type="email" matInput formControlName="representativeEmail" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>País de origen</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeCountryOrigin"
-      />
+      <input type="text" matInput formControlName="representativeCountryOrigin" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nacionalidad</mat-label>
@@ -235,6 +239,25 @@
       <input type="text" matInput formControlName="representativeAddressResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Tipo de vivienda *</mat-label>
+      <mat-select formControlName="representativeLivingPlace">
+        <mat-option value="PROPIA">PROPIA</mat-option>
+        <mat-option value="ALQUILADA">ALQUILADA</mat-option>
+        <mat-option value="OTRO">OTRO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'PROPIA'">
+      <mat-label>Totalmente pagada?</mat-label>
+      <mat-select formControlName="representativeLivingPlacePay">
+        <mat-option value="SI">SI</mat-option>
+        <mat-option value="NO">NO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'ALQUILADA'">
+      <mat-label>Precio del alquiler</mat-label>
+      <input type="number" matInput formControlName="representativeLivingPlacePrice" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
       <input type="text" matInput formControlName="representativeMobileNumber" />
     </mat-form-field>
@@ -252,11 +275,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Profesión / Ocupación</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativeProfessionOccupation"
-      />
+      <input type="text" matInput formControlName="representativeProfessionOccupation" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Cargo</mat-label>
@@ -264,34 +283,22 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Años de servicio</mat-label>
-      <input
-        type="number"
-        matInput
-        formControlName="representativeYearsOfService"
-      />
+      <input type="number" matInput formControlName="representativeYearsOfService" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Sueldo</mat-label>
+      <input type="number" matInput formControlName="representativeSalary" />
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedPEP"
-        [ngModelOptions]="{ standalone: true }"
-        >PEP</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{ standalone: true }">PEP</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Institución</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPInstitution"
-      />
+      <input type="text" matInput formControlName="representativePEPInstitution" />
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedPEP">
       <mat-label>Cargo</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="representativePEPPositionn"
-      />
+      <input type="text" matInput formControlName="representativePEPPositionn" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Regimen de bienes</mat-label>
@@ -303,24 +310,14 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha de nacimiento</mat-label>
-      <input
-        matInput
-        [matDatepicker]="birthDatePicker"
-        formControlName="representativeBirthDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="birthDatePicker"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="representativeBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>
     <div class="mb-3">
-      <mat-slide-toggle
-        [(ngModel)]="isCheckedCrime"
-        [ngModelOptions]="{ standalone: true }"
-        >¿han sido sentenciada o se encuentran investigada por actividades
-        criminales?</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="isCheckedCrime" [ngModelOptions]="{ standalone: true }">¿han sido sentenciada o se
+        encuentran investigada por actividades
+        criminales?</mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Estatus (sentenciado / investigado)</mat-label>
@@ -332,64 +329,57 @@
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedCrime">
       <mat-label>Año</mat-label>
-      <input
-        matInput
-        [matDatepicker]="representativeCrimeYear"
-        formControlName="representativeCrimeYear"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="representativeCrimeYear"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="representativeCrimeYear" formControlName="representativeCrimeYear" />
+      <mat-datepicker-toggle matSuffix [for]="representativeCrimeYear"></mat-datepicker-toggle>
       <mat-datepicker #representativeCrimeYear></mat-datepicker>
     </mat-form-field>
 
     <h1>Conyuge del representante legal</h1>
-        <mat-form-field appearance="fill">
-          <mat-label>Tipo de Documento *</mat-label>
-          <mat-select formControlName="representativeSpouseDocumentType">
-            <mat-option value="RUC">RUC</mat-option>
-            <mat-option value="DNI">DNI</mat-option>
-            <mat-option value="CE">CE</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>N° de Documento *</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="representativeSpouseDocument"
-            [maxlength]="maxlength"
-          />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Nombres/Razon Social *</mat-label>
-          <input type="text" matInput formControlName="representativeSpouseName" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Nacionalidad *</mat-label>
-          <input type="text" matInput formControlName="representativeSpouseNationality" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Estado civil *</mat-label>
-          <mat-select formControlName="representativeSpouseMaritalStatus">
-            <mat-option value="Soltero(a)">Soltero(a)</mat-option>
-            <mat-option value="Casado(a)">Casado(a)</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha de nacimiento</mat-label>
-          <input
-            matInput
-            [matDatepicker]="representativeSpouseBirthDatePicker"
-            formControlName="representativeSpouseBirthDate"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="representativeSpouseBirthDatePicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
-        </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeSpouseGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Documento *</mat-label>
+      <mat-select formControlName="representativeSpouseDocumentType">
+        <mat-option value="RUC">RUC</mat-option>
+        <mat-option value="DNI">DNI</mat-option>
+        <mat-option value="CE">CE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Documento *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseDocument" [maxlength]="maxlength" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres/Razon Social *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseName" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nacionalidad *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseNationality" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado civil *</mat-label>
+      <mat-select formControlName="representativeSpouseMaritalStatus">
+        <mat-option value="Soltero(a)">Soltero(a)</mat-option>
+        <mat-option value="Casado(a)">Casado(a)</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input matInput [matDatepicker]="representativeSpouseBirthDatePicker"
+        formControlName="representativeSpouseBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="representativeSpouseBirthDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Profesión / Ocupación</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseProfessionOccupation" />
+    </mat-form-field>
     <hr />
     <br />
 
@@ -415,57 +405,165 @@
       <input type="text" matInput formControlName="operationBanks" />
     </mat-form-field>
 
-    <mat-list class="mb-3">
-      <div mat-subheader>Miembros del directorio</div>
-      <mat-list-item *ngFor="let boardMember of boardMembers; let i = index">
-        <div>
-          {{ boardMember.name | uppercase }}
-          <br />
-          <span class="text-muted">
-            {{ boardMember.typeDocument }}: {{ boardMember.document }}
-          </span>
-        </div>
-        <span class="spacer"></span>
+    <hr />
+    <h3>MIX DE VENTAS</h3>
+    <mat-card *ngFor="let salesMixItem of salesMix; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ salesMixItem.activity | uppercase }}
+        <p class="text-muted">
+          {{ salesMixItem.amountOne }} - {{ salesMixItem.percentageOne }}
+        </p>
+        <p class="text-muted">
+          {{ salesMixItem.amountTwo }} - {{ salesMixItem.percentageTwo }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveSalesmix(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddSalesmix()">
+      MIX DE VENTAS
+    </button>
+
+    <h3>PRINCIPALES CLIENTES</h3>
+    <mat-card *ngFor="let mainSupplier of mainSuppliers; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ mainSupplier.name | uppercase }}
+        <p class="text-muted">
+          {{ mainSupplier.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainSupplier.turnBusiness }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveMainSuppliers(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainSuppliers()">
+      PRINCIPALES CLIENTES
+    </button>
+
+    <h3>PRINCIPALES PROVEEDORES</h3>
+    <mat-card *ngFor="let mainCustomer of mainCustomers; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ mainCustomer.name | uppercase }}
+        <p class="text-muted">
+          {{ mainCustomer.document }}
+        </p>
+        <p class="text-muted">
+          {{ mainCustomer.turnBusiness }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveMainCustomers(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddMainCustomers()">
+      PRINCIPALES PROVEEDORES
+    </button>
+
+    <h3>POLÍTICAS DE ROTACIÓN DE CUENTAS</h3>
+    <mat-card *ngFor="let accountRotationItem of accountRotation; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ accountRotationItem.typeAccount | uppercase }}
+        <p class="text-muted">{{ accountRotationItem.rotation }} dias</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveAccountRotation(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccountRotation()">
+      POLÍTICAS DE ROTACIÓN DE CUENTAS
+    </button>
+
+    <h3>ACCESO AL CRÉDITO</h3>
+    <mat-card *ngFor="let accessCreditItem of accessCredit; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ accessCreditItem.insuranceCarrier | uppercase }}
+        <p class="text-muted">
+          {{ accessCreditItem.financialProducts }} -
+          {{ accessCreditItem.creditLine }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveAccessCredit(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddAccessCredit()">
+      ACCESO AL CRÉDITO
+    </button>
+
+    <h3>JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES</h3>
+    <mat-card *ngFor="let judgment of trials; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ judgment.name | uppercase }}
+        <p class="text-muted">
+          {{ judgment.reason }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-icon-button (click)="onRemoveJudgment(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddJudgment()">
+      JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES
+    </button>
+
+    <h3>AGREGAR MIEMBROS DEL DIRECTORIO</h3>
+    <mat-card *ngFor="let boardMember of boardMembers; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ boardMember.name | uppercase }}
+        <p class="text-muted">
+          {{ boardMember.typeDocument }}: {{ boardMember.document }}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveBoardMembers(i)">
           <mat-icon>delete</mat-icon>
         </button>
-      </mat-list-item>
-    </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogBoardMembers()"
-    >
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogBoardMembers()">
       AGREGAR MIEMBROS DEL DIRECTORIO
     </button>
 
-    <mat-list class="mb-3">
-      <div mat-subheader>PERSONAS JURÍDICAS VINCULADAS</div>
-      <mat-list-item *ngFor="let linkedBusinesse of linkedBusinesses; let i = index">
-        <div>
-          {{ linkedBusinesse.name | uppercase }}
-          <br />
-          <span class="text-muted">
-            {{ linkedBusinesse.documentType }}: {{ linkedBusinesse.document }}
-          </span>
-        </div>
-        <span class="spacer"></span>
-        <button type="button" mat-icon-button (click)="onRemoveLinkedBusinesses(i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogLinkedBusinesses()"
-    >
+    <h3>PERSONAS JURÍDICAS VINCULADAS</h3>
+    <mat-card *ngFor="let linkedBusinesse of linkedBusinesses; let i = index">
+      <mat-card-content>
+        {{ linkedBusinesse.name | uppercase }}
+        <br />
+        <span class="text-muted">
+          {{ linkedBusinesse.documentType }}: {{ linkedBusinesse.document }}
+        </span>
+      </mat-card-content>
+      <mat-card-actions align="end">
+      <button type="button" mat-icon-button (click)="onRemoveLinkedBusinesses(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogLinkedBusinesses()">
       AGREGAR PERSONAS JURÍDICAS VINCULADAS
     </button>
 
@@ -485,14 +583,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogShareholders()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogShareholders()">
       AGREGAR ACCIONISTA
     </button>
 
@@ -553,38 +645,28 @@
     <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogInvestments()">
       AGREGAR INVERSION
     </button>
-    <mat-list class="mb-3">
-      <div mat-subheader>Experiencia</div>
-      <mat-list-item *ngFor="let experience of experiences; let i = index">
-        <div>
-          {{ experience.object }}
-          <br />
-          <span class="text-muted">
-            {{ experience.contractor }}
-          </span>
-        </div>
-        <span class="spacer"></span>
+    <div mat-subheader>Experiencia</div>
+    <mat-card *ngFor="let experience of experiences; let i = index" style="margin-bottom: 5px">
+      <mat-card-content>
+        {{ experience.tenderObjectContract }}
+        <p class="text-muted">
+          {{ experience.contractor }} {{experience.nameConsortium}} {{experience.participationConsortium}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
         <button type="button" mat-icon-button (click)="onRemoveExperience(i)">
           <mat-icon>delete</mat-icon>
         </button>
-      </mat-list-item>
-    </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogExperiences()"
-    >
+      </mat-card-actions>
+    </mat-card>
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogExperiences()">
       AGREGAR EXPERIENCIA
     </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>Facilidades crediticias</div>
-      <mat-list-item
-        *ngFor="let facilityCredit of facilityCredits; let i = index"
-      >
+      <mat-list-item *ngFor="let facilityCredit of facilityCredits; let i = index">
         <div>
           {{ facilityCredit.financier | uppercase }}
           <br />
@@ -593,31 +675,19 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveFacilityCredit(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveFacilityCredit(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogFacilityCredits()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogFacilityCredits()">
       AGREGAR FACILIDAD CREDITICIA
     </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>CUADRO DE FIANZAS VIGENTES DE CADA CONSORCIADO</div>
-      <mat-list-item
-        *ngFor="let guarantee of guaranties,; let i = index"
-      >
+      <mat-list-item *ngFor="let guarantee of guaranties; let i = index">
         <div>
           {{ guarantee.nameSuretyEntities | uppercase }}
           <br />
@@ -626,43 +696,23 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveGuaranties(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveGuaranties(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddGuaranties()"
-    >
-    FIANZAS VIGENTES DE CADA CONSORCIADO
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddGuaranties()">
+      FIANZAS VIGENTES DE CADA CONSORCIADO
     </button>
 
     <div class="d-flex">
       <span class="spacer"></span>
-      <button
-        type="button"
-        mat-stroked-button
-        color="primary"
-        routerLink="/businesses"
-      >
+      <button type="button" mat-stroked-button color="primary" routerLink="/businesses">
         CANCELAR
       </button>
       <div class="divider"></div>
-      <button
-        type="submit"
-        [disabled]="isLoading"
-        mat-raised-button
-        color="primary"
-      >
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">
         GUARDAR
       </button>
     </div>

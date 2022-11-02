@@ -9,6 +9,12 @@
       <input type="text" matInput formControlName="name">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Fecha de constitución *</mat-label>
+      <input matInput [matDatepicker]="datePicker" formControlName="constitutedAt">
+      <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Direccion</mat-label>
       <input type="text" matInput formControlName="address">
     </mat-form-field>
