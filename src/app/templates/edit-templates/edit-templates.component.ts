@@ -33,7 +33,7 @@ export class EditTemplatesComponent implements OnInit {
     startDate: [ null, Validators.required ],
     baseBudget: [ null, Validators.required ],
     contractMount: [ null, Validators.required ],
-    depositorName: [ null, Validators.required ],
+    depositorName: null,
     partnership: this.formBuilder.group({
       _id: null,
       name: null,

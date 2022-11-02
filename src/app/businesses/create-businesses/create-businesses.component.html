@@ -10,12 +10,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de Documento *</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="document"
-        [maxlength]="maxlength"
-      />
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Nombres/Razon Social *</mat-label>
@@ -79,18 +74,11 @@
       <mat-label>Direccion de Residencia</mat-label>
       <input type="text" matInput formControlName="addressRecidence" />
     </mat-form-field>
-    
+
     <mat-form-field appearance="fill">
       <mat-label>Fecha de registro mercantil</mat-label>
-      <input
-        matInput
-        [matDatepicker]="inscriptionAt"
-        formControlName="inscriptionAt"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="inscriptionAt"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt" />
+      <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -113,46 +101,36 @@
     </mat-form-field>
 
     <div class="mb-3">
-      <mat-slide-toggle formControlName="UIF"
-        >Ley que crea a la Unidad de Inteligencia Financiera –
-        UIF</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="UIF">Ley que crea a la Unidad de Inteligencia Financiera –
+        UIF</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="hasComplianceOfficer"
-        >¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="hasComplianceOfficer">¿Cuenta con Oficial de Cumplimiento?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="managementManualLAFT"
-        >¿Cuenta con Manual de Prevención y Gestión de LAFT?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="managementManualLAFT">¿Cuenta con Manual de Prevención y Gestión de LAFT?
+      </mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="codeEthicsConduct"
-        >¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="codeEthicsConduct">¿Cuenta con Código de Ética o Conducta?</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="carryReviewClients"
-        >¿Lleva a cabo una revisión de sus Clientes, Proveedores y Contrapartes
+      <mat-slide-toggle formControlName="carryReviewClients">¿Lleva a cabo una revisión de sus Clientes, Proveedores y
+        Contrapartes
         para verificar si están incluidos en Listas Internacionales de personas
-        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle
-      >
+        vinculas a actividades de LAFT? (OFAC, CSNU, UE)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="madeMakeInvestments"
-        >¿Ha realizado o tiene pensado realizar inversiones en países que
+      <mat-slide-toggle formControlName="madeMakeInvestments">¿Ha realizado o tiene pensado realizar inversiones en
+        países que
         presentan baja regulación frente a delitos de LAFT? (Ejemplo: Irán,
-        North Corea, Siria)</mat-slide-toggle
-      >
+        North Corea, Siria)</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="companyEverBeenInvestigated"
-        >¿Su empresa ha sido alguna vez investigada, procesada o sancionada por
+      <mat-slide-toggle formControlName="companyEverBeenInvestigated">¿Su empresa ha sido alguna vez investigada,
+        procesada o sancionada por
         incumplimiento de las regulaciones sobre Prevención de
-        LAFT?</mat-slide-toggle
-      >
+        LAFT?</mat-slide-toggle>
     </div>
     <hr />
     <br />
@@ -172,25 +150,26 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Fecha Certificada</mat-label>
-      <input
-        matInput
-        [matDatepicker]="osceCertifiedDate"
-        formControlName="osceCertifiedDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="osceCertifiedDate"
-      ></mat-datepicker-toggle>
+      <input matInput [matDatepicker]="osceCertifiedDate" formControlName="osceCertifiedDate" />
+      <mat-datepicker-toggle matSuffix [for]="osceCertifiedDate"></mat-datepicker-toggle>
       <mat-datepicker #osceCertifiedDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez? De ser así, indicar el motivo, fecha, y lugar de la sanción.</mat-label>
+      <mat-label>¿La empresa ha sido objeto de sanciones por parte del OSCE alguna vez? De ser así, indicar el motivo,
+        fecha, y lugar de la sanción.</mat-label>
       <input type="text" matInput formControlName="osceObservation" />
     </mat-form-field>
     <hr />
     <br />
 
     <h2>Representante legal</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
       <mat-select formControlName="representativeDocumentType">
@@ -205,6 +184,15 @@
     <mat-form-field appearance="fill">
       <mat-label>Nombres del representante</mat-label>
       <input type="text" matInput formControlName="representativeName" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estudios *</mat-label>
+      <mat-select formControlName="representativeStudies">
+        <mat-option value="PRIMARIA">PRIMARIA</mat-option>
+        <mat-option value="SECUNDARIA">SECUNDARIA</mat-option>
+        <mat-option value="TÉCNICO">TÉCNICO</mat-option>
+        <mat-option value="UNIVERSITARIA">UNIVERSITARIA</mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
@@ -239,6 +227,25 @@
       <input type="text" matInput formControlName="representativeAddressResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Tipo de vivienda *</mat-label>
+      <mat-select formControlName="representativeLivingPlace">
+        <mat-option value="PROPIA">PROPIA</mat-option>
+        <mat-option value="ALQUILADA">ALQUILADA</mat-option>
+        <mat-option value="OTRO">OTRO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'PROPIA'">
+      <mat-label>Totalmente pagada?</mat-label>
+      <mat-select formControlName="representativeLivingPlacePay">
+        <mat-option value="SI">SI</mat-option>
+        <mat-option value="NO">NO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'ALQUILADA'">
+      <mat-label>Precio del alquiler</mat-label>
+      <input type="number" matInput formControlName="representativeLivingPlacePrice" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
       <input type="text" matInput formControlName="representativeMobileNumber" />
     </mat-form-field>
@@ -265,6 +272,10 @@
     <mat-form-field appearance="fill">
       <mat-label>Años de servicio</mat-label>
       <input type="number" matInput formControlName="representativeYearsOfService" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Sueldo</mat-label>
+      <input type="number" matInput formControlName="representativeSalary" />
     </mat-form-field>
     <div class="mb-3">
       <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{ standalone: true }">PEP</mat-slide-toggle>
@@ -312,51 +323,51 @@
     </mat-form-field>
 
     <h1>Conyuge del representante legal</h1>
-        <mat-form-field appearance="fill">
-          <mat-label>Tipo de Documento *</mat-label>
-          <mat-select formControlName="representativeSpouseDocumentType">
-            <mat-option value="RUC">RUC</mat-option>
-            <mat-option value="DNI">DNI</mat-option>
-            <mat-option value="CE">CE</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>N° de Documento *</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="representativeSpouseDocument"
-            [maxlength]="maxlength"
-          />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Nombres/Razon Social *</mat-label>
-          <input type="text" matInput formControlName="representativeSpouseName" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Nacionalidad *</mat-label>
-          <input type="text" matInput formControlName="representativeSpouseNationality" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Estado civil *</mat-label>
-          <mat-select formControlName="representativeSpouseMaritalStatus">
-            <mat-option value="Soltero(a)">Soltero(a)</mat-option>
-            <mat-option value="Casado(a)">Casado(a)</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha de nacimiento</mat-label>
-          <input
-            matInput
-            [matDatepicker]="representativeSpouseBirthDatePicker"
-            formControlName="representativeSpouseBirthDate"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="representativeSpouseBirthDatePicker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
-        </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeSpouseGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Documento *</mat-label>
+      <mat-select formControlName="representativeSpouseDocumentType">
+        <mat-option value="RUC">RUC</mat-option>
+        <mat-option value="DNI">DNI</mat-option>
+        <mat-option value="CE">CE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>N° de Documento *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseDocument" [maxlength]="maxlength" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres/Razon Social *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseName" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nacionalidad *</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseNationality" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado civil *</mat-label>
+      <mat-select formControlName="representativeSpouseMaritalStatus">
+        <mat-option value="Soltero(a)">Soltero(a)</mat-option>
+        <mat-option value="Casado(a)">Casado(a)</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de nacimiento</mat-label>
+      <input matInput [matDatepicker]="representativeSpouseBirthDatePicker"
+        formControlName="representativeSpouseBirthDate" />
+      <mat-datepicker-toggle matSuffix [for]="representativeSpouseBirthDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Profesión / Ocupación</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseProfessionOccupation" />
+    </mat-form-field>
     <hr />
     <br />
 
@@ -504,7 +515,7 @@
       (click)="onDialogAddJudgment()">
       JUICIOS CIVILES, COMERCIALES, LABORALES, ARBITRALES Y CONTENCIOSOS ADMINISTRATIVOS VIGENTES
     </button>
-    
+
     <mat-list class="mb-3">
       <div mat-subheader>Miembros del directorio</div>
       <mat-list-item *ngFor="let boardMember of boardMembers; let i = index">
@@ -521,14 +532,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogBoardMembers()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogBoardMembers()">
       AGREGAR MIEMBROS DEL DIRECTORIO
     </button>
 
@@ -548,14 +553,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogLinkedBusinesses()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogLinkedBusinesses()">
       AGREGAR PERSONAS JURÍDICAS VINCULADAS
     </button>
 
@@ -575,14 +574,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogShareholders()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogShareholders()">
       AGREGAR ACCIONISTA
     </button>
     <mat-list class="mb-3">
@@ -601,21 +594,13 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogProperties()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogProperties()">
       AGREGAR INMUEBLE
     </button>
     <mat-list class="mb-3">
       <div mat-subheader>Bienes mubles</div>
-      <mat-list-item
-        *ngFor="let movableProperty of movableProperties; let i = index"
-      >
+      <mat-list-item *ngFor="let movableProperty of movableProperties; let i = index">
         <div>
           {{ movableProperty.description | uppercase }}
           <br />
@@ -624,23 +609,13 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveMovableProperty(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveMovableProperty(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogMovableProperties()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogMovableProperties()">
       AGREGAR MUEBLE
     </button>
     <mat-list class="mb-3">
@@ -659,14 +634,8 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogInvestments()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogInvestments()">
       AGREGAR INVERSION
     </button>
     <mat-list class="mb-3">
@@ -685,22 +654,14 @@
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogExperiences()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogExperiences()">
       AGREGAR EXPERIENCIA
     </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>Facilidades crediticias</div>
-      <mat-list-item
-        *ngFor="let facilityCredit of facilityCredits; let i = index"
-      >
+      <mat-list-item *ngFor="let facilityCredit of facilityCredits; let i = index">
         <div>
           {{ facilityCredit.financier | uppercase }}
           <br />
@@ -709,31 +670,19 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveFacilityCredit(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveFacilityCredit(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogFacilityCredits()"
-    >
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogFacilityCredits()">
       AGREGAR FACILIDAD CREDITICIA
     </button>
 
     <mat-list class="mb-3">
       <div mat-subheader>CUADRO DE FIANZAS VIGENTES DE CADA CONSORCIADO</div>
-      <mat-list-item
-        *ngFor="let guarantee of guaranties,; let i = index"
-      >
+      <mat-list-item *ngFor="let guarantee of guaranties,; let i = index">
         <div>
           {{ guarantee.nameSuretyEntities | uppercase }}
           <br />
@@ -742,43 +691,23 @@
           </span>
         </div>
         <span class="spacer"></span>
-        <button
-          type="button"
-          mat-icon-button
-          (click)="onRemoveGuaranties(i)"
-        >
+        <button type="button" mat-icon-button (click)="onRemoveGuaranties(i)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-list-item>
     </mat-list>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      class="w-100 mb-3"
-      [disabled]="isLoading"
-      (click)="onDialogAddGuaranties()"
-    >
-    FIANZAS VIGENTES DE CADA CONSORCIADO
+    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+      (click)="onDialogAddGuaranties()">
+      FIANZAS VIGENTES DE CADA CONSORCIADO
     </button>
 
     <div class="d-flex">
       <span class="spacer"></span>
-      <button
-        type="button"
-        mat-stroked-button
-        color="primary"
-        routerLink="/businesses"
-      >
+      <button type="button" mat-stroked-button color="primary" routerLink="/businesses">
         CANCELAR
       </button>
       <div class="divider"></div>
-      <button
-        type="submit"
-        [disabled]="isLoading"
-        mat-raised-button
-        color="primary"
-      >
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">
         GUARDAR
       </button>
     </div>

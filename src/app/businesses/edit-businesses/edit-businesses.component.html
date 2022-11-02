@@ -176,6 +176,13 @@
 
     <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
       <mat-select formControlName="representativeDocumentType">
         <mat-option value="DNI">DNI</mat-option>
@@ -189,6 +196,15 @@
     <mat-form-field appearance="fill">
       <mat-label>Nombres del representante</mat-label>
       <input type="text" matInput formControlName="representativeName" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estudios *</mat-label>
+      <mat-select formControlName="representativeStudies">
+        <mat-option value="PRIMARIA">PRIMARIA</mat-option>
+        <mat-option value="SECUNDARIA">SECUNDARIA</mat-option>
+        <mat-option value="TÉCNICO">TÉCNICO</mat-option>
+        <mat-option value="UNIVERSITARIA">UNIVERSITARIA</mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
@@ -223,6 +239,25 @@
       <input type="text" matInput formControlName="representativeAddressResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Tipo de vivienda *</mat-label>
+      <mat-select formControlName="representativeLivingPlace">
+        <mat-option value="PROPIA">PROPIA</mat-option>
+        <mat-option value="ALQUILADA">ALQUILADA</mat-option>
+        <mat-option value="OTRO">OTRO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'PROPIA'">
+      <mat-label>Totalmente pagada?</mat-label>
+      <mat-select formControlName="representativeLivingPlacePay">
+        <mat-option value="SI">SI</mat-option>
+        <mat-option value="NO">NO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'ALQUILADA'">
+      <mat-label>Precio del alquiler</mat-label>
+      <input type="number" matInput formControlName="representativeLivingPlacePrice" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
       <input type="text" matInput formControlName="representativeMobileNumber" />
     </mat-form-field>
@@ -249,6 +284,10 @@
     <mat-form-field appearance="fill">
       <mat-label>Años de servicio</mat-label>
       <input type="number" matInput formControlName="representativeYearsOfService" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Sueldo</mat-label>
+      <input type="number" matInput formControlName="representativeSalary" />
     </mat-form-field>
     <div class="mb-3">
       <mat-slide-toggle [(ngModel)]="isCheckedPEP" [ngModelOptions]="{ standalone: true }">PEP</mat-slide-toggle>
@@ -297,6 +336,13 @@
 
     <h1>Conyuge del representante legal</h1>
     <mat-form-field appearance="fill">
+      <mat-label>Sexo *</mat-label>
+      <mat-select formControlName="representativeSpouseGender">
+        <mat-option value="MASCULINO">MASCULINO</mat-option>
+        <mat-option value="FEMENINO">FEMENINO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Tipo de Documento *</mat-label>
       <mat-select formControlName="representativeSpouseDocumentType">
         <mat-option value="RUC">RUC</mat-option>
@@ -329,6 +375,10 @@
         formControlName="representativeSpouseBirthDate" />
       <mat-datepicker-toggle matSuffix [for]="representativeSpouseBirthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #representativeSpouseBirthDatePicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Profesión / Ocupación</mat-label>
+      <input type="text" matInput formControlName="representativeSpouseProfessionOccupation" />
     </mat-form-field>
     <hr />
     <br />

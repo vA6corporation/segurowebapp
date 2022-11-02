@@ -90,6 +90,12 @@ export class CreateBusinessesComponent implements OnInit {
     osceCertifiedDate: null,
     osceObservation: null,
 
+    representativeSalary: null,
+    representativeLivingPlacePay: null,
+    representativeLivingPlacePrice: null,
+    representativeGender: null,
+    representativeStudies: null,
+    representativeLivingPlace: null,
     representativePosition: null,
     representativeYearsOfService: null,
     representativeCountryOrigin: null,
@@ -125,6 +131,8 @@ export class CreateBusinessesComponent implements OnInit {
     representativeSpouseMaritalStatus: null,
     representativeSpousePropertyRegime: null,
     representativeSpouseBirthDate: null,
+    representativeSpouseProfessionOccupation: null,
+    representativeSpouseGender: null,
 
     operationSector: null,
     operationActivity: null,

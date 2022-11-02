@@ -28,6 +28,7 @@ export class EditTemplatePartnershipsComponent implements OnInit {
     _id: [ null, Validators.required ],
     document: null,
     name: [ null, Validators.required ],
+    constitutedAt: null,
     address: null,
     businessId: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],

@@ -28,6 +28,7 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     document: null,
     name: [ null, Validators.required ],
+    constitutedAt: null,
     address: [ null ],
     representativeName: [ null, Validators.required ],
     representativeDocument: [ null, Validators.required ],
