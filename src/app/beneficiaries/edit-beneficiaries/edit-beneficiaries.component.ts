@@ -28,6 +28,11 @@ export class EditBeneficiariesComponent implements OnInit {
     phoneNumber: null,
     annexed: null,
     address: null,
+    legalRepresentative: null,
+    positionLegalRepresentative: null,
+    contactPerson: null,
+    positioncontactPerson: null,
+    economicActivity: null,
   });
 
   public isLoading: boolean = false;
