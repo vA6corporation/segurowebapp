@@ -18,22 +18,27 @@ export class CreateBeneficiariesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly router: Router,
   ) { }
-    
+
   public formGroup: FormGroup = this.formBuilder.group({
     beneficiary: this.formBuilder.group({
-      document: [ null, Validators.required ],
-      name: [ null, Validators.required ],
+      document: [null, Validators.required],
+      name: [null, Validators.required],
       email: null,
       mobileNumber: null,
       phoneNumber: null,
       annexed: null,
       address: null,
+      legalRepresentative: null,
+      positionLegalRepresentative: null,
+      contactPerson: null,
+      positioncontactPerson: null,
+      economicActivity: null,
     }),
   });
   public isLoading: boolean = false;
   public maxlength: number = 11;
-  
-  ngOnInit(): void { 
+
+  ngOnInit(): void {
     this.navigationService.setTitle('Nuevo beneficiario');
     this.navigationService.backTo();
   }
@@ -47,7 +52,7 @@ export class CreateBeneficiariesComponent implements OnInit {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
-        this.router.navigate(['/beneficiaries']); 
+        this.router.navigate(['/beneficiaries']);
         this.navigationService.showMessage('Registrado correctamente');
       }, (error: HttpErrorResponse) => {
         this.isLoading = false;
@@ -56,5 +61,5 @@ export class CreateBeneficiariesComponent implements OnInit {
       });
     }
   }
-  
+
 }

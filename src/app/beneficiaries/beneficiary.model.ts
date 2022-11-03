@@ -13,4 +13,9 @@ export interface BeneficiaryModel {
   partnership?: PartnershipModel
   userId: string,
   businessId: string,
+  legalRepresentative: string
+  positionLegalRepresentative: string
+  contactPerson: string
+  positioncontactPerson: string
+  economicActivity: string
 }

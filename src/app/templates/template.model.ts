@@ -13,7 +13,7 @@ export interface TemplateModel {
   startDate: string
   business: BusinessModel
   guaranties: GuaranteeModel[]
-  partnership: PartnershipModel|null
+  partnership: PartnershipModel | null
   beneficiary: BeneficiaryModel
   tenderNumber: string
 }
