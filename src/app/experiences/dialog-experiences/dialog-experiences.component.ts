@@ -39,15 +39,15 @@ export class DialogExperiencesComponent implements OnInit {
     nameConsortium: null,
     bondedConsortium: null,
     participationConsortium: null,
-
-    nameOtherConsortium: null,
-    participationOtherConsortium: null,
   });
   incomes: ExperienceModelIncome[] = [];
   incomesYear = '';
   incomesAmount = 0;
   isCheckedConsortium = false;
   isCheckedOthersConsortium = false;
+  nameOtherConsortium = '';
+  participationOtherConsortium = 0;
+  consortium: any[] = [];
   ngOnInit(): void {}
   addIncomes() {
     if (this.incomesYear != '' && this.incomesAmount > 0) {
@@ -59,10 +59,21 @@ export class DialogExperiencesComponent implements OnInit {
   removeIncomes(index: number) {
     this.incomes.splice(index, 1);
   }
+  addConsortium() {
+    if (this.nameOtherConsortium != '' && this.participationOtherConsortium > 0) {
+      this.consortium.push({ name: this.nameOtherConsortium, participation: this.participationOtherConsortium });
+      this.nameOtherConsortium = '';
+      this.participationOtherConsortium = 0;
+    }
+  }
+  removeConsortium(index: number) {
+    this.consortium.splice(index, 1);
+  }
   onSubmit() {
     if (this.formGroup.valid) {
       let experiences = this.formGroup.value;
       experiences.income = this.incomes;
+      experiences.othersConsortium = this.consortium;
       this.dialogRef.close(this.formGroup.value);
     }
   }
