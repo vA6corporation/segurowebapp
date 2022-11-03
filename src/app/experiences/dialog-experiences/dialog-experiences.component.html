@@ -70,18 +70,16 @@
     </mat-form-field>
 
     <mat-card>
-      <mat-card-subtitle
-        >INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</mat-card-subtitle
-      >
+      <mat-card-subtitle>INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</mat-card-subtitle>
       <mat-card-content>
         <div>
           <mat-form-field appearance="fill">
             <mat-label>Año *</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }"/>
+            <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>monto *</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }"/>
+            <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
           </mat-form-field>
         </div>
 
@@ -104,14 +102,10 @@
     </mat-card>
 
     <div class="mb-3">
-      <mat-slide-toggle formControlName="isCompleted"
-        >Concluido</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle formControlName="isArbitration"
-        >Arbitraje</mat-slide-toggle
-      >
+      <mat-slide-toggle formControlName="isArbitration">Arbitraje</mat-slide-toggle>
     </div>
     <div class="mb-3">
       <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
@@ -120,49 +114,51 @@
       <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio">Consorcio</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados
+      </mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
       <mat-label>Nombre</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="nameConsortium"
-      />
+      <input type="text" matInput formControlName="nameConsortium" />
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
       <mat-label>Afianzados</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="bondedConsortium"
-      />
+      <input type="text" matInput formControlName="bondedConsortium" />
     </mat-form-field>
     <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
       <mat-label>% Participación</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="participationConsortium"
-      />
+      <input type="text" matInput formControlName="participationConsortium" />
     </mat-form-field>
-
-    <mat-form-field appearance="fill" *ngIf="isCheckedOthersConsortium">
-      <mat-label>Nombre</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="nameOtherConsortium"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="isCheckedOthersConsortium">
-      <mat-label>% Participación</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="participationOtherConsortium"
-      />
-    </mat-form-field>
+    <mat-card *ngIf="isCheckedOthersConsortium">
+      <mat-card-subtitle>Otros Consorciados</mat-card-subtitle>
+      <mat-card-content>
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput [(ngModel)]="nameOtherConsortium" [ngModelOptions]="{ standalone: true }"/>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>% Participación</mat-label>
+            <input type="text" matInput [(ngModel)]="participationOtherConsortium" [ngModelOptions]="{ standalone: true }"/>
+          </mat-form-field>
+        </div>
+        <mat-list class="mb-3">
+          <div mat-subheader>Experiencia</div>
+          <mat-list-item *ngFor="let item of consortium; let i = index">
+            <div>
+              Nombre: {{ item.name }}, Participación {{ item.participation }}
+            </div>
+            <span class="spacer"></span>
+            <button type="button" mat-icon-button (click)="removeConsortium(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button type="button" mat-button (click)="addConsortium()">Agregar consorcio</button>
+      </mat-card-actions>
+    </mat-card>
   </div>
   <mat-dialog-actions>
     <span class="spacer"></span>
