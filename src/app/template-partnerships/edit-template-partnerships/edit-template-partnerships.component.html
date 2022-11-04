@@ -26,7 +26,11 @@
       <mat-label>Documento representante legal *</mat-label>
       <input type="text" matInput formControlName="representativeDocument">
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <div class="mb-3">
+      <mat-slide-toggle [(ngModel)]="independentAccounting" formControlName="independentAccounting">Contabilidad independiente
+      </mat-slide-toggle>
+    </div>
+    <mat-form-field appearance="fill" *ngIf="!independentAccounting">
       <mat-label>Operador tributario</mat-label>
       <mat-select formControlName="businessId">
         <mat-option class="text-uppercase" *ngFor="let partnershipItem of partnershipItems" [value]="partnershipItem.businessId">

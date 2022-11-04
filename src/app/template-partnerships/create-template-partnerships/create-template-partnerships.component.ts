@@ -32,13 +32,14 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
     address: [ null ],
     representativeName: [ null, Validators.required ],
     representativeDocument: [ null, Validators.required ],
-    businessId: [ null, Validators.required ],
+    businessId: null,
     isTemplate: true,
+    independentAccounting: null,
   });
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
   public partnershipItems: PartnershipItemModel[] = [];
-  
+  independentAccounting = false;
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio para formatos');
     this.navigationService.backTo();
