@@ -133,12 +133,6 @@ export class CreateBusinessesComponent implements OnInit {
     representativeSpouseBirthDate: null,
     representativeSpouseProfessionOccupation: null,
     representativeSpouseGender: null,
-
-    operationSector: null,
-    operationActivity: null,
-    operationPlace: null,
-    operationFinanciers: null,
-    operationBanks: null
   });
 
   public isLoading: boolean = false;

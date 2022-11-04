@@ -133,12 +133,6 @@ export class EditBusinessesComponent implements OnInit {
     representativeSpouseBirthDate: null,
     representativeSpouseProfessionOccupation: null,
     representativeSpouseGender: null,
-
-    operationSector: null,
-    operationActivity: null,
-    operationPlace: null,
-    operationFinanciers: null,
-    operationBanks: null,
   });
 
   private businessId: string = '';
