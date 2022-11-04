@@ -29,6 +29,8 @@ export class DebtorsComponent implements OnInit {
     'emitionAt',
     'code',
     'worker',
+    'partnership',
+    'business',
     'commission',
     'debt',
     'actions' 
@@ -78,15 +80,15 @@ export class DebtorsComponent implements OnInit {
         this.chartDebtor?.destroy();
         const dataSet = {
           labels: [
+            'PAGADO',
             'PENDIENTE',
-            'PAGADO'
           ],
           datasets: [
             {
               label: 'Primas',
               data: [
+                totalPaid,
                 totalDebt - totalPaid,
-                totalDebt
               ],
               backgroundColor: colors,
             },

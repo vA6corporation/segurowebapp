@@ -25,6 +25,7 @@ export class PercentCompletionsComponent implements OnInit {
     
   @ViewChild('creditsChart') 
   private insurancesChart!: ElementRef<HTMLCanvasElement>;
+  
 
   public chartInsurance: Chart|null = null;
   public formGroup = this.formBuilder.group({
@@ -165,6 +166,7 @@ export class PercentCompletionsComponent implements OnInit {
         if (!percentCompletionCode) {
           
           data = [
+            summaries.summaryFinal,
             summaries.summaryGood,
             summaries.summaryWarning,
             summaries.summaryDanger,
@@ -172,6 +174,7 @@ export class PercentCompletionsComponent implements OnInit {
           ];
 
           labels = [
+            'FINALIZADO',
             'BIEN',
             'PRECAUCION',
             'PELIGRO',
@@ -179,6 +182,7 @@ export class PercentCompletionsComponent implements OnInit {
           ];
           
           colors = [
+            'white',
             '#00ff00',
             '#ffff00',
             '#ff0000', 
@@ -256,6 +260,24 @@ export class PercentCompletionsComponent implements OnInit {
                 // '#ffff00',
                 // '#ff0000', 
                 'gray'
+              ];
+              break;
+
+            case '05':
+              data = [
+                summaries.summaryFinal,
+              ]
+              labels = [
+                // 'BIEN',
+                // 'PRECAUCION',
+                // 'PELIGRO',
+                'FINALIZADO'
+              ];
+              colors = [
+                // '#00ff00',
+                // '#ffff00',
+                // '#ff0000', 
+                'white'
               ];
               break;
           

@@ -1,32 +1,40 @@
 <section class="container">
-  <form [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="fill">
-      <mat-label>Estado de obra</mat-label>
-      <mat-select formControlName="constructionCode" (selectionChange)="fetchData()">
-        <mat-option value="">TODOS LOS ESTADOS</mat-option>
-        <mat-option value="01">EJECUCION</mat-option>
-        <mat-option value="02">POR TERMINAR</mat-option>
-        <mat-option value="03">PARALIZADA</mat-option>
-        <mat-option value="04">EN ARBITRAJE</mat-option>
-        <mat-option value="05">ANULADA</mat-option>
-        <mat-option value="06">FINALIZADA</mat-option>
-        <mat-option value="07">AMORTIZADO</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Estado de avance</mat-label>
-      <mat-select formControlName="percentCompletionCode" (selectionChange)="fetchData()">
-        <mat-option value="">TODOS LOS ESTADOS</mat-option>
-        <mat-option value="01">BIEN</mat-option>
-        <mat-option value="02">PRECAUCION</mat-option>
-        <mat-option value="03">PELIGRO</mat-option>
-        <mat-option value="04">POR INICIAR</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <form [formGroup]="formGroup" autocomplete="off" class="d-flex">
+    <div class="w-100">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de obra</mat-label>
+        <mat-select formControlName="constructionCode" (selectionChange)="fetchData()">
+          <mat-option value="">TODOS LOS ESTADOS</mat-option>
+          <mat-option value="01">EJECUCION</mat-option>
+          <mat-option value="02">POR TERMINAR</mat-option>
+          <mat-option value="03">PARALIZADA</mat-option>
+          <mat-option value="04">EN ARBITRAJE</mat-option>
+          <mat-option value="05">ANULADA</mat-option>
+          <mat-option value="06">FINALIZADA</mat-option>
+          <mat-option value="07">AMORTIZADO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="d-flex">
+        <canvas #statusChart></canvas>
+      </div>
+    </div>
+    <div class="w-100">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de avance</mat-label>
+        <mat-select formControlName="percentCompletionCode" (selectionChange)="fetchData()">
+          <mat-option value="">TODOS LOS ESTADOS</mat-option>
+          <mat-option value="01">BIEN</mat-option>
+          <mat-option value="02">PRECAUCION</mat-option>
+          <mat-option value="03">PELIGRO</mat-option>
+          <mat-option value="04">POR INICIAR</mat-option>
+          <mat-option value="05">FINALIZADO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="d-flex">
+        <canvas #percentChart></canvas>
+      </div>
+    </div>
   </form>
-  <div class="d-flex">
-    <canvas #creditsChart></canvas>
-  </div>
   <!-- <mat-list role="list">
     <mat-list-item role="listitem" *ngFor="let element of summaries; let i = index">
       {{ element._id }} ({{ element.count }})

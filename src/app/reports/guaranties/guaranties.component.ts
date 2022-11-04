@@ -34,6 +34,7 @@ export class GuarantiesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'actions' ];
@@ -49,9 +50,12 @@ export class GuarantiesComponent implements OnInit {
 
   private queryParams$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
+    this.queryParams$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
     
   ngOnInit(): void {
@@ -71,6 +75,25 @@ export class GuarantiesComponent implements OnInit {
       }
 
       this.fetchData();
+    });
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart();
+      
+      const queryParams: Params = { startDate: null, endDate: null, pageIndex: 0, key };
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
+      const params = { key };
+
+      this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = guaranties;
+      });
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
