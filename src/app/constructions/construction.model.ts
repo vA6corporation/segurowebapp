@@ -12,6 +12,7 @@ export interface ConstructionModel {
   emitionAt: string
   code: string
   constructionCodeType: string
+  processStatusCodeType: string
   percentageOfCompletion: number
   object: string
   commission: number
@@ -23,6 +24,7 @@ export interface ConstructionModel {
   business: BusinessModel
   beneficiary: BeneficiaryModel
   percentCompletions: PercentCompletionModel[]
+  percentCompletion: PercentCompletionModel|null
   payments: PaymentModel[]
   createdAt: string
 }

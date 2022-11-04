@@ -128,6 +128,7 @@ export class CreateTemplatesComponent implements OnInit {
       template.businessId = business._id;
       template.partnershipId = partnership._id;
       template.beneficiaryId = beneficiary._id;
+      Object.assign(template, { guaranties: this.guaranties });
       this.templatesService.create(template).subscribe(() => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();

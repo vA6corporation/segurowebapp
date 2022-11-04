@@ -35,6 +35,20 @@ export class BusinessesComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   private office: OfficeModel = new OfficeModel();
+  public months: any[] = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
@@ -109,7 +123,7 @@ export class BusinessesComponent implements OnInit {
       const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([
-        'AVANCE (%)',
+        // 'AVANCE (%)',
         'ESTADO DE O.',
         'CLIENTE',
         'CONSORCIO',
@@ -118,11 +132,13 @@ export class BusinessesComponent implements OnInit {
       ]);
       for (const construction of constructions) {
         body.push([
-          construction.percentageOfCompletion,
+          // construction.percentageOfCompletion,
           construction.constructionCodeType,
           construction.business.name,
           construction.partnership?.name,
           construction.worker?.name,
+          construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+          construction.percentCompletion?.year,
           construction.object,
         ]);
       }

@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Chart } from 'chart.js';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
+import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-debtors',
@@ -19,8 +21,9 @@ export class DebtorsComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
   ) { }
     
-  @ViewChild('debtorsChart') 
-  private debtorsChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('chartDebtor') 
+  private chartDebtorViewChild!: ElementRef<HTMLCanvasElement>;
+  public chartDebtor: Chart|null = null;
 
   public displayedColumns: string[] = [ 
     'emitionAt',
@@ -28,11 +31,8 @@ export class DebtorsComponent implements OnInit {
     'worker',
     'commission',
     'debt',
-    // 'business',
-    // 'partnership', 
     'actions' 
   ];
-  public chartInsurance: Chart|null = null;
   public formGroup = this.formBuilder.group({
     constructionCode: '',
   });
@@ -60,67 +60,69 @@ export class DebtorsComponent implements OnInit {
 
   fetchData() {
     if (this.formGroup.valid) {
-      // const { constructionCode } = this.formGroup.value;
       this.navigationService.loadBarStart();
       this.constructionsService.getDebtorConstructions().subscribe(constructions => {
-        // console.log(summaries);
         this.dataSource = constructions;
-        // this.navigationService.loadBarFinish();
-        // const colors = [
-        //   '#00ff00',
-        //   '#ffff00',
-        //   '#ff0000', 
-        // ];
-        // this.chartInsurance?.destroy();
-        // const dataSet = {
-        //   labels: [
-        //     'BIEN',
-        //     'PRECAUCION',
-        //     'PELIGRO'
-        //   ],
-        //   datasets: [
-        //     {
-        //       label: 'Primas',
-        //       data: [
-        //         summaries.summaryGood,
-        //         summaries.summaryWarning,
-        //         summaries.summaryDanger,
-        //       ],
-        //       backgroundColor: colors,
-        //     },
-        //   ]
-        // };
-        // const configPrima = {
-        //   type: 'pie' as ChartType,
-        //   data: dataSet,
-        //   plugins: [ChartDataLabels],
-        //   options: {
-        //     maintainAspectRatio: false,
-        //     plugins: {
-        //       datalabels: {
-        //         backgroundColor: function(context) {
-        //           return 'rgba(73, 79, 87, 0.5)'
-        //           // return context.dataset.backgroundColor;
-        //         },
-        //         borderRadius: 4,
-        //         color: 'white',
-        //         font: {
-        //           weight: 'bold'
-        //         },
-        //         formatter: function(value) {
-        //           if (value === 0) {
-        //             return null;
-        //           } else {
-        //             return Math.round(value);
-        //           }
-        //         },
-        //         padding: 6
-        //       },
-        //     }
-        //   } as ChartOptions,
-        // };
-        // const canvasPrima = this.insurancesChart.nativeElement;
-        // this.chartInsurance = new Chart(canvasPrima, configPrima);
+        this.navigationService.loadBarFinish();
+        let totalPaid = 0;
+        let totalDebt = 0;
+        for (const construction of constructions) {
+          const payments = construction.payments;
+          totalDebt += construction.commission;
+          totalPaid += payments.map((e: any) => e.charge).reduce((a: number, b: number) => a + b, 0);
+        }
+        const colors = [
+          '#00ff00',
+          '#ff0000', 
+        ];
+        this.chartDebtor?.destroy();
+        const dataSet = {
+          labels: [
+            'PENDIENTE',
+            'PAGADO'
+          ],
+          datasets: [
+            {
+              label: 'Primas',
+              data: [
+                totalDebt - totalPaid,
+                totalDebt
+              ],
+              backgroundColor: colors,
+            },
+          ]
+        };
+        const configPrima = {
+          type: 'pie' as ChartType,
+          data: dataSet,
+          plugins: [ChartDataLabels],
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              datalabels: {
+                backgroundColor: function(context) {
+                  return 'rgba(73, 79, 87, 0.5)'
+                  // return context.dataset.backgroundColor;
+                },
+                borderRadius: 4,
+                color: 'white',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: function(value) {
+                  if (value === 0) {
+                    return null;
+                  } else {
+                    return (Math.round(value)).toLocaleString('en-US', { minimumFractionDigits: 2 });
+                  }
+                },
+                padding: 6
+              },
+            }
+          } as ChartOptions,
+        };
+        const canvasPrima = this.chartDebtorViewChild.nativeElement;
+        this.chartDebtor = new Chart(canvasPrima, configPrima);
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
         this.navigationService.loadBarFinish();

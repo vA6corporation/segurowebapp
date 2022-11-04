@@ -15,6 +15,8 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { ConstructionsService } from 'src/app/constructions/constructions.service';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 Chart.register(...registerables);
 
 @Component({
@@ -30,7 +32,9 @@ export class LegalsComponent implements OnInit {
     private readonly workersService: WorkersService,
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
-    private readonly matDialog: MatDialog
+    private readonly matDialog: MatDialog,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) { }
 
   public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'endDate', 'actions' ];
@@ -54,10 +58,10 @@ export class LegalsComponent implements OnInit {
   private users$: Subscription = new Subscription();
   private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
 
   public statusForm = this.formBuilder.group({
     processStatusCode: '',
-    constructionCode: '',
   });
 
   public workerForm = this.formBuilder.group({
@@ -78,6 +82,7 @@ export class LegalsComponent implements OnInit {
     this.users$.unsubscribe();
     this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
+    this.queryParams$.unsubscribe();
   }
 
   ngOnInit() {
@@ -96,6 +101,29 @@ export class LegalsComponent implements OnInit {
       this.workers = workers;
     });
 
+    this.queryParams$ = this.route.queryParams.pipe(first()).subscribe(params => {
+      const { _id, name, workerId, startDate, endDate, processStatusCode } = params;
+      if (_id && name) {
+        this.financierForm.patchValue({
+          _id,
+          name
+        });
+      }
+      if (workerId) {
+        this.workerForm.patchValue({ _id: workerId });
+      }
+      if (startDate && endDate) {
+        this.dateForm.patchValue({
+          startDate: new Date(Number(startDate)), 
+          endDate: new Date(Number(endDate))
+        });
+      }
+      if (processStatusCode) {
+        this.statusForm.patchValue({ processStatusCode });
+      }
+      this.fetchData();
+    });
+
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       const wscols = [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ];
       let body = [];
@@ -103,7 +131,7 @@ export class LegalsComponent implements OnInit {
         'CLIENTE',
         'CONSORCIO',
         'PERSONAL',
-        'ASEGURADORA',
+        'E. DE TRAMITE',
         'OBJETO',
       ]);
 
@@ -112,6 +140,7 @@ export class LegalsComponent implements OnInit {
           construction.business.name,
           construction.partnership?.name,
           construction.worker?.name,
+          construction.processStatusCodeType,
           construction.object,
         ]);
       }
@@ -155,20 +184,63 @@ export class LegalsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(financier => {
+
+      const queryParams: Params = { };
+
       if (financier) {
         this.financierForm.patchValue(financier);
+        Object.assign(queryParams, { name: financier.name, _id: financier._id });
       } else {
         this.financierForm.patchValue({ name: null, _id: null });
+        Object.assign(queryParams, { name: null, _id: null });
       }
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
       this.fetchData();
     });
   }
 
-  ngAfterViewInit() {
+  onSelectionChange() {
     this.fetchData();
   }
 
-  onSelectionChange() {
+  onWorkerChange() {
+    const queryParams: Params = { };
+    Object.assign(queryParams, { workerId: this.workerForm.value._id || null });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+    this.fetchData();
+  }
+
+  onStatusChange() {
+    const queryParams: Params = { };
+    const { processStatusCode } = this.statusForm.value;
+    Object.assign(queryParams, { processStatusCode });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+    this.fetchData();
+  }
+
+  onDateChange() {
+    const queryParams: Params = { };
+    const { startDate, endDate } = this.dateForm.value;
+    Object.assign(queryParams, { startDate: startDate.getTime(), endDate: endDate.getTime() });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
     this.fetchData();
   }
 

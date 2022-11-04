@@ -246,14 +246,14 @@
         <mat-option value="OTRO">OTRO</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'PROPIA'">
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace')?.value == 'PROPIA'">
       <mat-label>Totalmente pagada?</mat-label>
       <mat-select formControlName="representativeLivingPlacePay">
         <mat-option value="SI">SI</mat-option>
         <mat-option value="NO">NO</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace').value == 'ALQUILADA'">
+    <mat-form-field appearance="fill" *ngIf="formGroup.get('representativeLivingPlace')?.value == 'ALQUILADA'">
       <mat-label>Precio del alquiler</mat-label>
       <input type="number" matInput formControlName="representativeLivingPlacePrice" />
     </mat-form-field>

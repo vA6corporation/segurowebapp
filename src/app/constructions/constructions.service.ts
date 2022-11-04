@@ -23,12 +23,16 @@ export class ConstructionsService {
     return this.httpService.get('constructions');
   }
 
+  getConstructionsByPercentCompletion(percentCompletionCode: string): Observable<ConstructionModel[]> {
+    return this.httpService.get(`constructions/byPercentCompletionCode/${percentCompletionCode}`);
+  }
+
   getConstructionsByOffice(): Observable<ConstructionModel[]> {
     return this.httpService.get('constructions/byOffice');
   }
 
-  getSummaryCompletions(constructionCode: string): Observable<any> {
-    const params = { constructionCode };
+  getSummaryCompletions(constructionCode: string, percentCompletionCode: string): Observable<any> {
+    const params = { constructionCode, percentCompletionCode };
     return this.httpService.get(`constructions/summaryCompletions`, { params });
   }
 

@@ -23,18 +23,6 @@
     <mat-icon class="mr-2">people</mat-icon>
     <span>Empresas</span>
   </a>
-  <!-- <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()" *ngIf="privileges.shareholders">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Accionistas</span>
-  </a>
-  <a href="#" #shareholders mat-list-item routerLink="/properties" (click)="onClose()" *ngIf="privileges.properties">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Bienes inmuebles</span>
-  </a>
-  <a href="#" #shareholders mat-list-item routerLink="/movableProperties" (click)="onClose()" *ngIf="privileges.movableProperties">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Bienes muebles</span>
-  </a> -->
   <a href="#" #beneficiaries mat-list-item routerLink="/beneficiaries" (click)="onClose()" *ngIf="privileges.beneficiaries">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Beneficiarios</span>
@@ -63,46 +51,29 @@
     <mat-icon class="mr-2">text_snippet</mat-icon>
     <span>Lineas de credito</span>
   </a>
-  <!-- <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
-    <mat-icon class="mr-2">task</mat-icon>
-    <span>Formatos</span>
-  </a> -->
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.templates">
         <mat-panel-title>
-          <!-- <mat-icon class="mr-2">local_atm</mat-icon> -->
           <mat-icon class="mr-2">task</mat-icon>
           Formatos
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">task</mat-icon> -->
         <span>Formatos</span>
       </a>
       <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">people</mat-icon> -->
         <span>Accionistas</span>
       </a>
       <a href="#" #shareholders mat-list-item routerLink="/templatePartnerships" (click)="onClose()">
-        <!-- <mat-icon class="mr-2">people</mat-icon> -->
         <span>Consorcios</span>
       </a>
-      <!-- <a href="#" #shareholders mat-list-item routerLink="/properties" (click)="onClose()">
-        <span>Bienes inmuebles</span>
-      </a> -->
-      <!-- <a href="#" #shareholders mat-list-item routerLink="/movableProperties" (click)="onClose()">
-        <span>Bienes muebles</span>
-      </a> -->
-      <!-- <a href="#" #shareholders mat-list-item routerLink="/investments" (click)="onClose()">
-        <span>Inversiones</span>
-      </a> -->
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.expenses">
         <mat-panel-title>
           <mat-icon class="mr-2">local_atm</mat-icon>
-          Egresos
+          Contabilidad
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" #providers mat-list-item routerLink="/providers" (click)="onClose()">
@@ -114,8 +85,11 @@
       <a href="#" #banks mat-list-item routerLink="/banks" (click)="onClose()">
         <span>Cuentas bancarias</span>
       </a>
+      <a href="#" mat-list-item routerLink="/constructions/debtors" (click)="onClose()">
+        <span>Recaudacion</span>
+      </a>
       <a href="#" #banks mat-list-item routerLink="/paymentOrders/report" (click)="onClose()">
-        <span>Reporte</span>
+        <span>Resumen</span>
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
@@ -202,7 +176,7 @@
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #reports *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8">
+      <mat-expansion-panel-header #reports *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8  || privileges.r9">
         <mat-panel-title>
           <mat-icon class="mr-2">poll</mat-icon>
           Reportes
@@ -233,12 +207,7 @@
         <span>Lineas de credito</span>
       </a>
       <a href="#" mat-list-item routerLink="/constructions/percentCompletions" (click)="onClose()" *ngIf="privileges.r9">
-        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
         <span>Avance de obras</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/constructions/debtors" (click)="onClose()" *ngIf="privileges.r10">
-        <!-- <mat-icon class="mr-2">text_snippet</mat-icon> -->
-        <span>Recaudacion</span>
       </a>
     </mat-expansion-panel>
   </mat-accordion>

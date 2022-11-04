@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -62,6 +62,20 @@ export class ConstructionsComponent implements OnInit {
   private handleClickMenu$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
+  public months: any[] = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
@@ -128,20 +142,28 @@ export class ConstructionsComponent implements OnInit {
           const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
           let body = [];
           body.push([
-            'AVANCE (%)',
+            // 'AVANCE (%)',
             'ESTADO DE O.',
             'CLIENTE',
             'CONSORCIO',
             'PERSONAL',
+            'A. PROGRAMADO',
+            'A. EJECUTADO',
+            'MES',
+            'AÑO',
             'OBJETO',
           ]);
           for (const construction of this.dataSource) {
             body.push([
-              construction.percentageOfCompletion,
+              // construction.percentageOfCompletion,
               construction.constructionCodeType,
               construction.business.name,
               construction.partnership?.name,
               construction.worker?.name,
+              construction.percentCompletion?.percentProgrammated,
+              construction.percentCompletion?.percentCompletion,
+              construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+              construction.percentCompletion?.year,
               construction.object,
             ]);
           }
@@ -156,20 +178,28 @@ export class ConstructionsComponent implements OnInit {
             const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
             let body = [];
             body.push([
-              'AVANCE (%)',
+              // 'AVANCE (%)',
               'ESTADO DE O.',
               'CLIENTE',
               'CONSORCIO',
               'PERSONAL',
+              'A. PROGRAMADO',
+              'A. EJECUTADO',
+              'MES',
+              'AÑO',
               'OBJETO',
             ]);
             for (const construction of constructions) {
               body.push([
-                construction.percentageOfCompletion,
+                // construction.percentageOfCompletion,
                 construction.constructionCodeType,
                 construction.business.name,
                 construction.partnership?.name,
                 construction.worker?.name,
+                construction.percentCompletion?.percentProgrammated,
+                construction.percentCompletion?.percentCompletion,
+                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                construction.percentCompletion?.year,
                 construction.object,
               ]);
             }
@@ -185,20 +215,28 @@ export class ConstructionsComponent implements OnInit {
             const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
             let body = [];
             body.push([
-              'AVANCE (%)',
+              // 'AVANCE (%)',
               'ESTADO DE O.',
               'CLIENTE',
               'CONSORCIO',
               'PERSONAL',
+              'A. PROGRAMADO',
+              'A. EJECUTADO',
+              'MES',
+              'AÑO',
               'OBJETO',
             ]);
             for (const construction of constructions) {
               body.push([
-                construction.percentageOfCompletion,
+                // construction.percentageOfCompletion,
                 construction.constructionCodeType,
                 construction.business.name,
                 construction.partnership?.name,
                 construction.worker?.name,
+                construction.percentCompletion?.percentProgrammated,
+                construction.percentCompletion?.percentCompletion,
+                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                construction.percentCompletion?.year,
                 construction.object,
               ]);
             }

@@ -70,7 +70,7 @@ export class ReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.navigationService.setTitle("Seguros");
+    this.navigationService.setTitle("Resumen");
 
     const startYear = 2020;
     const currentYear = new Date().getFullYear();
@@ -172,17 +172,17 @@ export class ReportComponent implements OnInit {
           labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
           datasets: [
             {
-              label: 'Garantias',
+              label: 'Comision',
               data: incomesSummaries.map(e => e.guaranties),
               backgroundColor: colors[0],
             },
             {
-              label: 'Creditos',
+              label: 'L. de credito',
               data: incomesSummaries.map((e: any) => e.credits),
               backgroundColor: colors[1],
             },
             {
-              label: 'Obras',
+              label: 'Honorarios',
               data: incomesSummaries.map((e: any) => e.constructions),
               backgroundColor: colors[2],
             },

@@ -2,7 +2,7 @@
     <form [formGroup]="statusForm" autocomplete="off">
       <mat-form-field appearance="fill">
         <mat-label>Estado de tramite</mat-label>
-        <mat-select formControlName="processStatusCode" (selectionChange)="onSelectionChange()">
+        <mat-select formControlName="processStatusCode" (selectionChange)="onStatusChange()">
           <mat-option value="">TODOS LOS ESTADOS</mat-option>
           <mat-option value="01">REDACCION</mat-option>
           <mat-option value="02">LEGALIZACION</mat-option>
@@ -20,7 +20,7 @@
     <form [formGroup]="workerForm" autocomplete="off">
       <mat-form-field appearance="fill">
         <mat-label>Personal a cargo</mat-label>
-        <mat-select formControlName="_id" (selectionChange)="onSelectionChange()">
+        <mat-select formControlName="_id" (selectionChange)="onWorkerChange()">
           <mat-option value="">TODOS LOS PERSONALES</mat-option>
           <mat-option *ngFor="let worker of workers" [value]="worker._id">{{ worker.name }}</mat-option>
         </mat-select>
@@ -32,7 +32,7 @@
         <mat-label>Seleccione un rango de fechas</mat-label>
         <mat-date-range-input [rangePicker]="picker">
           <input matStartDate placeholder="Desde" formControlName="startDate">
-          <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="fetchData()">
+          <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onDateChange()">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>

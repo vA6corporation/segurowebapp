@@ -8,7 +8,7 @@
       <mat-icon>open_in_new</mat-icon>
     </a>
     <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
-        <mat-icon>content_copy</mat-icon>
+      <mat-icon>content_copy</mat-icon>
     </button>
   </div>
   <h3 class="text-center">{{ partnership?.name }}</h3>
@@ -41,10 +41,10 @@
         <mat-label>N° de poliza *</mat-label>
         <input type="text" matInput formControlName="policyNumber">
       </mat-form-field>
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Objeto *</mat-label>
         <input type="text" matInput formControlName="object">
-      </mat-form-field>
+      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>Suma asegurada *</mat-label>
         <input type="number" matInput formControlName="price">

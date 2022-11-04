@@ -13,6 +13,16 @@
         <mat-option value="07">AMORTIZADO</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado de avance</mat-label>
+      <mat-select formControlName="percentCompletionCode" (selectionChange)="fetchData()">
+        <mat-option value="">TODOS LOS ESTADOS</mat-option>
+        <mat-option value="01">BIEN</mat-option>
+        <mat-option value="02">PRECAUCION</mat-option>
+        <mat-option value="03">PELIGRO</mat-option>
+        <mat-option value="04">POR INICIAR</mat-option>
+      </mat-select>
+    </mat-form-field>
   </form>
   <div class="d-flex">
     <canvas #creditsChart></canvas>
