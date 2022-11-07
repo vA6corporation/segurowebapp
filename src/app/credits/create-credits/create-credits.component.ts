@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { CompaniesService } from 'src/app/companies/companies.service';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -29,6 +30,7 @@ export class CreateCreditsComponent implements OnInit {
     private readonly creditsService: CreditsService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
+    private readonly companiesService: CompaniesService,
     private readonly router: Router,
     private readonly matDialog: MatDialog,
   ) { }
@@ -50,7 +52,8 @@ export class CreateCreditsComponent implements OnInit {
       _id: [ null, Validators.required ]
     }),
     credit: this.formBuilder.group({
-      days: [null, Validators. required ],
+      companyId: [ '', Validators.required ],
+      days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
@@ -64,17 +67,24 @@ export class CreateCreditsComponent implements OnInit {
   private pdfDocument: File|null = null;
   private pdfCarta: File|null = null;
   private pdfVoucher: File|null = null;
+  public companies: any[] = [];
 
-  private handleWorkers$: Subscription = new Subscription;
+  private handleWorkers$: Subscription = new Subscription();
+  private handleCompanies$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
+    this.handleCompanies$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.backTo();
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
     });
   }
 

@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
+import { CompaniesService } from 'src/app/companies/companies.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { randomColor } from 'src/app/randomColor';
 import { ReportsService } from 'src/app/reports/reports.service';
@@ -25,6 +26,7 @@ export class ReportComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
+    private readonly companiesService: CompaniesService,
     private readonly matDialog: MatDialog
   ) { }
     
@@ -57,20 +59,28 @@ export class ReportComponent implements OnInit {
   public formGroup = this.formBuilder.group({
     workerId: '',
     type: 'SCTR',
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
+    companyId: '',
   });
   public workers: WorkerModel[] = [];
   private expensesSummaries: any[] = [];
   private incomesSummaries: any[] = [];
+  public companies: any[] = [];
   
   private handleWorkers$: Subscription = new Subscription();
+  private handleCompanies$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
+    this.handleCompanies$.unsubscribe();
   }
 
   ngOnInit() {
     this.navigationService.setTitle("Resumen");
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
 
     const startYear = 2020;
     const currentYear = new Date().getFullYear();
@@ -151,11 +161,11 @@ export class ReportComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
 
-      const { year, workerId } = this.formGroup.value;
-      const params = { workerId };
+      const { year, workerId, companyId } = this.formGroup.value;
+      const params = { workerId, companyId };
       this.navigationService.loadBarStart();
 
-      this.reportsService.getCommissionsByYear(year).subscribe(incomesSummaries => {
+      this.reportsService.getCommissionsByYear(year, params).subscribe(incomesSummaries => {
         this.incomesSummaries = incomesSummaries;
         this.onUpdateUtilities();
         this.navigationService.loadBarFinish();

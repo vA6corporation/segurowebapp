@@ -52,8 +52,8 @@ export class ReportsService {
     return this.httpService.get('reports/primasByRangeDateWorker', { params });
   }
 
-  getCommissionsByYear(year: number): Observable<any[]> {
-    return this.httpService.get(`reports/commissionsByYear/${year}`);
+  getCommissionsByYear(year: number, params: Params): Observable<any[]> {
+    return this.httpService.get(`reports/commissionsByYear/${year}`, { params });
   }
 
   // getGuarantiesCommissionByYear(year: number): Observable<any> {

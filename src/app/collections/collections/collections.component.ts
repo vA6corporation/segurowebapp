@@ -273,7 +273,6 @@ export class CollectionsComponent implements OnInit {
     });
   }
 
-
   ngAfterViewInit() {
     this.fetchData();
   }

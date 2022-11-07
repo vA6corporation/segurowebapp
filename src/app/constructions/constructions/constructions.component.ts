@@ -93,7 +93,7 @@ export class ConstructionsComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_constructions', label: 'Exportar excel por fecha', icon: 'download', show: false },
+      { id: 'export_constructions_date', label: 'Exportar excel por fecha', icon: 'download', show: false },
       { id: 'export_constructions_office', label: 'Exportar excel por oficina', icon: 'download', show: false },
       { id: 'export_constructions_all', label: 'Exportar excel todos', icon: 'download', show: false },
     ]);
@@ -138,47 +138,15 @@ export class ConstructionsComponent implements OnInit {
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
 
       switch (id) {
-        case 'export_constructions': {
-          const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          let body = [];
-          body.push([
-            // 'AVANCE (%)',
-            'ESTADO DE O.',
-            'CLIENTE',
-            'CONSORCIO',
-            'PERSONAL',
-            'A. PROGRAMADO',
-            'A. EJECUTADO',
-            'MES',
-            'AÑO',
-            'OBJETO',
-          ]);
-          for (const construction of this.dataSource) {
-            body.push([
-              // construction.percentageOfCompletion,
-              construction.constructionCodeType,
-              construction.business.name,
-              construction.partnership?.name,
-              construction.worker?.name,
-              construction.percentCompletion?.percentProgrammated,
-              construction.percentCompletion?.percentCompletion,
-              construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-              construction.percentCompletion?.year,
-              construction.object,
-            ]);
-          }
-          const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-          buildExcel(body, name, wscols, [], []);
-          break;
-        }
-        case 'export_constructions_all': {
+        case 'export_constructions_date': {
+          const { startDate, endDate, officeId } = this.formGroup.value;
+          const params = { officeId };
           this.navigationService.loadBarStart();
-          this.constructionsService.getConstructions().subscribe(constructions => {
+          this.constructionsService.getConstructionsByRangeDate(startDate, endDate, params).subscribe(constructions=> {
             this.navigationService.loadBarFinish();
             const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
             let body = [];
             body.push([
-              // 'AVANCE (%)',
               'ESTADO DE O.',
               'CLIENTE',
               'CONSORCIO',
@@ -191,7 +159,41 @@ export class ConstructionsComponent implements OnInit {
             ]);
             for (const construction of constructions) {
               body.push([
-                // construction.percentageOfCompletion,
+                construction.constructionCodeType,
+                construction.business.name,
+                construction.partnership?.name,
+                construction.worker?.name,
+                construction.percentCompletion?.percentProgrammated,
+                construction.percentCompletion?.percentCompletion,
+                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                construction.percentCompletion?.year,
+                construction.object,
+              ]);
+            }
+            const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+            buildExcel(body, name, wscols, [], []);
+          });
+          break;
+        }
+        case 'export_constructions_all': {
+          this.navigationService.loadBarStart();
+          this.constructionsService.getConstructions().subscribe(constructions => {
+            this.navigationService.loadBarFinish();
+            const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+            let body = [];
+            body.push([
+              'ESTADO DE O.',
+              'CLIENTE',
+              'CONSORCIO',
+              'PERSONAL',
+              'A. PROGRAMADO',
+              'A. EJECUTADO',
+              'MES',
+              'AÑO',
+              'OBJETO',
+            ]);
+            for (const construction of constructions) {
+              body.push([
                 construction.constructionCodeType,
                 construction.business.name,
                 construction.partnership?.name,
@@ -215,7 +217,6 @@ export class ConstructionsComponent implements OnInit {
             const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
             let body = [];
             body.push([
-              // 'AVANCE (%)',
               'ESTADO DE O.',
               'CLIENTE',
               'CONSORCIO',
@@ -228,7 +229,6 @@ export class ConstructionsComponent implements OnInit {
             ]);
             for (const construction of constructions) {
               body.push([
-                // construction.percentageOfCompletion,
                 construction.constructionCodeType,
                 construction.business.name,
                 construction.partnership?.name,

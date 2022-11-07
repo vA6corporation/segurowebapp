@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { buildExcel } from 'src/app/xlsx';
 import { formatDate } from '@angular/common';
 Chart.register(...registerables);
+import { randomColor } from 'src/app/randomColor';
 
 @Component({
   selector: 'app-percent-completions',
@@ -23,11 +24,14 @@ export class PercentCompletionsComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
   ) { }
     
-  @ViewChild('creditsChart') 
-  private insurancesChart!: ElementRef<HTMLCanvasElement>;
-  
+  @ViewChild('percentChart') 
+  private percentChartViewChild!: ElementRef<HTMLCanvasElement>;
+  public percentChart: Chart|null = null;
 
-  public chartInsurance: Chart|null = null;
+  @ViewChild('statusChart') 
+  private statusChartViewChild!: ElementRef<HTMLCanvasElement>;
+  public statusChart: Chart|null = null;
+
   public formGroup = this.formBuilder.group({
     constructionCode: '',
     percentCompletionCode: ''
@@ -47,6 +51,16 @@ export class PercentCompletionsComponent implements OnInit {
     'NOVIEMBRE',
     'DICIEMBRE',
   ];
+
+  public constructionCodes: any = {
+    "01": 'EJECUCION',
+    "02": 'POR TERMINAR',
+    "03": 'PARALIZADA',
+    "04": 'EN ARBITRAJE',
+    "05": 'ANULADA',
+    "06": 'FINALIZADA',
+    "07": 'AMORTIZADO',
+  };
 
   private handleClickMenu$: Subscription = new Subscription();
 
@@ -157,6 +171,72 @@ export class PercentCompletionsComponent implements OnInit {
     if (this.formGroup.valid) {
       const { constructionCode, percentCompletionCode } = this.formGroup.value;
       this.navigationService.loadBarStart();
+      const params = { constructionCode };
+      this.constructionsService.getSummaryConstructions(params).subscribe(summaries => {
+        console.log(summaries);
+
+        const colors = [
+          randomColor(), 
+          randomColor(), 
+          randomColor(), 
+          randomColor(),
+          randomColor(),
+          randomColor(),
+          randomColor(),
+          randomColor(),
+        ];
+        
+        this.navigationService.loadBarFinish();
+        this.statusChart?.destroy();
+        const dataSet = {
+          // labels: [
+          //   'BIEN',
+          //   'PRECAUCION',
+          //   'PELIGRO',
+          //   'POR INICIAR'
+          // ],
+          // labels,
+          labels: summaries.map(e => this.constructionCodes[e._id]),
+          datasets: [
+            {
+              label: 'Primas',
+              data: summaries.map(e => e.count),
+              backgroundColor: colors,
+            },
+          ]
+        };
+        const configPrima = {
+          type: 'pie' as ChartType,
+          data: dataSet,
+          plugins: [ChartDataLabels],
+          options: {
+            maintainAspectRatio: false,
+            plugins: {
+              datalabels: {
+                backgroundColor: function(context) {
+                  return 'rgba(73, 79, 87, 0.5)'
+                  // return context.dataset.backgroundColor;
+                },
+                borderRadius: 4,
+                color: 'white',
+                font: {
+                  weight: 'bold'
+                },
+                formatter: function(value) {
+                  if (value === 0) {
+                    return null;
+                  } else {
+                    return Math.round(value);
+                  }
+                },
+                padding: 6
+              },
+            }
+          } as ChartOptions,
+        };
+        const canvasPrima = this.statusChartViewChild.nativeElement;
+        this.statusChart = new Chart(canvasPrima, configPrima);
+      });
       this.constructionsService.getSummaryCompletions(constructionCode, percentCompletionCode).subscribe(summaries => {
 
         let data: any[] = [];
@@ -288,7 +368,7 @@ export class PercentCompletionsComponent implements OnInit {
         }
         
         this.navigationService.loadBarFinish();
-        this.chartInsurance?.destroy();
+        this.percentChart?.destroy();
         const dataSet = {
           // labels: [
           //   'BIEN',
@@ -334,8 +414,8 @@ export class PercentCompletionsComponent implements OnInit {
             }
           } as ChartOptions,
         };
-        const canvasPrima = this.insurancesChart.nativeElement;
-        this.chartInsurance = new Chart(canvasPrima, configPrima);
+        const canvasPrima = this.percentChartViewChild.nativeElement;
+        this.percentChart = new Chart(canvasPrima, configPrima);
       }, (error: HttpErrorResponse) => {
         this.navigationService.showMessage(error.error.message);
         this.navigationService.loadBarFinish();

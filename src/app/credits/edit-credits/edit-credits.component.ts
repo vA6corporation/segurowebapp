@@ -15,6 +15,7 @@ import { WorkersService } from 'src/app/workers/workers.service';
 import { CreditsService } from '../credits.service';
 import { CreditPdfData, DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { CompaniesService } from 'src/app/companies/companies.service';
 
 @Component({
   selector: 'app-edit-credits',
@@ -27,6 +28,7 @@ export class EditCreditsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly creditsService: CreditsService,
     private readonly navigationService: NavigationService,
+    private readonly companiesService: CompaniesService,
     private readonly workersService: WorkersService,
     private readonly route: ActivatedRoute,
     private readonly matDialog: MatDialog,
@@ -49,7 +51,8 @@ export class EditCreditsComponent implements OnInit {
       _id: [ null, Validators.required ]
     }),
     credit: this.formBuilder.group({
-      days: [null, Validators. required ],
+      companyId: [ null, Validators.required ],
+      days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
@@ -61,11 +64,14 @@ export class EditCreditsComponent implements OnInit {
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
   private creditId: string = '';
+  public companies: any[] = [];
 
-  private handleWorkers$: Subscription = new Subscription;
+  private handleWorkers$: Subscription = new Subscription();
+  private handleCompanies$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
+    this.handleCompanies$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -73,6 +79,10 @@ export class EditCreditsComponent implements OnInit {
     
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
     });
     
     this.route.params.subscribe(params => {

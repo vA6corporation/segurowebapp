@@ -34,6 +34,12 @@
         </mat-form-field>
       </div>
       <div formGroupName="credit">
+        <mat-form-field appearance="fill">
+          <mat-label>Razon social *</mat-label>
+          <mat-select formControlName="companyId">
+            <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field>
           <input type="number" matInput placeholder="Monto *" formControlName="charge">
         </mat-form-field>

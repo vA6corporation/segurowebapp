@@ -39,7 +39,8 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
   public partnershipItems: PartnershipItemModel[] = [];
-  independentAccounting = false;
+  public independentAccounting = false;
+  
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio para formatos');
     this.navigationService.backTo();

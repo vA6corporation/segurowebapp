@@ -37,9 +37,10 @@ export class EditTemplatePartnershipsComponent implements OnInit {
   });
 
   public isLoading: boolean = false;
-  private partnershipId: string = '';
   public partnershipItems: PartnershipItemModel[] = [];
-  independentAccounting = false;
+  public independentAccounting = false;
+  private partnershipId: string = '';
+
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio para formatos');
     this.navigationService.backTo();

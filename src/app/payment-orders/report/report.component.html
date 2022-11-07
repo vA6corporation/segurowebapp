@@ -13,6 +13,13 @@
           <mat-option *ngFor="let element of workers" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Razon social *</mat-label>
+        <mat-select (selectionChange)="fetchData()" formControlName="companyId">
+          <mat-option value="">TODAS LAS RAZONES SOCIALES</mat-option>
+          <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </form>
     <div class="d-flex">
       <div>

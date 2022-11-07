@@ -34,11 +34,13 @@ export class EditPartnershipsComponent implements OnInit {
     representativeDocumentType: 'DNI',
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],
+    independentAccounting: false
   });
 
   public isLoading: boolean = false;
   private partnershipId: string = '';
   public partnershipItems: PartnershipItemModel[] = [];
+  public independentAccounting = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');

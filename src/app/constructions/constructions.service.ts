@@ -23,6 +23,10 @@ export class ConstructionsService {
     return this.httpService.get('constructions');
   }
 
+  getSummaryConstructions(params: Params): Observable<any[]> {
+    return this.httpService.get('constructions/summaryByConstructionCode', { params });
+  }
+
   getConstructionsByPercentCompletion(percentCompletionCode: string): Observable<ConstructionModel[]> {
     return this.httpService.get(`constructions/byPercentCompletionCode/${percentCompletionCode}`);
   }
@@ -96,9 +100,11 @@ export class ConstructionsService {
     return this.httpService.get(`constructions/${pageIndex}/${pageSize}`);
   }
 
+  getConstructionsByRangeDate(startDate: string, endDate: string, params: Params): Observable<ConstructionModel[]> {
+    return this.httpService.get(`constructions/byRangeDate/${startDate}/${endDate}`, { params });
+  }
+
   getConstructionsByRangeDatePage(
-    // startDate: Date, 
-    // endDate: Date, 
     pageIndex: number, 
     pageSize: number, 
     params: Params

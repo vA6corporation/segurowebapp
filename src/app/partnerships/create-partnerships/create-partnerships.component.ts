@@ -34,10 +34,12 @@ export class CreatePartnershipsComponent implements OnInit {
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],
     businessId: [ null, Validators.required ],
+    independentAccounting: false
   });
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
   public partnershipItems: PartnershipItemModel[] = [];
+  public independentAccounting = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio');
