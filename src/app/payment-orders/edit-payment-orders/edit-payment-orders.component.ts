@@ -86,6 +86,8 @@ export class EditPaymentOrdersComponent implements OnInit {
     ]);
 
     this.banksService.getBanks().subscribe(banks => {
+      console.log(banks);
+      
       this.banks = banks;
     });
 

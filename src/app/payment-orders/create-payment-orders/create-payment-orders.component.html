@@ -32,7 +32,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Cuenta de la empresa</mat-label>
       <mat-select formControlName="accountNumber" (selectionChange)="onBankChange($event.value)">
-        <mat-option *ngFor="let element of banks" [value]="element.accountNumber">{{ element.bankName }} {{ element.accountNumber }}</mat-option>
+        <mat-option *ngFor="let element of banks" [value]="element.accountNumber">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">

@@ -290,8 +290,6 @@ export class ConstructionsComponent implements OnInit {
       const params = { startDate, endDate, officeId };
       this.navigationService.loadBarStart();
       this.constructionsService.getConstructionsByRangeDatePage(
-        // startDate, 
-        // endDate, 
         this.pageIndex + 1, 
         this.pageSize, 
         params

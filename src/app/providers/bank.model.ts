@@ -1,5 +1,6 @@
 export interface BankModel {
-  _id: string,
-  bankName: string,
-  accountNumber: string,
+  _id: string
+  bankName: string
+  providerName: string
+  accountNumber: string
 }
