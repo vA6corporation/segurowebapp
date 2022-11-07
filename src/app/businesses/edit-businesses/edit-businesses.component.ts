@@ -54,6 +54,9 @@ export class EditBusinessesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     documentType: [null, Validators.required],
     document: [null, Validators.required],
+    electronicDeparture: null,
+    registryArea: null,
+    publicDeed: null,
     name: [null, Validators.required],
     email: [null, [Validators.required, Validators.email]],
     mobileNumber: null,
