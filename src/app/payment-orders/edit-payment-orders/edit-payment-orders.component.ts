@@ -47,25 +47,13 @@ export class EditPaymentOrdersComponent implements OnInit {
     accountNumber: '',
     isPaid: false,
   });
-
-  // public paymentTypes = [
-  //   { code: '01', name: 'EFECTIVO' },
-  //   { code: '02', name: 'VISA' },
-  //   { code: '03', name: 'MASTERCARD' },
-  //   { code: '04', name: 'AMERICAN EXPRESS' },
-  //   { code: '05', name: 'YAPE' },
-  //   { code: '06', name: 'PLIN' },
-  //   { code: '07', name: 'TRANSFERENCIA' },
-  //   { code: '08', name: 'DEPOSITO' },
-  //   { code: '09', name: 'ONLINE' },
-  // ];
  
   public isLoading: boolean = false;
   public provider: ProviderModel|null = null;
   public providerBanks: BankModel[] = [];
   public banks: BankModel[] = [];
   private paymentOrderId: string = '';
-  private pdfId: string = '';
+  // private pdfId: string = '';
   public companies: CompanyModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
@@ -86,8 +74,6 @@ export class EditPaymentOrdersComponent implements OnInit {
     ]);
 
     this.banksService.getBanks().subscribe(banks => {
-      console.log(banks);
-      
       this.banks = banks;
     });
 
@@ -130,60 +116,60 @@ export class EditPaymentOrdersComponent implements OnInit {
       
         case 'attach_file': {
 
-          if (this.pdfId) {
-            const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
-              width: '100vw',
-              height: '90vh',
-              position: { top: '20px' },
-              data: `paymentOrderPdfs/${this.pdfId}`
-            });
+          const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            // data: `paymentOrderPdfs/${this.pdfId}`
+          });
 
-            dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
-              this.navigationService.loadBarStart();
-              this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
-                this.navigationService.loadBarFinish();
-                this.fetchData();
-              });
-            });
-          } else {
-            const dialogRef = this.matDialog.open(DialogAttachFileComponent, {
-              width: '600px',
-              position: { top: '20px' },
-            });
+          dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
+            this.navigationService.loadBarStart();
+            // this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
+            //   this.navigationService.loadBarFinish();
+            //   this.fetchData();
+            // });
+          });
+          // if (this.pdfId) {
+          // } else {
+          //   // const dialogRef = this.matDialog.open(DialogAttachFileComponent, {
+          //   //   width: '600px',
+          //   //   position: { top: '20px' },
+          //   // });
   
-            dialogRef.afterClosed().subscribe(file => {
-              console.log(file);
-              if (file) {
-                const formData = new FormData();
-                formData.append('file', file, file.name);
-                this.navigationService.loadBarStart();
-                this.paymentOrdersService.updatePdf(formData, this.paymentOrderId).subscribe(pdfId => {
-                  this.navigationService.loadBarFinish();
-                  this.navigationService.showMessage('Registrado correctamente');
-                  this.pdfId = pdfId;
+          //   // dialogRef.afterClosed().subscribe(file => {
+          //   //   console.log(file);
+          //   //   if (file) {
+          //   //     const formData = new FormData();
+          //   //     formData.append('file', file, file.name);
+          //   //     this.navigationService.loadBarStart();
+          //   //     this.paymentOrdersService.updatePdf(formData, this.paymentOrderId).subscribe(pdfId => {
+          //   //       this.navigationService.loadBarFinish();
+          //   //       this.navigationService.showMessage('Registrado correctamente');
+          //   //       this.pdfId = pdfId;
 
-                  const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
-                    width: '100vw',
-                    height: '90vh',
-                    position: { top: '20px' },
-                    data: `paymentOrderPdfs/${this.pdfId}`
-                  });
+          //   //       const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
+          //   //         width: '100vw',
+          //   //         height: '90vh',
+          //   //         position: { top: '20px' },
+          //   //         data: `paymentOrderPdfs/${this.pdfId}`
+          //   //       });
       
-                  dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
-                    this.navigationService.loadBarStart();
-                    this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
-                      this.navigationService.loadBarFinish();
-                      this.fetchData();
-                    });
-                  });
+          //   //       dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
+          //   //         this.navigationService.loadBarStart();
+          //   //         this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
+          //   //           this.navigationService.loadBarFinish();
+          //   //           this.fetchData();
+          //   //         });
+          //   //       });
 
-                }, (error: HttpErrorResponse) => {
-                  this.navigationService.loadBarFinish();
-                  this.navigationService.showMessage(error.error.message);
-                });
-              }
-            });
-          }
+          //   //     }, (error: HttpErrorResponse) => {
+          //   //       this.navigationService.loadBarFinish();
+          //   //       this.navigationService.showMessage(error.error.message);
+          //   //     });
+          //   //   }
+          //   // });
+          // }
 
           break;
         }
@@ -199,7 +185,7 @@ export class EditPaymentOrdersComponent implements OnInit {
   fetchData() {
     this.paymentOrdersService.getPaymentOrderById(this.paymentOrderId).subscribe(paymentOrder => {
       console.log(paymentOrder);
-      this.pdfId = paymentOrder.pdfId;
+      // this.pdfId = paymentOrder.pdfId;
       this.formGroup.patchValue(paymentOrder);
       this.provider = paymentOrder.provider;
       this.providerBanks = paymentOrder.provider.banks;
