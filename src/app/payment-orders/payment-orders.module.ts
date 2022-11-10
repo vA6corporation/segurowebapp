@@ -9,6 +9,7 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SystemModule } from '../system/system.module';
 import { ReportComponent } from './report/report.component';
+import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { ReportComponent } from './report/report.component';
     CreatePaymentOrdersComponent,
     EditPaymentOrdersComponent,
     ReportComponent,
+    DialogAttachPdfComponent,
   ],
   imports: [
     CommonModule,

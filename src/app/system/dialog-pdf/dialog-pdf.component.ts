@@ -18,18 +18,18 @@ export class DialogPdfComponent implements OnInit {
   ) { }
 
   public url: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(environment.baseUrl + this.uri);
-  private onDeleteEvent: EventEmitter<void> = new EventEmitter();
+  private onDeleteEvent$: EventEmitter<void> = new EventEmitter();
 
   ngOnInit(): void { 
 
   }
 
   onDeletePdf() {
-    this.onDeleteEvent.next();
+    this.onDeleteEvent$.next();
   }
 
   handleDeletePdf() {
-    return this.onDeleteEvent;
+    return this.onDeleteEvent$;
   }
 
 }

@@ -1,5 +1,5 @@
 <section class="container">
-  <form [formGroup]="formGroup" autocomplete="off" class="d-flex">
+  <form [formGroup]="formGroup" autocomplete="off" class="d-flex mb-3">
     <div class="w-100">
       <mat-form-field appearance="fill">
         <mat-label>Estado de obra</mat-label>
@@ -35,6 +35,7 @@
       </div>
     </div>
   </form>
+  <h2 class="text-center">TOTAL DE OBRAS: {{ totalConstructions }}</h2>
   <!-- <mat-list role="list">
     <mat-list-item role="listitem" *ngFor="let element of summaries; let i = index">
       {{ element._id }} ({{ element.count }})

@@ -15,6 +15,7 @@ import { DialogProvidersComponent } from 'src/app/providers/dialog-providers/dia
 import { ProviderModel } from 'src/app/providers/provider.model';
 import { DialogAttachFileComponent } from 'src/app/system/dialog-attach-file/dialog-attach-file.component';
 import { DialogPdfComponent } from 'src/app/system/dialog-pdf/dialog-pdf.component';
+import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { PaymentOrdersService } from '../payment-orders.service';
 
 @Component({
@@ -116,61 +117,12 @@ export class EditPaymentOrdersComponent implements OnInit {
       
         case 'attach_file': {
 
-          const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
+          this.matDialog.open(DialogAttachPdfComponent, {
             width: '100vw',
             height: '90vh',
             position: { top: '20px' },
-            // data: `paymentOrderPdfs/${this.pdfId}`
+            data: this.paymentOrderId
           });
-
-          dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
-            this.navigationService.loadBarStart();
-            // this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
-            //   this.navigationService.loadBarFinish();
-            //   this.fetchData();
-            // });
-          });
-          // if (this.pdfId) {
-          // } else {
-          //   // const dialogRef = this.matDialog.open(DialogAttachFileComponent, {
-          //   //   width: '600px',
-          //   //   position: { top: '20px' },
-          //   // });
-  
-          //   // dialogRef.afterClosed().subscribe(file => {
-          //   //   console.log(file);
-          //   //   if (file) {
-          //   //     const formData = new FormData();
-          //   //     formData.append('file', file, file.name);
-          //   //     this.navigationService.loadBarStart();
-          //   //     this.paymentOrdersService.updatePdf(formData, this.paymentOrderId).subscribe(pdfId => {
-          //   //       this.navigationService.loadBarFinish();
-          //   //       this.navigationService.showMessage('Registrado correctamente');
-          //   //       this.pdfId = pdfId;
-
-          //   //       const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
-          //   //         width: '100vw',
-          //   //         height: '90vh',
-          //   //         position: { top: '20px' },
-          //   //         data: `paymentOrderPdfs/${this.pdfId}`
-          //   //       });
-      
-          //   //       dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
-          //   //         this.navigationService.loadBarStart();
-          //   //         this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
-          //   //           this.navigationService.loadBarFinish();
-          //   //           this.fetchData();
-          //   //         });
-          //   //       });
-
-          //   //     }, (error: HttpErrorResponse) => {
-          //   //       this.navigationService.loadBarFinish();
-          //   //       this.navigationService.showMessage(error.error.message);
-          //   //     });
-          //   //   }
-          //   // });
-          // }
-
           break;
         }
       }

@@ -1,7 +1,8 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+// import { MatDialog } from '@angular/material/dialog';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { CompaniesService } from 'src/app/companies/companies.service';
@@ -10,6 +11,7 @@ import { randomColor } from 'src/app/randomColor';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
+import { buildExcel } from 'src/app/xlsx';
 import { PaymentOrdersService } from '../payment-orders.service';
 Chart.register(...registerables);
 
@@ -27,7 +29,7 @@ export class ReportComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly companiesService: CompaniesService,
-    private readonly matDialog: MatDialog
+    // private readonly matDialog: MatDialog
   ) { }
     
   @ViewChild('expensesChart') 
@@ -56,6 +58,20 @@ export class ReportComponent implements OnInit {
     'EPS',
     'SALUD',
   ];
+  public months: any[] = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
   public formGroup = this.formBuilder.group({
     workerId: '',
     type: 'SCTR',
@@ -69,10 +85,12 @@ export class ReportComponent implements OnInit {
   
   private handleWorkers$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
@@ -96,6 +114,42 @@ export class ReportComponent implements OnInit {
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+      let body = [];
+      body.push([
+        'MES',
+        'EGRESOS',
+        'INGRESOS',
+        'DIFERENCIA',
+      ]);
+      for (let index = 0; index < 12; index++) {
+        const incomes = this.incomesSummaries[index].guaranties + this.incomesSummaries[index].credits + this.incomesSummaries[index].constructions;
+        const expenses = this.expensesSummaries[index].totalCharge;
+        body.push([
+          this.months[index],
+          incomes,
+          expenses,
+          incomes - expenses
+        ]);
+      }
+      // for (const construction of constructions) {
+      //   // body.push([
+      //   //   construction.constructionCodeType,
+      //   //   construction.business.name,
+      //   //   construction.partnership?.name,
+      //   //   construction.worker?.name,
+      //   //   construction.percentCompletion?.percentProgrammated,
+      //   //   construction.percentCompletion?.percentCompletion,
+      //   //   construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+      //   //   construction.percentCompletion?.year,
+      //   //   construction.object,
+      //   // ]);
+      // }
+      const name = `RESUMEN_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+      buildExcel(body, name, wscols, [], []);
     });
 
   }

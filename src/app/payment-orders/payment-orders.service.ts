@@ -3,6 +3,7 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { CreatePaymentOrderModel } from './create-payment-order.model';
+import { PaymentOrderPdfModel } from './payment-order-pdf.model';
 import { PaymentOrderModel } from './payment-order.model';
 
 @Injectable({
@@ -14,12 +15,20 @@ export class PaymentOrdersService {
     private readonly httpService: HttpService,
   ) { }
 
+  getCountPaymentOrders(): Observable<number> {
+    return this.httpService.get('paymentOrders/count');
+  }
+
   getPaymentOrderById(paymentOrderId: string) {
     return this.httpService.get(`paymentOrders/byId/${paymentOrderId}`);
   }
 
   getPaymentOrders(): Observable<PaymentOrderModel[]> {
     return this.httpService.get('paymentOrders');
+  }
+
+  getPaymentOrdersByPage(pageIndex: number, pageSize: number): Observable<PaymentOrderModel[]> {
+    return this.httpService.get(`paymentOrders/byPage/${pageIndex}/${pageSize}`);
   }
 
   getSummaryByYear(year: number, params: Params): Observable<PaymentOrderModel[]> {
@@ -38,7 +47,11 @@ export class PaymentOrdersService {
     return this.httpService.delete(`paymentOrders/${paymentOrderId}`);
   }
 
-  updatePdf(formData: FormData, paymentOrderId: string): Observable<string> {
+  getPdfs(paymentOrderId: string): Observable<PaymentOrderPdfModel[]> {
+    return this.httpService.get(`paymentOrderPdfs/byPaymentOrderId/${paymentOrderId}`);
+  }
+
+  uploadPdf(formData: FormData, paymentOrderId: string): Observable<string> {
     return this.httpService.postForm(`paymentOrderPdfs/${paymentOrderId}`, formData);
   }
 

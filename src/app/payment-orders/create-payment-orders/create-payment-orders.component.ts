@@ -86,7 +86,7 @@ export class CreatePaymentOrdersComponent implements OnInit {
     });
 
     this.navigationService.setMenu([
-      { id: 'attach_file', label: 'Adjuntar PDF', icon: 'attach_file', show: true },
+      // { id: 'attach_file', label: 'Adjuntar PDF', icon: 'attach_file', show: true },
       { id: 'add_provider', label: 'Agregar proveedor', icon: 'person_add', show: true },
     ]);
 
@@ -119,47 +119,6 @@ export class CreatePaymentOrdersComponent implements OnInit {
             });
           });
           break;
-      
-        case 'attach_file': {
-          const dialogRef = this.matDialog.open(DialogAttachFileComponent, {
-            width: '600px',
-            position: { top: '20px' },
-          });
-
-          dialogRef.afterClosed().subscribe(file => {
-            console.log(file);
-            if (file) {
-              this.formData = new FormData();
-              this.formData.append('file', file, file.name);
-              // this.navigationService.loadBarStart();
-              // this.paymentOrdersService.updatePdf(formData, this.paymentOrderId).subscribe(pdfId => {
-              //   this.navigationService.loadBarFinish();
-              //   this.navigationService.showMessage('Registrado correctamente');
-              //   this.pdfId = pdfId;
-
-              //   const dialogRefPDf = this.matDialog.open(DialogPdfComponent, {
-              //     width: '100vw',
-              //     height: '90vh',
-              //     position: { top: '20px' },
-              //     data: `paymentOrderPdfs/${this.pdfId}`
-              //   });
-    
-              //   dialogRefPDf.componentInstance.handleDeletePdf().subscribe(() => {
-              //     this.navigationService.loadBarStart();
-              //     this.paymentOrdersService.deletePdf(this.pdfId).subscribe(() => {
-              //       this.navigationService.loadBarFinish();
-              //       this.fetchData();
-              //     });
-              //   });
-
-              // }, (error: HttpErrorResponse) => {
-              //   this.navigationService.loadBarFinish();
-              //   this.navigationService.showMessage(error.error.message);
-              // });
-            }
-          });
-          break;
-        }
       }
     });
   }
@@ -200,20 +159,20 @@ export class CreatePaymentOrdersComponent implements OnInit {
           providerId: this.provider._id,
         }
         this.paymentOrdersService.create(createdPaymentOrder).subscribe(paymentOrder => {
-          console.log(paymentOrder);
-          if (this.formData) {
-            this.paymentOrdersService.updatePdf(this.formData, paymentOrder._id).subscribe(pdfId => {
-              this.isLoading = false;
-              this.router.navigate(['/paymentOrders']);
-              this.navigationService.loadSpinnerFinish();
-              this.navigationService.showMessage('Registrado correctamente');
-            });
-          } else {
-            this.isLoading = false;
-            this.router.navigate(['/paymentOrders']);
-            this.navigationService.loadSpinnerFinish();
-            this.navigationService.showMessage('Registrado correctamente');
-          }
+          // console.log(paymentOrder);
+          // if (this.formData) {
+          //   // this.paymentOrdersService.updatePdf(this.formData, paymentOrder._id).subscribe(pdfId => {
+          //   //   this.isLoading = false;
+          //   //   this.router.navigate(['/paymentOrders']);
+          //   //   this.navigationService.loadSpinnerFinish();
+          //   //   this.navigationService.showMessage('Registrado correctamente');
+          //   // });
+          // } else {
+          //   this.isLoading = false;
+          //   this.router.navigate(['/paymentOrders']);
+          //   this.navigationService.loadSpinnerFinish();
+          //   this.navigationService.showMessage('Registrado correctamente');
+          // }
         }, (error: HttpErrorResponse) => {
           this.isLoading = false;
           this.navigationService.loadSpinnerFinish();

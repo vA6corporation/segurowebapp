@@ -27,4 +27,5 @@ export interface ConstructionModel {
   percentCompletion: PercentCompletionModel|null
   payments: PaymentModel[]
   createdAt: string
+  debt: number
 }

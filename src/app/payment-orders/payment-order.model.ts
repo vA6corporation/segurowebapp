@@ -1,4 +1,5 @@
 import { Provider } from "@angular/core";
+import { PaymentOrderPdfModel } from "./payment-order-pdf.model";
 
 export interface PaymentOrderModel {
   _id: string
@@ -10,5 +11,5 @@ export interface PaymentOrderModel {
   createdAt: string
   bank: string
   providerId: string
-  pdfId: string|null
+  attachments: PaymentOrderPdfModel[]
 }

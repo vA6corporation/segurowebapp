@@ -4,12 +4,12 @@ import { FormBuilder } from '@angular/forms';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionsService } from '../constructions.service';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Subscription } from 'rxjs';
 import { buildExcel } from 'src/app/xlsx';
 import { formatDate } from '@angular/common';
-Chart.register(...registerables);
 import { randomColor } from 'src/app/randomColor';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-percent-completions',
@@ -36,6 +36,7 @@ export class PercentCompletionsComponent implements OnInit {
     constructionCode: '',
     percentCompletionCode: ''
   });
+  public totalConstructions: number = 0;
   public summaries: any[] = [];
   public months: any[] = [
     'ENERO',
@@ -117,7 +118,7 @@ export class PercentCompletionsComponent implements OnInit {
             });
           } else {
             this.navigationService.loadBarStart();
-            this.constructionsService.getConstructions().subscribe(constructions => {
+            this.constructionsService.getConstructionsByOffice().subscribe(constructions => {
               this.navigationService.loadBarFinish();
               console.log(constructions);
               const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
@@ -174,6 +175,7 @@ export class PercentCompletionsComponent implements OnInit {
       const params = { constructionCode };
       this.constructionsService.getSummaryConstructions(params).subscribe(summaries => {
         console.log(summaries);
+        this.totalConstructions = summaries.map(e => e.count).reduce((a, b) => a + b, 0);
 
         const colors = [
           randomColor(), 

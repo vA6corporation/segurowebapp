@@ -6,6 +6,9 @@ import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Subscription } from 'rxjs';
+import { formatDate } from '@angular/common';
+import { buildExcel } from 'src/app/xlsx';
 Chart.register(...registerables);
 
 @Component({
@@ -45,11 +48,48 @@ export class DebtorsComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
+  private handleClickMenu$: Subscription = new Subscription();
+
   ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
     this.navigationService.setTitle("Recaudacion");
+
+    this.navigationService.setMenu([
+      // { id: 'search', label: 'search', icon: 'search', show: true },
+      // { id: 'export_constructions_date', label: 'Exportar excel por fecha', icon: 'download', show: false },
+      // { id: 'export_constructions_office', label: 'Exportar excel por oficina', icon: 'download', show: false },
+      { id: 'export_constructions', label: 'Exportar excel', icon: 'download', show: false },
+    ]);
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+      let body = [];
+      body.push([
+        'ESTADO DE O.',
+        'CLIENTE',
+        'CONSORCIO',
+        'PERSONAL',
+        'HONORARIOS',
+        'PENDIENTE',
+        'OBJETO',
+      ]);
+      for (const construction of this.dataSource) {
+        body.push([
+          construction.constructionCodeType,
+          construction.business.name,
+          construction.partnership?.name,
+          construction.worker?.name,
+          construction.commission,
+          construction.debt,
+          construction.object,
+        ]);
+      }
+      const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+      buildExcel(body, name, wscols, [], []);
+    });
   }
 
   ngAfterViewInit() {
