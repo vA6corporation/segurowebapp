@@ -16,7 +16,7 @@ export class AppComponent {
     private readonly authService: AuthService,
     private readonly router: Router,
   ) { }
-
+  title = '';
   isLoading: boolean = true;
   isStart: boolean = false;
   currentPath: string = '';
