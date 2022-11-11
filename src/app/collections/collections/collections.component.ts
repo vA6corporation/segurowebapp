@@ -133,42 +133,6 @@ export class CollectionsComponent implements OnInit {
                 'OBRA'
               ]);
 
-              for (const guarantee of payedDirect) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
-              }
-
-              for (const guarantee of notPayedDirect) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'NO PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
-              }
-
               for (const guarantee of payedCompliance) {
                 const { business, partnership, financier } = guarantee;
                 body.push([
@@ -179,7 +143,7 @@ export class CollectionsComponent implements OnInit {
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
-                  'PAGADO',
+                  guarantee.isPaid ? 'PAGADO' : 'NO PAGADO',
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
@@ -187,7 +151,7 @@ export class CollectionsComponent implements OnInit {
                 ]);
               }
 
-              for (const guarantee of notPayedCompliance) {
+              for (const guarantee of payedDirect) {
                 const { business, partnership, financier } = guarantee;
                 body.push([
                   guarantee.guaranteeType,
@@ -197,7 +161,7 @@ export class CollectionsComponent implements OnInit {
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
-                  'NO PAGADO',
+                  guarantee.isPaid ? 'PAGADO' : 'NO PAGADO',
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
@@ -215,7 +179,7 @@ export class CollectionsComponent implements OnInit {
                   guarantee.policyNumber,
                   guarantee.price,
                   guarantee.prima,
-                  'PAGADO',
+                  guarantee.isPaid ? 'PAGADO' : 'NO PAGADO',
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
@@ -223,23 +187,6 @@ export class CollectionsComponent implements OnInit {
                 ]);
               }
               
-              for (const guarantee of notPayedMaterial) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'NO PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
-              }
               const name = `SUMAS_ASEGURADAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
               buildExcel(body, name, wscols, [], []);
             });

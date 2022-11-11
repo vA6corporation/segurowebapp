@@ -13,8 +13,6 @@ import { DialogCreateProvidersComponent } from 'src/app/providers/dialog-create-
 import { DialogEditProvidersComponent } from 'src/app/providers/dialog-edit-providers/dialog-edit-providers.component';
 import { DialogProvidersComponent } from 'src/app/providers/dialog-providers/dialog-providers.component';
 import { ProviderModel } from 'src/app/providers/provider.model';
-import { DialogAttachFileComponent } from 'src/app/system/dialog-attach-file/dialog-attach-file.component';
-import { DialogPdfComponent } from 'src/app/system/dialog-pdf/dialog-pdf.component';
 import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { PaymentOrdersService } from '../payment-orders.service';
 
@@ -130,6 +128,19 @@ export class EditPaymentOrdersComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.paymentOrderId = params.paymentOrderId;
+      this.fetchData();
+    });
+  }
+
+  onAttachPdf() {
+    const dialogRef = this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: this.paymentOrderId
+    });
+
+    dialogRef.componentInstance.handleChangePdf().subscribe(() => {
       this.fetchData();
     });
   }

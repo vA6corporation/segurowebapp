@@ -5,6 +5,9 @@
     </button>
     <p class="text-center m-0">{{ provider?.address }}</p>
     <p class="text-center m-0">{{ provider?.mobileNumber }}</p>
+    <div class="my-3">
+      <button type="button" (click)="onAttachPdf()" [disabled]="isLoading" mat-raised-button color="primary">ADJUNTOS</button>
+    </div>
     <mat-form-field appearance="fill">
       <mat-label>Razon social *</mat-label>
       <mat-select formControlName="companyId">

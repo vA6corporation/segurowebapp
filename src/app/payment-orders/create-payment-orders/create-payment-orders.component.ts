@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
 import { CompaniesService } from 'src/app/companies/companies.service';
 import { CompanyModel } from 'src/app/companies/company.model';
+import { DialogSelectPdfComponent, DialogSelectPdfData } from 'src/app/insurances/dialog-select-pdf/dialog-select-pdf.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BankModel } from 'src/app/providers/bank.model';
 import { DialogCreateProvidersComponent } from 'src/app/providers/dialog-create-providers/dialog-create-providers.component';
@@ -45,6 +46,7 @@ export class CreatePaymentOrdersComponent implements OnInit {
     accountNumber: '',
     isPaid: true,
   });
+  private pdfs: DialogSelectPdfData[] = [];
 
   // public paymentTypes = [
   //   { code: '01', name: 'EFECTIVO' },
@@ -123,6 +125,19 @@ export class CreatePaymentOrdersComponent implements OnInit {
     });
   }
 
+  onAttachPdf() {
+    const dialogRef = this.matDialog.open(DialogSelectPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: this.pdfs
+    });
+
+    dialogRef.componentInstance.handleSelectedFile().subscribe(files => {
+      this.pdfs = files;
+    });
+  }
+
   onEditProvider() {
     const dialogRef = this.matDialog.open(DialogEditProvidersComponent, {
       width: '600px',
@@ -146,6 +161,18 @@ export class CreatePaymentOrdersComponent implements OnInit {
     this.formGroup.get('bankName')?.patchValue(this.banks.find(e => e.accountNumber == accountNumber)?.bankName);
   }
 
+  uploadFile(file: File, paymentOrderId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', file),
+      this.paymentOrdersService.uploadPdf(formData, paymentOrderId).subscribe(pdfId => {
+        resolve();
+      }, (error: HttpErrorResponse) => {
+        reject();
+      });  
+    });
+  }
+
   onSubmit(): void {
     if (this.provider === null) {
       this.navigationService.showMessage('Agrege un proveedor');
@@ -158,21 +185,21 @@ export class CreatePaymentOrdersComponent implements OnInit {
           ...this.formGroup.value,
           providerId: this.provider._id,
         }
-        this.paymentOrdersService.create(createdPaymentOrder).subscribe(paymentOrder => {
-          // console.log(paymentOrder);
-          // if (this.formData) {
-          //   // this.paymentOrdersService.updatePdf(this.formData, paymentOrder._id).subscribe(pdfId => {
-          //   //   this.isLoading = false;
-          //   //   this.router.navigate(['/paymentOrders']);
-          //   //   this.navigationService.loadSpinnerFinish();
-          //   //   this.navigationService.showMessage('Registrado correctamente');
-          //   // });
-          // } else {
-          //   this.isLoading = false;
-          //   this.router.navigate(['/paymentOrders']);
-          //   this.navigationService.loadSpinnerFinish();
-          //   this.navigationService.showMessage('Registrado correctamente');
-          // }
+        this.paymentOrdersService.create(createdPaymentOrder).subscribe(async paymentOrder => {
+          if (this.pdfs.length) {
+            for (const pdf of this.pdfs) {
+              await this.uploadFile(pdf.file, paymentOrder._id);
+            }
+            this.isLoading = false;
+            this.router.navigate(['/paymentOrders']);
+            this.navigationService.loadSpinnerFinish();
+            this.navigationService.showMessage('Registrado correctamente');
+          } else {
+            this.isLoading = false;
+            this.router.navigate(['/paymentOrders']);
+            this.navigationService.loadSpinnerFinish();
+            this.navigationService.showMessage('Registrado correctamente');
+          }
         }, (error: HttpErrorResponse) => {
           this.isLoading = false;
           this.navigationService.loadSpinnerFinish();

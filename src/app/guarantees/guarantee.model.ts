@@ -4,4 +4,5 @@ export interface GuaranteeModel {
   guaranteeType: string
   status: string
   policyNumber: string
+  isPaid: boolean
 }

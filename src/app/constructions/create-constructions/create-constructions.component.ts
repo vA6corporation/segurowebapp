@@ -179,8 +179,6 @@ export class CreateConstructionsComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        console.log(partnership);
-        
         const { business } = partnership;
         this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });

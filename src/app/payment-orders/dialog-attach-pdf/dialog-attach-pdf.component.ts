@@ -22,7 +22,8 @@ export class DialogAttachPdfComponent implements OnInit {
 
   public url: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 
-  public accept: string = 'application/pdf';
+  // public accept: string = 'application/pdf';
+  public accept: string = '';
   public isLoading: boolean = false;
   public paymentOrderPdfs: PaymentOrderPdfModel[] = [];
   public tabIndex: number = 0;
@@ -58,16 +59,16 @@ export class DialogAttachPdfComponent implements OnInit {
   onChangePdf(paymentOrderPdf: PaymentOrderPdfModel) {
     this.pdfId = paymentOrderPdf.pdfId;
     this.paymentOrderPdfId = paymentOrderPdf._id;
-    if (paymentOrderPdf.contentType === 'application/pdf') {
+    if (paymentOrderPdf.contentType === 'application/pdf' || paymentOrderPdf.contentType.includes('image')) {
       this.tabIndex = 1;
-      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.baseUrl}paymentOrderPdfs/${this.pdfId}`);
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.baseUrl}paymentOrderPdfs/byPdfId/${this.pdfId}`);
     } else {
-      this.downloadURI(`${environment.baseUrl}paymentOrderPdfs/${this.pdfId}`, paymentOrderPdf.filename)
+      this.downloadURI(`${environment.baseUrl}paymentOrderPdfs/byPdfIdDownload/${this.pdfId}/${paymentOrderPdf.filename}`, paymentOrderPdf.filename)
     }
   }
 
   downloadURI(uri: string, name: string) {
-    var link = document.createElement("a");
+    const link = document.createElement("a");
     link.download = name;
     link.href = uri;
     document.body.appendChild(link);
