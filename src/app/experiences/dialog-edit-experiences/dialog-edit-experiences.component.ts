@@ -56,6 +56,13 @@ export class DialogEditExperiencesComponent implements OnInit {
   ngOnInit(): void {
     this.incomes = this.experience.incomes;
     this.consortium = this.experience.othersConsortium;
+    if (this.experience.nameConsortium) {
+      this.isCheckedConsortium = true;
+    }
+
+    if (this.experience.othersConsortium.length) {
+      this.isCheckedOthersConsortium = true;
+    }
     // this.incomesYear = this.experience.incomesYear;
     // this.incomesAmount = this.experience.incomesAmount;
     // this.isCheckedConsortium = this.

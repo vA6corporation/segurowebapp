@@ -114,7 +114,7 @@
       <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio">Consorcio</mat-slide-toggle>
     </div>
     <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados
+      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" [ngModelOptions]="{ standalone: true }" >Otros Consorciados
       </mat-slide-toggle>
     </div>
     <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
