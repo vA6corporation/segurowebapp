@@ -9,6 +9,7 @@ import { EditTemplatesComponent } from './edit-templates/edit-templates.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogTemplatesComponent } from './dialog-templates/dialog-templates.component';
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -25,6 +26,9 @@ import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class TemplatesModule { }

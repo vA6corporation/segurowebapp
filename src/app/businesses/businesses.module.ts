@@ -23,6 +23,7 @@ import { DialogAddMainSuppliersComponent } from './dialog-add-main-suppliers/dia
 import { DialogAddAccountRotationComponent } from './dialog-add-account-rotation/dialog-add-account-rotation.component';
 import { DialogAddAccessCreditComponent } from './dialog-add-access-credit/dialog-add-access-credit.component';
 import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,9 @@ import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.
     MovablePropertiesModule,
     ExperiencesModule,
     BoardMembersModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class BusinessesModule { }
