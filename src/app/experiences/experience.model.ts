@@ -5,6 +5,11 @@ export interface ExperienceModel {
   timeLimit: string
   advancePercent: string
   tenderObjectContract: string
+  price: number
+  isCompleted: boolean
+  isArbitration: boolean
+  isOperation: boolean
+  isConsorcio: boolean
 
   typeWork: string
   endingDate: string
@@ -13,7 +18,8 @@ export interface ExperienceModel {
   directAdvance: string
   advanceMaterials: string
   bondingEntity: string
-  income: ExperienceModelIncome[]
+  incomes: ExperienceModelIncome[]
+  othersConsortium: any[]
 
   nameSuretyEntities: string
   nameConsortium: string

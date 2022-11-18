@@ -26,6 +26,7 @@ export class EditFinancierModelsComponent implements OnInit {
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
+    primaPercentage: [ null, Validators.required ],
   });
 
   private financierId: string = '';

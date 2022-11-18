@@ -4,7 +4,6 @@ import { ChequesRoutingModule } from './cheques-routing.module';
 import { DialogChequesComponent } from './dialog-cheques/dialog-cheques.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
-import { ChequesComponent } from './cheques/cheques.component';
 import { ChequesPaymentComponent } from './cheques-payment/cheques-payment.component';
 import { DialogDetailChequesComponent } from './dialog-detail-cheques/dialog-detail-cheques.component';
 import { CommercialChequesComponent } from './commercial-cheques/commercial-cheques.component';
@@ -12,7 +11,6 @@ import { CommercialChequesComponent } from './commercial-cheques/commercial-cheq
 @NgModule({
   declarations: [
     DialogChequesComponent,
-    ChequesComponent,
     ChequesPaymentComponent,
     DialogDetailChequesComponent,
     CommercialChequesComponent
@@ -23,8 +21,5 @@ import { CommercialChequesComponent } from './commercial-cheques/commercial-cheq
     MaterialModule,
     ReactiveFormsModule,
   ],
-  // exports: [
-  //   DialogChequesComponent,
-  // ]
 })
 export class ChequesModule { }

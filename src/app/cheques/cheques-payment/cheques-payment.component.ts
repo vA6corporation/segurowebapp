@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { ChequeModel } from '../cheque.model';
@@ -32,6 +33,7 @@ export class ChequesPaymentComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
+    isPaid: 'false',
   });
   public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
   public dataSource: any[] = [];
@@ -39,21 +41,31 @@ export class ChequesPaymentComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  public params: Params = {
-    isPaid: 'false',
-  };
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
+    this.queryParams$.unsubscribe();
   }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
-    this.fetchData();
+
+    this.queryParams$ = this.route.queryParams.pipe(first()).subscribe(params => {
+      const { startDate, endDate, isPaid } = params;
+      if (startDate && endDate) {
+        this.formGroup.get('startDate')?.patchValue(new Date(Number(startDate)));
+        this.formGroup.get('endDate')?.patchValue(new Date(Number(endDate)));
+      }
+      if (isPaid) {
+        this.formGroup.get('isPaid')?.patchValue(isPaid);
+      }
+      this.fetchData();
+    });
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
@@ -113,9 +125,10 @@ export class ChequesPaymentComponent implements OnInit {
 
   fetchData() {
     if (this.formGroup.valid) {
-      const { startDate, endDate } = this.formGroup.value;
+      const { startDate, endDate, isPaid } = this.formGroup.value;
+      const params = { isPaid };
       this.navigationService.loadBarStart();
-      this.chequesService.getChequesByRangeDate(startDate, endDate, this.params).subscribe(cheques => {
+      this.chequesService.getChequesByRangeDate(startDate, endDate, params).subscribe(cheques => {
         this.navigationService.loadBarFinish();
         this.dataSource = cheques;
       });
@@ -174,7 +187,24 @@ export class ChequesPaymentComponent implements OnInit {
   }
 
   onSelectionChange() {
+    const { isPaid } = this.formGroup.value;
+    const queryParams: Params = { isPaid };
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
     this.fetchData();
+  }
+
+  onNotPaid(cheque: ChequeModel) {
+    cheque.isPaid = false;
+    this.chequesService.update(cheque, cheque._id || '').subscribe(cheque => {
+      this.navigationService.showMessage('Se han guardado los cambios');
+      this.fetchData();
+    });
   }
 
   onPaid(cheque: ChequeModel) {
@@ -182,7 +212,7 @@ export class ChequesPaymentComponent implements OnInit {
     if (ok) {
       cheque.isPaid = true;
       this.chequesService.update(cheque, cheque._id || '').subscribe(cheque => {
-        this.navigationService.showMessage('Pago realizado correctamente');
+        this.navigationService.showMessage('Se han guardado los cambios');
         this.fetchData();
       });
     }

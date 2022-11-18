@@ -9,13 +9,14 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado de pago</mat-label>
+      <mat-select formControlName="isPaid" (selectionChange)="onSelectionChange()">
+        <mat-option value="false">NO PAGADOS</mat-option>
+        <mat-option value="true">PAGADOS</mat-option>
+      </mat-select>
+    </mat-form-field>
   </form>
-  <mat-form-field appearance="fill">
-    <mat-select [(value)]="params.isPaid" (selectionChange)="onSelectionChange()">
-      <mat-option value="false">NO PAGADOS</mat-option>
-      <mat-option value="true">PAGADOS</mat-option>
-    </mat-select>
-  </mat-form-field>
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" class="w-100">
       <ng-container matColumnDef="guarantee">
@@ -61,7 +62,7 @@
               <mat-icon>monetization_on</mat-icon>
               <span>Marcar pago</span>
             </button>
-            <button type="button" (click)="onPaid(cheque)" *ngIf="cheque.isPaid" mat-menu-item>
+            <button type="button" (click)="onNotPaid(cheque)" *ngIf="cheque.isPaid" mat-menu-item>
               <mat-icon>monetization_on</mat-icon>
               <span>Desmarcar pago</span>
             </button>

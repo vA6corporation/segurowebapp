@@ -27,6 +27,7 @@ export class CreateFinancierModelsComponent implements OnInit {
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
+    primaPercentage: [ null, Validators.required ],
   });
 
   ngOnInit(): void {
