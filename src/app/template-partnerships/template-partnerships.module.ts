@@ -8,6 +8,7 @@ import { EditTemplatePartnershipsComponent } from './edit-template-partnerships/
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogTemplatePartnershipsComponent } from './dialog-template-partnerships/dialog-template-partnerships.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -17,6 +18,9 @@ import { DialogTemplatePartnershipsComponent } from './dialog-template-partnersh
     TemplatePartnershipsRoutingModule,
     MaterialModule,
     ReactiveFormsModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class TemplatePartnershipsModule { }

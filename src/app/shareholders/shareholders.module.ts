@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogShareholdersComponent } from './dialog-shareholders/dialog-shareholders.component';
 import { DialogIncomesComponent } from './dialog-incomes/dialog-incomes.component';
 import { InvestmentsModule } from '../investments/investments.module';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -21,6 +22,9 @@ import { InvestmentsModule } from '../investments/investments.module';
     FormsModule,
     ReactiveFormsModule,
     InvestmentsModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class ShareholdersModule { }

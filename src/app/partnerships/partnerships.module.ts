@@ -9,6 +9,7 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogPartnershipsComponent } from './dialog-partnerships/dialog-partnerships.component';
 import { DialogPartnershipItemsComponent } from './dialog-partnership-items/dialog-partnership-items.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -28,6 +29,9 @@ import { DialogPartnershipItemsComponent } from './dialog-partnership-items/dial
   ],
   exports: [
     DialogPartnershipsComponent,
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
   ]
 })
 export class PartnershipsModule { }
