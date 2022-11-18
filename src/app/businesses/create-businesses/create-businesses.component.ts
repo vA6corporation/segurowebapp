@@ -50,7 +50,7 @@ export class CreateBusinessesComponent implements OnInit {
     private readonly router: Router,
     private readonly matDialog: MatDialog
   ) { }
-    
+
   public formGroup: FormGroup = this.formBuilder.group({
     documentType: [null, Validators.required],
     document: [null, Validators.required],
@@ -151,24 +151,24 @@ export class CreateBusinessesComponent implements OnInit {
   public isCheckedPEP = false;
   public isCheckedCrime = false;
   public boardMembers: BoardMembersModel[] = [];
-  
+
   public salesMix: SalesMixModel[] = [];
   public mainSuppliers: MainSuppliersModel[] = [];
   public mainCustomers: MainCustomersModel[] = [];
   public accessCredit: AccessCreditModel[] = [];
   public accountRotation: AccountRotationModel[] = [];
   public trials: TrialsModel[] = [];
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.navigationService.setTitle('Nueva empresa');
     this.navigationService.backTo();
     this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
+          this.formGroup.get('documento')?.setValidators([Validators.required, Validators.minLength(11), Validators.maxLength(11)]);
           this.maxlength = 11;
           break;
         case 'DNI':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
+          this.formGroup.get('documento')?.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(8)]);
           this.maxlength = 8;
           break;
       }
@@ -447,21 +447,21 @@ export class CreateBusinessesComponent implements OnInit {
       business.accessCredit = this.accessCredit
       business.accountRotation = this.accountRotation
       business.trials = this.trials
-      
-      if(!this.isCheckedPEP){
+
+      if (!this.isCheckedPEP) {
         business.representativePEPInstitution = '';
         business.representativePEPPositionn = '';
       }
-      if(!this.isCheckedCrime){
+      if (!this.isCheckedCrime) {
         business.representativeCrimeStatus = '';
         business.representativeCrimeYearme = '';
         business.representativeCrime = '';
       }
 
       this.businessesService.create(
-        business, 
+        business,
         this.guaranties,
-        this.experiences, 
+        this.experiences,
         this.investments,
         this.properties,
         this.movableProperties,
