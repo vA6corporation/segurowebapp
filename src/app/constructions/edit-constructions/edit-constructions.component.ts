@@ -36,7 +36,7 @@ export class EditConstructionsComponent implements OnInit {
     private readonly  authService: AuthService,
     private readonly navigationService: NavigationService,
     private readonly officesService: OfficesService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly workersService: WorkersService,
     private readonly matDialog: MatDialog,
     private readonly formBuilder: FormBuilder,
@@ -120,7 +120,7 @@ export class EditConstructionsComponent implements OnInit {
       this.user = auth.user;
     });
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.constructionId = params.constructionId;
       this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
         console.log(construction);

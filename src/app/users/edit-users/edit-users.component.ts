@@ -20,7 +20,7 @@ export class EditUsersComponent implements OnInit {
     private readonly usersService: UsersService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -47,7 +47,7 @@ export class EditUsersComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Editar usuario');
     this.navigationService.backTo();
-    this.route.params.subscribe(async params => {
+    this.activatedRoute.params.subscribe(async params => {
       this.userId = params.userId;
       this.usersService.getUserById(this.userId).subscribe(user => {
         console.log(user);

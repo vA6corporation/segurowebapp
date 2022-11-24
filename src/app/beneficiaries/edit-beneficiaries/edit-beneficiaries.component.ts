@@ -16,7 +16,7 @@ export class EditBeneficiariesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly beneficiariesService: BeneficiariesService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -43,7 +43,7 @@ export class EditBeneficiariesComponent implements OnInit {
     this.navigationService.setTitle('Editar beneficiario');
     this.navigationService.backTo();
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.beneficiaryId = params.beneficiaryId;
       this.beneficiariesService.getBeneficiaryById(this.beneficiaryId).subscribe(beneficiary => {
         console.log(beneficiary);

@@ -16,7 +16,7 @@ export class EditBanksComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
     private readonly banksService: BanksService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -32,7 +32,7 @@ export class EditBanksComponent implements OnInit {
     this.navigationService.setTitle('Editar cuenta bancaria');
     this.navigationService.backTo();
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.bankId = params.bankId;
 
       this.banksService.getBankById(this.bankId).subscribe(bank => {

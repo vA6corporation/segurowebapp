@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Detalles de obra</h2>
+<div mat-dialog-content>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 13rem">Comvocatoria ID:</td>
+        <td>{{ seaceData.comvocatoriaId }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <table>
+    <tbody>
+      <tr *ngFor="let element of seaceData.businesses">
+        <td style="width: 13rem">{{ element }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="my-3"></div>
+</div>

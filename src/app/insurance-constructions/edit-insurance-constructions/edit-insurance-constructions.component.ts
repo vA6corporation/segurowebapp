@@ -19,7 +19,7 @@ export class EditInsuranceConstructionsComponent implements OnInit {
   constructor(
     private readonly constructionsService: InsuranceConstructionsService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
   ) { }
     
@@ -39,7 +39,7 @@ export class EditInsuranceConstructionsComponent implements OnInit {
     this.navigationService.setTitle('Editar obra');
     this.navigationService.backTo();
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.constructionId = params.constructionId;
       this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
         const { business, ...value } = construction;

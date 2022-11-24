@@ -16,7 +16,7 @@ export class EditInsuranceBusinessesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly businessesService: InsuranceBusinessesService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
   
   public formGroup: FormGroup = this.formBuilder.group({
@@ -54,7 +54,7 @@ export class EditInsuranceBusinessesComponent implements OnInit {
       this.formGroup.get('documento')?.updateValueAndValidity();
     });
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.businessId = params.businessId;
       this.businessesService.getBusinessById(this.businessId).subscribe(business => {
         this.formGroup?.setValue(business);

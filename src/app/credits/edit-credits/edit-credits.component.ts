@@ -30,7 +30,7 @@ export class EditCreditsComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly companiesService: CompaniesService,
     private readonly workersService: WorkersService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
   ) { }
 
@@ -85,7 +85,7 @@ export class EditCreditsComponent implements OnInit {
       this.companies = companies;
     });
     
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.creditId = params.creditId;
       this.navigationService.setTitle('Editar linea de credito');
       this.creditsService.getCreditById(this.creditId).subscribe(credit => {

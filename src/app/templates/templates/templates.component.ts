@@ -19,7 +19,7 @@ export class TemplatesComponent implements OnInit {
   constructor(
     private readonly templatesService: TemplatesService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
   ) { }
@@ -59,7 +59,7 @@ export class TemplatesComponent implements OnInit {
     const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
 
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });

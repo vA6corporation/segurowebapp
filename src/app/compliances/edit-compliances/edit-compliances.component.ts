@@ -36,7 +36,7 @@ export class EditCompliancesComponent implements OnInit {
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
   ) { }
 
@@ -76,7 +76,7 @@ export class EditCompliancesComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.backTo();
     this.navigationService.setTitle('Editar fiel cumplimiento');
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.complianceId = params.complianceId;
       this.compliancesService.getComplianceById(this.complianceId).subscribe(compliance => {
         console.log(compliance);

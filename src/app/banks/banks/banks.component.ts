@@ -18,7 +18,7 @@ export class BanksComponent implements OnInit {
     private readonly banksService: BanksService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   public users: UserModel[] = [];
@@ -42,7 +42,7 @@ export class BanksComponent implements OnInit {
     const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
 
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });

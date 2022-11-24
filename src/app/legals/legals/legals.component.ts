@@ -34,7 +34,7 @@ export class LegalsComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'endDate', 'actions' ];
@@ -101,7 +101,7 @@ export class LegalsComponent implements OnInit {
       this.workers = workers;
     });
 
-    this.queryParams$ = this.route.queryParams.pipe(first()).subscribe(params => {
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       const { _id, name, workerId, startDate, endDate, processStatusCode } = params;
       if (_id && name) {
         this.financierForm.patchValue({
@@ -196,7 +196,7 @@ export class LegalsComponent implements OnInit {
       }
 
       this.router.navigate([], {
-        relativeTo: this.route,
+        relativeTo: this.activatedRoute,
         queryParams: queryParams, 
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
@@ -213,7 +213,7 @@ export class LegalsComponent implements OnInit {
     const queryParams: Params = { };
     Object.assign(queryParams, { workerId: this.workerForm.value._id || null });
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -225,7 +225,7 @@ export class LegalsComponent implements OnInit {
     const { processStatusCode } = this.statusForm.value;
     Object.assign(queryParams, { processStatusCode });
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -237,7 +237,7 @@ export class LegalsComponent implements OnInit {
     const { startDate, endDate } = this.dateForm.value;
     Object.assign(queryParams, { startDate: startDate.getTime(), endDate: endDate.getTime() });
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });

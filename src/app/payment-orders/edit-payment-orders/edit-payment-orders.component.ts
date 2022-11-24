@@ -31,7 +31,7 @@ export class EditPaymentOrdersComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -126,7 +126,7 @@ export class EditPaymentOrdersComponent implements OnInit {
       }
     });
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.paymentOrderId = params.paymentOrderId;
       this.fetchData();
     });

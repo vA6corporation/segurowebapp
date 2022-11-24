@@ -38,7 +38,7 @@ export class CreateDirectsComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -85,7 +85,7 @@ export class CreateDirectsComponent implements OnInit {
       this.workers = workers;
     });
 
-    this.queryParams$ = this.route.queryParams.subscribe(params => {
+    this.queryParams$ = this.activatedRoute.queryParams.subscribe(params => {
       if (params.constructionId) {
         this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
           if (construction) {

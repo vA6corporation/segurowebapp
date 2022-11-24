@@ -27,7 +27,7 @@ export class ConstructionStatusComponent implements OnInit {
     private readonly compliancesService: CompliancesService,
     private readonly directsService: DirectsService,
     private readonly matDialog: MatDialog,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'price', 'actions' ];
@@ -53,7 +53,7 @@ export class ConstructionStatusComponent implements OnInit {
       { id: 'search', label: 'search', icon: 'search', show: true }
     ]);
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       console.log(params);
       this.financierId = params.financierId;
       this.fetchData();

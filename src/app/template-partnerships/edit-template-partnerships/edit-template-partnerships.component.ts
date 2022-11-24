@@ -21,7 +21,7 @@ export class EditTemplatePartnershipsComponent implements OnInit {
     private readonly partnershipsService: PartnershipsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -44,7 +44,7 @@ export class EditTemplatePartnershipsComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio para formatos');
     this.navigationService.backTo();
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
         this.partnershipItems = partnership.partnershipItems;

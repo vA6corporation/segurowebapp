@@ -3,6 +3,10 @@
     <p class="text-capitalize text-bold mb-1">Horvi</p>
     <span class="m-0 text-capitalize text-truncate">{{ office?.name }}</span>
   </div>
+  <a href="#" #search mat-list-item routerLink="/seace" (click)="onClose()" *ngIf="privileges.seace">
+    <mat-icon class="mr-2">travel_explore</mat-icon>
+    <span>Seace</span>
+  </a>
   <a href="#" #search mat-list-item routerLink="/search" (click)="onClose()" *ngIf="privileges.search">
     <mat-icon class="mr-2">search</mat-icon>
     <span>Buscar Admin</span>

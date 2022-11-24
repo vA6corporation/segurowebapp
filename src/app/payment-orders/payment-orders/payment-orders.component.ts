@@ -21,7 +21,7 @@ export class PaymentOrdersComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public displayedColumns: string[] = [ 'provider', 'company', 'concept', 'charge', 'paymentAt', 'actions' ];
@@ -54,7 +54,7 @@ export class PaymentOrdersComponent implements OnInit {
       }
     });
 
-    this.route.queryParams.subscribe(params => {
+    this.activatedRoute.queryParams.subscribe(params => {
       
       this.navigationService.setMenu([
         { id: 'search', label: 'Buscar', icon: 'search', show: true },
@@ -88,7 +88,7 @@ export class PaymentOrdersComponent implements OnInit {
     const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
 
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });

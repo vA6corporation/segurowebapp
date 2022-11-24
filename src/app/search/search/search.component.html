@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Estado de tramite</mat-label>
       <mat-select [(value)]="processStatusCode" (selectionChange)="onStatusChange()">
-        <mat-option value="" disabled>TODOS LOS ESTADOS</mat-option>
+        <mat-option value="">TODOS LOS ESTADOS</mat-option>
         <mat-option value="01">REDACCION</mat-option>
         <mat-option value="02">LEGALIZACION</mat-option>
         <mat-option value="03">CONFORMIDAD</mat-option>
@@ -13,7 +13,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Estado de revision</mat-label>
       <mat-select [(value)]="status" (selectionChange)="onStatusChange()">
-        <mat-option value="" disabled>TODAS LAS REVISIONES</mat-option>
+        <mat-option value="">TODAS LAS REVISIONES</mat-option>
         <mat-option value="01">SIN REVISAR</mat-option>
         <mat-option value="02">RENOVAR</mat-option>
         <mat-option value="03">NO RENOVAR</mat-option>
@@ -22,7 +22,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Oficina</mat-label>
-      <mat-select [(value)]="officeId">
+      <mat-select [(value)]="officeId" (selectionChange)="onStatusChange()">
         <!-- <mat-option value="" disabled>TODAS LAS OFICINAS</mat-option> -->
         <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>

@@ -24,7 +24,7 @@ export class EditPrivilegesComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly formBuilder: FormBuilder,
     private readonly usersService: UsersService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
   
   public formGroup: FormGroup = this.formBuilder.group(this.authService.getObjectModules());
@@ -40,7 +40,7 @@ export class EditPrivilegesComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationService.backTo();
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.userId = params.userId;
       this.usersService.getUserById(params.userId).subscribe(user => {
         this.navigationService.setTitle(`Permisos ${user.name}`);

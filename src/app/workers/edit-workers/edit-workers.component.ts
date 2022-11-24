@@ -17,7 +17,7 @@ export class EditWorkersComponent implements OnInit {
     private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) {
     this.formGroup = this.formBuilder.group({
       worker: this.formBuilder.group({
@@ -41,7 +41,7 @@ export class EditWorkersComponent implements OnInit {
     this.navigationService.setTitle('Editar personal');
     this.navigationService.backTo();
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.workerId = params.workerId;
       this.workersService.getWorkerById(this.workerId).subscribe(worker => {
         this.formGroup.get('worker')?.patchValue(worker);

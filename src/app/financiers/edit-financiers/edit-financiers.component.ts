@@ -16,7 +16,7 @@ export class EditFinancierModelsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly financiersService: FinancierModelsService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -26,7 +26,12 @@ export class EditFinancierModelsComponent implements OnInit {
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    primaPercentage: [ null, Validators.required ],
+    emitionPrimaPercentage: [ null, Validators.required ],
+    emitionLawPercentage: [ null, Validators.required ],
+    emitionCharge: [ null, Validators.required ],
+    renewalPrimaPercentage: [ null, Validators.required ],
+    renewalLawPercentage: [ null, Validators.required ],
+    renewalCharge: [ null, Validators.required ],
   });
 
   private financierId: string = '';
@@ -35,15 +40,10 @@ export class EditFinancierModelsComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Editar financiera');
     this.navigationService.backTo();
-    this.route.params.subscribe(async params => {
+    this.activatedRoute.params.subscribe(async params => {
       this.financierId = params.financierId;
       this.financiersService.getFinancierModelById(this.financierId).subscribe(financier => {
-        console.log(financier);
-        this.formGroup.get('document')?.setValue(financier.document);
-        this.formGroup.get('name')?.setValue(financier.name);
-        this.formGroup.get('email')?.setValue(financier.email);
-        this.formGroup.get('phoneNumber')?.setValue(financier.phoneNumber);
-        this.formGroup.get('annexed')?.setValue(financier.annexed);
+        this.formGroup.patchValue(financier);
       });
     });
   }

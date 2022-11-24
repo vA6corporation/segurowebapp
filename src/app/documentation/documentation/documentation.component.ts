@@ -25,7 +25,7 @@ export class DocumentationComponent implements OnInit {
     private readonly documentationService: DocumentationService,
     private readonly matDialog: MatDialog,
     private readonly formBuilder: FormBuilder,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router
   ) { }
     
@@ -108,7 +108,7 @@ export class DocumentationComponent implements OnInit {
         const queryParams: Params = financier;
 
         this.router.navigate([], {
-          relativeTo: this.route,
+          relativeTo: this.activatedRoute,
           queryParams: queryParams, 
           queryParamsHandling: 'merge', // remove to replace all query params by provided
         });
@@ -131,7 +131,7 @@ export class DocumentationComponent implements OnInit {
     }
 
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
@@ -200,7 +200,7 @@ export class DocumentationComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Documentacion faltante');
     
-    this.route.queryParams.pipe(first()).subscribe(params => {
+    this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       this.financierForm.patchValue(params);
       this.formGroup.patchValue(params);
       if (params.startDate && params.endDate) {

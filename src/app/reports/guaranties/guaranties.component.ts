@@ -34,7 +34,6 @@ export class GuarantiesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
   ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'actions' ];
@@ -83,7 +82,7 @@ export class GuarantiesComponent implements OnInit {
       const queryParams: Params = { startDate: null, endDate: null, pageIndex: 0, key };
 
       this.router.navigate([], {
-        relativeTo: this.route,
+        relativeTo: this.activatedRoute,
         queryParams: queryParams, 
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });

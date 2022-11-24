@@ -2,8 +2,9 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
@@ -34,6 +35,8 @@ export class SearchComponent implements OnInit {
     private readonly compliancesService: CompliancesService,
     private readonly officesService: OfficesService,
     private readonly authService: AuthService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly router: Router,
   ) { }
 
   public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'policyNumber', 'endDate', 'price', 'status', 'actions' ];
@@ -52,6 +55,7 @@ export class SearchComponent implements OnInit {
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
@@ -64,6 +68,15 @@ export class SearchComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.key = key;
+
+      const queryParams: Params = { key, status: null, processStatusCode: null };
+
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
       this.fetchData();
     });
 
@@ -73,6 +86,20 @@ export class SearchComponent implements OnInit {
 
     this.authService.handleAuth().subscribe(auth => {
       this.officeId = auth.office._id;
+    });
+
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+      const { key, status, processStatusCode } = params;
+      if (key) {
+        this.key = key;
+        this.fetchData();
+      }
+
+      if (status || processStatusCode) {
+        this.status = status;
+        this.processStatusCode = processStatusCode;
+        this.onStatusChange();
+      }
     });
     
     this.navigationService.setMenu([
@@ -94,22 +121,24 @@ export class SearchComponent implements OnInit {
 
   private fetchData() {
     this.navigationService.loadBarStart();
+    
     const params: Params = {
       key: this.key, 
       officeId: this.officeId 
     };
-      this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
-        this.navigationService.loadBarFinish();
-        this.guaranties = guaranties;
-        if (this.processStatusCode) {
-          this.dataSource = guaranties.filter(e => e.processStatusCode === this.processStatusCode);
-        } else {
-          this.dataSource = guaranties;
-        }
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+
+    this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
+      this.navigationService.loadBarFinish();
+      this.guaranties = guaranties;
+      if (this.processStatusCode) {
+        this.dataSource = guaranties.filter(e => e.processStatusCode === this.processStatusCode);
+      } else {
+        this.dataSource = guaranties;
+      }
+    }, (error: HttpErrorResponse) => {
+      this.navigationService.loadBarFinish();
+      this.navigationService.showMessage(error.error.message);
+    });
   }
 
   downloadExcel() {
@@ -147,6 +176,18 @@ export class SearchComponent implements OnInit {
   }
 
   onStatusChange() {
+    const queryParams: Params = { 
+      key: null, 
+      status: this.status, 
+      processStatusCode: this.processStatusCode,
+    };
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
     this.navigationService.loadBarStart();
     this.reportsService.getGuarantiesByStatus(this.processStatusCode, this.status).subscribe(guaranties => {
       this.navigationService.loadBarFinish();
@@ -193,13 +234,34 @@ export class SearchComponent implements OnInit {
     guarantee.status = '04';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        this.materialsService.update(guarantee, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
+        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GFCF':
-        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        this.compliancesService.update(guarantee, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');

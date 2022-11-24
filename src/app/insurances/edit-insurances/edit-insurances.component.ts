@@ -33,7 +33,7 @@ export class EditInsurancesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly officesService: OfficesService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly location: Location,
     private readonly router: Router,
@@ -99,7 +99,7 @@ export class EditInsurancesComponent implements OnInit {
       this.offices = offices;
     });
     
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.insuranceId = params.insuranceId;
       this.navigationService.setTitle('Editar seguro');
       this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {

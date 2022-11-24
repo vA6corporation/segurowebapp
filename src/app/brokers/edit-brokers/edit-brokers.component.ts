@@ -16,7 +16,7 @@ export class EditBrokersComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly brokersService: BrokersService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -36,7 +36,7 @@ export class EditBrokersComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar broker');
 
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.brokerId = params.brokerId;
       this.brokersService.getBrokerById(this.brokerId).subscribe(broker => {
         this.formGroup.patchValue(broker);

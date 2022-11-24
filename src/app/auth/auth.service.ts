@@ -19,6 +19,7 @@ export class AuthService {
   private authStatus$: Subject<boolean> = new Subject();
   private auth: AuthModel|null = null;
   private modules: ModuleModel[] = [
+    { label: 'Seace', name: 'seace' },
     { label: 'Busqueda Admin', name: 'search' },
     { label: 'Busqueda', name: 'searchCommercial', info: 'Area comercial' },
     { label: 'Obras', name: 'constructions' },
@@ -48,6 +49,7 @@ export class AuthService {
   ]
 
   private objectModules = {
+    seace: false,
     search: false,
     searchCommercial: false,
     constructions: false,

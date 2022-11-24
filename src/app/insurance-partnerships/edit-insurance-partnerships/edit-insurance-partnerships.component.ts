@@ -20,7 +20,7 @@ export class EditInsurancePartnershipsComponent implements OnInit {
     private readonly partnershipsService: InsurancePartnershipsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -40,7 +40,7 @@ export class EditInsurancePartnershipsComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');
     this.navigationService.backTo();
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.partnershipId = params.partnershipId;
       this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {
         const { businesses } = partnership;

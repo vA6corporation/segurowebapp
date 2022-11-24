@@ -36,7 +36,7 @@ export class EditCommercialsComponent implements OnInit {
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -74,7 +74,7 @@ export class EditCommercialsComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
     this.navigationService.backTo();
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
         const { financier, beneficiary, cheques = [], deposits = [], construction } = material;

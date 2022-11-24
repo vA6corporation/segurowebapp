@@ -48,7 +48,7 @@ export class EditBusinessesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog
   ) { }
 
@@ -189,7 +189,7 @@ export class EditBusinessesComponent implements OnInit {
       this.formGroup.get('documento')?.updateValueAndValidity();
     });
 
-    this.route.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
       this.businessId = params.businessId;
       this.businessesService
         .getBusinessById(this.businessId)

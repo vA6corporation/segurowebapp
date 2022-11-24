@@ -8,6 +8,10 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'seace',
+    loadChildren: () => import('./seace/seace.module').then(m => m.SeaceModule)
+  },
+  {
     path: 'dashboard',
     loadChildren: () => import('./search/search.module').then(m => m.SearchModule)
   },

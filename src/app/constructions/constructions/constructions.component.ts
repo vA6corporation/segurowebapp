@@ -32,7 +32,7 @@ export class ConstructionsComponent implements OnInit {
     private readonly officesService: OfficesService,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public displayedColumns: string[] = [ 
@@ -102,7 +102,7 @@ export class ConstructionsComponent implements OnInit {
       this.offices = offices;
     });
 
-    this.queryParams$ = this.route.queryParams.pipe(first()).subscribe(params => {
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       const { startDate, endDate, key } = params;
       if (key) {
         this.constructionsService.getConstructionsByKey(key).subscribe(constructions => {
@@ -124,7 +124,7 @@ export class ConstructionsComponent implements OnInit {
       const queryParams: Params = { startDate: null, endDate: null, pageIndex: 0, key };
 
       this.router.navigate([], {
-        relativeTo: this.route,
+        relativeTo: this.activatedRoute,
         queryParams: queryParams, 
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
@@ -276,7 +276,7 @@ export class ConstructionsComponent implements OnInit {
       const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0, key: null };
 
       this.router.navigate([], {
-        relativeTo: this.route,
+        relativeTo: this.activatedRoute,
         queryParams: queryParams, 
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });

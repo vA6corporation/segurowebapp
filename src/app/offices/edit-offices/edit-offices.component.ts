@@ -17,7 +17,7 @@ export class EditOfficesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly officesService: OfficesService,
     private readonly navigationService: NavigationService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
@@ -39,7 +39,7 @@ export class EditOfficesComponent implements OnInit {
     this.navigationService.setTitle('Editar oficina');
     this.navigationService.backTo();
 
-    this.params$ = this.route.params.subscribe(params => {
+    this.params$ = this.activatedRoute.params.subscribe(params => {
       this.officeId = params.officeId;
       this.officesService.getOfficeById(params.officeId).subscribe(office => {
         this.formGroup.patchValue(office);

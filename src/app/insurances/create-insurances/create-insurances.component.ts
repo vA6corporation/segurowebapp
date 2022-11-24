@@ -31,7 +31,7 @@ export class CreateInsurancesComponent implements OnInit {
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
-    private readonly route: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly location: Location,
   ) { }
@@ -94,7 +94,7 @@ export class CreateInsurancesComponent implements OnInit {
       this.workers = workers;
     });
     
-    this.route.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(params => {
       this.type = params.type;
       this.navigationService.setTitle('Nuevo ' + this.type);
     });

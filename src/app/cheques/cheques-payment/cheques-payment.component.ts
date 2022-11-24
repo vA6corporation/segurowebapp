@@ -27,7 +27,7 @@ export class ChequesPaymentComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -55,7 +55,7 @@ export class ChequesPaymentComponent implements OnInit {
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
 
-    this.queryParams$ = this.route.queryParams.pipe(first()).subscribe(params => {
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       const { startDate, endDate, isPaid } = params;
       if (startDate && endDate) {
         this.formGroup.get('startDate')?.patchValue(new Date(Number(startDate)));
@@ -144,7 +144,7 @@ export class ChequesPaymentComponent implements OnInit {
       const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0 };
 
       this.router.navigate([], {
-        relativeTo: this.route,
+        relativeTo: this.activatedRoute,
         queryParams: queryParams, 
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
@@ -191,7 +191,7 @@ export class ChequesPaymentComponent implements OnInit {
     const queryParams: Params = { isPaid };
 
     this.router.navigate([], {
-      relativeTo: this.route,
+      relativeTo: this.activatedRoute,
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
