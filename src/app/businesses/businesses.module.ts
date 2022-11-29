@@ -24,6 +24,7 @@ import { DialogAddAccountRotationComponent } from './dialog-add-account-rotation
 import { DialogAddAccessCreditComponent } from './dialog-add-access-credit/dialog-add-access-credit.component';
 import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { BusinessesCommercialComponent } from './businesses-commercial/businesses-commercial.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     EditBusinessesComponent, 
     DialogBusinessesComponent, 
     DialogConstructionBusinessesComponent, 
-    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent,
+    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent, BusinessesCommercialComponent,
   ],
   imports: [
     CommonModule,

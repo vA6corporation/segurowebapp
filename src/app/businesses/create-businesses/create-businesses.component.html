@@ -46,6 +46,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
+      <mat-label>Personal a cargo *</mat-label>
+      <mat-select formControlName="workerId">
+        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
       <mat-label>País de Origen</mat-label>
       <input type="text" matInput formControlName="countryOrigin" />
     </mat-form-field>

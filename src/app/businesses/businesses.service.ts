@@ -23,20 +23,32 @@ export class BusinessesService {
     return this.httpService.get('businesses');
   }
 
+  getBusinessById(businessId: string): Observable<BusinessModel> {
+    return this.httpService.get(`businesses/byId/${businessId}`);
+  }
+
   getBusinessesByKey(key: string): Observable<BusinessModel[]> {
     return this.httpService.get(`businesses/byKey/${key}`);
   }
 
-  getBusinessById(businessId: string): Observable<BusinessModel> {
-    return this.httpService.get(`businesses/byId/${businessId}`);
+  getBusinessesByWorkerKey(workerId: string, key: string): Observable<BusinessModel[]> {
+    return this.httpService.get(`businesses/byWorkerKey/${workerId}/${key}`);
   }
 
   getBusinessesByPage(pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
     return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`);
   }
 
-  getBusinessCount(): Observable<number> {
-    return this.httpService.get('businesses/count');
+  getBusinessesByWorkerPage(workerId: string, pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
+    return this.httpService.get(`businesses/byWorkerPage/${workerId}/${pageIndex}/${pageSize}`);
+  }
+
+  getCountBusinesses(): Observable<number> {
+    return this.httpService.get('businesses/countBusinesses');
+  }
+
+  getCountBusinessesByWorker(workerId: string): Observable<number> {
+    return this.httpService.get(`businesses/countBusinessesByWorker/${workerId}`);
   }
 
   create(

@@ -8,17 +8,18 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { ConstructionsService } from 'src/app/constructions/constructions.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { UserModel } from 'src/app/users/user.model';
 import { buildExcel } from 'src/app/xlsx';
 import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
 import { DialogConstructionBusinessesComponent } from '../dialog-construction-businesses/dialog-construction-businesses.component';
 
 @Component({
-  selector: 'app-businesses',
-  templateUrl: './businesses.component.html',
-  styleUrls: ['./businesses.component.sass']
+  selector: 'app-businesses-commercial',
+  templateUrl: './businesses-commercial.component.html',
+  styleUrls: ['./businesses-commercial.component.sass']
 })
-export class BusinessesComponent implements OnInit {
+export class BusinessesCommercialComponent implements OnInit {
 
   constructor(
     private readonly businessesService: BusinessesService,
@@ -35,6 +36,8 @@ export class BusinessesComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   private office: OfficeModel = new OfficeModel();
+  private workerId: string = '';
+  private user: UserModel|null = null;
   public months: any[] = [
     'ENERO',
     'FEBRERO',
@@ -53,6 +56,7 @@ export class BusinessesComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
+  private user$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
@@ -68,21 +72,35 @@ export class BusinessesComponent implements OnInit {
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.businessesService.getCountBusinesses().subscribe(count => {
-      this.length = count;
+    this.user$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
+      
+      if (!this.user.workerId) {
+        alert('Este modulo no puede funcionar si no tienes un COMERCIAL asignado');
+      } else {
+        console.log(this.user);
+        this.workerId = this.user.workerId || '';
+        // this.businessesService.getBusinessesByWorkerPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(materials => {
+        //   this.dataSource = materials;
+        // });
+
+        this.businessesService.getCountBusinessesByWorker(this.workerId).subscribe(count => {
+          this.length = count;
+        });
+    
+        this.businessesService.getBusinessesByWorkerPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(businesses => {
+          this.dataSource = businesses;
+        });
+      }
     });
 
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.office = auth.office;
     });
 
-    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize).subscribe(businesses => {
-      this.dataSource = businesses;
-    });
-
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
-      this.businessesService.getBusinessesByKey(key).subscribe(businesses => {
+      this.businessesService.getBusinessesByWorkerKey(this.workerId, key).subscribe(businesses => {
         this.navigationService.loadBarFinish();
         this.dataSource = businesses;
       }, (error: HttpErrorResponse) => {

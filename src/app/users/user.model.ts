@@ -10,4 +10,5 @@ export interface UserModel {
   createdAt?: any,
   updatedAt?: any,
   privileges?: any
+  worker?: any
 }

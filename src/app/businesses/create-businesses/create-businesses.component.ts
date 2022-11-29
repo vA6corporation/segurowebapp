@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { BoardMembersModel } from 'src/app/board-members/board-members.model';
 import { DialogBoardMembersComponent } from 'src/app/board-members/dialog-board-members/dialog-board-members.component';
 import { DialogExperiencesComponent } from 'src/app/experiences/dialog-experiences/dialog-experiences.component';
@@ -16,6 +17,8 @@ import { DialogPropertiesComponent } from 'src/app/properties/dialog-properties/
 import { PropertyModel } from 'src/app/properties/property.model';
 import { DialogShareholdersComponent } from 'src/app/shareholders/dialog-shareholders/dialog-shareholders.component';
 import { ShareholderModel } from 'src/app/shareholders/shareholder.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
 import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
 import { AccessCreditModel } from '../dialog-add-access-credit/access-credit.model';
@@ -48,6 +51,7 @@ export class CreateBusinessesComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
+    private readonly workersService: WorkersService,
     private readonly router: Router,
     private readonly matDialog: MatDialog
   ) { }
@@ -64,6 +68,7 @@ export class CreateBusinessesComponent implements OnInit {
     phoneNumber: null,
     annexed: null,
     inscriptionAt: null,
+    workerId: null,
 
     turnOfBusiness: null,
     sourcesOfIncome: null,
@@ -159,9 +164,22 @@ export class CreateBusinessesComponent implements OnInit {
   public accessCredit: AccessCreditModel[] = [];
   public accountRotation: AccountRotationModel[] = [];
   public trials: TrialsModel[] = [];
+  public workers: WorkerModel[] = [];
+
+  private handleWorkers$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleWorkers$.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.navigationService.setTitle('Nueva empresa');
     this.navigationService.backTo();
+
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
+
     this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
       switch (value) {
         case 'RUC':
