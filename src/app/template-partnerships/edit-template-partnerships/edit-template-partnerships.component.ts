@@ -34,6 +34,10 @@ export class EditTemplatePartnershipsComponent implements OnInit {
     representativeDocument: [ null, Validators.required ],
     businessId: null,
     independentAccounting: null,
+    email: null,
+    phoneNumber: null,
+    economicActivity: null,
+    representativeNationality: null,
   });
 
   public isLoading: boolean = false;

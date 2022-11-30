@@ -15,6 +15,18 @@
       <mat-datepicker #datePicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Email *</mat-label>
+      <input type="email" matInput formControlName="email" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="phoneNumber" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Actividad economica</mat-label>
+      <input type="text" matInput formControlName="economicActivity" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Direccion</mat-label>
       <input type="text" matInput formControlName="address">
     </mat-form-field>
@@ -25,6 +37,10 @@
     <mat-form-field appearance="fill">
       <mat-label>Documento representante legal *</mat-label>
       <input type="text" matInput formControlName="representativeDocument">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nacionalidad del representante legal *</mat-label>
+      <input type="text" matInput formControlName="representativeNationality" />
     </mat-form-field>
     <div class="mb-3">
       <mat-slide-toggle [(ngModel)]="independentAccounting" formControlName="independentAccounting">Contabilidad independiente

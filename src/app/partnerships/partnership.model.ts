@@ -6,9 +6,12 @@ export interface PartnershipModel {
   document: string
   name: string
   email: string
+  address: string
   constitutedAt: string
   phoneNumber: string
+  economicActivity: string
   annexed: string
+  representativeNationality: string
   representative: string
   representativeDocument: string
   business: BusinessModel
