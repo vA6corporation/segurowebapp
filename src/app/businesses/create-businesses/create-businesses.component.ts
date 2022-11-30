@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BoardMembersModel } from 'src/app/board-members/board-members.model';
 import { DialogBoardMembersComponent } from 'src/app/board-members/dialog-board-members/dialog-board-members.component';
+import { DialogEditExperiencesComponent } from 'src/app/experiences/dialog-edit-experiences/dialog-edit-experiences.component';
 import { DialogExperiencesComponent } from 'src/app/experiences/dialog-experiences/dialog-experiences.component';
 import { ExperienceModel } from 'src/app/experiences/experience.model';
 import { DialogInvestmentsComponent } from 'src/app/investments/dialog-investments/dialog-investments.component';
@@ -269,6 +270,21 @@ export class CreateBusinessesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(investment => {
       if (investment) {
         this.investments.push(investment);
+      }
+    });
+  }
+
+  onDialogEditExperience(index: number) {
+    const dialogRef = this.matDialog.open(DialogEditExperiencesComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: this.experiences[index],
+    });
+
+    dialogRef.afterClosed().subscribe(experience => {
+      if (experience) {
+        Object.assign(this.experiences[index], experience);
+        // this.experiences.push(experience);
       }
     });
   }
