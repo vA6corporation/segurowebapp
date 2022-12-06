@@ -35,6 +35,10 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
     businessId: null,
     isTemplate: true,
     independentAccounting: null,
+    email: null,
+    phoneNumber: null,
+    economicActivity: null,
+    representativeNationality: null,
   });
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
