@@ -1,5 +1,6 @@
 # Base image
 FROM node:16
+RUN mkdir -p /home/appWeb/node_modules
 WORKDIR /home/appWeb
 COPY . .
 COPY package*.json ./
