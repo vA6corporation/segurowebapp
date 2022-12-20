@@ -47,8 +47,14 @@ export class ShareholdersComponent implements OnInit {
       this.length = count;
     });
 
-    this.shareholdersService.getShareholdersByPage(this.pageIndex + 1, this.pageSize).subscribe(businesses => {
-      this.dataSource = businesses;
+    this.shareholdersService.getShareholdersByPage(this.pageIndex + 1, this.pageSize).subscribe(shareholders => {
+      this.dataSource = shareholders;
+    });
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.shareholdersService.getShareholdersByKey(key).subscribe(shareholders => {
+        this.dataSource = shareholders;
+      });
     });
   }
 

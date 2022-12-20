@@ -9,21 +9,29 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
+    <div class="d-flex">
+      <mat-form-field appearance="fill">
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="estado" (selectionChange)="onStateChange()">
+          <mat-option value="">TODOS LOS ESTADOS</mat-option>
+          <mat-option *ngFor="let element of estados" [value]="element._id">{{ element._id | uppercase }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Objeto de contratacion</mat-label>
+        <mat-select formControlName="objetoContratacion" (selectionChange)="onDepartmentChange()">
+          <mat-option value="">TODOS LOS OBJETOS</mat-option>
+          <mat-option value="BIEN">BIEN</mat-option>
+          <mat-option value="OBRA">OBRA</mat-option>
+          <mat-option value="SERVICIO">SERVICIO</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <mat-form-field appearance="fill">
-      <mat-label>Estado</mat-label>
-      <mat-select formControlName="estado" (selectionChange)="onStateChange()">
-        <mat-option value="">TODOS LOS ESTADOS</mat-option>
-        <mat-option *ngFor="let element of estados" [value]="element._id">{{ element._id | uppercase }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Objeto de contratacion</mat-label>
-      <mat-select formControlName="objetoContratacion" (selectionChange)="onObjectChange()">
-        <mat-option value="">TODOS LOS OBJETOS</mat-option>
-        <mat-option value="Bien">BIEN</mat-option>
-        <mat-option value="Consultoría de Obra">{{ 'Consultoría de Obra' | uppercase }}</mat-option>
-        <mat-option value="Obra">OBRA</mat-option>
-        <mat-option value="Servicio">SERVICIO</mat-option>
+      <mat-label>Departamento</mat-label>
+      <mat-select formControlName="departamento" (selectionChange)="onObjectChange()">
+        <mat-option value="">TODOS LOS DEPARTAMENTOS</mat-option>
+        <mat-option *ngFor="let element of departamentos" [value]="element">{{ element }}</mat-option>
       </mat-select>
     </mat-form-field>
     <!-- <mat-form-field appearance="fill">

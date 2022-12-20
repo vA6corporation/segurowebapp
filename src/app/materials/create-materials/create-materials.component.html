@@ -31,8 +31,27 @@
         <input type="text" matInput formControlName="policyNumber">
       </mat-form-field>
       <mat-form-field appearance="fill">
+        <mat-label>Garantia</mat-label>
+        <input type="number" matInput formControlName="guarantee">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Suma asegurada *</mat-label>
         <input type="number" matInput formControlName="price">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Prima</mat-label>
+        <input type="number" matInput formControlName="prima">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Comision</mat-label>
+        <input type="number" matInput formControlName="commission">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Moneda</mat-label>
+        <mat-select formControlName="currency">
+          <mat-option value="PEN">PEN</mat-option>
+          <mat-option value="USD">USD</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Fecha de inicio *</mat-label>
@@ -45,25 +64,6 @@
         <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
         <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #endDatePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Moneda</mat-label>
-        <mat-select formControlName="currency">
-          <mat-option value="PEN">PEN</mat-option>
-          <mat-option value="USD">USD</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Prima</mat-label>
-        <input type="number" matInput formControlName="prima">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Garantia</mat-label>
-        <input type="number" matInput formControlName="guarantee">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Comision</mat-label>
-        <input type="number" matInput formControlName="commission">
       </mat-form-field>
       <mat-list class="mb-1">
         <div mat-subheader>Cheques</div>

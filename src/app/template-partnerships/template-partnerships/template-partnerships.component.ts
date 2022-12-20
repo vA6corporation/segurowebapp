@@ -52,7 +52,7 @@ export class TemplatePartnershipsComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
-      this.partnershipsService.getPartnershipsByKey(key).subscribe(partnerships => {
+      this.partnershipsService.getTemplatePartnershipsByKey(key).subscribe(partnerships => {
         this.navigationService.loadBarFinish();
         this.dataSource = partnerships;
       }, (error: HttpErrorResponse) => {

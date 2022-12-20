@@ -1,6 +1,5 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <!-- <h1>Editar Financiera</h1> -->
     <mat-form-field>
       <input type="text" matInput placeholder="N° RUC" formControlName="document" maxlength="11">
     </mat-form-field>
@@ -19,7 +18,12 @@
     <mat-form-field>
       <input type="text" matInput placeholder="Anexo" formControlName="annexed">
     </mat-form-field>
+    <div class="mb-5"></div>
     <h2>Prima emision</h2>
+    <mat-form-field>
+      <input type="number" matInput placeholder="Porcentaje de tasa anual *" formControlName="emitionYearlyRatePercentage">
+    </mat-form-field>
+    <div class="mb-3"></div>
     <mat-form-field>
       <input type="number" matInput placeholder="Porcentaje de prima *" formControlName="emitionPrimaPercentage">
     </mat-form-field>
@@ -30,6 +34,9 @@
       <input type="number" matInput placeholder="Gastos *" formControlName="emitionCharge">
     </mat-form-field>
     <h2>Prima renovacion</h2>
+    <mat-form-field>
+      <input type="number" matInput placeholder="Porcentaje de tasa anual *" formControlName="renewalYearlyRatePercentage">
+    </mat-form-field>
     <mat-form-field>
       <input type="number" matInput placeholder="Porcentaje de prima *" formControlName="renewalPrimaPercentage">
     </mat-form-field>

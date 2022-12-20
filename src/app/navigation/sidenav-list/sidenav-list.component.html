@@ -59,6 +59,89 @@
     <mat-icon class="mr-2">text_snippet</mat-icon>
     <span>Lineas de credito</span>
   </a>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <mat-expansion-panel-header #guaranties *ngIf="privileges.guaranties">
+      <mat-panel-title>
+        <mat-icon class="mr-2">text_snippet</mat-icon>
+        Fianzas
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
+      <span>A. de Materiales</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
+      <span>A. Directo</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
+      <span>F. Cumplimiento</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/guaranties" (click)="onClose()">
+      <span>Renovaciones Fianzas</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/mails" (click)="onClose()">
+      <span>Mails enviados</span>
+    </a>
+  </mat-expansion-panel>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <mat-expansion-panel-header #insurances *ngIf="privileges.insurances">
+      <mat-panel-title>
+        <mat-icon class="mr-2">text_snippet</mat-icon>
+        Seguros
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <a href="#" mat-list-item routerLink="/insurances/SCTR" (click)="onClose()">
+      <span>SCTR</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/SOAT" (click)="onClose()">
+      <span>SOAT</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/VIDALEY" (click)="onClose()">
+      <span>VIDA LEY</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/POLIZACAR" (click)="onClose()">
+      <span>POLIZA CAR</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/POLIZATREC" (click)="onClose()">
+      <span>POLIZA TREC</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/POLIZAEAR" (click)="onClose()">
+      <span>POLIZA EAR</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/RCIVIL" (click)="onClose()">
+      <span>RES. CIVIL</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/VEHICULAR" (click)="onClose()">
+      <span>VEHICULAR</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/VIDA" (click)="onClose()">
+      <span>VIDA</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/EPS" (click)="onClose()">
+      <span>EPS</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/SALUD" (click)="onClose()">
+      <span>SALUD</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/ACCIDENTES" (click)="onClose()">
+      <span>ACCIDENTES P.</span>
+    </a>
+    <mat-divider></mat-divider>
+    <a href="#" mat-list-item routerLink="/insuranceBusinesses" (click)="onClose()">
+      <span>Empresas</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurancePartnerships" (click)="onClose()">
+      <span>Consorcios</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/brokers" (click)="onClose()">
+      <span>Brokers</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insuranceConstructions" (click)="onClose()">
+      <span>Obras</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/renew" (click)="onClose()">
+      <span>Renovaciones Seguros</span>
+    </a>
+  </mat-expansion-panel>
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.templates">
@@ -101,89 +184,6 @@
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #guaranties *ngIf="privileges.guaranties">
-        <mat-panel-title>
-          <mat-icon class="mr-2">text_snippet</mat-icon>
-          Fianzas
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
-        <span>A. de Materiales</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
-        <span>A. Directo</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
-        <span>F. Cumplimiento</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/guaranties" (click)="onClose()">
-        <span>Renovaciones Fianzas</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/mails" (click)="onClose()">
-        <span>Mails enviados</span>
-      </a>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #insurances *ngIf="privileges.insurances">
-        <mat-panel-title>
-          <mat-icon class="mr-2">text_snippet</mat-icon>
-          Seguros
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <a href="#" mat-list-item routerLink="/insurances/SCTR" (click)="onClose()">
-        <span>SCTR</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/SOAT" (click)="onClose()">
-        <span>SOAT</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/VIDALEY" (click)="onClose()">
-        <span>VIDA LEY</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/POLIZACAR" (click)="onClose()">
-        <span>POLIZA CAR</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/POLIZATREC" (click)="onClose()">
-        <span>POLIZA TREC</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/POLIZAEAR" (click)="onClose()">
-        <span>POLIZA EAR</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/RCIVIL" (click)="onClose()">
-        <span>RES. CIVIL</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/VEHICULAR" (click)="onClose()">
-        <span>VEHICULAR</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/VIDA" (click)="onClose()">
-        <span>VIDA</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/EPS" (click)="onClose()">
-        <span>EPS</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/SALUD" (click)="onClose()">
-        <span>SALUD</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/ACCIDENTES" (click)="onClose()">
-        <span>ACCIDENTES P.</span>
-      </a>
-      <mat-divider></mat-divider>
-      <a href="#" mat-list-item routerLink="/insuranceBusinesses" (click)="onClose()">
-        <span>Empresas</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurancePartnerships" (click)="onClose()">
-        <span>Consorcios</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/brokers" (click)="onClose()">
-        <span>Brokers</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insuranceConstructions" (click)="onClose()">
-        <span>Obras</span>
-      </a>
-      <a href="#" mat-list-item routerLink="/insurances/renew" (click)="onClose()">
-        <span>Renovaciones Seguros</span>
-      </a>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #reports *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8  || privileges.r9">
         <mat-panel-title>
           <mat-icon class="mr-2">poll</mat-icon>
@@ -216,6 +216,9 @@
       </a>
       <a href="#" mat-list-item routerLink="/constructions/percentCompletions" (click)="onClose()" *ngIf="privileges.r9">
         <span>Avance de obras</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/constructions/updatePercentCompletions" (click)="onClose()" *ngIf="privileges.r9">
+        <span>Actualizacion de avanze de obras</span>
       </a>
     </mat-expansion-panel>
   </mat-accordion>

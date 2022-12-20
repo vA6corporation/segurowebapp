@@ -30,7 +30,7 @@ export class DialogTemplatePartnershipsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.reset();
-      this.partnershipsService.getTemplatePartnershipsByKey(key).subscribe(partnerships => {
+      this.partnershipsService.getPartnershipsByKey(key).subscribe(partnerships => {
         this.navigationService.loadBarFinish();
         this.partnerships = partnerships;
       }, (error: HttpErrorResponse) => {

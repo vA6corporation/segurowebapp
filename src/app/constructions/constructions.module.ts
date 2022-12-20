@@ -17,6 +17,7 @@ import { DialogPercentCompletionsComponent } from './dialog-percent-completions/
 import { PercentCompletionsComponent } from './percent-completions/percent-completions.component';
 import { DialogPaymentsComponent } from './dialog-payments/dialog-payments.component';
 import { DebtorsComponent } from './debtors/debtors.component';
+import { UpdatePercentCompletionsComponent } from './update-percent-completions/update-percent-completions.component';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { DebtorsComponent } from './debtors/debtors.component';
     LessConstructionsComponent, 
     DialogAttachPdfComponent, 
     WithoutDocumentationComponent, 
-    DialogAddBailComponent, DialogPercentCompletionsComponent, PercentCompletionsComponent, DialogPaymentsComponent, DebtorsComponent 
+    DialogAddBailComponent, DialogPercentCompletionsComponent, PercentCompletionsComponent, DialogPaymentsComponent, DebtorsComponent, UpdatePercentCompletionsComponent 
   ],
   imports: [
     CommonModule,

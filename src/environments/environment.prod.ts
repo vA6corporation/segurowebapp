@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://api.seguroin.com/api/',
-  baseUrlSeace: 'https://seguroscraper.uc.r.appspot.com/api/',
+  baseUrl: 'https://seguroin.com/api/',
+  baseUrlSeace: 'https://seguroin.com/api/',
   version: '1.12.0',
 };

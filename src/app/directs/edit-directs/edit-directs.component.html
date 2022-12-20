@@ -30,7 +30,7 @@
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdfFianzas()" [disabled]="isLoading" mat-raised-button color="primary">FIANZAS</button>
     <span class="divider"></span>
-    <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary">{{ formGroup.value.direct.isEmition ? 'CONTRATO DE OBRA' : 'ESTADO DE OBRA' }}</button>
+    <button type="button" (click)="onAttachPdfConstructions()" [disabled]="isLoading" mat-raised-button color="primary" *ngIf="formGroup.value.direct.isEmition === false">ESTADO DE OBRA</button>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="financier">
@@ -44,13 +44,28 @@
         <mat-label>N° de poliza</mat-label>
         <input type="text" matInput formControlName="policyNumber">
       </mat-form-field>
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Objeto *</mat-label>
-        <input type="text" matInput formControlName="object">
-      </mat-form-field> -->
       <mat-form-field appearance="fill">
-        <mat-label>Monto</mat-label>
+        <mat-label>Garantia</mat-label>
+        <input type="number" matInput formControlName="guarantee">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Suma asegurada *</mat-label>
         <input type="number" matInput formControlName="price">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Prima</mat-label>
+        <input type="number" matInput formControlName="prima">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Comision</mat-label>
+        <input type="number" matInput formControlName="commission">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Moneda</mat-label>
+        <mat-select formControlName="currency">
+          <mat-option value="PEN">PEN</mat-option>
+          <mat-option value="USD">USD</mat-option>
+        </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Fecha de inicio *</mat-label>
@@ -69,25 +84,6 @@
         <input matInput [matDatepicker]="voucherDatePicker" formControlName="voucherAt">
         <mat-datepicker-toggle matSuffix [for]="voucherDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #voucherDatePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Moneda</mat-label>
-        <mat-select formControlName="currency">
-          <mat-option value="PEN">PEN</mat-option>
-          <mat-option value="USD">USD</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Prima</mat-label>
-        <input type="number" matInput formControlName="prima">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Garantia</mat-label>
-        <input type="number" matInput formControlName="guarantee">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Comision</mat-label>
-        <input type="number" matInput formControlName="commission">
       </mat-form-field>
       <div class="mb-3">
         <mat-slide-toggle formControlName="isEmition">Emision</mat-slide-toggle>

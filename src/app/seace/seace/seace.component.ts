@@ -1,9 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-// import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogSeaceDetailsComponent } from '../dialog-seace-details/dialog-seace-details.component';
 import { SeaceService } from '../seace.service';
@@ -29,6 +29,7 @@ export class SeaceComponent implements OnInit {
     endDate: [ null, Validators.required ],
     estado: '',
     objetoContratacion: '',
+    departamento: '',
   });
   public displayedColumns: string[] = [ 'buenaPro', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'actions' ];
   public dataSource: any[] = [];
@@ -43,7 +44,36 @@ export class SeaceComponent implements OnInit {
     { _id: 'Desierto' },
     { _id: 'Convocado' }  
   ]
-  // private subscription: Subscription = new Subscription();
+
+  public departamentos: string[] = [
+    'AMAZONAS',
+    'ANCASH',
+    'APURIMAC',
+    'AREQUIPA',
+    'AYACUCHO',
+    'CAJAMARCA',
+    'CALLAO',
+    'CUSCO',
+    'EXTERIOR',
+    'HUANCAVELICA',
+    'HUANUCO',
+    'ICA',
+    'JUNIN',
+    'LA LIBERTAD',
+    'LAMBAYEQUE',
+    'LIMA', // 15
+    'LORETO',
+    'MADRE DE DIOS',
+    'MOQUEGUA',
+    'MULTIDEPARTAMENTAL',
+    'PASCO',
+    'PIURA',
+    'PUNO',
+    'SAN MARTIN',
+    'TACNA',
+    'TUMBES',
+    'UCAYALI'
+  ]
   
   ngOnDestroy() {
     // this.subscription.unsubscribe();
@@ -83,9 +113,25 @@ export class SeaceComponent implements OnInit {
 
   onObjectChange() {
     this.pageIndex = 0;
-    const { startDate, endDate, estado, objetoContratacion } = this.formGroup.value;
+    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
     
-    const params: any = { estado, objetoContratacion };
+    const params: any = { estado, objetoContratacion, departamento };
+    
+    if (startDate && endDate) {
+      Object.assign(params, { startDate, endDate });
+    }
+
+    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
+      this.length = count;
+    });
+    this.fetchData();
+  }
+
+  onDepartmentChange() {
+    this.pageIndex = 0;
+    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
+    
+    const params: any = { estado, objetoContratacion, departamento };
     
     if (startDate && endDate) {
       Object.assign(params, { startDate, endDate });
@@ -101,7 +147,7 @@ export class SeaceComponent implements OnInit {
     if (this.formGroup.valid) {
       this.pageIndex = 0;
 
-      const { startDate, endDate, estado, objetoContratacion } = this.formGroup.value;
+      const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
 
       const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0 };
 
@@ -111,7 +157,7 @@ export class SeaceComponent implements OnInit {
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
 
-      const params: any = { estado, objetoContratacion };
+      const params: any = { estado, objetoContratacion, departamento };
       if (startDate && endDate) {
         Object.assign(params, { startDate, endDate });
       }
@@ -125,15 +171,19 @@ export class SeaceComponent implements OnInit {
   }
 
   fetchData() {
-    const { startDate, endDate, estado, objetoContratacion } = this.formGroup.value;
-    const params: any = { estado, objetoContratacion };
+    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
+    const params: any = { estado, objetoContratacion, departamento };
     if (startDate && endDate) {
       Object.assign(params, { startDate, endDate });
     }
     this.navigationService.loadBarStart();
-    this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, params).subscribe(workers => {
+    this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, params).subscribe(seaceDatas => {
       this.navigationService.loadBarFinish();
-      this.dataSource = workers;
+      this.dataSource = seaceDatas;
+      console.log(seaceDatas);
+    }, (error: HttpErrorResponse) => {
+      this.navigationService.loadBarFinish();
+      this.navigationService.showMessage(error.error.message);
     });
   }
 

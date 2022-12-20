@@ -27,6 +27,10 @@ export class ConstructionsService {
     return this.httpService.get('constructions/summaryByConstructionCode', { params });
   }
 
+  getUpdatePercentCompletions(): Observable<ConstructionModel[]> {
+    return this.httpService.get('constructions/updatePercentCompletions');
+  }
+
   getConstructionsByPercentCompletion(percentCompletionCode: string): Observable<ConstructionModel[]> {
     return this.httpService.get(`constructions/byPercentCompletionCode/${percentCompletionCode}`);
   }

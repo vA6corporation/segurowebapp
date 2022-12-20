@@ -6,12 +6,14 @@ import { DebtorsComponent } from './debtors/debtors.component';
 import { EditConstructionsComponent } from './edit-constructions/edit-constructions.component';
 import { LessConstructionsComponent } from './less-constructions/less-constructions.component';
 import { PercentCompletionsComponent } from './percent-completions/percent-completions.component';
+import { UpdatePercentCompletionsComponent } from './update-percent-completions/update-percent-completions.component';
 import { WithoutDocumentationComponent } from './without-documentation/without-documentation.component';
 
 const routes: Routes = [
   { path: '', component: ConstructionsComponent },
   { path: 'debtors', component: DebtorsComponent },
   { path: 'percentCompletions', component: PercentCompletionsComponent },
+  { path: 'updatePercentCompletions', component: UpdatePercentCompletionsComponent },
   { path: 'create', component: CreateConstructionsComponent },
   { path: ':constructionId/edit', component: EditConstructionsComponent },
   { path: 'less', component: LessConstructionsComponent },

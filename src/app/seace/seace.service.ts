@@ -9,15 +9,15 @@ import { HttpSeaceService } from '../http-seace.service';
 export class SeaceService {
 
   constructor(
-    private readonly httpSeaceService: HttpSeaceService,
+    private readonly httpService: HttpSeaceService
   ) { }
 
   getSeaceDatasByPage(pageIndex: number, pageSize: number, params: Params): Observable<any[]> {
-    return this.httpSeaceService.get(`seaceDatasByPage/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`seace/seaceDatasByPage/${pageIndex}/${pageSize}`, { params });
   }
 
   getCountSeaceDatas(params: Params): Observable<number> {
-    return this.httpSeaceService.get(`countSeaceDatas`, { params });
+    return this.httpService.get(`seace/countSeaceDatas`, { params });
   }
   
 }

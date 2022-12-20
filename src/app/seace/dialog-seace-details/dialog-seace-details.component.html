@@ -4,17 +4,15 @@
     <tbody>
       <tr>
         <td style="width: 13rem">Comvocatoria ID:</td>
-        <td>{{ seaceData.comvocatoriaId }}</td>
+        <td>{{ seaceData.convocatoriaId }}</td>
       </tr>
     </tbody>
   </table>
   <hr>
-  <table>
-    <tbody>
-      <tr *ngFor="let element of seaceData.businesses">
-        <td style="width: 13rem">{{ element }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <mat-list>
+    <mat-list-item class="text-uppercase" *ngFor="let element of seaceData.businesses">
+      {{ element }}
+    </mat-list-item>
+  </mat-list>
   <div class="my-3"></div>
 </div>
