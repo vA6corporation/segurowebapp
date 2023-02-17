@@ -22,6 +22,13 @@ import { ChequeModel } from 'src/app/cheques/cheque.model';
 import { DepositModel } from 'src/app/deposits/deposit.model';
 import { BusinessModel } from 'src/app/businesses/business.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { MaterialModel } from '../material.model';
+import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
+import { BankModel } from 'src/app/providers/bank.model';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { Subscription } from 'rxjs';
+import { BanksService } from 'src/app/banks/banks.service';
+import { CompaniesService } from 'src/app/companies/companies.service';
 
 @Component({
   selector: 'app-edit-materials',
@@ -38,6 +45,8 @@ export class EditMaterialsComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly banksService: BanksService,
+    private readonly companiesService: CompaniesService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -50,6 +59,8 @@ export class EditMaterialsComponent implements OnInit {
       policyNumber: [ null, Validators.required ],
       object: null,
       price: [ null, Validators.required ],
+      pagare: null,
+      observations: null,
       startDate: [null, Validators. required ],
       endDate: [ null, Validators.required ],
       voucherAt: null,
@@ -58,7 +69,9 @@ export class EditMaterialsComponent implements OnInit {
       isEmition: false,
       isPaid: false,
       commission: null,
-      currency: 'PEN',
+      currencyCode: 'PEN',
+      companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -66,18 +79,40 @@ export class EditMaterialsComponent implements OnInit {
   private materialId: string = '';
   public cheques: ChequeModel[] = [];
   public deposits: DepositModel[] = [];
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
+
   public construction: ConstructionModel|null = null;
   public business: BusinessModel|null = null;
   public partnership: PartnershipModel|null = null;
   public beneficiary: BeneficiaryModel|null = null;
   public worker: WorkerModel|null = null;
+  public material: MaterialModel|null = null;
+
+  private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
+  }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
     this.navigationService.backTo();
+    
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
+
     this.activatedRoute.params.subscribe(params => {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
+        this.material = material;
         const { financier, beneficiary, cheques = [], deposits = [], construction } = material;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ material });
@@ -228,6 +263,15 @@ export class EditMaterialsComponent implements OnInit {
     }
   }
 
+  onShowDetails(constructionId: string) {
+    this.matDialog.open(DialogDetailConstructionsComponent, {
+      width: '100vw',
+      // height: '90vh',
+      position: { top: '20px' },
+      data: constructionId,
+    });
+  }
+
   removeCheque(index: number): void {
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
@@ -359,7 +403,7 @@ export class EditMaterialsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, material } = this.formGroup.value;
       material.financierId = financier._id;
-      this.materialsService.update(material, this.materialId).subscribe(res => {
+      this.materialsService.updateWithFinanicer(material, financier, this.materialId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

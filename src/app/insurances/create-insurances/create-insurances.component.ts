@@ -18,6 +18,12 @@ import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constru
 import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
 import { DialogSelectPdfComponent, DialogSelectPdfData } from '../dialog-select-pdf/dialog-select-pdf.component';
 import jsPDF from 'jspdf';
+import { InsuranceModel } from '../insurance.model';
+import { BankModel } from 'src/app/providers/bank.model';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { CompaniesService } from 'src/app/companies/companies.service';
+import { BanksService } from 'src/app/banks/banks.service';
+import { FinancierModel } from 'src/app/financiers/financier.model';
 
 @Component({
   selector: 'app-create-insurances',
@@ -34,6 +40,8 @@ export class CreateInsurancesComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly location: Location,
+    private readonly companiesService: CompaniesService,
+    private readonly banksService: BanksService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -66,24 +74,36 @@ export class CreateInsurancesComponent implements OnInit {
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
-      currency: 'PEN',
+      currencyCode: 'PEN',
       isPaid: false,
       isEmition: false,
+      companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
     }),
   });
 
   public construction: ConstructionModel|null = null;
+  private financier: FinancierModel|null = null;
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
+  public insurances: InsuranceModel[] = [];
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
+  
   private type: string = '';
+  private insuranceGroupId: string = '';
   private pdfPolicy: DialogSelectPdfData[] = [];
   private pdfInvoice: DialogSelectPdfData[] = [];
   private pdfVoucher: DialogSelectPdfData[] = [];
   private pdfDocument: DialogSelectPdfData[] = [];
 
-  private handleWorkers$: Subscription = new Subscription;
+  private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
+    this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
     this.handleWorkers$.unsubscribe();
   }
 
@@ -93,10 +113,22 @@ export class CreateInsurancesComponent implements OnInit {
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
     
     this.activatedRoute.params.subscribe(params => {
       this.type = params.type;
-      this.navigationService.setTitle('Nuevo ' + this.type);
+      this.insuranceGroupId = params.insuranceGroupId;
+      this.navigationService.setTitle('Renovar ' + this.type);
+      this.insurancesService.getInsurancesByInsuranceGroup(this.insuranceGroupId).subscribe(insurances => {
+        this.insurances = insurances;
+      });
     });
   }
 
@@ -194,8 +226,25 @@ export class CreateInsurancesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(financier => {
+      this.financier = financier;
       this.formGroup.patchValue({ financier: financier || {} });
+      this.formGroup.get('companyId')?.patchValue(financier.companyId);
+      if (this.formGroup.value.insurance.currencyCode=== 'PEN') {
+        this.formGroup.get('bankId')?.patchValue(financier.bankPenId);
+      } else {
+        this.formGroup.get('bankId')?.patchValue(financier.bankUsdId);
+      }
     });
+  }
+
+  onChangeCurrency() {
+    if (this.financier) {
+      if (this.formGroup.value.insurance.currencyCode=== 'PEN') {
+        this.formGroup.get('bankId')?.patchValue(this.financier.bankPenId);
+      } else {
+        this.formGroup.get('bankId')?.patchValue(this.financier.bankUsdId);
+      }
+    }
   }
 
   openDialogBeneficiaries() {
@@ -228,7 +277,7 @@ export class CreateInsurancesComponent implements OnInit {
     const formData = new FormData();
     if (file.type === "application/pdf" || file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || file.type === "application/vnd.ms-excel" || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       formData.append('file', file),
-      this.insurancesService.uploadPdf(formData, insuranceId, type).subscribe(pdfId => {
+      this.insurancesService.uploadFile(formData, insuranceId, type).subscribe(pdfId => {
         console.log(pdfId);
         // this.fetchData();
       });  
@@ -251,7 +300,7 @@ export class CreateInsurancesComponent implements OnInit {
         pdf.addImage(result, 'JPEG', 0, 0, width, height);
         const data = pdf.output('blob');
         formData.append('file', data);
-        this.insurancesService.uploadPdf(formData, insuranceId, type).subscribe(pdfId => {
+        this.insurancesService.uploadFile(formData, insuranceId, type).subscribe(pdfId => {
           console.log(pdfId);
           // this.fetchData();
         });
@@ -260,7 +309,7 @@ export class CreateInsurancesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.formGroup.valid) {
+    if (this.formGroup.valid && this.financier) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       const { business, financier, broker, worker, partnership, insurance, construction } = this.formGroup.value;
@@ -271,7 +320,7 @@ export class CreateInsurancesComponent implements OnInit {
       insurance.brokerId = broker._id;
       insurance.workerId = worker._id;
       insurance.type = this.type;
-      this.insurancesService.create(insurance).subscribe(insurance => {
+      this.insurancesService.create(insurance, this.financier, this.insuranceGroupId).subscribe(insurance => {
         
         for (const pdf of this.pdfPolicy) {
           this.uploadFile(pdf.file, insurance._id, 'POLICY');

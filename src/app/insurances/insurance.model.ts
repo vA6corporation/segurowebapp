@@ -10,6 +10,7 @@ export interface InsuranceModel {
     emitionAt: string
     type: string
     insuranceNumber: string
+    insuranceGroupId: string
     policyNumber: string
     prima: number
     commission: number

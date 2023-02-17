@@ -1,11 +1,12 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <!-- <h1>Editar Usuario</h1> -->
-    <mat-form-field>
-      <input type="text" matInput placeholder="Nombres" formControlName="name">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres</mat-label>
+      <input type="text" matInput formControlName="name">
     </mat-form-field>
-    <mat-form-field>
-      <input type="email" matInput placeholder="Email" formControlName="email">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Contraseña</mat-label>
@@ -21,9 +22,6 @@
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <!-- <div class="mb-3">
-      <mat-slide-toggle formControlName="allGuaranties">Mostrar todas las fianzas</mat-slide-toggle>
-    </div> -->
     <div class="mb-3">
       <mat-slide-toggle formControlName="isAdmin">Administrador</mat-slide-toggle>
     </div>

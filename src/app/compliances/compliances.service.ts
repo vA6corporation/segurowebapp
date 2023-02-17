@@ -56,12 +56,20 @@ export class CompliancesService {
     return this.httpService.delete(`compliances/deletePdf/${pdfId}`);
   }
 
-  create(compliance: any, cheques: ChequeModel[], deposits: DepositModel[]): Observable<ComplianceModel> {
-    return this.httpService.post('compliances', { compliance, cheques, deposits });
+  create(compliance: any, financier: any, cheques: ChequeModel[], deposits: DepositModel[], officeId: string): Observable<ComplianceModel> {
+    return this.httpService.post(`compliances/${officeId}`, { compliance, financier, cheques, deposits });
   }
 
   update(compliance: any, complianceId: string): Observable<ComplianceModel> {
     return this.httpService.put(`compliances/${complianceId}`, { compliance });
+  }
+
+  updateStatus(status: string, complianceId: string): Observable<ComplianceModel> {
+    return this.httpService.put(`compliances/status/${complianceId}`, { status });
+  }
+
+  updateWithFinanicer(compliance: any, financier: any, complianceId: string): Observable<ComplianceModel> {
+    return this.httpService.put(`compliances/${complianceId}`, { compliance, financier });
   }
 
 }

@@ -23,6 +23,12 @@ import { ChequeModel } from 'src/app/cheques/cheque.model';
 import { DepositModel } from 'src/app/deposits/deposit.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
+import { DirectModel } from '../direct.model';
+import { BankModel } from 'src/app/providers/bank.model';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { Subscription } from 'rxjs';
+import { CompaniesService } from 'src/app/companies/companies.service';
+import { BanksService } from 'src/app/banks/banks.service';
 
 @Component({
   selector: 'app-edit-directs',
@@ -39,6 +45,8 @@ export class EditDirectsComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
+    private readonly companiesService: CompaniesService,
+    private readonly banksService: BanksService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -52,6 +60,8 @@ export class EditDirectsComponent implements OnInit {
       policyNumber: [ null, Validators.required ],
       object: null,
       price: [ null, Validators.required ],
+      pagare: null,
+      observations: null,
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       voucherAt: null,
@@ -60,7 +70,7 @@ export class EditDirectsComponent implements OnInit {
       isEmition: false,
       isPaid: false,
       commission: null,
-      currency: 'PEN'
+      currencyCode: 'PEN'
     }),
   });
 
@@ -73,14 +83,34 @@ export class EditDirectsComponent implements OnInit {
   public cheques: ChequeModel[] = [];
   public deposits: DepositModel[] = [];
   public worker: WorkerModel|null = null;
+  public direct: DirectModel|null = null;
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
+
+  private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
+  }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto directo');
     this.navigationService.backTo();
+    
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
+
     this.activatedRoute.params.subscribe(params => {
       this.directId = params.directId;
       this.directsService.getDirectById(this.directId).subscribe(direct => {
-        console.log(direct);
+        this.direct = direct;
         const { financier, beneficiary, cheques = [], deposits = [], construction } = direct;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ direct });
@@ -369,7 +399,7 @@ export class EditDirectsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, direct } = this.formGroup.value;
       direct.financierId = financier._id;
-      this.directsService.update(direct, this.directId).subscribe(res => {
+      this.directsService.updateWithFinancier(direct, financier, this.directId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

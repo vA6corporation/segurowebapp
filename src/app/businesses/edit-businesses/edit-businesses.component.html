@@ -1,7 +1,15 @@
 <section class="container py-4">
   <div class="mb-3">
-    <button type="button" (click)="onAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">
+    <button type="button" (click)="onDialogAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">
       DOCUMENTOS
+    </button>
+    <span class="divider"></span>
+    <button type="button" (click)="onDialogAttachPdfExperiences()" [disabled]="isLoading" mat-raised-button color="primary">
+      EXPERIENCIA
+    </button>
+    <span class="divider"></span>
+    <button type="button" (click)="onDialogAttachPdfFinancials()" [disabled]="isLoading" mat-raised-button color="primary">
+      D. FINANCIEROS
     </button>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
@@ -79,28 +87,28 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>País de Residencia</mat-label>
+      <mat-label>País de Residencia (en caso la empresa sea extranjera)</mat-label>
       <input type="text" matInput formControlName="countryResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Distrito de Residencia</mat-label>
+      <mat-label>Distrito de Residencia (en caso la empresa sea extranjera)</mat-label>
       <input type="text" matInput formControlName="districtResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Provincia de Residencia</mat-label>
+      <mat-label>Provincia de Residencia (en caso la empresa sea extranjera)</mat-label>
       <input type="text" matInput formControlName="provinceResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Departamento de Residencia</mat-label>
+      <mat-label>Departamento de Residencia (en caso la empresa sea extranjera)</mat-label>
       <input type="text" matInput formControlName="departmentResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Direccion de Residencia</mat-label>
+      <mat-label>Direccion de Residencia (en caso la empresa sea extranjera)</mat-label>
       <input type="text" matInput formControlName="addressResidence" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de registro mercantil</mat-label>
+      <mat-label>Fecha de registro mercantil *</mat-label>
       <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt" />
       <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>

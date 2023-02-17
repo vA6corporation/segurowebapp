@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Params } from '@angular/router';
 import { Chart, ChartOptions, ChartType } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -30,6 +30,7 @@ export class ReportPieComponent implements OnInit {
   private insurancesChart!: ElementRef<HTMLCanvasElement>;
 
   public chartInsurance: Chart|null = null;
+  public total: number = 0;
   public years: number[] = [];
   public types: string[] = [
     'SCTR',
@@ -47,8 +48,8 @@ export class ReportPieComponent implements OnInit {
   public formGroup = this.formBuilder.group({
     workerId: '',
     type: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: [ new Date(), Validators.required ],
+    endDate: [ new Date(), Validators.required ],
   });
   public workers: WorkerModel[] = [];
   public summaries: any[] = [];
@@ -94,7 +95,8 @@ export class ReportPieComponent implements OnInit {
               'PRIMA',
               'COMISION',
               'ESTADO DE PAGO',
-              'PROMOTOR'
+              'PROMOTOR',
+              'TIPO'
             ]);
             for (const insurance of insurances) {
               body.push([
@@ -108,6 +110,7 @@ export class ReportPieComponent implements OnInit {
                 insurance.commission,
                 insurance.isPaid ? 'PAGADO' : 'PENDIENTE',
                 insurance.worker?.name.toUpperCase(),
+                insurance.type
               ]);
             }
             const name = `SEGUROS_DESDE_${formatDate(startDate, 'dd/MM/yyyy', 'en-US')}_HASTA_${formatDate(endDate, 'dd/MM/yyyy', 'en-US')}`;
@@ -131,7 +134,9 @@ export class ReportPieComponent implements OnInit {
   }
 
   onRangeChange() {
-    this.fetchData();
+    if (this.formGroup.valid) {
+      this.fetchData();
+    }
   }
 
   fetchData() {
@@ -144,8 +149,6 @@ export class ReportPieComponent implements OnInit {
         endDate,
         params
       ).subscribe(summaries => {
-        console.log(summaries);
-        
         this.navigationService.loadBarFinish();
         const colors = [
           randomColor(), 
@@ -153,6 +156,7 @@ export class ReportPieComponent implements OnInit {
           randomColor(),
         ];
         this.summaries = summaries;
+        this.total = summaries.map(e => e.totalPrima).reduce((a, b) => a + b, 0);
         this.chartInsurance?.destroy();
         const dataSet = {
           // labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],

@@ -32,7 +32,7 @@ export class InsurancesComponent implements OnInit {
     workerId: '',
     startDate: '',
     endDate: '',
-  })
+  });
   public displayedColumns: string[] = [ 'partnership', 'business', 'financier', 'policyNumber', 'emitionAt', 'expirationAt', 'prima', 'actions' ];
   public dataSource: InsuranceModel[] = [];
   public length: number = 100;
@@ -56,8 +56,6 @@ export class InsurancesComponent implements OnInit {
     this.navigationService.setTitle('Seguros');
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
-      console.log(workers);
-      
       this.workers = workers;
     });
 
@@ -102,7 +100,7 @@ export class InsurancesComponent implements OnInit {
           'COMISION',
           'ESTADO DE TRAMITE',
           'ESTADO DE OBRA',
-          'P. A CARGO'
+          'P. A CARGO',
         ]);
       }
       
@@ -145,10 +143,12 @@ export class InsurancesComponent implements OnInit {
       this.length = count;
     });
     
+    this.navigationService.loadBarStart();
     this.insurancesService.getInsurancesByPageType(this.pageIndex + 1, this.pageSize, this.type, params).subscribe(insurances => {
-      console.log(insurances);
+      this.navigationService.loadBarFinish();
       this.dataSource = insurances;
     }, (error: HttpErrorResponse) => {
+      this.navigationService.loadBarFinish();
       this.navigationService.showMessage(error.error.message);      
     });
   }

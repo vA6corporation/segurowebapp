@@ -17,6 +17,8 @@ import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { OfficeModel } from 'src/app/auth/office.model';
+import { OfficesService } from 'src/app/offices/offices.service';
 Chart.register(...registerables);
 
 @Component({
@@ -35,6 +37,7 @@ export class LegalsComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly officesService: OfficesService,
   ) { }
 
   public displayedColumns: string[] = [ 'partnership', 'business', 'policyNumber', 'endDate', 'actions' ];
@@ -45,6 +48,7 @@ export class LegalsComponent implements OnInit {
   public pageIndex: number = 0;
   public users: UserModel[] = [];
   public workers: WorkerModel[] = [];
+  public offices: OfficeModel[] = [];
   public compliancePayed: number = 0;
   public materialPayed: number = 0;
   public directPayed: number = 0;
@@ -59,6 +63,7 @@ export class LegalsComponent implements OnInit {
   private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
+  private handleOffices$: Subscription = new Subscription();
 
   public statusForm = this.formBuilder.group({
     processStatusCode: '',
@@ -76,6 +81,10 @@ export class LegalsComponent implements OnInit {
   public dateForm = this.formBuilder.group({
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
+  });
+
+  public officeForm = this.formBuilder.group({
+    officeId: [ null, Validators.required ],
   });
 
   ngOnDestroy() {
@@ -99,6 +108,10 @@ export class LegalsComponent implements OnInit {
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
+      this.offices = offices;
     });
 
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
@@ -147,6 +160,18 @@ export class LegalsComponent implements OnInit {
       const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
       buildExcel(body, name, wscols, [], []);
     });
+  }
+
+  onChangeOffice() {
+    const queryParams: Params = { };
+    const { officeId } = this.officeForm.value;
+    Object.assign(queryParams, { officeId });
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+    this.fetchData();
   }
 
   onShowDetails(constructionId: string) {
@@ -259,6 +284,10 @@ export class LegalsComponent implements OnInit {
       params.workerId = this.workerForm.value._id; 
     }
 
+    if (this.officeForm.valid) {
+      params.officeId = this.officeForm.value.officeId;
+    }
+
     if (this.dateForm.valid) {
       const { startDate, endDate } = this.dateForm.value;
       params.startDate = startDate;
@@ -266,7 +295,6 @@ export class LegalsComponent implements OnInit {
     }
 
     this.constructionsService.getConstructionsByRangeDateFinancierWorkerStatus(params).subscribe(constructions => {
-      console.log(constructions);
       this.navigationService.loadBarFinish();
       this.dataSource = constructions;
     });

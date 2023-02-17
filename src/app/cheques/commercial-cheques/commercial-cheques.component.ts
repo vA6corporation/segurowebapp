@@ -46,19 +46,19 @@ export class CommercialChequesComponent implements OnInit {
     endDate: [ new Date(), Validators.required ],
   });
 
-  private user$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
-    this.user$.unsubscribe();
+    this.handleAuth$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
-    this.user$ = this.authService.handleAuth().subscribe(auth => {
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
       if (!this.user?.workerId) {
         alert('Este modulo no puede funcionar si no tienes un COMERCIAL asignado');

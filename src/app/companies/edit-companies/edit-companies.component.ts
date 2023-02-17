@@ -16,12 +16,16 @@ export class EditCompaniesComponent implements OnInit {
   constructor(
     private readonly companiesService: CompaniesService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
+    ruc: [ null, Validators.required ],
     name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    address: [ null, Validators.required ],
+    mobileNumber: [ null, Validators.required ]
   });
 
   public isLoading: boolean = false;
@@ -34,7 +38,7 @@ export class EditCompaniesComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> { 
-    this.navigationService.setTitle('Nueva empresa');
+    this.navigationService.setTitle('Editar empresa');
     this.navigationService.backTo();
 
     this.params$ = this.activatedRoute.params.subscribe(params => {

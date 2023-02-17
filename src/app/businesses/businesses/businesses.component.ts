@@ -76,9 +76,7 @@ export class BusinessesComponent implements OnInit {
       this.office = auth.office;
     });
 
-    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize).subscribe(businesses => {
-      this.dataSource = businesses;
-    });
+    this.fetchData();
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
@@ -103,6 +101,14 @@ export class BusinessesComponent implements OnInit {
     });
   }
 
+  fetchData() {
+    this.navigationService.loadBarStart();
+    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize).subscribe(businesses => {
+      this.navigationService.loadBarFinish();
+      this.dataSource = businesses;
+    });
+  }
+
   onShowConstructions(businessId: string) {
     const dialogRef = this.matDialog.open(DialogConstructionBusinessesComponent, {
       width: '600px',
@@ -111,19 +117,25 @@ export class BusinessesComponent implements OnInit {
     });
   }
 
+  onDelete(businessId: string) {
+    const ok = confirm('Esta seguro de aliminar?...');
+    if (ok) {
+      this.navigationService.loadBarStart();
+      this.businessesService.delete(businessId).subscribe(() => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Eliminado correctamente');
+        this.fetchData();
+      });
+    }
+  }
+
   onExportConstructions(businessId: string) {
-    // const dialogRef = this.matDialog.open(DialogConstructionBusinessesComponent, {
-    //   width: '600px',
-    //   position: { top: '20px' },
-    //   data: businessId,
-    // });
     this.navigationService.loadBarStart();
     this.constructionsService.getConstructionsByBusiness(businessId).subscribe(constructions => {
       this.navigationService.loadBarFinish();
       const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([
-        // 'AVANCE (%)',
         'ESTADO DE O.',
         'CLIENTE',
         'CONSORCIO',
@@ -132,7 +144,6 @@ export class BusinessesComponent implements OnInit {
       ]);
       for (const construction of constructions) {
         body.push([
-          // construction.percentageOfCompletion,
           construction.constructionCodeType,
           construction.business.name,
           construction.partnership?.name,

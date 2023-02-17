@@ -16,6 +16,8 @@ import { CreditsService } from '../credits.service';
 import { CreditPdfData, DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { CompaniesService } from 'src/app/companies/companies.service';
+import { BankModel } from 'src/app/providers/bank.model';
+import { BanksService } from 'src/app/banks/banks.service';
 
 @Component({
   selector: 'app-edit-credits',
@@ -31,6 +33,7 @@ export class EditCreditsComponent implements OnInit {
     private readonly companiesService: CompaniesService,
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly banksService: BanksService,
     private readonly matDialog: MatDialog,
   ) { }
 
@@ -52,10 +55,12 @@ export class EditCreditsComponent implements OnInit {
     }),
     credit: this.formBuilder.group({
       companyId: [ null, Validators.required ],
+      bankId: [ '', Validators.required ],
       days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
+      currencyCode: 'PEN',
       charge: [ null, Validators.required ],
     }),
   });
@@ -65,13 +70,16 @@ export class EditCreditsComponent implements OnInit {
   public workers: WorkerModel[] = [];
   private creditId: string = '';
   public companies: any[] = [];
+  public banks: BankModel[] = [];
 
-  private handleWorkers$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.handleWorkers$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -79,6 +87,10 @@ export class EditCreditsComponent implements OnInit {
     
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
     });
 
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
@@ -130,6 +142,12 @@ export class EditCreditsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(financier => {
       this.formGroup.patchValue({ financier: financier || {} });
+      if (this.formGroup.get('currencyCode')?.value === 'PEN') {
+        this.formGroup.get('bankId')?.patchValue(financier.bankPenId);
+      } else {
+        this.formGroup.get('bankId')?.patchValue(financier.bankUsdId);
+      }
+      this.formGroup.get('companyId')?.patchValue(financier.companyId);
     });
   }
 
@@ -222,6 +240,5 @@ export class EditCreditsComponent implements OnInit {
       });
     }
   }
-
 
 }

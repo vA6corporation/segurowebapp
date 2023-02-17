@@ -71,6 +71,18 @@ export class BusinessesService {
     });
   }
 
+  createNode(businessNode: any): Observable<any> {
+    return this.httpService.post('businessPdfs/createNode', { businessNode });
+  }
+
+  updateNode(businessNode: any, businessNodeId: string): Observable<any> {
+    return this.httpService.post(`businessPdfs/updateNode/${businessNodeId}`, { businessNode });
+  }
+
+  deleteNode(businessNodeId: string): Observable<void> {
+    return this.httpService.delete(`businessPdfs/deleteNode/${businessNodeId}`);
+  }
+
   update(
     business: BusinessModel, 
     guaranties: GuarantiesModel[],
@@ -92,16 +104,25 @@ export class BusinessesService {
     });
   }
 
-  getPdfs(businessId: string): Observable<BusinessPdfModel[]> {
-    return this.httpService.get(`businesses/pdfsByBusinessId/${businessId}`);
+  delete(businessId: string) {
+    return this.httpService.delete(`businesses/${businessId}`);
   }
 
-  uploadPdf(formData: FormData, businessId: string): Observable<string> {
-    return this.httpService.postForm(`businesses/uploadPdf/${businessId}`, formData);
+  getBusinessNodes(type: string, businessId: string): Observable<any[]> {
+    return this.httpService.get(`businessPdfs/businessNodesByTypeBusinessId/${type}/${businessId}`);
+  }
+
+  uploadFile(
+    formData: FormData, 
+    type: string, 
+    businessId: string,
+    businessNodeId: string
+  ): Observable<BusinessPdfModel> {
+    return this.httpService.postForm(`businessPdfs/uploadPdf/${type}/${businessId}/${businessNodeId}`, formData);
   }
 
   deletePdf(businessPdfId: string, pdfId: string): Observable<void> {
-    return this.httpService.delete(`businesses/deletePdf/${businessPdfId}/${pdfId}`);
+    return this.httpService.delete(`businessPdfs/deletePdf/${businessPdfId}/${pdfId}`);
   }
 
 }

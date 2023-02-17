@@ -56,12 +56,4 @@ export class ReportsService {
     return this.httpService.get(`reports/commissionsByYear/${year}`, { params });
   }
 
-  // getGuarantiesCommissionByYear(year: number): Observable<any> {
-  //   return this.httpService.get(`reports/guarantiesCommissionByYear/${year}`);
-  // }
-
-  // getCreditsCommissionByYear(year: number): Observable<any> {
-  //   return this.httpService.get(`reports/creditsCommissionByYear/${year}`);
-  // }
-
 }

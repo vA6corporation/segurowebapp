@@ -45,12 +45,12 @@ export class DialogEditExperiencesComponent implements OnInit {
   });
 
   incomes: ExperienceModelIncome[] = [];
-  incomesYear = '';
-  incomesAmount = 0;
+  incomesYear: null|string = null;
+  incomesAmount: null|number = null;
   isCheckedConsortium = false;
   isCheckedOthersConsortium = false;
-  nameOtherConsortium = '';
-  participationOtherConsortium = 0;
+  nameOtherConsortium = null;
+  participationOtherConsortium = null;
   consortium: any[] = [];
   
   ngOnInit(): void {
@@ -63,16 +63,13 @@ export class DialogEditExperiencesComponent implements OnInit {
     if (this.experience.othersConsortium.length) {
       this.isCheckedOthersConsortium = true;
     }
-    // this.incomesYear = this.experience.incomesYear;
-    // this.incomesAmount = this.experience.incomesAmount;
-    // this.isCheckedConsortium = this.
   }
 
   addIncomes() {
-    if (this.incomesYear != '' && this.incomesAmount > 0) {
+    if (this.incomesYear && this.incomesAmount) {
       this.incomes.push({ year: this.incomesYear, amount: this.incomesAmount });
-      this.incomesYear = '';
-      this.incomesAmount = 0;
+      this.incomesYear = null;
+      this.incomesAmount = null;
     }
   }
 
@@ -81,10 +78,10 @@ export class DialogEditExperiencesComponent implements OnInit {
   }
 
   addConsortium() {
-    if (this.nameOtherConsortium != '' && this.participationOtherConsortium > 0) {
+    if (this.nameOtherConsortium && this.participationOtherConsortium) {
       this.consortium.push({ name: this.nameOtherConsortium, participation: this.participationOtherConsortium });
-      this.nameOtherConsortium = '';
-      this.participationOtherConsortium = 0;
+      this.nameOtherConsortium = null;
+      this.participationOtherConsortium = null;
     }
   }
 

@@ -1,6 +1,6 @@
 <section class="container py-4">
   <form [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="standard">
+    <mat-form-field appearance="fill">
       <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
@@ -12,8 +12,15 @@
     <mat-form-field appearance="fill">
       <mat-label>Estado de pago</mat-label>
       <mat-select formControlName="isPaid" (selectionChange)="onSelectionChange()">
-        <mat-option value="false">NO PAGADOS</mat-option>
-        <mat-option value="true">PAGADOS</mat-option>
+        <mat-option [value]="false">NO PAGADOS</mat-option>
+        <mat-option [value]="true">PAGADOS</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Oficina</mat-label>
+      <mat-select formControlName="officeId" (selectionChange)="onChangeOffice()">
+        <mat-option [value]="null">TODAS LAS OFICINAS</mat-option>
+        <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
   </form>

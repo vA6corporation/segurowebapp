@@ -26,21 +26,21 @@ export class SetOfficeComponent implements OnInit {
   public user: UserModel|null = null;
   public offices: OfficeModel[] = [];
 
-  private auth$: Subscription = new Subscription();
-  private offices$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
+  private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.auth$.unsubscribe();
-    this.offices$.unsubscribe();
+    this.handleAuth$.unsubscribe();
+    this.handleOffices$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Seleccione oficina');
-    this.auth$ = this.authService.handleAuth().subscribe(auth => {
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
     });
 
-    this.offices$ = this.officesService.getActiveOffices().subscribe(offices => {
+    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
       this.offices = offices;
     }, (error: HttpErrorResponse) => {
       console.log(error.error.message);

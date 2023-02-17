@@ -71,7 +71,7 @@ export class DialogProvidersComponent implements OnInit {
       case 'RUC':
         if (key.length === 11) {
           this.formGroup.get('key')?.disable();
-          this.providersService.getProvidersByRuc(key).subscribe(providers => {
+          this.providersService.getProvidersByDocument(key, 'RUC').subscribe(providers => {
             this.providers = providers;
             this.formGroup.get('key')?.enable();
           }, (error: HttpErrorResponse) => {
@@ -83,7 +83,7 @@ export class DialogProvidersComponent implements OnInit {
       case 'DNI':
         if (key.length === 8) {
           this.formGroup.get('key')?.disable();
-          this.providersService.getProvidersByDni(key).subscribe(provider => {
+          this.providersService.getProvidersByDocument(key, 'DNI').subscribe(provider => {
             this.providers = provider;
             this.formGroup.get('key')?.enable();
           }, (error: HttpErrorResponse) => {

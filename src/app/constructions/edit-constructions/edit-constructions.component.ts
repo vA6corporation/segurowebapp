@@ -60,6 +60,7 @@ export class EditConstructionsComponent implements OnInit {
     object: [ null, Validators.required ],
     awardedAmount: [ null, Validators.required ],
     code: [ null, Validators.required ],
+    observations: null,
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',
@@ -93,11 +94,13 @@ export class EditConstructionsComponent implements OnInit {
   private workers$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription(); 
   private handleCompanies$: Subscription = new Subscription();
+  private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.workers$.unsubscribe();
     this.handleAuth$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleOffices$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -112,7 +115,7 @@ export class EditConstructionsComponent implements OnInit {
       this.workers = workers;
     });
 
-    this.officesService.getActiveOffices().subscribe(offices => {
+    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
       this.offices = offices;
     });
 

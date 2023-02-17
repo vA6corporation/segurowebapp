@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-// import { Params } from '@angular/router';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
@@ -34,7 +33,6 @@ export class DocumentationComponent implements OnInit {
     'policyNumber', 
     'invoice', 
     'voucher', 
-    // 'document', 
     'cheque', 
     'deposit', 
     'fianza', 
@@ -388,11 +386,11 @@ export class DocumentationComponent implements OnInit {
   }
 
   findContract(element: any, type: string) {
-    return !element.documentation.find((e: string) => e == type) && element.isEmition;
+    return !element.documentation.find((e: string) => e == type) && !element.isEmition;
   }
 
   findConstruction(element: any, type: string) {
-    return !element.documentation.find((e: string) => e == type) && !element.isEmition;
+    return !element.documentation.find((e: string) => e == type) && element.isEmition;
   }
 
   findDocumentation(element: any, type: string) {

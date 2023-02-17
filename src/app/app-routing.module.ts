@@ -8,6 +8,14 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'notifications',
+    loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule)
+  },
+  {
+    path: 'incomes',
+    loadChildren: () => import('./incomes/incomes.module').then(m => m.IncomesModule)
+  },
+  {
     path: 'seace',
     loadChildren: () => import('./seace/seace.module').then(m => m.SeaceModule)
   },
@@ -126,6 +134,14 @@ const routes: Routes = [
   {
     path: 'credits',
     loadChildren: () => import('./credits/credits.module').then(m => m.CreditsModule)
+  },
+  {
+    path: 'fideicomisos',
+    loadChildren: () => import('./fideicomisos/fideicomisos.module').then(m => m.FideicomisosModule)
+  },
+  {
+    path: 'isos',
+    loadChildren: () => import('./isos/isos.module').then(m => m.IsosModule)
   },
   {
     path: 'insuranceBusinesses',

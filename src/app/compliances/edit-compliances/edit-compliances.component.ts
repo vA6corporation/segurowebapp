@@ -22,6 +22,13 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { DepositModel } from 'src/app/deposits/deposit.model';
 import { ChequeModel } from 'src/app/cheques/cheque.model';
+import { ComplianceModel } from '../compliance.model';
+import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
+import { Subscription } from 'rxjs';
+import { BankModel } from 'src/app/providers/bank.model';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { BanksService } from 'src/app/banks/banks.service';
+import { CompaniesService } from 'src/app/companies/companies.service';
 
 @Component({
   selector: 'app-edit-compliances',
@@ -38,6 +45,8 @@ export class EditCompliancesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
+    private readonly companiesService: CompaniesService,
+    private readonly banksService: BanksService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -51,6 +60,8 @@ export class EditCompliancesComponent implements OnInit {
       policyNumber: [ null, Validators.required ],
       object: null,
       price: [ null, Validators.required ],
+      pagare: null,
+      observations: null,
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       voucherAt: null,
@@ -59,7 +70,9 @@ export class EditCompliancesComponent implements OnInit {
       isEmition: false,
       isPaid: false,
       commission: null,
-      currency: 'PEN',
+      currencyCode: 'PEN',
+      companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -69,17 +82,38 @@ export class EditCompliancesComponent implements OnInit {
   public beneficiary: BeneficiaryModel|null = null;
   public worker: WorkerModel|null = null;
   public isLoading: boolean = false;
-  private complianceId: string = '';
   public deposits: DepositModel[] = [];
   public cheques: ChequeModel[] = [];
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
+
+  public compliance: ComplianceModel|null = null;
+  private complianceId: string = '';
+
+  private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
+  }
 
   ngOnInit(): void { 
     this.navigationService.backTo();
     this.navigationService.setTitle('Editar fiel cumplimiento');
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
+    });
+    
     this.activatedRoute.params.subscribe(params => {
       this.complianceId = params.complianceId;
       this.compliancesService.getComplianceById(this.complianceId).subscribe(compliance => {
-        console.log(compliance);
+        this.compliance = compliance;
         const { financier, beneficiary, cheques = [], deposits = [], construction } = compliance;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ compliance });
@@ -107,6 +141,15 @@ export class EditCompliancesComponent implements OnInit {
         this.construction = construction;
         this.formGroup.patchValue({ compliance: { constructionId: construction._id } });
       }
+    });
+  }
+
+  onShowDetails(constructionId: string) {
+    this.matDialog.open(DialogDetailConstructionsComponent, {
+      width: '100vw',
+      // height: '90vh',
+      position: { top: '20px' },
+      data: constructionId,
     });
   }
 
@@ -260,7 +303,7 @@ export class EditCompliancesComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, compliance } = this.formGroup.value;
       compliance.financierId = financier._id;
-      this.compliancesService.update(compliance, this.complianceId).subscribe(res => {
+      this.compliancesService.updateWithFinanicer(compliance, financier, this.complianceId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

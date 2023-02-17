@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { PartnershipItemModel } from './partnership-item.model';
@@ -25,16 +26,16 @@ export class PartnershipsService {
     return this.httpService.get('partnerships');
   }
 
-  getPartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
-    return this.httpService.get(`partnerships/byPage/${pageIndex}/${pageSize}`); 
+  getPartnershipsByPage(pageIndex: number, pageSize: number, params: Params): Observable<PartnershipModel[]> {
+    return this.httpService.get(`partnerships/byPage/${pageIndex}/${pageSize}`, { params }); 
   }
 
   getTemplatePartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
     return this.httpService.get(`partnerships/templatePartnershipsByPage/${pageIndex}/${pageSize}`); 
   }
 
-  getPartnershipsCount(): Observable<number> {
-    return this.httpService.get('partnerships/count');
+  getPartnershipsCount(params: Params): Observable<number> {
+    return this.httpService.get('partnerships/countPartnerships', { params });
   }
 
   getTemplatePartnershipsCount(): Observable<number> {

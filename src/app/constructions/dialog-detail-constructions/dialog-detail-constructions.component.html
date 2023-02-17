@@ -1,6 +1,5 @@
 <h2 mat-dialog-title>Fianzas</h2>
 <div mat-dialog-content>
-  <!-- <h3 class="mb-0">Adelanto directo</h3> -->
   <mat-action-list>
     <ng-container *ngFor="let guarantee of guarantiesGADF">
       <a [href]=" 'directs/' + guarantee._id + '/edit' " target="_blank" mat-list-item>
@@ -10,8 +9,6 @@
       </a>
     </ng-container>
   </mat-action-list>
-  <mat-divider></mat-divider>
-  <!-- <h3 class="mb-0">Adelanto de materiales</h3> -->
   <mat-action-list>
     <ng-container *ngFor="let guarantee of guarantiesGAMF">
       <a [href]=" 'materials/' + guarantee._id + '/edit' " target="_blank" mat-list-item>
@@ -21,8 +18,6 @@
       </a>
     </ng-container>
   </mat-action-list>
-  <mat-divider></mat-divider>
-  <!-- <h3 class="mb-0">Fiel cumplimiento</h3> -->
   <mat-action-list>
     <ng-container *ngFor="let guarantee of guarantiesGFCF">
       <a [href]=" 'compliances/' + guarantee._id + '/edit' " target="_blank" mat-list-item>

@@ -20,7 +20,7 @@ export class DialogChequesComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     price: [ null, Validators.required ],
     paymentAt: [ null, Validators.required ],
-    currency: 'PEN',
+    currencyCode: 'PEN',
     extensionAt: null,
     observations: null,
   });

@@ -18,21 +18,17 @@ export class EditWorkersComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      worker: this.formBuilder.group({
-        documentType: [ null, Validators.required ],
-        document: [ null, Validators.required ],
-        name: [ null, Validators.required ],
-        email: null,
-        mobileNumber: null,
-        birthDate: null,
-        address: null,    
-      }),
-    });
-  }
+  ) { }
     
-  public formGroup: FormGroup;
+  public formGroup: FormGroup = this.formBuilder.group({
+    documentType: [ null, Validators.required ],
+    document: [ null, Validators.required ],
+    name: [ null, Validators.required ],
+    email: null,
+    mobileNumber: null,
+    birthDate: null,
+    address: null,    
+  });
   public isLoading: boolean = false;
   public maxlength: number = 11;
   private workerId: string = '';
@@ -44,7 +40,7 @@ export class EditWorkersComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.workerId = params.workerId;
       this.workersService.getWorkerById(this.workerId).subscribe(worker => {
-        this.formGroup.get('worker')?.patchValue(worker);
+        this.formGroup.patchValue(worker);
       });
     });
   }
@@ -53,8 +49,7 @@ export class EditWorkersComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadSpinnerStart();
-      const { worker } = this.formGroup.value;
-      this.workersService.update(worker, this.workerId).subscribe(res => {
+      this.workersService.update(this.formGroup.value, this.workerId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();

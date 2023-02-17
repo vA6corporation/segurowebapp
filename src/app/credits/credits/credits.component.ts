@@ -1,10 +1,12 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
+import { buildCreditLine } from 'src/app/buildCreditLine';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { buildExcel } from 'src/app/xlsx';
 import { CreditModel } from '../credit.model';
 import { CreditsService } from '../credits.service';
 import { DialogDetailCreditsComponent } from '../dialog-detail-credits/dialog-detail-credits.component';
@@ -45,6 +47,11 @@ export class CreditsComponent implements OnInit {
       this.length = count;
     });
 
+    this.navigationService.setMenu([
+      { id: 'search', label: '', icon: 'search', show: true },
+      { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false },
+    ]);
+
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
       this.creditsService.getCreditsByKey(key).subscribe(credits => {
@@ -58,35 +65,52 @@ export class CreditsComponent implements OnInit {
     
     this.fetchData();
 
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true },
-      // { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
-    ]);
-
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
 
       if (id == 'export_excel') {
         this.navigationService.loadBarStart();
-        this.navigationService.loadBarFinish();
-        const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-        let body = [];
-        body.push([
-          'CONSORCIO',
-          'CLIENTE',
-          'N° POLIZA',
-          'OBJETO',
-          'F. DE INICIO',
-          'F. DE CUMPLIMIENTO',
-          'SUMA ASEGURADA',
-          'PRIMA',
-          'GARANTIA',
-          'COMISION',
-          'ESTADO DE TRAMITE',
-          'ESTADO DE OBRA',
-          'P. A CARGO'
-        ]);
+        this.creditsService.getCredits().subscribe(credits => {
+          this.navigationService.loadBarFinish();
+          const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+          let body = [];
+          body.push([
+            'F. DE EMISION',
+            'CONSORCIO',
+            'CLIENTE',
+            'FINANCIERA',
+            'MONTO',
+            'PRIMA',
+            'DIAS',
+          ]);
+
+          for (const credit of credits) {
+            body.push([
+              formatDate(new Date(credit.emitionAt), 'dd/MM/yyyy', 'en-US'),
+              credit.partnership ? credit.partnership.name : '',
+              credit.business.name,
+              credit.financier.name,
+              credit.charge,
+              credit.commission,
+              credit.days
+            ]);
+          }
+
+          const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+          buildExcel(body, name, wscols, [], []);
+        });
       }
 
+    });
+  }
+
+  onExportPdf(creditId: string) {
+    this.navigationService.loadBarStart();
+    this.creditsService.getCreditById(creditId).subscribe(async credit => {
+      this.navigationService.loadBarFinish();
+      if (credit.company) {
+        const pdf = await buildCreditLine(credit, credit.bank);
+        pdf.save(`ORDEN_DE_SERVICIO_${credit.partnership ? credit.partnership.name : credit.business.name}.pdf`);
+      }
     });
   }
 

@@ -32,7 +32,7 @@
       <input type="text" matInput formControlName="location" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Precio *</mat-label>
+      <mat-label>Monto adjudicado *</mat-label>
       <input type="number" matInput formControlName="price" />
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -43,7 +43,6 @@
       <mat-label>Avance a la fecha *</mat-label>
       <input type="number" matInput formControlName="advancePercent" />
     </mat-form-field>
-
     <mat-form-field appearance="fill">
       <mat-label>Tipo de obra / servicio *</mat-label>
       <input type="text" matInput formControlName="typeWork" />
@@ -68,39 +67,29 @@
       <mat-label>Nombre de Entidades Afianzadoras </mat-label>
       <input type="text" matInput formControlName="nameSuretyEntities" />
     </mat-form-field>
-
-    <mat-card>
-      <mat-card-subtitle>INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</mat-card-subtitle>
-      <mat-card-content>
-        <div>
-          <mat-form-field appearance="fill">
-            <mat-label>Año *</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>monto *</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
-          </mat-form-field>
-        </div>
-
-        <mat-list class="mb-3">
-          <div mat-subheader>Experiencia</div>
-          <mat-list-item *ngFor="let income of incomes; let i = index">
-            <div>
-              Año: {{ income.year }}, Monto {{ income.amount }}
-            </div>
-            <span class="spacer"></span>
-            <button type="button" mat-icon-button (click)="removeIncomes(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button type="button" mat-button (click)="addIncomes()">Agregar ingresos</button>
-      </mat-card-actions>
-    </mat-card>
-
+    <h2>INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</h2>
+    <div class="d-flex">
+      <mat-form-field appearance="fill">
+        <mat-label>Año *</mat-label>
+        <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>monto *</mat-label>
+        <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
+      </mat-form-field>
+    </div>
+    <mat-list class="mb-3">
+      <mat-list-item *ngFor="let income of incomes; let i = index">
+        <div>Año: {{ income.year }} / Monto: {{ income.amount.toFixed(2) }}</div>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="removeIncomes(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <div class="mb-3">
+      <button type="button" class="w-100" mat-raised-button color="primary" (click)="addIncomes()">AGREGAR INGRESOS</button>
+    </div>
     <div class="mb-3">
       <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
     </div>

@@ -8,27 +8,28 @@ import { PartnershipModel } from "../partnerships/partnership.model";
 import { WorkerModel } from "../workers/worker.model";
 
 export interface DirectModel {
-  _id: string,
-  price: number,
-  startDate: string,
-  endDate: string,
-  guarantee: number,
-  object: string,
-  policyNumber: string,
-  businessId: string,
-  financierId: string,
-  beneficiaryId: string,
-  business: BusinessModel,
-  financier: FinancierModel,
-  beneficiary: BeneficiaryModel,
-  partnership: PartnershipModel,
-  construction: ConstructionModel,
-  worker: WorkerModel|null,
-  guaranteeType: string,
-  isMarked: boolean,
-  cheques: ChequeModel[],
-  deposits: DepositModel[],
-  createdAt: any,
-  updatedAt: any,
-  userId: string,
+  _id: string
+  price: number
+  startDate: string
+  endDate: string
+  guarantee: number
+  object: string
+  diffDays: number
+  policyNumber: string
+  businessId: string
+  financierId: string
+  beneficiaryId: string
+  business: BusinessModel
+  financier: FinancierModel
+  beneficiary: BeneficiaryModel
+  partnership: PartnershipModel
+  construction: ConstructionModel
+  worker: WorkerModel|null
+  guaranteeType: string
+  isMarked: boolean
+  cheques: ChequeModel[]
+  deposits: DepositModel[]
+  createdAt: any
+  updatedAt: any
+  userId: string
 }

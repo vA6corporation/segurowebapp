@@ -21,8 +21,6 @@ export class DialogAttachPdfComponent implements OnInit {
   ) { }
 
   public url: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
-
-  // public accept: string = 'application/pdf';
   public accept: string = '';
   public isLoading: boolean = false;
   public paymentOrderPdfs: PaymentOrderPdfModel[] = [];
@@ -77,15 +75,20 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   onFileSelected(files: FileList|null, input: HTMLInputElement) {
-    if (files !== null && files[0] !== null) {
-      const file: File = files[0];
-      input.value = '';
-      const formData = new FormData();
-      formData.append('file', file),
-      this.paymentOrdersService.uploadPdf(formData, this.paymentOrderId).subscribe(pdfId => {
+    if (files !== null) {
+      const promises: Promise<any>[] = [];
+      for (let index = 0; index < files.length; index++) {
+        const file = files[index];
+        const formData = new FormData();
+        formData.append('file', file);
+        const promise = this.paymentOrdersService.uploadFile(formData, this.paymentOrderId).toPromise();
+        promises.push(promise);
+      }
+      Promise.all(promises).then(() => {
         this.fetchData();
         this.onChangePdfEvent$.next();
-      });    
+      });
+      input.value = '';
     }
   }
 

@@ -67,9 +67,6 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   downloadURI(uri: string, name: string) {
-    console.log(uri);
-    console.log(name);
-    
     var link = document.createElement("a");
     link.download = name;
     link.href = uri;
@@ -79,46 +76,41 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   onFileSelected(files: FileList|null, input: HTMLInputElement) {
-    if (files !== null && files[0] !== null) {
-      const file: File = files[0];
-      input.value = '';
-      const formData = new FormData();
-
-      console.log(file);
-      
-      if (file.type === "application/pdf" || file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || file.type === "application/vnd.ms-excel" || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        formData.append('file', file),
-        this.insurancesService.uploadPdf(formData, this.data.insuranceId, this.data.type).subscribe(pdfId => {
-          console.log(pdfId);
-          this.fetchData();
-        });  
-      } else {
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = function () {
-            resolve(reader.result);
-          };
-          reader.onerror = function (error) {
-            console.log('Error: ', error);
-          };
-        }).then((result: any) => {
-          const pdf = new jsPDF("p", "mm", "a4");
-
-          var width = pdf.internal.pageSize.getWidth();
-          var height = pdf.internal.pageSize.getHeight();
-
-          pdf.addImage(result, 'JPEG', 0, 0, width, height);
-          const data = pdf.output('blob');
-          formData.append('file', data);
-          this.insurancesService.uploadPdf(formData, this.data.insuranceId, this.data.type).subscribe(pdfId => {
-            console.log(pdfId);
+    if (files !== null) {
+      for (let index = 0; index < files.length; index++) {
+        const file = files[index];
+        const formData = new FormData();
+        if (file.type === "application/pdf" || file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || file.type === "application/vnd.ms-excel" || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          formData.append('file', file),
+          this.insurancesService.uploadFile(formData, this.data.insuranceId, this.data.type).subscribe(pdfId => {
             this.fetchData();
+          });  
+        } else {
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+              resolve(reader.result);
+            };
+            reader.onerror = function (error) {
+              reject(error);
+            };
+          }).then((result: any) => {
+            const pdf = new jsPDF("p", "mm", "a4");
+            const width = pdf.internal.pageSize.getWidth();
+            const height = pdf.internal.pageSize.getHeight();
+            pdf.addImage(result, 'JPEG', 0, 0, width, height);
+            const data = pdf.output('blob');
+            formData.append('file', data);
+            this.insurancesService.uploadFile(formData, this.data.insuranceId, this.data.type).subscribe(pdfId => {
+              console.log(pdfId);
+              this.fetchData();
+            });
           });
-        });
-      }
-      
+        }
+      }      
     }
+    input.value = '';
   }
 
 }

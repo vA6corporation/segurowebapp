@@ -26,12 +26,12 @@ export class CreditsService {
     return this.httpService.get(`credits/summaryMonthsByYear/${year}`);
   }
 
-  // getSummaryPrimasByYear(year: string): Observable<any[]> {
-  //   return this.httpService.get(`credits/summaryPrimasByYear/${year}`);
-  // }
-
   getCreditsByPage(pageIndex: number, pageSize: number): Observable<CreditModel[]> {
     return this.httpService.get(`credits/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getCredits(): Observable<CreditModel[]> {
+    return this.httpService.get('credits');
   }
 
   getCountCredits(): Observable<number> {

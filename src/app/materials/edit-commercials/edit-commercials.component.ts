@@ -59,7 +59,7 @@ export class EditCommercialsComponent implements OnInit {
       prima: null,
       isEmition: false,
       commission: null,
-      currency: 'PEN',
+      currencyCode: 'PEN',
     }),
   });
 

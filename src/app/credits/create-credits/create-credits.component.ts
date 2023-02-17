@@ -5,14 +5,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import { Subscription } from 'rxjs';
+import { BanksService } from 'src/app/banks/banks.service';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { CompaniesService } from 'src/app/companies/companies.service';
+import { CompanyModel } from 'src/app/companies/company.model';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
+import { BankModel } from 'src/app/providers/bank.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { CreditsService } from '../credits.service';
@@ -33,6 +36,7 @@ export class CreateCreditsComponent implements OnInit {
     private readonly companiesService: CompaniesService,
     private readonly router: Router,
     private readonly matDialog: MatDialog,
+    private readonly banksService: BanksService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -53,10 +57,12 @@ export class CreateCreditsComponent implements OnInit {
     }),
     credit: this.formBuilder.group({
       companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
       days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
       prima: null,
       commission: null,
+      currencyCode: 'PEN',
       charge: [ null, Validators.required ],
     }),
   });
@@ -67,20 +73,30 @@ export class CreateCreditsComponent implements OnInit {
   private pdfDocument: File|null = null;
   private pdfCarta: File|null = null;
   private pdfVoucher: File|null = null;
-  public companies: any[] = [];
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
 
-  private handleWorkers$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
+    this.handleBanks$.unsubscribe();
     this.handleCompanies$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.backTo();
+
+    this.navigationService.setTitle('Nueva linea credito');
+
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
     });
 
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
@@ -169,6 +185,12 @@ export class CreateCreditsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(financier => {
       this.formGroup.patchValue({ financier: financier || {} });
+      if (this.formGroup.get('currencyCode')?.value === 'PEN') {
+        this.formGroup.get('bankId')?.patchValue(financier.bankPenId);
+      } else {
+        this.formGroup.get('bankId')?.patchValue(financier.bankUsdId);
+      }
+      this.formGroup.get('companyId')?.patchValue(financier.companyId);
     });
   }
 

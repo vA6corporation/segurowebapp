@@ -59,13 +59,17 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <button type="button" (click)="onShowDetails(element._id)" mat-menu-item>
+            <!-- <button type="button" (click)="onShowDetails(element._id)" mat-menu-item>
               <mat-icon>info</mat-icon>
               <span>Detalles</span>
-            </button>
+            </button> -->
             <button [routerLink]="['/insurances', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
+            </button>
+            <button [routerLink]="['/insurances/create', type, element.insuranceGroupId]" mat-menu-item>
+              <mat-icon>autorenew</mat-icon>
+              <span>Renovar</span>
             </button>
             <button type="button" (click)="onDelete(element._id)" mat-menu-item>
               <mat-icon>delete</mat-icon>
@@ -82,7 +86,7 @@
     <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
   </div>
   <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
-    <button mat-fab color="primary" class="float-right" [routerLink]="[ '/insurances', type, 'create' ]">
+    <button mat-fab color="primary" class="float-right" [routerLink]="[ '/insurances', 'createWithInsuranceGroup', type ]">
       <mat-icon>add</mat-icon>
     </button>
   </div>

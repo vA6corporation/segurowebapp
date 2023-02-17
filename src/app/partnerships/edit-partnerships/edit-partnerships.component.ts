@@ -28,12 +28,16 @@ export class EditPartnershipsComponent implements OnInit {
     _id: [ null, Validators.required ],
     document: null,
     name: [ null, Validators.required ],
-    constitutedAt: null,
     address: null,
-    businessId: [ null, Validators.required ],
+    constitutedAt: null,
+    email: null,
+    phoneNumber: null,
+    economicActivity: null,
+    representativeNationality: null,
     representativeDocumentType: 'DNI',
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],
+    businessId: [ null, Validators.required ],
     independentAccounting: false
   });
 

@@ -77,18 +77,22 @@ export class DialogSelectPdfComponent implements OnInit {
  
 
   async onFileSelected(files: FileList|null, input: HTMLInputElement) {
-    if (files !== null && files[0] !== null) {
-      const file: File = files[0];
+    if (files !== null) {
+      
+      for (let index = 0; index < files.length; index++) {
+        const file: File = files[index];
+        
+        const base64 = await this.getBase64(file);
+        
+        this.insurancePdfs.push({
+          file,
+          base64,
+          fileName: file.name,
+          fileType: file.type
+        });
+      }
+      
       input.value = '';
-
-      const base64 = await this.getBase64(file);
-
-      this.insurancePdfs.push({
-        file,
-        base64,
-        fileName: file.name,
-        fileType: file.type
-      });
 
       this.selectedFile$.next(this.insurancePdfs);
     }

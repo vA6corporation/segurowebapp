@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
 import { CompaniesService } from 'src/app/companies/companies.service';
@@ -30,7 +30,6 @@ export class EditPaymentOrdersComponent implements OnInit {
     private readonly banksService: BanksService,
     private readonly formBuilder: FormBuilder,
     private readonly matDialog: MatDialog,
-    private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
   ) { }
     
@@ -40,10 +39,8 @@ export class EditPaymentOrdersComponent implements OnInit {
     charge: [ null, Validators.required ],
     observations: null,
     paymentAt: [ new Date(), Validators.required ],
-    providerBankName: '',
-    providerAccountNumber: '',
-    bankName: '',
-    accountNumber: '',
+    bankId: null,
+    providerBankId: null,
     isPaid: false,
   });
  
@@ -52,15 +49,16 @@ export class EditPaymentOrdersComponent implements OnInit {
   public providerBanks: BankModel[] = [];
   public banks: BankModel[] = [];
   private paymentOrderId: string = '';
-  // private pdfId: string = '';
   public companies: CompanyModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
   }
   
   ngOnInit(): void { 
@@ -72,7 +70,7 @@ export class EditPaymentOrdersComponent implements OnInit {
       { id: 'add_provider', label: 'Agregar proveedor', icon: 'person_add', show: true },
     ]);
 
-    this.banksService.getBanks().subscribe(banks => {
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
       this.banks = banks;
     });
 
@@ -148,7 +146,6 @@ export class EditPaymentOrdersComponent implements OnInit {
   fetchData() {
     this.paymentOrdersService.getPaymentOrderById(this.paymentOrderId).subscribe(paymentOrder => {
       console.log(paymentOrder);
-      // this.pdfId = paymentOrder.pdfId;
       this.formGroup.patchValue(paymentOrder);
       this.provider = paymentOrder.provider;
       this.providerBanks = paymentOrder.provider.banks;
@@ -167,14 +164,6 @@ export class EditPaymentOrdersComponent implements OnInit {
         this.provider = provider;
       }
     });
-  }
-
-  onProviderBankChange(accountNumber: string) {
-    this.formGroup.get('providerBankName')?.patchValue(this.providerBanks.find(e => e.accountNumber == accountNumber)?.bankName);
-  }
-
-  onBankChange(accountNumber: string) {
-    this.formGroup.get('bankName')?.patchValue(this.banks.find(e => e.accountNumber == accountNumber)?.bankName);
   }
 
   onSubmit(): void {

@@ -20,7 +20,7 @@ export class DialogDepositsComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     _id: null,
     price: [ null, Validators.required ],
-    currency: 'PEN'
+    currencyCode: 'PEN'
   });
 
   ngOnInit(): void {

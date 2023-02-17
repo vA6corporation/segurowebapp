@@ -17,13 +17,17 @@ export class ProvidersService {
     return this.httpService.get(`providers/byKey/${key}`);
   }
 
-  getProvidersByRuc(key: string): Observable<ProviderModel[]> {
-    return this.httpService.get(`providers/byRuc/${key}`);
+  // getProvidersByDocument(document: string, documentType: string): Observable<ProviderModel[]> {
+  //   return this.httpService.get(`providers/byDocument/${document}/${documentType}`);
+  // }
+
+  getProvidersByDocument(document: string, documentType: string): Observable<ProviderModel[]> {
+    return this.httpService.get(`providers/byDocument/${document}/${documentType}`);
   }
 
-  getProvidersByDni(key: string): Observable<ProviderModel[]> {
-    return this.httpService.get(`providers/byDni/${key}`);
-  }
+  // getProvidersByDni(key: string): Observable<ProviderModel[]> {
+  //   return this.httpService.get(`providers/byDni/${key}`);
+  // }
 
   getProvidersByPage(pageIndex: number, pageSize: number): Observable<ProviderModel[]> {
     return this.httpService.get(`providers/byPage/${pageIndex}/${pageSize}`);

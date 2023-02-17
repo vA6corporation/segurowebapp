@@ -63,6 +63,8 @@ export class TemplatesComponent implements OnInit {
       queryParams: queryParams, 
       queryParamsHandling: 'merge', // remove to replace all query params by provided
     });
+
+    this.fetchData();
   }
 
   fetchData() {
@@ -79,7 +81,7 @@ export class TemplatesComponent implements OnInit {
     });
   }
 
-  onDelete(providerId: string) {
+  onDelete(templateId: string) {
     // const ok = confirm('Esta seguro de eliminar?...');
     // if (ok) {
     //   this.providersService.delete(providerId).subscribe(() => {

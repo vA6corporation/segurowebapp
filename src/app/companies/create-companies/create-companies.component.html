@@ -1,8 +1,24 @@
 <section class="container">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
+      <mat-label>RUC</mat-label>
+      <input type="text" matInput formControlName="ruc">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Razon social</mat-label>
       <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Direccion</mat-label>
+      <input type="text" matInput formControlName="address">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="mobileNumber">
     </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>

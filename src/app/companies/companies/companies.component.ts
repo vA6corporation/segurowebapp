@@ -17,7 +17,7 @@ export class CompaniesComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'name', 'actions' ];
+  public displayedColumns: string[] = [ 'ruc', 'name', 'email', 'address', 'mobileNumber', 'actions' ];
   public dataSource: CompanyModel[] = [];
   public length: number = 0;
   public pageSize: number = 10;

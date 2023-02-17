@@ -2,11 +2,12 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-// import { MatDialog } from '@angular/material/dialog';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
+import { BanksService } from 'src/app/banks/banks.service';
 import { CompaniesService } from 'src/app/companies/companies.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { BankModel } from 'src/app/providers/bank.model';
 import { randomColor } from 'src/app/randomColor';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
@@ -29,7 +30,7 @@ export class ReportComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly companiesService: CompaniesService,
-    // private readonly matDialog: MatDialog
+    private readonly banksService: BanksService,
   ) { }
     
   @ViewChild('expensesChart') 
@@ -74,6 +75,7 @@ export class ReportComponent implements OnInit {
   ];
   public formGroup = this.formBuilder.group({
     workerId: '',
+    bankId: '',
     type: 'SCTR',
     year: new Date().getFullYear(),
     companyId: '',
@@ -82,19 +84,26 @@ export class ReportComponent implements OnInit {
   private expensesSummaries: any[] = [];
   private incomesSummaries: any[] = [];
   public companies: any[] = [];
+  public banks: BankModel[] = [];
   
   private handleWorkers$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit() {
     this.navigationService.setTitle("Resumen");
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
 
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
       this.companies = companies;
@@ -117,39 +126,48 @@ export class ReportComponent implements OnInit {
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-      let body = [];
-      body.push([
-        'MES',
-        'EGRESOS',
-        'INGRESOS',
-        'DIFERENCIA',
-      ]);
-      for (let index = 0; index < 12; index++) {
-        const incomes = this.incomesSummaries[index].guaranties + this.incomesSummaries[index].credits + this.incomesSummaries[index].constructions;
-        const expenses = this.expensesSummaries[index].totalCharge;
-        body.push([
-          this.months[index],
-          incomes,
-          expenses,
-          incomes - expenses
-        ]);
+      this.navigationService.loadBarStart();
+      const promises: Promise<any>[] = [];
+      for (const bank of this.banks) {
+        const { year } = this.formGroup.value;
+        const params = { bankId: bank._id };
+        const promise = this.reportsService.getCommissionsByYear(year, params).toPromise();
+        promises.push(promise);
       }
-      // for (const construction of constructions) {
-      //   // body.push([
-      //   //   construction.constructionCodeType,
-      //   //   construction.business.name,
-      //   //   construction.partnership?.name,
-      //   //   construction.worker?.name,
-      //   //   construction.percentCompletion?.percentProgrammated,
-      //   //   construction.percentCompletion?.percentCompletion,
-      //   //   construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-      //   //   construction.percentCompletion?.year,
-      //   //   construction.object,
-      //   // ]);
-      // }
-      const name = `RESUMEN_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-      buildExcel(body, name, wscols, [], []);
+      Promise.all(promises).then(values => {
+        this.navigationService.loadBarFinish();
+        const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+        let body = [];
+        
+        for (let indexBank = 0; indexBank < this.banks.length; indexBank++) {
+          const bank = this.banks[indexBank];
+          const element = values[indexBank];
+
+          body.push([`${bank.bankName} ${bank.accountNumber}`, '', '', '']);
+          body.push([
+            'MES',
+            'EGRESOS',
+            'INGRESOS',
+            'DIFERENCIA',
+          ]);
+
+          for (let index = 0; index < 12; index++) {
+            const incomes = (element[index].guaranties || 0) + (element[index].credits || 0) + (element[index].constructions || 0);
+            const expenses = (element[index].totalCharge || 0);
+            body.push([
+              this.months[index],
+              incomes,
+              expenses,
+              incomes - expenses
+            ]);
+          }
+
+          body.push(['', '', '', '']);
+          body.push(['', '', '', '']);
+        }
+        const name = `RESUMEN_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+        buildExcel(body, name, wscols, [], []);
+      });
     });
 
   }
@@ -215,8 +233,8 @@ export class ReportComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
 
-      const { year, workerId, companyId } = this.formGroup.value;
-      const params = { workerId, companyId };
+      const { year, workerId, companyId, bankId } = this.formGroup.value;
+      const params = { workerId, companyId, bankId };
       this.navigationService.loadBarStart();
 
       this.reportsService.getCommissionsByYear(year, params).subscribe(incomesSummaries => {

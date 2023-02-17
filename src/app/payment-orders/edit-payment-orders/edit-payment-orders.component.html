@@ -17,6 +17,12 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Cuenta de la empresa</mat-label>
+      <mat-select formControlName="bankId">
+        <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Descripcion *</mat-label>
       <input type="text" matInput formControlName="concept">
     </mat-form-field>
@@ -35,15 +41,9 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Cuenta de la empresa</mat-label>
-      <mat-select formControlName="accountNumber" (selectionChange)="onBankChange($event.value)">
-        <mat-option *ngFor="let element of banks" [value]="element.accountNumber">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
       <mat-label>Cuenta del proveedor</mat-label>
-      <mat-select formControlName="providerAccountNumber" (selectionChange)="onProviderBankChange($event.value)">
-        <mat-option *ngFor="let element of providerBanks" [value]="element.accountNumber">{{ element.bankName }} {{ element.accountNumber }}</mat-option>
+      <mat-select formControlName="providerBankId">
+        <mat-option *ngFor="let element of providerBanks" [value]="element._id">{{ element.bankName }} {{ element.accountNumber }}</mat-option>
       </mat-select>
     </mat-form-field>
     <div class="py-3">

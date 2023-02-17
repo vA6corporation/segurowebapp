@@ -55,12 +55,15 @@ export class SearchComponent implements OnInit {
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
+  private handleOffices$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
     this.handleSearch$.unsubscribe();
     this.handleAuth$.unsubscribe();
+    this.handleOffices$.unsubscribe();
+    this.queryParams$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -80,12 +83,8 @@ export class SearchComponent implements OnInit {
       this.fetchData();
     });
 
-    this.officesService.getActiveOffices().subscribe(offices => {
+    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
       this.offices = offices;
-    });
-
-    this.authService.handleAuth().subscribe(auth => {
-      this.officeId = auth.office._id;
     });
 
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
@@ -199,42 +198,63 @@ export class SearchComponent implements OnInit {
   }
 
   async onRenewGuarantee(guarantee: any) {
-    guarantee.status = '02';
+    const status = '02';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        this.materialsService.updateStatus(status, guarantee._id).toPromise();
         break;
       case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
+        this.directsService.updateStatus(status, guarantee._id).toPromise();
         break;
       case 'GFCF':
-        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        this.compliancesService.updateStatus(status, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
   async onNotRenewGuarantee(guarantee: any) {
-    guarantee.status = '03';
+    const status = '03';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
+        this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GFCF':
-        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
   async onFreeGuarantee(guarantee: any) {
-    guarantee.status = '04';
+    const status = '04';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).subscribe(() => {
+        this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
           if (this.key) {
             this.fetchData();
           }
@@ -244,7 +264,7 @@ export class SearchComponent implements OnInit {
         });
         break;
       case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+        this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
           if (this.key) {
             this.fetchData();
           }
@@ -254,7 +274,7 @@ export class SearchComponent implements OnInit {
         });
         break;
       case 'GFCF':
-        this.compliancesService.update(guarantee, guarantee._id).subscribe(() => {
+        this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
           if (this.key) {
             this.fetchData();
           }
@@ -268,16 +288,37 @@ export class SearchComponent implements OnInit {
   }
 
   async onNotLookGuarantee(guarantee: any) {
-    guarantee.status = '01';
+    const status = '01';
     switch (guarantee.guaranteeType) {
       case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
+        this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
+        this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
       case 'GFCF':
-        this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
+          if (this.key) {
+            this.fetchData();
+          }
+          if (this.status || this.processStatusCode) {
+            this.onStatusChange();
+          }
+        });
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');

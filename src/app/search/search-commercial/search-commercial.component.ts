@@ -52,21 +52,19 @@ export class SearchCommercialComponent implements OnInit {
 
   private handleClickMenu$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
-  private user$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
     this.handleSearch$.unsubscribe();
-    this.user$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Buscar');
 
-    this.user$ = this.authService.handleAuth().subscribe(auth => {
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
-      console.log(this.user);
-      
       if (!this.user?.workerId) {
         alert('Este modulo no puede funcionar si no tienes un COMERCIAL asignado');
       } else {

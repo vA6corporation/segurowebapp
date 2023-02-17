@@ -92,9 +92,9 @@ export class TemplatePartnershipsComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
-      this.dataSource = partnerships;
-    });
+    // this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
+    //   this.dataSource = partnerships;
+    // });
   }
 
 

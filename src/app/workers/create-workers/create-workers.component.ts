@@ -17,21 +17,17 @@ export class CreateWorkersComponent implements OnInit {
     private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
-  ) {
-    this.formGroup = this.formBuilder.group({
-      worker: this.formBuilder.group({
-        documentType: [ null, Validators.required ],
-        document: [ null, Validators.required ],
-        name: [ null, Validators.required ],
-        email: null,
-        mobileNumber: null,
-        birthDate: null,
-        address: null,    
-      }),
-    });
-  }
+  ) { }
     
-  public formGroup: FormGroup;
+  public formGroup = this.formBuilder.group({
+    documentType: [ null, Validators.required ],
+    document: [ null, Validators.required ],
+    name: [ null, Validators.required ],
+    email: null,
+    mobileNumber: null,
+    birthDate: null,
+    address: null,    
+  });
   public isLoading: boolean = false;
   public maxlength: number = 11;
   
@@ -44,8 +40,7 @@ export class CreateWorkersComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadSpinnerStart();
-      const { worker } = this.formGroup.value;
-      this.workersService.create(worker).subscribe(res => {
+      this.workersService.create(this.formGroup.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadSpinnerFinish();

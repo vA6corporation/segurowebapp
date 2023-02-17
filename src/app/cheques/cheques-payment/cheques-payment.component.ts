@@ -7,7 +7,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { OfficeModel } from 'src/app/auth/office.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { OfficesService } from 'src/app/offices/offices.service';
 import { buildExcel } from 'src/app/xlsx';
 import { ChequeModel } from '../cheque.model';
 import { ChequesService } from '../cheques.service';
@@ -27,13 +29,15 @@ export class ChequesPaymentComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly officesService: OfficesService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
-    isPaid: 'false',
+    isPaid: false,
+    officeId: null,
   });
   public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
   public dataSource: any[] = [];
@@ -41,19 +45,26 @@ export class ChequesPaymentComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+  public offices: OfficeModel[] = [];
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
+  private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
     this.queryParams$.unsubscribe();
+    this.handleOffices$.unsubscribe();
   }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Garantias');
+
+    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
+      this.offices = offices;
+    });
 
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       const { startDate, endDate, isPaid } = params;
@@ -123,10 +134,15 @@ export class ChequesPaymentComponent implements OnInit {
     });
   }
 
+  onChangeOffice() {
+    this.pageIndex = 0;
+    this.fetchData();
+  }
+
   fetchData() {
     if (this.formGroup.valid) {
-      const { startDate, endDate, isPaid } = this.formGroup.value;
-      const params = { isPaid };
+      const { startDate, endDate, isPaid, officeId } = this.formGroup.value;
+      const params = { isPaid, officeId };
       this.navigationService.loadBarStart();
       this.chequesService.getChequesByRangeDate(startDate, endDate, params).subscribe(cheques => {
         this.navigationService.loadBarFinish();

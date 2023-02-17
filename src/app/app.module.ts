@@ -7,6 +7,7 @@ import { NavigationModule } from './navigation/navigation.module';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
 import { MaterialModule } from './material.module';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import { MaterialModule } from './material.module';
     AuthModule,
     MaterialModule,
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

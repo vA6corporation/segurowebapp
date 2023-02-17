@@ -36,7 +36,7 @@ import { DialogAddSalesmixComponent } from '../dialog-add-salesmix/dialog-add-sa
 import { SalesMixModel } from '../dialog-add-salesmix/sales-mix.model';
 import { DialogAddTrialsComponent } from '../dialog-add-trials/dialog-add-trials.component';
 import { TrialsModel } from '../dialog-add-trials/trials.model';
-import { DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogAttachPdfComponent, DialogAttachPdfData, Types } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogBusinessesComponent } from '../dialog-businesses/dialog-businesses.component';
 import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
 import { FacilityCreditModel } from '../facility-credit.model';
@@ -57,17 +57,17 @@ export class EditBusinessesComponent implements OnInit {
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
-    documentType: [null, Validators.required],
-    document: [null, Validators.required],
+    documentType: [ null, Validators.required ],
+    document: [ null, Validators.required ],
     electronicDeparture: null,
     registryArea: null,
     publicDeed: null,
-    name: [null, Validators.required],
-    email: [null, [Validators.required, Validators.email]],
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    inscriptionAt: null,
+    inscriptionAt: [ null, Validators.required ],
     workerId: null,
 
     turnOfBusiness: null,
@@ -184,23 +184,19 @@ export class EditBusinessesComponent implements OnInit {
     this.formGroup.get('documentType')?.valueChanges.subscribe((value) => {
       switch (value) {
         case 'RUC':
-          this.formGroup
-            .get('documento')
-            ?.setValidators([
-              Validators.required,
-              Validators.minLength(11),
-              Validators.maxLength(11),
-            ]);
+          this.formGroup.get('documento')?.setValidators([
+            Validators.required,
+            Validators.minLength(11),
+            Validators.maxLength(11),
+          ]);
           this.maxlength = 11;
           break;
         case 'DNI':
-          this.formGroup
-            .get('documento')
-            ?.setValidators([
-              Validators.required,
-              Validators.minLength(8),
-              Validators.maxLength(8),
-            ]);
+          this.formGroup.get('documento')?.setValidators([
+            Validators.required,
+            Validators.minLength(8),
+            Validators.maxLength(8),
+          ]);
           this.maxlength = 8;
           break;
       }
@@ -209,33 +205,29 @@ export class EditBusinessesComponent implements OnInit {
 
     this.activatedRoute.params.subscribe((params) => {
       this.businessId = params.businessId;
-      this.businessesService
-        .getBusinessById(this.businessId)
-        .subscribe((business) => {
-          this.linkedBusinesses = business.linkedBusinesses
-            ? business.linkedBusinesses
-            : [];
-          this.salesMix = business.salesMix;
-          this.mainSuppliers = business.mainSuppliers;
-          this.mainCustomers = business.mainCustomers;
-          this.accessCredit = business.accessCredit;
-          this.accountRotation = business.accountRotation;
-          this.boardMembers = business.boardMembers;
-          this.shareholders = business.shareholders;
-          this.properties = business.properties;
-          this.movableProperties = business.movableProperties;
-          this.investments = business.investments;
-          this.experiences = business.experiences;
-          this.guaranties = business.guaranties ? business.guaranties : [];
-          this.facilityCredits = business.facilityCredits;
-          this.formGroup.patchValue(business);
-          if (business.representativePEPInstitution != '') {
-            this.isCheckedPEP = true;
-          }
-          if (business.representativeCrimeStatus != '') {
-            this.isCheckedCrime = true;
-          }
-        });
+      this.businessesService.getBusinessById(this.businessId).subscribe((business) => {
+        this.linkedBusinesses = business.linkedBusinesses ? business.linkedBusinesses : [];
+        this.salesMix = business.salesMix;
+        this.mainSuppliers = business.mainSuppliers;
+        this.mainCustomers = business.mainCustomers;
+        this.accessCredit = business.accessCredit;
+        this.accountRotation = business.accountRotation;
+        this.boardMembers = business.boardMembers;
+        this.shareholders = business.shareholders;
+        this.properties = business.properties;
+        this.movableProperties = business.movableProperties;
+        this.investments = business.investments;
+        this.experiences = business.experiences;
+        this.guaranties = business.guaranties ? business.guaranties : [];
+        this.facilityCredits = business.facilityCredits;
+        this.formGroup.patchValue(business);
+        if (business.representativePEPInstitution != '') {
+          this.isCheckedPEP = true;
+        }
+        if (business.representativeCrimeStatus != '') {
+          this.isCheckedCrime = true;
+        }
+      });
     });
   }
 
@@ -340,7 +332,6 @@ export class EditBusinessesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(experience => {
       if (experience) {
         Object.assign(this.experiences[index], experience);
-        // this.experiences.push(experience);
       }
     });
   }
@@ -509,12 +500,45 @@ export class EditBusinessesComponent implements OnInit {
     this.guaranties.splice(index, 1);
   }
 
-  onAttachPdfDocuments() {
+  onDialogAttachPdfDocuments() {
+    const data: DialogAttachPdfData = {
+      businessId: this.businessId,
+      type: Types.DOCUMENT,
+    } 
+
     this.matDialog.open(DialogAttachPdfComponent, {
       width: '100vw',
       height: '90vh',
       position: { top: '20px' },
-      data: this.businessId,
+      data,
+    });
+  }
+
+  onDialogAttachPdfExperiences() {
+    const data: DialogAttachPdfData = {
+      businessId: this.businessId,
+      type: Types.EXPERIENCE,
+    } 
+
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
+    });
+  }
+
+  onDialogAttachPdfFinancials() {
+    const data: DialogAttachPdfData = {
+      businessId: this.businessId,
+      type: Types.FINANCIAL,
+    } 
+
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data,
     });
   }
 

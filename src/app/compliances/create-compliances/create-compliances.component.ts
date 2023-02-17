@@ -22,6 +22,10 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { DepositModel } from 'src/app/deposits/deposit.model';
 import { ChequeModel } from 'src/app/cheques/cheque.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { BankModel } from 'src/app/providers/bank.model';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { CompaniesService } from 'src/app/companies/companies.service';
+import { BanksService } from 'src/app/banks/banks.service';
 
 @Component({
   selector: 'app-create-compliances',
@@ -39,6 +43,8 @@ export class CreateCompliancesComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly companiesService: CompaniesService,
+    private readonly banksService: BanksService,
   ) { }
 
   public formGroup: FormGroup = this.formBuilder.group({
@@ -50,12 +56,16 @@ export class CreateCompliancesComponent implements OnInit {
       constructionId: '',
       policyNumber: [ null, Validators.required ],
       price: [ null, Validators.required ],
+      pagare: null,
+      observations: null,
       startDate: [ null, Validators.required ],
       endDate: [ null, Validators.required ],
       guarantee: null,
       prima: null,
       commission: null,
-      currency: 'PEN',
+      currencyCode: 'PEN',
+      companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -68,11 +78,17 @@ export class CreateCompliancesComponent implements OnInit {
   public deposits: DepositModel[] = [];
   public cheques: ChequeModel[] = [];
   public workers: WorkerModel[] = [];
+  public banks: BankModel[] = [];
+  public companies: CompanyModel[] = [];
 
+  private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
   private handleWorkers$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
   ngOnDestroy() {
+    this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
     this.handleWorkers$.unsubscribe();
     this.queryParams$.unsubscribe();
   }
@@ -83,6 +99,14 @@ export class CreateCompliancesComponent implements OnInit {
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
     });
 
     this.queryParams$ = this.activatedRoute.queryParams.subscribe(params => {
@@ -204,7 +228,7 @@ export class CreateCompliancesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.formGroup.valid) {
+    if (this.formGroup.valid && this.construction) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       const { financier, compliance } = this.formGroup.value;
@@ -214,7 +238,7 @@ export class CreateCompliancesComponent implements OnInit {
       compliance.financierId = financier._id;
       compliance.workerId = this.worker?._id;
       compliance.constructionId = this.construction?._id;
-      this.compliancesService.create(compliance, this.cheques, this.deposits).subscribe(res => {
+      this.compliancesService.create(compliance, financier, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

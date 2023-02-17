@@ -58,14 +58,10 @@
               <mat-icon>bookmark</mat-icon>
               <span>Liberado</span>
             </button>
-            <button type="button" [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
+            <a [routerLink]="['/compliances', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
-            </button>
-            <!-- <button type="button" (click)="sendMail(element._id)" mat-menu-item>
-              <mat-icon>mail</mat-icon>
-              <span>Enviar Mail</span>
-            </button> -->
+            </a>
             <button type="button" (click)="onDelete(element._id)" mat-menu-item>
               <mat-icon>delete</mat-icon>
               <span>Eliminar</span>

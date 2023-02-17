@@ -23,6 +23,8 @@ export class EditBanksComponent implements OnInit {
     providerName: [ null, Validators.required ],
     bankName: 'BCP',
     accountNumber: [ null, Validators.required ],
+    accountType: 'CORRIENTE',
+    currencyCode: 'PEN'
   });
 
   public isLoading: boolean = false;
@@ -34,10 +36,7 @@ export class EditBanksComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       this.bankId = params.bankId;
-
       this.banksService.getBankById(this.bankId).subscribe(bank => {
-        console.log(bank);
-        
         this.formGroup.patchValue(bank);
       });
     });

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogSeaceDetailsComponent } from '../dialog-seace-details/dialog-seace-details.component';
 import { SeaceService } from '../seace.service';
@@ -27,16 +29,19 @@ export class SeaceComponent implements OnInit {
   public formGroup: FormGroup = this.formBuilder.group({
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
+    isCustomer: false,
+    key: '',
     estado: '',
     objetoContratacion: '',
     departamento: '',
   });
-  public displayedColumns: string[] = [ 'buenaPro', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'actions' ];
+  public displayedColumns: string[] = [ 'buenaPro', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 0;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+  public key: string = '';
   public estados: any[] = [
     { _id: 'Consentido' },
     { _id: 'Nulo' },
@@ -74,108 +79,78 @@ export class SeaceComponent implements OnInit {
     'TUMBES',
     'UCAYALI'
   ]
+  private params: Params = {};
+
+  private queryParams$: Subscription = new Subscription();
+  private handleSearch$: Subscription = new Subscription();
   
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.queryParams$.unsubscribe();
+    this.handleSearch$.unsubscribe();
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Seace');
-    const params = {};
-    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
-      this.length = count;
-    });
 
-    this.fetchData();
-  }
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true },
+    ]);
 
-  handlePageEvent(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.fetchData();
-  }
-
-  onStateChange() {
-    this.pageIndex = 0;
-    const { startDate, endDate, estado, objetoContratacion } = this.formGroup.value;
-    
-    const params: any = { estado, objetoContratacion };
-    
-    if (startDate && endDate) {
-      Object.assign(params, { startDate, endDate });
-    }
-
-    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
-      this.length = count;
-    });
-    this.fetchData();
-  }
-
-  onObjectChange() {
-    this.pageIndex = 0;
-    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
-    
-    const params: any = { estado, objetoContratacion, departamento };
-    
-    if (startDate && endDate) {
-      Object.assign(params, { startDate, endDate });
-    }
-
-    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
-      this.length = count;
-    });
-    this.fetchData();
-  }
-
-  onDepartmentChange() {
-    this.pageIndex = 0;
-    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
-    
-    const params: any = { estado, objetoContratacion, departamento };
-    
-    if (startDate && endDate) {
-      Object.assign(params, { startDate, endDate });
-    }
-
-    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
-      this.length = count;
-    });
-    this.fetchData();
-  }
-
-  onRangeChange() {
-    if (this.formGroup.valid) {
-      this.pageIndex = 0;
-
-      const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
-
-      const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0 };
-
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParams, 
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart();
+      this.seaceService.getSeaceDatasByKey(key).subscribe(seaceDatas => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = seaceDatas;
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
       });
+    });
+    
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+      const { startDate, endDate, estado, departamento, objetoContratacion, key } = params;
 
-      const params: any = { estado, objetoContratacion, departamento };
       if (startDate && endDate) {
-        Object.assign(params, { startDate, endDate });
+        this.formGroup.patchValue({
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+        });
       }
 
-      this.seaceService.getCountSeaceDatas(params).subscribe(count => {
-        this.length = count;
+      this.formGroup.patchValue({
+        key: key || '',
+        estado: estado || '',
+        departamento: departamento || '',
+        objetoContratacion: objetoContratacion || '',
       });
 
-      this.fetchData();
+    });
+
+    this.fetchData();
+    this.fetchCount();
+  }
+
+  fetchCount() {
+    const { startDate, endDate, estado, objetoContratacion, departamento, key, isCustomer } = this.formGroup.value;
+    const params: any = { estado, objetoContratacion, departamento, key, isCustomer };
+
+    if (startDate && endDate) {
+      Object.assign(params, { startDate, endDate });
     }
+
+    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
+      this.length = count;
+    });
   }
 
   fetchData() {
-    const { startDate, endDate, estado, objetoContratacion, departamento } = this.formGroup.value;
-    const params: any = { estado, objetoContratacion, departamento };
+    const { startDate, endDate, estado, objetoContratacion, departamento, isCustomer } = this.formGroup.value;
+    const params: any = { estado, objetoContratacion, departamento, isCustomer };
+
     if (startDate && endDate) {
       Object.assign(params, { startDate, endDate });
     }
+
     this.navigationService.loadBarStart();
     this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, params).subscribe(seaceDatas => {
       this.navigationService.loadBarFinish();
@@ -185,6 +160,120 @@ export class SeaceComponent implements OnInit {
       this.navigationService.loadBarFinish();
       this.navigationService.showMessage(error.error.message);
     });
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    const queryParams = { pageIndex: this.pageIndex, pageSize: this.pageSize };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchData();
+  }
+
+  onStateChange() {
+    this.pageIndex = 0;
+
+    const { estado } = this.formGroup.value;
+    
+    const queryParams: Params = { estado, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchCount();
+    this.fetchData();
+  }
+
+  onObjectChange() {
+    this.pageIndex = 0;
+
+    const { objetoContratacion } = this.formGroup.value;
+    
+    const queryParams: Params = { objetoContratacion, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchCount();
+    this.fetchData();
+  }
+
+  onDepartmentChange() {
+    this.pageIndex = 0;
+
+    const { departamento } = this.formGroup.value;
+
+    const queryParams: Params = { departamento, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchCount();
+    this.fetchData();
+  }
+
+  onCustomerChange() {
+    this.pageIndex = 0;
+
+    const { isCustomer } = this.formGroup.value;
+
+    const queryParams: Params = { isCustomer, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchCount();
+    this.fetchData();
+  }
+
+  onRangeChange() {
+    if (this.formGroup.valid) {
+      this.pageIndex = 0;
+
+      const { startDate, endDate } = this.formGroup.value;
+
+      const queryParams: Params = { startDate: startDate, endDate: endDate, pageIndex: 0 };
+
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
+      Object.assign(this.params, queryParams);
+      
+      this.fetchCount();
+      this.fetchData();
+    }
   }
 
   onDialogDetails(seaceData: any) {

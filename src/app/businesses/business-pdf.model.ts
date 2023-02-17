@@ -3,5 +3,5 @@ export interface BusinessPdfModel {
     pdfId: string
     type: string
     filename: string
-    fileType: string   
+    contentType: string   
 }

@@ -2,7 +2,7 @@ export interface DepositModel {
   _id?: string,
   price: number,
   onModel: any,
-  currency: string
+  currencyCode: string
   guaranteeId: string,
   businessId: string,
 }

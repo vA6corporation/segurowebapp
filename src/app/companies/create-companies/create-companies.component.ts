@@ -20,7 +20,11 @@ export class CreateCompaniesComponent implements OnInit {
   ) { }
     
   public formGroup: FormGroup = this.formBuilder.group({
+    ruc: [ null, Validators.required ],
     name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    address: [ null, Validators.required ],
+    mobileNumber: [ null, Validators.required ]
   });
 
   public isLoading: boolean = false;

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
+import { FinancierModel } from '../financiers/financier.model';
 import { HttpService } from '../http.service';
 import { InsurancePdfModel } from './insurance-pdf.model';
 import { InsuranceModel } from './insurance.model';
@@ -22,6 +23,10 @@ export class InsurancesService {
     return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`, { params });
   }
 
+  getInsurancesByInsuranceGroup(insuranceGroupId: string): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/byInsuranceGroup/${insuranceGroupId}`);
+  }
+
   getInsurancesByKeyType(key: string, type: string): Observable<InsuranceModel[]> {
     return this.httpService.get(`insurances/byKeyType/${key}/${type}`);
   }
@@ -34,20 +39,28 @@ export class InsurancesService {
     return this.httpService.get(`insurances/byRangeDateTypeWorker/${startDate}/${endDate}`, { params });
   }
 
+  getInsurancesRenewByTypeWorker(params: Params): Observable<InsuranceModel[]> {
+    return this.httpService.get(`insurances/renewByTypeWorker`, { params });
+  }
+
   getPdfs(insuranceId: string, type: string): Observable<InsurancePdfModel[]> {
     return this.httpService.get(`insurances/pdfs/${insuranceId}/${type}`);
   }
 
-  uploadPdf(formData: FormData, insuranceId: string, type: string): Observable<any> {
+  uploadFile(formData: FormData, insuranceId: string, type: string): Observable<any> {
     return this.httpService.postForm(`insurances/uploadPdf/${insuranceId}/${type}`, formData);
   }
 
-  create(insurance: any): Observable<InsuranceModel> {
-    return this.httpService.post('insurances', { insurance });
+  create(insurance: any, financier: FinancierModel, insuranceGroupId: string): Observable<InsuranceModel> {
+    return this.httpService.post(`insurances/${insuranceGroupId}`, { insurance, financier });
   }
 
-  update(insurance: any, insuranceId: string): Observable<void> {
-    return this.httpService.put(`insurances/${insuranceId}`, { insurance });
+  update(insurance: any, financier: FinancierModel, insuranceId: string): Observable<void> {
+    return this.httpService.put(`insurances/${insuranceId}`, { insurance, financier });
+  }
+
+  createWithInsuranceGroup(insurance: any): Observable<InsuranceModel> {
+    return this.httpService.post('insurances', { insurance });
   }
 
   updateOffice(insuranceId: string, officeId: string): Observable<void> {

@@ -3,4 +3,5 @@ export interface BankModel {
   bankName: string
   providerName: string
   accountNumber: string
+  currencyCode: string
 }

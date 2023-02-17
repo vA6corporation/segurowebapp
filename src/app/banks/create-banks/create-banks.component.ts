@@ -23,6 +23,8 @@ export class CreateBanksComponent implements OnInit {
     providerName: [ null, Validators.required ],
     bankName: 'BCP',
     accountNumber: [ null, Validators.required ],
+    accountType: 'CORRIENTE',
+    currencyCode: 'PEN'
   });
 
   public isLoading: boolean = false;

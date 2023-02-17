@@ -73,6 +73,7 @@ export class PrimasComponent implements OnInit {
   public emitionCount: number = 0;
   public renovationCount: number = 0;
   public isEmition: boolean|null = null;
+  public total: number = 0;
   
   private guaranties: string[] = ["GFCF", "GADF", "GAMF"];
 
@@ -146,112 +147,125 @@ export class PrimasComponent implements OnInit {
                 'OBRA'
               ]);
 
-              for (const guarantee of payedDirect) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+              if (payedDirect) {
+                for (const guarantee of payedDirect) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
 
-              for (const guarantee of notPayedDirect) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'NO PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+
+              if (notPayedDirect) {
+                for (const guarantee of notPayedDirect) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'NO PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
 
-              for (const guarantee of payedCompliance) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+              if (payedCompliance) {
+                for (const guarantee of payedCompliance) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
 
-              for (const guarantee of notPayedCompliance) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'NO PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+              if (notPayedCompliance) {
+                for (const guarantee of notPayedCompliance) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'NO PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
 
-              for (const guarantee of payedMaterial) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+              if (payedMaterial) {
+                for (const guarantee of payedMaterial) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
               
-              for (const guarantee of notPayedMaterial) {
-                const { business, partnership, financier } = guarantee;
-                body.push([
-                  guarantee.guaranteeType,
-                  financier?.name || null,
-                  partnership?.name || null,
-                  business?.name || null,
-                  guarantee.policyNumber,
-                  guarantee.price,
-                  guarantee.prima,
-                  'NO PAGADO',
-                  guarantee.processStatus,
-                  guarantee.statusLabel,
-                  formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                  guarantee.construction?.object
-                ]);
+              if (notPayedMaterial) {
+                for (const guarantee of notPayedMaterial) {
+                  const { business, partnership, financier } = guarantee;
+                  body.push([
+                    guarantee.guaranteeType,
+                    financier?.name || null,
+                    partnership?.name || null,
+                    business?.name || null,
+                    guarantee.policyNumber,
+                    guarantee.price,
+                    guarantee.prima,
+                    'NO PAGADO',
+                    guarantee.processStatus,
+                    guarantee.statusLabel,
+                    formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    guarantee.construction?.object
+                  ]);
+                }
               }
               const name = `PRIMAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
               buildExcel(body, name, wscols, [], []);
@@ -406,6 +420,9 @@ export class PrimasComponent implements OnInit {
         this.complianceNotPayed = notPayedCompliance.emitionPrima + notPayedCompliance.renovationPrima;
         this.directNotPayed = notPayedDirect.emitionPrima + notPayedDirect.renovationPrima;
         this.materialNotPayed = notPayedMaterial.emitionPrima + notPayedMaterial.renovationPrima;
+
+        this.total = this.compliancePayed + this.directPayed + this.materialPayed
+          + this.complianceNotPayed + this.directNotPayed + this.materialNotPayed;
 
         const dataPrima = {
           datasets: [

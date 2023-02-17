@@ -14,7 +14,6 @@ import { DialogCreateProvidersComponent } from 'src/app/providers/dialog-create-
 import { DialogEditProvidersComponent } from 'src/app/providers/dialog-edit-providers/dialog-edit-providers.component';
 import { DialogProvidersComponent } from 'src/app/providers/dialog-providers/dialog-providers.component';
 import { ProviderModel } from 'src/app/providers/provider.model';
-import { DialogAttachFileComponent } from 'src/app/system/dialog-attach-file/dialog-attach-file.component';
 import { PaymentOrdersService } from '../payment-orders.service';
 
 @Component({
@@ -40,46 +39,32 @@ export class CreatePaymentOrdersComponent implements OnInit {
     charge: [ null, Validators.required ],
     observations: null,
     paymentAt: [ new Date(), Validators.required ],
-    providerBankName: '',
-    providerAccountNumber: '',
-    bankName: '',
-    accountNumber: '',
+    bankId: null,
+    providerBankId: null,
     isPaid: true,
   });
   private pdfs: DialogSelectPdfData[] = [];
-
-  // public paymentTypes = [
-  //   { code: '01', name: 'EFECTIVO' },
-  //   { code: '02', name: 'VISA' },
-  //   { code: '03', name: 'MASTERCARD' },
-  //   { code: '04', name: 'AMERICAN EXPRESS' },
-  //   { code: '05', name: 'YAPE' },
-  //   { code: '06', name: 'PLIN' },
-  //   { code: '07', name: 'TRANSFERENCIA' },
-  //   { code: '08', name: 'DEPOSITO' },
-  //   { code: '09', name: 'ONLINE' },
-  // ];
- 
   public isLoading: boolean = false;
   public provider: ProviderModel|null = null;
   public banks: BankModel[] = [];
   public providerBanks: BankModel[] = [];
-  private formData: FormData|null = null;
   public companies: CompanyModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleBanks$.unsubscribe();
   }
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nueva orden de pago');
     this.navigationService.backTo();
 
-    this.banksService.getBanks().subscribe(banks => {
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
       this.banks = banks;
     });
 
@@ -153,19 +138,11 @@ export class CreatePaymentOrdersComponent implements OnInit {
     });
   }
 
-  onProviderBankChange(accountNumber: string) {
-    this.formGroup.get('providerBankName')?.patchValue(this.providerBanks.find(e => e.accountNumber == accountNumber)?.bankName);
-  }
-
-  onBankChange(accountNumber: string) {
-    this.formGroup.get('bankName')?.patchValue(this.banks.find(e => e.accountNumber == accountNumber)?.bankName);
-  }
-
   uploadFile(file: File, paymentOrderId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const formData = new FormData();
       formData.append('file', file),
-      this.paymentOrdersService.uploadPdf(formData, paymentOrderId).subscribe(pdfId => {
+      this.paymentOrdersService.uploadFile(formData, paymentOrderId).subscribe(pdfId => {
         resolve();
       }, (error: HttpErrorResponse) => {
         reject();

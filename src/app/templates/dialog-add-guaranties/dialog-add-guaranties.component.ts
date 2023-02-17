@@ -20,7 +20,7 @@ export class DialogAddGuarantiesComponent implements OnInit {
     guaranteeCode: 'GAMF',
     timeLimit: [ null, Validators.required ],
     mount: [ null, Validators.required ],
-    currency: [ null, Validators.required ],
+    currencyCode: [ null, Validators.required ],
     validSincer: [ null, Validators.required ],
     validUntil: [ null, Validators.required ],
   });

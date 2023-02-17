@@ -5,10 +5,12 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Subscription } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
+import { BankModel } from 'src/app/providers/bank.model';
+import { BanksService } from 'src/app/banks/banks.service';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 Chart.register(...registerables);
 
 @Component({
@@ -22,6 +24,7 @@ export class DebtorsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly navigationService: NavigationService,
     private readonly constructionsService: ConstructionsService,
+    private readonly banksService: BanksService,
   ) { }
     
   @ViewChild('chartDebtor') 
@@ -39,7 +42,9 @@ export class DebtorsComponent implements OnInit {
     'actions' 
   ];
   public formGroup = this.formBuilder.group({
-    constructionCode: '',
+    bankId: '',
+    startDate: '',
+    endDate: '',
   });
   public summaries: any[] = [];
   public dataSource: ConstructionModel[] = [];
@@ -47,15 +52,22 @@ export class DebtorsComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+  public banks: BankModel[] = [];
 
   private handleClickMenu$: Subscription = new Subscription();
+  private handleBanks$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleClickMenu$.unsubscribe();
+    this.handleBanks$.unsubscribe();
   }
 
   ngOnInit() {
     this.navigationService.setTitle("Recaudacion");
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
 
     this.navigationService.setMenu([
       // { id: 'search', label: 'search', icon: 'search', show: true },
@@ -103,7 +115,9 @@ export class DebtorsComponent implements OnInit {
   fetchData() {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
-      this.constructionsService.getDebtorConstructions().subscribe(constructions => {
+      const { bankId, startDate, endDate } = this.formGroup.value;
+      const params = { bankId, startDate, endDate };
+      this.constructionsService.getDebtorConstructions(params).subscribe(constructions => {
         this.dataSource = constructions;
         this.navigationService.loadBarFinish();
         let totalPaid = 0;

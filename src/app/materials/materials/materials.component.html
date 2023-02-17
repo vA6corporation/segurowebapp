@@ -38,10 +38,6 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <!-- <button (click)="onDialogDocumentations(element)" mat-menu-item>
-              <mat-icon>task</mat-icon>
-              <span>Documentacion</span>
-            </button> -->
             <button type="button" (click)="onShowDetails(element._id)" mat-menu-item>
               <mat-icon>info</mat-icon>
               <span>Detalles</span>
@@ -62,14 +58,10 @@
               <mat-icon>bookmark</mat-icon>
               <span>Liberado</span>
             </button>
-            <button [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
+            <a [routerLink]="['/materials', element._id, 'edit']" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
-            </button>
-            <!-- <button type="button" (click)="sendMail(element._id)" mat-menu-item>
-              <mat-icon>mail</mat-icon>
-              <span>Enviar Mail</span>
-            </button> -->
+            </a>
             <button type="button" (click)="onDelete(element._id)" mat-menu-item>
               <mat-icon>delete</mat-icon>
               <span>Eliminar</span>

@@ -1,7 +1,8 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
@@ -21,6 +22,7 @@ export class RenewComponent implements OnInit {
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly formBuilder: FormBuilder,
+    private readonly matDialog: MatDialog
   ) { }
 
   public displayedColumns: string[] = [ 
@@ -36,8 +38,6 @@ export class RenewComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   public formGroup: FormGroup = this.formBuilder.group({
-    startDate: [ null, Validators.required ],
-    endDate: [ null, Validators.required ],
     type: '',
   });
   public types: string[] = [
@@ -102,7 +102,16 @@ export class RenewComponent implements OnInit {
           break;
       }
     });
+
+    this.fetchData();
   }
+
+  // onShowDetails(materialId: string) {
+  //   this.matDialog.open(DialogMaterialComponent, {
+  //     position: { top: '20px' },
+  //     data: materialId,
+  //   });
+  // }
 
   async onRenewGuarantee(insuranceId: string) {
     const status = '02';
@@ -158,19 +167,19 @@ export class RenewComponent implements OnInit {
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  onRangeChange() {
+  fetchData() {
+    const { type } = this.formGroup.value;
+    this.navigationService.loadBarStart();
+    const params: Params = { type };
+    this.insurancesService.getInsurancesRenewByTypeWorker(params).subscribe(guaranties => {
+      console.log(guaranties);
+      this.navigationService.loadBarFinish();
+      this.dataSource = guaranties;
+    }, (error: HttpErrorResponse) => {
+      this.navigationService.showMessage(error.error.message);
+      this.navigationService.loadBarFinish();
+    });
     if (this.formGroup.valid) {
-      const { startDate, endDate, type } = this.formGroup.value;
-      this.navigationService.loadBarStart();
-      const params: Params = { type };
-      this.insurancesService.getInsurancesByRangeDateTypeWorker(startDate, endDate, params).subscribe(guaranties => {
-        console.log(guaranties);
-        this.navigationService.loadBarFinish();
-        this.dataSource = guaranties;
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.showMessage(error.error.message);
-        this.navigationService.loadBarFinish();
-      });
     }
   }
 

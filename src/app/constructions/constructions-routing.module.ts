@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ConstructionsCommercialComponent } from './constructions-commercial/constructions-commercial.component';
 import { ConstructionsComponent } from './constructions/constructions.component';
 import { CreateConstructionsComponent } from './create-constructions/create-constructions.component';
 import { DebtorsComponent } from './debtors/debtors.component';
@@ -11,6 +12,7 @@ import { WithoutDocumentationComponent } from './without-documentation/without-d
 
 const routes: Routes = [
   { path: '', component: ConstructionsComponent },
+  { path: 'commercial', component: ConstructionsCommercialComponent },
   { path: 'debtors', component: DebtorsComponent },
   { path: 'percentCompletions', component: PercentCompletionsComponent },
   { path: 'updatePercentCompletions', component: UpdatePercentCompletionsComponent },

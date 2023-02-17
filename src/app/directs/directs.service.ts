@@ -49,8 +49,6 @@ export class DirectsService {
   }
 
   uploadPdf(formData: FormData, directId: string, type: string, constructionId: string, attachAll: boolean): Observable<string> {
-    console.log(attachAll);
-    
     return this.httpService.postForm(`directs/uploadPdf/${directId}/${type}/${constructionId}/${attachAll}`, formData);
   }
 
@@ -58,12 +56,20 @@ export class DirectsService {
     return this.httpService.delete(`directs/deletePdf/${pdfId}`);
   }
 
-  create(direct: any, cheques: ChequeModel[], deposits: DepositModel[]): Observable<DirectModel> {
-    return this.httpService.post('directs', { direct, cheques, deposits });
+  create(direct: any, financier: any, cheques: ChequeModel[], deposits: DepositModel[], officeId: string): Observable<DirectModel> {
+    return this.httpService.post(`directs/${officeId}`, { direct, financier, cheques, deposits });
   }
 
   update(direct: any, directId: string): Observable<DirectModel> {
     return this.httpService.put(`directs/${directId}`, { direct });
+  }
+
+  updateStatus(status: string, directId: string): Observable<DirectModel> {
+    return this.httpService.put(`directs/status/${directId}`, { status });
+  }
+
+  updateWithFinancier(direct: any, financier: any, directId: string): Observable<DirectModel> {
+    return this.httpService.put(`directs/${directId}`, { direct, financier });
   }
 
 }

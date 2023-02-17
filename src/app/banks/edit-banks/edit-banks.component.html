@@ -1,10 +1,10 @@
 <section class="container">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="standard">
-      <mat-label>Titular de la cuenta</mat-label>
+    <mat-form-field appearance="fill">
+      <mat-label>Titular de la cuenta *</mat-label>
       <input type="text" matInput formControlName="providerName">
     </mat-form-field>
-    <mat-form-field appearance="standard">
+    <mat-form-field appearance="fill">
       <mat-label>Banco *</mat-label>
       <mat-select formControlName="bankName">
         <mat-option value="BCP">BCP</mat-option>
@@ -14,8 +14,23 @@
         <mat-option value="BANCO DE LA NACION">BANCO DE LA NACION</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
-      <input type="text" matInput placeholder="N° de cuenta" formControlName="accountNumber">
+    <mat-form-field appearance="fill">
+      <mat-label>N° de cuenta *</mat-label>
+      <input type="text" matInput formControlName="accountNumber">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de cuenta *</mat-label>
+      <mat-select formControlName="accountType">
+        <mat-option value="CORRIENTE">CORRIENTE</mat-option>
+        <mat-option value="AHORROS">AHORROS</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Moneda *</mat-label>
+      <mat-select formControlName="currencyCode">
+        <mat-option value="PEN">SOLES</mat-option>
+        <mat-option value="USD">DOLARES</mat-option>
+      </mat-select>
     </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>

@@ -30,7 +30,7 @@ export class DialogConstructionsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.reset();
-      this.constructionsService.getConstructionsByKey(key).subscribe(constructions => {
+      this.constructionsService.getConstructionsByPageKey(1, 100, key, {}).subscribe(constructions => {
         this.navigationService.loadBarFinish();
         this.constructions = constructions;
       }, (error: HttpErrorResponse) => {

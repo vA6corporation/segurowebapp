@@ -1,6 +1,7 @@
 import { OfficeModel } from "../auth/office.model";
 import { BeneficiaryModel } from "../beneficiaries/beneficiary.model";
 import { BusinessModel } from "../businesses/business.model";
+import { CompanyModel } from "../companies/company.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
 import { UserModel } from "../users/user.model";
 import { WorkerModel } from "../workers/worker.model";
@@ -17,15 +18,18 @@ export interface ConstructionModel {
   object: string
   commission: number
   businessId: string
+  officeId: string
   user: UserModel
   worker: WorkerModel
   office: OfficeModel,
   partnership: PartnershipModel|null
   business: BusinessModel
   beneficiary: BeneficiaryModel
+  company: CompanyModel
   percentCompletions: PercentCompletionModel[]
   percentCompletion: PercentCompletionModel|null
   payments: PaymentModel[]
   createdAt: string
+  observations: string
   debt: number
 }

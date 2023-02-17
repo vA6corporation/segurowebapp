@@ -56,7 +56,6 @@ export class BusinessesCommercialComponent implements OnInit {
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
-  private user$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
@@ -72,7 +71,7 @@ export class BusinessesCommercialComponent implements OnInit {
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.user$ = this.authService.handleAuth().subscribe(auth => {
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
       
       if (!this.user.workerId) {

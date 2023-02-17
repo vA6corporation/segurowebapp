@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpService } from '../http.service';
 import { BankModel } from '../providers/bank.model';
 
@@ -12,12 +12,29 @@ export class BanksService {
     private readonly httpService: HttpService,
   ) { }
 
+  private banks: BankModel[] = [];
+  private banks$: Subject<BankModel[]> = new Subject();
+
   getBankById(bankId: string): Observable<BankModel> {
     return this.httpService.get(`banks/byId/${bankId}`);
   }
 
   getBanks(): Observable<BankModel[]> {
     return this.httpService.get('banks');
+  }
+
+  handleBanks(): Observable<BankModel[]> {
+    if (this.banks.length) {
+      setTimeout(() => {
+        this.banks$.next(this.banks);
+      });
+    } else {
+      this.getBanks().subscribe(banks => {
+        this.banks = banks;
+        this.banks$.next(this.banks);
+      });
+    }
+    return this.banks$.asObservable();
   }
 
   create(bank: BankModel): Observable<BankModel> {

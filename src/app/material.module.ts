@@ -22,6 +22,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { MatTreeModule } from '@angular/material/tree';
+
 @NgModule({
   imports: [
     ClipboardModule,
@@ -46,6 +48,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     MatProgressSpinnerModule,
     MatMenuModule,
     MatSlideToggleModule,
+    MatTreeModule,
   ],
   exports: [
     ClipboardModule,
@@ -69,7 +72,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     MatProgressSpinnerModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTreeModule
   ],
 })
 export class MaterialModule {}

@@ -24,12 +24,6 @@ export class UsersComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
 
-  handlePageEvent(event: PageEvent): void {
-    this.usersService.getActiveUsersByPage(event.pageIndex + 1, event.pageSize).subscribe(users => {
-      this.dataSource = users;
-    });
-  }
-
   ngOnInit(): void {
     this.navigationService.setTitle('Usuarios');
     this.navigationService.setMenu([
@@ -41,6 +35,12 @@ export class UsersComponent implements OnInit {
     });
 
     this.usersService.getActiveUsersByPage(this.pageIndex + 1, this.pageSize).subscribe(users => {
+      this.dataSource = users;
+    });
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.usersService.getActiveUsersByPage(event.pageIndex + 1, event.pageSize).subscribe(users => {
       this.dataSource = users;
     });
   }

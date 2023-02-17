@@ -1,0 +1,23 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpService } from '../http.service';
+import { NotificationModel } from './notification.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class NotificationsService {
+
+  constructor(
+    private readonly httpService: HttpService,
+  ) { }
+
+  getActiveNotifications(): Observable<NotificationModel[]> {
+    return this.httpService.get('notifications/activeNotifications');
+  }
+
+  getDisableNotification(notificationId: string): Observable<void> {
+    return this.httpService.get(`notifications/disableNotification/${notificationId}`);
+  }
+
+}

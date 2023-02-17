@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DialogPartnershipsComponent } from './dialog-partnerships/dialog-partnerships.component';
 import { DialogPartnershipItemsComponent } from './dialog-partnership-items/dialog-partnership-items.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { PartnershipsCommercialComponent } from './partnerships-commercial/partnerships-commercial.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     EditPartnershipsComponent,
     PartnershipsComponent,
     DialogPartnershipsComponent,
-    DialogPartnershipItemsComponent
+    DialogPartnershipItemsComponent,
+    PartnershipsCommercialComponent
   ],
   imports: [
     CommonModule,

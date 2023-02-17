@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { OfficeModel } from '../auth/office.model';
 import { HttpService } from '../http.service';
 
@@ -12,16 +13,27 @@ export class OfficesService {
     private readonly httpService: HttpService,
   ) { }
 
+  private offices: OfficeModel[] = [];
+  private offices$: Subject<OfficeModel[]> = new Subject();
+
   getOffices(): Observable<OfficeModel[]> {
     return this.httpService.get('offices');
   }
 
-  getActiveOffices(): Observable<OfficeModel[]> {
-    return this.httpService.get('offices/active');
-  }
-
-  getActivities(): Observable<any[]> {
-    return this.httpService.get('activities');
+  handleOffices(): Observable<OfficeModel[]> {
+    if (this.offices.length === 0) {
+      this.getOffices().subscribe(offices => {
+        this.offices = offices;
+        this.offices$.next(offices);
+      }, (error: HttpErrorResponse) => {
+        console.log(error.message);
+      });
+    } else {
+      setTimeout(() => {
+        this.offices$.next(this.offices);
+      });
+    }
+    return this.offices$.asObservable();
   }
 
   getOfficeById(officeId: string) {

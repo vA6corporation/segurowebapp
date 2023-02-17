@@ -17,9 +17,17 @@
   </a>
   <a href="#" #constructions mat-list-item routerLink="/constructions" (click)="onClose()" *ngIf="privileges.constructions">
     <mat-icon class="mr-2">construction</mat-icon>
+    <span>Obras Admin</span>
+  </a>
+  <a href="#" #constructions mat-list-item routerLink="/constructions/commercial" (click)="onClose()" *ngIf="privileges.constructionsCommercial">
+    <mat-icon class="mr-2">construction</mat-icon>
     <span>Obras</span>
   </a>
   <a href="#" #partnerships mat-list-item routerLink="/partnerships" (click)="onClose()" *ngIf="privileges.partnerships">
+    <mat-icon class="mr-2">people</mat-icon>
+    <span>Consorcios Admin</span>
+  </a>
+  <a href="#" #partnerships mat-list-item routerLink="/partnerships/commercial" (click)="onClose()" *ngIf="privileges.partnershipsCommercial">
     <mat-icon class="mr-2">people</mat-icon>
     <span>Consorcios</span>
   </a>
@@ -58,6 +66,14 @@
   <a href="#" #credits mat-list-item routerLink="/credits" (click)="onClose()" *ngIf="privileges.credits">
     <mat-icon class="mr-2">text_snippet</mat-icon>
     <span>Lineas de credito</span>
+  </a>
+  <a href="#" #credits mat-list-item routerLink="/fideicomisos" (click)="onClose()" *ngIf="privileges.fideocomisos">
+    <mat-icon class="mr-2">text_snippet</mat-icon>
+    <span>Fideicomisos</span>
+  </a>
+  <a href="#" #credits mat-list-item routerLink="/isos" (click)="onClose()" *ngIf="privileges.isos">
+    <mat-icon class="mr-2">text_snippet</mat-icon>
+    <span>Isos</span>
   </a>
   <mat-expansion-panel class="mat-elevation-z0">
     <mat-expansion-panel-header #guaranties *ngIf="privileges.guaranties">
@@ -141,6 +157,9 @@
     <a href="#" mat-list-item routerLink="/insurances/renew" (click)="onClose()">
       <span>Renovaciones Seguros</span>
     </a>
+    <a href="#" mat-list-item routerLink="/insurances/report/reportPie" (click)="onClose()">
+      <span>Reporte</span>
+    </a>
   </mat-expansion-panel>
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
@@ -172,6 +191,9 @@
       </a>
       <a href="#" #paymentOrders mat-list-item routerLink="/paymentOrders" (click)="onClose()">
         <span>Ordenes de pago</span>
+      </a>
+      <a href="#" #paymentOrders mat-list-item routerLink="/incomes" (click)="onClose()">
+        <span>Ingresos</span>
       </a>
       <a href="#" #banks mat-list-item routerLink="/banks" (click)="onClose()">
         <span>Cuentas bancarias</span>

@@ -2,7 +2,9 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { PartnershipModel } from '../partnership.model';
@@ -26,6 +28,7 @@ export class PartnershipsComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
+  private params: Params = {};
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
@@ -36,20 +39,15 @@ export class PartnershipsComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    this.navigationService.setTitle('Consorcios');
+    this.navigationService.setTitle('Consorcios Admin');
+
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
       { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.partnershipsService.getPartnershipsCount().subscribe(count => {
-      this.length = count;
-    });
-
-    this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
-      console.log(partnerships);
-      this.dataSource = partnerships;
-    });
+    this.fetchData();
+    this.fetchCount();
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
@@ -92,6 +90,18 @@ export class PartnershipsComponent implements OnInit {
     });
   }
 
+  fetchCount() {
+    this.partnershipsService.getPartnershipsCount(this.params).subscribe(count => {
+      this.length = count;
+    });
+  }
+
+  fetchData() {
+    this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(partnerships => {
+      this.dataSource = partnerships;
+    });
+  }
+
   onDelete(partnershipId: string) {
     const ok = confirm('Estas seguro de anular?...');
     if (ok) {
@@ -105,9 +115,9 @@ export class PartnershipsComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
-      this.dataSource = partnerships;
-    });
+    // this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
+    //   this.dataSource = partnerships;
+    // });
   }
 
 }
