@@ -37,7 +37,7 @@ export class ChequesPaymentComponent implements OnInit {
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
     isPaid: false,
-    officeId: null,
+    officeId: '',
   });
   public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
   public dataSource: any[] = [];

@@ -19,7 +19,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Oficina</mat-label>
       <mat-select formControlName="officeId" (selectionChange)="onChangeOffice()">
-        <mat-option [value]="null">TODAS LAS OFICINAS</mat-option>
+        <mat-option value="">TODAS LAS OFICINAS</mat-option>
         <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
