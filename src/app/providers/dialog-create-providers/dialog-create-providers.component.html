@@ -2,25 +2,30 @@
   <h2 mat-dialog-title>Nuevo Proveedor</h2>
   <div mat-dialog-content>
     <mat-form-field appearance="standard">
-      <mat-label>Tipo de Documento *</mat-label>
+      <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="documentType" tabindex="-1">
         <mat-option *ngFor="let element of documentTypes" [value]="element">{{ element }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="N° de Documento *" formControlName="document">
+      <mat-label>N° de Documento</mat-label>
+      <input type="text" matInput formControlName="document">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Nombres/Razon Social *" formControlName="name">
+      <mat-label>Nombres/Razon Social</mat-label>
+      <input type="text" matInput formControlName="name">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Direccion" formControlName="address">
+      <mat-label>Direccion</mat-label>
+      <input type="text" matInput formControlName="address">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Celular" formControlName="mobileNumber">
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="mobileNumber">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Email" formControlName="email">
+      <mat-label>Email</mat-label>
+      <input type="text" matInput formControlName="email">
     </mat-form-field>
     <ng-container formArrayName="banks" *ngFor="let item of formArray.controls; let i = index;">
       <div class="d-flex" [formGroupName]="i">
@@ -33,7 +38,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="standard">
-          <input type="text" matInput placeholder="N° de cuenta *" formControlName="accountNumber">
+          <input type="text" matInput formControlName="accountNumber">
           <button type="button" mat-icon-button matSuffix (click)="onRemoveAccount(i)">
             <mat-icon>delete</mat-icon>
           </button>

@@ -5,6 +5,7 @@ import { ConstructionModel } from "../constructions/construction.model";
 import { DepositModel } from "../deposits/deposit.model";
 import { FinancierModel } from "../financiers/financier.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
+import { PaymentModel } from "../payments/payment.model";
 import { WorkerModel } from "../workers/worker.model";
 
 export interface MaterialModel {
@@ -29,6 +30,7 @@ export interface MaterialModel {
   isMarked: boolean
   cheques: ChequeModel[]
   deposits: DepositModel[]
+  payments: PaymentModel[]
   createdAt: any
   updatedAt: any
   userId: string

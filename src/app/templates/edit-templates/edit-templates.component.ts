@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -25,9 +25,9 @@ export class EditTemplatesComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
   ) { }
     
-  private formBuilder: FormBuilder = new FormBuilder();
+  private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
   public isLoading: boolean = false;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],
     startDate: [ null, Validators.required ],

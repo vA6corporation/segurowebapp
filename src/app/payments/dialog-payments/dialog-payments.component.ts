@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
@@ -18,13 +18,13 @@ export class DialogPaymentsComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) 
     public readonly data: ChequeModel|null,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly banksService: BanksService,
     private readonly companiesService: CompaniesService,
     private readonly dialogRef: MatDialogRef<DialogPaymentsComponent>,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     charge: [ null, Validators.required ],
     paymentAt: [ new Date(), Validators.required ],
     bankId: [ '', Validators.required ],

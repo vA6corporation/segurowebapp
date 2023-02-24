@@ -3,9 +3,9 @@ import { BeneficiaryModel } from "../beneficiaries/beneficiary.model";
 import { BusinessModel } from "../businesses/business.model";
 import { CompanyModel } from "../companies/company.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
+import { PaymentModel } from "../payments/payment.model";
 import { UserModel } from "../users/user.model";
 import { WorkerModel } from "../workers/worker.model";
-import { PaymentModel } from "./payment.model";
 import { PercentCompletionModel } from "./percent-completion.model";
 
 export interface ConstructionModel {

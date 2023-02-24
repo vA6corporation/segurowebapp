@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ExperienceModel, ExperienceModelIncome } from '../experience.model';
 
@@ -13,11 +13,11 @@ export class DialogEditExperiencesComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private readonly experience: ExperienceModel,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogEditExperiencesComponent>
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     contractor: [ this.experience.contractor, Validators.required ],
     startAt: [ new Date(this.experience.startAt), Validators.required],
     location: [ this.experience.location, Validators.required ],

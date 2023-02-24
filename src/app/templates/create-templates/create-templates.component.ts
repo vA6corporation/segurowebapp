@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
@@ -24,9 +24,9 @@ export class CreateTemplatesComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
     
-  private formBuilder: FormBuilder = new FormBuilder();
+  private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
   public isLoading: boolean = false;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     object: [ null, Validators.required ],
     startDate: [ null, Validators.required ],
     executionPlace: [ null, Validators.required ],

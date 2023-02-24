@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
@@ -29,6 +29,10 @@ import { BankModel } from 'src/app/providers/bank.model';
 import { CompanyModel } from 'src/app/companies/company.model';
 import { BanksService } from 'src/app/banks/banks.service';
 import { CompaniesService } from 'src/app/companies/companies.service';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { UserModel } from 'src/app/users/user.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-edit-compliances',
@@ -38,7 +42,7 @@ import { CompaniesService } from 'src/app/companies/companies.service';
 export class EditCompliancesComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly compliancesService: CompliancesService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
@@ -47,9 +51,10 @@ export class EditCompliancesComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly companiesService: CompaniesService,
     private readonly banksService: BanksService,
+    private readonly authService: AuthService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
@@ -86,16 +91,20 @@ export class EditCompliancesComponent implements OnInit {
   public cheques: ChequeModel[] = [];
   public banks: BankModel[] = [];
   public companies: CompanyModel[] = [];
+  public payments: PaymentModel[] = [];
+  public user: UserModel|null = null;
 
   public compliance: ComplianceModel|null = null;
   private complianceId: string = '';
 
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleCompanies$.unsubscribe();
     this.handleBanks$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void { 
@@ -109,12 +118,15 @@ export class EditCompliancesComponent implements OnInit {
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
       this.companies = companies;
     });
+
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
+    });
     
     this.activatedRoute.params.subscribe(params => {
       this.complianceId = params.complianceId;
       this.compliancesService.getComplianceById(this.complianceId).subscribe(compliance => {
-        this.compliance = compliance;
-        const { financier, beneficiary, cheques = [], deposits = [], construction } = compliance;
+        const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = compliance;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ compliance });
         this.construction = construction;
@@ -124,8 +136,26 @@ export class EditCompliancesComponent implements OnInit {
         this.worker = compliance.worker;
         this.cheques = cheques;
         this.deposits = deposits;
+        this.payments = payments;
       });
     });
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   onEditConstruction() {
@@ -303,7 +333,7 @@ export class EditCompliancesComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, compliance } = this.formGroup.value;
       compliance.financierId = financier._id;
-      this.compliancesService.updateWithFinanicer(compliance, financier, this.complianceId).subscribe(res => {
+      this.compliancesService.updateWithFinanicer(compliance, financier, this.payments, this.complianceId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

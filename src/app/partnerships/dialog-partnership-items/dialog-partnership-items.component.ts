@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BusinessModel } from 'src/app/businesses/business.model';
 
@@ -14,10 +14,10 @@ export class DialogPartnershipItemsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     private readonly business: BusinessModel,
     private readonly dialogRef: MatDialogRef<DialogPartnershipItemsComponent>,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
 
-  formGroup: FormGroup = this.formBuilder.group({
+  formGroup: UntypedFormGroup = this.formBuilder.group({
     percent: [ null, Validators.required ]
   });
 

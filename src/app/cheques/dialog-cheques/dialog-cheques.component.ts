@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChequeModel } from '../cheque.model';
 
@@ -13,11 +13,11 @@ export class DialogChequesComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) 
     public readonly cheque: ChequeModel|null,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogChequesComponent>,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     price: [ null, Validators.required ],
     paymentAt: [ null, Validators.required ],
     currencyCode: 'PEN',

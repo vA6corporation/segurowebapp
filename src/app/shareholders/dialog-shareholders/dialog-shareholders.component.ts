@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ShareholderModel } from '../shareholder.model';
 import { ShareholdersService } from '../shareholders.service';
@@ -13,13 +13,13 @@ import { ShareholdersService } from '../shareholders.service';
 export class DialogShareholdersComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly shareholdersService: ShareholdersService,
     private readonly navigationService: NavigationService,
   ) { }
 
   public shareholders: ShareholderModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
 

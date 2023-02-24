@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Params } from '@angular/router';
@@ -24,7 +24,7 @@ export class WithoutDocumentationComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
-    private readonly formBuilder: FormBuilder, 
+    private readonly formBuilder: UntypedFormBuilder, 
   ) { }
     
   public displayedColumns: string[] = [ 

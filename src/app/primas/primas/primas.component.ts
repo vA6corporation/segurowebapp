@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Params } from '@angular/router';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -29,7 +29,7 @@ export class PrimasComponent implements OnInit {
   constructor(
     private readonly reportsService: ReportsService,
     private readonly usersService: UsersService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly workersService: WorkersService,

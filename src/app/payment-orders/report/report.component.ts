@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
@@ -26,7 +26,7 @@ export class ReportComponent implements OnInit {
   constructor(
     private readonly paymentOrdersService: PaymentOrdersService,
     private readonly reportsService: ReportsService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly companiesService: CompaniesService,

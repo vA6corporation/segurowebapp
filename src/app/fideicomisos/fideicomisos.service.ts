@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
+import { PaymentModel } from '../payments/payment.model';
 import { FideicomisoModel } from './fideicomiso.model';
 
 @Injectable({
@@ -37,8 +38,8 @@ export class FideicomisosService {
     return this.httpService.post('fideicomisos', { fideicomiso });
   }
 
-  update(fideicomiso: FideicomisoModel, fideicomisoId: string): Observable<void> {
-    return this.httpService.put(`fideicomisos/${fideicomisoId}`, { fideicomiso });
+  update(fideicomiso: FideicomisoModel, payments: PaymentModel[], fideicomisoId: string): Observable<void> {
+    return this.httpService.put(`fideicomisos/${fideicomisoId}`, { fideicomiso, payments });
   }
 
   delete(fideicomisoId: string) {

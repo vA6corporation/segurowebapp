@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-trials',
@@ -8,8 +8,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogAddTrialsComponent implements OnInit {
 
-  constructor(private readonly formBuilder: FormBuilder, private readonly dialogRef: MatDialogRef<DialogAddTrialsComponent>) { }
-  public formGroup: FormGroup = this.formBuilder.group({
+  constructor(private readonly formBuilder: UntypedFormBuilder, private readonly dialogRef: MatDialogRef<DialogAddTrialsComponent>) { }
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     name: [null, Validators.required],
     reason: [null, Validators.required],
     amount: [null, Validators.required],

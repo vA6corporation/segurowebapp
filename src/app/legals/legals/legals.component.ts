@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Chart, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -32,7 +32,7 @@ export class LegalsComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
     private readonly usersService: UsersService,
     private readonly workersService: WorkersService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly router: Router,

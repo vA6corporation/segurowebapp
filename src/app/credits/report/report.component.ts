@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -21,7 +21,7 @@ export class ReportComponent implements OnInit {
 
   constructor(
     private readonly creditsService: CreditsService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly matDialog: MatDialog

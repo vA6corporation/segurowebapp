@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ProvidersService } from '../providers.service';
@@ -16,11 +16,11 @@ export class EditProvidersComponent implements OnInit {
     private readonly providersService: ProvidersService,
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
   
-  public formArray: FormArray = this.formBuilder.array([]);
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formArray: UntypedFormArray = this.formBuilder.array([]);
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     documentType: [ null, Validators.required ],
     document: null,
     name: [ null, Validators.required ],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -20,9 +20,11 @@ import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
 import { BankModel } from 'src/app/providers/bank.model';
 import { CompanyModel } from 'src/app/companies/company.model';
-import { CompaniesService } from 'src/app/companies/companies.service';
-import { BanksService } from 'src/app/banks/banks.service';
 import { FinancierModel } from 'src/app/financiers/financier.model';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { UserModel } from 'src/app/users/user.model';
+import { AuthService } from 'src/app/auth/auth.service';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
 
 @Component({
   selector: 'app-edit-insurances',
@@ -32,18 +34,17 @@ import { FinancierModel } from 'src/app/financiers/financier.model';
 export class EditInsurancesComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly officesService: OfficesService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly authService: AuthService,
     private readonly matDialog: MatDialog,
-    private readonly companiesService: CompaniesService,
-    private readonly banksService: BanksService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     construction: this.formBuilder.group({
       object: null,
       _id: null,
@@ -78,8 +79,6 @@ export class EditInsurancesComponent implements OnInit {
       isEmition: false,
       officeId: '',
       type: '',
-      companyId: [ '', Validators.required ],
-      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -91,13 +90,17 @@ export class EditInsurancesComponent implements OnInit {
   public banks: BankModel[] = [];
   public companies: CompanyModel[] = [];
   private financier: FinancierModel|null = null;
+  public payments: PaymentModel[] = [];
+  public user: UserModel|null = null;
 
+  private handleAuth$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
   private handleWorkers$: Subscription = new Subscription();
   private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
+    this.handleAuth$.unsubscribe();
     this.handleCompanies$.unsubscribe();
     this.handleBanks$.unsubscribe();
     this.handleWorkers$.unsubscribe();
@@ -115,19 +118,14 @@ export class EditInsurancesComponent implements OnInit {
       this.offices = offices;
     });
 
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
-    });
-
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
     });
     
     this.activatedRoute.params.subscribe(params => {
       this.insuranceId = params.insuranceId;
       this.navigationService.setTitle('Editar seguro');
       this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
-        console.log(insurance);
         const { broker, business, financier, construction } = insurance;
         this.financier = financier;
         this.formGroup.get('construction')?.patchValue(construction || {});
@@ -136,8 +134,26 @@ export class EditInsurancesComponent implements OnInit {
         this.formGroup.get('financier')?.patchValue(financier);
         this.formGroup.get('insurance')?.patchValue(insurance);
         this.formGroup.get('worker')?.patchValue({ _id: insurance.workerId });
+        this.payments = insurance.payments;
       });
     });
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   onChangeOffice() {
@@ -296,7 +312,7 @@ export class EditInsurancesComponent implements OnInit {
       insurance.financierId = financier._id;
       insurance.brokerId = broker._id;
       insurance.workerId = worker._id;
-      this.insurancesService.update(insurance, this.financier, this.insuranceId).subscribe(res => {
+      this.insurancesService.update(insurance, this.financier, this.payments, this.insuranceId).subscribe(res => {
         this.navigationService.loadBarFinish();
         console.log(res);
         this.isLoading = false;

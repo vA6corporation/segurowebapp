@@ -3,6 +3,7 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FinancierModel } from '../financiers/financier.model';
 import { HttpService } from '../http.service';
+import { PaymentModel } from '../payments/payment.model';
 import { InsurancePdfModel } from './insurance-pdf.model';
 import { InsuranceModel } from './insurance.model';
 
@@ -55,8 +56,8 @@ export class InsurancesService {
     return this.httpService.post(`insurances/${insuranceGroupId}`, { insurance, financier });
   }
 
-  update(insurance: any, financier: FinancierModel, insuranceId: string): Observable<void> {
-    return this.httpService.put(`insurances/${insuranceId}`, { insurance, financier });
+  update(insurance: any, financier: FinancierModel, payments: PaymentModel[], insuranceId: string): Observable<void> {
+    return this.httpService.put(`insurances/${insuranceId}`, { insurance, financier, payments });
   }
 
   createWithInsuranceGroup(insurance: any): Observable<InsuranceModel> {

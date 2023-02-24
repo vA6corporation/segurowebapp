@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -21,12 +21,12 @@ export class EditPrivilegesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly privilegesService: PrivilegesService,
     private readonly authService: AuthService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly usersService: UsersService,
     private readonly activatedRoute: ActivatedRoute,
   ) { }
   
-  public formGroup: FormGroup = this.formBuilder.group(this.authService.getObjectModules());
+  public formGroup: UntypedFormGroup = this.formBuilder.group(this.authService.getObjectModules());
   public auth$: Subscription = new Subscription();
   public modules: ModuleModel[] = this.authService.getModules();
   public user: UserModel|null = null;

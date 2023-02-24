@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ProviderModel } from '../provider.model';
@@ -14,14 +14,14 @@ import { ProvidersService } from '../providers.service';
 export class DialogProvidersComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly providersService: ProvidersService,
     private readonly navigationService: NavigationService,
     private readonly dialogRef: MatDialogRef<DialogProvidersComponent>,
   ) { }
 
   public providers: ProviderModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     searchType: 'RUC',
     key: [ null, Validators.required ],
   });

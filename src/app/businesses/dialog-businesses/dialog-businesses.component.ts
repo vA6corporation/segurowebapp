@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
@@ -13,13 +13,13 @@ import { BusinessesService } from '../businesses.service';
 export class DialogBusinessesComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
   ) { }
 
   public businesses: BusinessModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
 

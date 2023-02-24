@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialsService } from '../materials.service';
@@ -35,7 +35,7 @@ import { CompanyModel } from 'src/app/companies/company.model';
 export class CreateMaterialsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly materialsService: MaterialsService,
     private readonly navigationService: NavigationService,
     private readonly constructionsService: ConstructionsService,
@@ -47,7 +47,7 @@ export class CreateMaterialsComponent implements OnInit {
     private readonly companiesService: CompaniesService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],

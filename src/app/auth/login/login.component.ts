@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -17,11 +17,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService, 
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
   ) { }
   
-  public loginForm: FormGroup = this.formBuilder.group({
+  public loginForm: UntypedFormGroup = this.formBuilder.group({
     email: [ '', [Validators.required, Validators.email] ],
     password: [ '', [Validators.required, Validators.minLength(3)] ],
     rememberme: false,

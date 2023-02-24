@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from '../navigation.service';
@@ -15,10 +15,10 @@ export class ToolbarComponent implements OnInit {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: null,
   });
 

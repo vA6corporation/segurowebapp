@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { BusinessModel } from 'src/app/businesses/business.model';
@@ -18,14 +18,14 @@ import { PartnershipsService } from '../partnerships.service';
 export class CreatePartnershipsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly partnershipsService: PartnershipsService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
     private readonly matDialog: MatDialog,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     document: null,
     name: [ null, Validators.required ],
     address: null,

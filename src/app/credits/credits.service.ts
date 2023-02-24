@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
+import { PaymentModel } from '../payments/payment.model';
 import { CreditPdfModel } from './credit-pdf.model';
 import { CreditModel } from './credit.model';
 
@@ -50,8 +51,8 @@ export class CreditsService {
     return this.httpService.post('credits', { credit });
   }
 
-  update(credit: any, creditId: string): Observable<void> {
-    return this.httpService.put(`credits/${creditId}`, { credit });
+  update(credit: any, payments: PaymentModel[], creditId: string): Observable<void> {
+    return this.httpService.put(`credits/${creditId}`, { credit, payments });
   }
 
   getPdfs(creditId: string, type: string): Observable<CreditPdfModel[]> {

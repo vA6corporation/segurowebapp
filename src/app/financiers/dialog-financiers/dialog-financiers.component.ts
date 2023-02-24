@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FinancierModel } from 'src/app/financiers/financier.model';
 import { FinancierModelsService } from 'src/app/financiers/financiers.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -13,13 +13,13 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 export class DialogFinanciesComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private financiersService: FinancierModelsService,
     private navigationService: NavigationService,
   ) { }
 
   public financiers: FinancierModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
 

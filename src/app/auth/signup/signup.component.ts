@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -14,12 +14,12 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly router: Router,  
   ) { }
     
-  public signupForm: FormGroup = this.formBuilder.group({
+  public signupForm: UntypedFormGroup = this.formBuilder.group({
     user: this.formBuilder.group({
       email: [ null, [ Validators.required, Validators.email ] ],
       password: '123',

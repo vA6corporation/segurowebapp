@@ -10,7 +10,7 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Razon social *</mat-label>
+      <mat-label>Razon social</mat-label>
       <mat-select formControlName="companyId" (selectionChange)="onCompanyChange()">
         <mat-option value="">TODAS LAS RAZONES SOCIALES</mat-option>
         <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>

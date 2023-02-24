@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,13 +11,13 @@ import { CompaniesService } from 'src/app/companies/companies.service';
 import { CompanyModel } from 'src/app/companies/company.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { PaymentModel } from 'src/app/payments/payment.model';
 import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { ConstructionsService } from '../constructions.service';
-import { DialogPaymentsComponent } from '../dialog-payments/dialog-payments.component';
 import { DialogPercentCompletionsComponent } from '../dialog-percent-completions/dialog-percent-completions.component';
-import { PaymentModel } from '../payment.model';
 import { PercentCompletionModel } from '../percent-completion.model';
 
 @Component({
@@ -37,9 +37,9 @@ export class CreateConstructionsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
     
-  private formBuilder: FormBuilder = new FormBuilder();
+  private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
   public isLoading: boolean = false;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     partnership: this.formBuilder.group({
       _id: null,
       name: null,

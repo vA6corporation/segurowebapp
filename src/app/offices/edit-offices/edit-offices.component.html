@@ -1,10 +1,12 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field>
-      <input type="text" matInput placeholder="Nombre *" formControlName="name">
+      <mat-label>Nombre</mat-label>
+      <input type="text" matInput formControlName="name">
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput placeholder="Direccion *" formControlName="address">
+      <mat-label>Direccion</mat-label>
+      <input type="text" matInput formControlName="address">
     </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BanksService } from 'src/app/banks/banks.service';
@@ -18,7 +18,7 @@ import { FinancierModelsService } from '../financiers.service';
 export class EditFinancierModelsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly financiersService: FinancierModelsService,
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
@@ -26,7 +26,7 @@ export class EditFinancierModelsComponent implements OnInit {
     private readonly companiesService: CompaniesService,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],

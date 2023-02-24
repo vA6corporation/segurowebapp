@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
@@ -29,6 +29,10 @@ import { CompanyModel } from 'src/app/companies/company.model';
 import { Subscription } from 'rxjs';
 import { CompaniesService } from 'src/app/companies/companies.service';
 import { BanksService } from 'src/app/banks/banks.service';
+import { UserModel } from 'src/app/users/user.model';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-edit-directs',
@@ -38,18 +42,19 @@ import { BanksService } from 'src/app/banks/banks.service';
 export class EditDirectsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly directsService: DirectsService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
-    private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
     private readonly companiesService: CompaniesService,
     private readonly banksService: BanksService,
+    private readonly authService: AuthService,
+    private readonly activatedRoute: ActivatedRoute,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       _id: [ null, Validators.required ],
       name: [ null, Validators.required ],
@@ -86,13 +91,17 @@ export class EditDirectsComponent implements OnInit {
   public direct: DirectModel|null = null;
   public banks: BankModel[] = [];
   public companies: CompanyModel[] = [];
+  public payments: PaymentModel[] = [];
+  public user: UserModel|null = null;
 
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleCompanies$.unsubscribe();
     this.handleBanks$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void { 
@@ -107,11 +116,15 @@ export class EditDirectsComponent implements OnInit {
       this.companies = companies;
     });
 
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
+    });
+
     this.activatedRoute.params.subscribe(params => {
       this.directId = params.directId;
       this.directsService.getDirectById(this.directId).subscribe(direct => {
         this.direct = direct;
-        const { financier, beneficiary, cheques = [], deposits = [], construction } = direct;
+        const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = direct;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ direct });
         this.construction = construction;
@@ -121,8 +134,26 @@ export class EditDirectsComponent implements OnInit {
         this.worker = direct.worker;
         this.cheques = cheques;
         this.deposits = deposits;
+        this.payments = payments;
       });
     });;
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   onEditConstruction() {
@@ -399,7 +430,7 @@ export class EditDirectsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, direct } = this.formGroup.value;
       direct.financierId = financier._id;
-      this.directsService.updateWithFinancier(direct, financier, this.directId).subscribe(res => {
+      this.directsService.updateWithFinancier(direct, financier, this.payments, this.directId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

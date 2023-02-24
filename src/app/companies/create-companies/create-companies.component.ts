@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CompaniesService } from '../companies.service';
@@ -15,11 +15,11 @@ export class CreateCompaniesComponent implements OnInit {
   constructor(
     private readonly companiesService: CompaniesService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly router: Router,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     ruc: [ null, Validators.required ],
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],

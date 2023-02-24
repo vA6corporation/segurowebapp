@@ -1,36 +1,42 @@
 <section class="container py-4">
-    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-        <mat-form-field appearance="fill">
-            <mat-label>Tipo de Documento *</mat-label>
-            <mat-select formControlName="documentType">
-            <mat-option value="RUC">RUC</mat-option>
-            <mat-option value="DNI">DNI</mat-option>
-            <mat-option value="CE">CE</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <input type="text" matInput placeholder="N° de Documento *" formControlName="document" [maxlength]="maxlength">
-        </mat-form-field>
-        <mat-form-field>
-            <input type="text" matInput placeholder="Nombres/Razon social *" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-            <input type="email" matInput placeholder="Email *" formControlName="email">
-        </mat-form-field>
-        <mat-form-field>
-            <input type="text" matInput placeholder="Celular" formControlName="phoneNumber">
-        </mat-form-field>
-        <mat-form-field>
-            <input type="text" matInput placeholder="Telefono" formControlName="mobileNumber">
-        </mat-form-field>
-        <mat-form-field>
-            <input type="text" matInput placeholder="Anexo" formControlName="annexed">
-        </mat-form-field>
-      <div class="d-flex">
-        <span class="spacer"></span>
-        <button type="button" mat-stroked-button routerLink="/brokers" color="primary">CANCELAR</button>
-        <div class="divider"></div>
-        <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
-      </div>
-    </form>
-  </section>
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Tipo de Documento</mat-label>
+      <mat-select formControlName="documentType">
+      <mat-option value="RUC">RUC</mat-option>
+      <mat-option value="DNI">DNI</mat-option>
+      <mat-option value="CE">CE</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>N° de Documento</mat-label>
+      <input type="text" matInput formControlName="document" [maxlength]="maxlength">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nombres/Razon social</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Celular</mat-label>
+      <input type="text" matInput formControlName="phoneNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Telefono</mat-label>
+      <input type="text" matInput formControlName="mobileNumber">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Anexo</mat-label>
+      <input type="text" matInput formControlName="annexed">
+    </mat-form-field>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button routerLink="/brokers" color="primary">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+</section>

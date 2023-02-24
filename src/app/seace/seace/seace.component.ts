@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -20,13 +20,13 @@ export class SeaceComponent implements OnInit {
   constructor(
     private readonly seaceService: SeaceService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
     isCustomer: false,

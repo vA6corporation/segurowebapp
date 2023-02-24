@@ -28,7 +28,7 @@
       <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
         (click)="openDialogAddGuaranties()">AGREGAR FIANZA</button>
       <mat-form-field appearance="fill">
-        <mat-label>Objeto *</mat-label>
+        <mat-label>Objeto</mat-label>
         <input type="text" matInput formControlName="object">
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -42,23 +42,23 @@
         <mat-datepicker #startDatePicker></mat-datepicker>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Plazo de ejecución de la obra (Días calendarios) *</mat-label>
+        <mat-label>Plazo de ejecución de la obra (Días calendarios)</mat-label>
         <input type="number" matInput formControlName="executionPeriodWork">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Lugar de ejecucion *</mat-label>
+        <mat-label>Lugar de ejecucion</mat-label>
         <input type="text" matInput formControlName="executionPlace">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Presupuesto base *</mat-label>
+        <mat-label>Presupuesto base</mat-label>
         <input type="number" matInput formControlName="baseBudget">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Monto del contrato *</mat-label>
+        <mat-label>Monto del contrato</mat-label>
         <input type="number" matInput formControlName="contractMount">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Nombre del depositante *</mat-label>
+        <mat-label>Nombre del depositante</mat-label>
         <input type="text" matInput formControlName="depositorName">
       </mat-form-field>
       <div formGroupName="partnership">
@@ -69,13 +69,13 @@
       </div>
       <div formGroupName="business">
         <mat-form-field appearance="fill">
-          <mat-label>Empresa *</mat-label>
+          <mat-label>Empresa</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
         </mat-form-field>
       </div>
       <div formGroupName="beneficiary">
         <mat-form-field appearance="fill">
-          <mat-label>Beneficiario *</mat-label>
+          <mat-label>Beneficiario</mat-label>
           <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
         </mat-form-field>
       </div>

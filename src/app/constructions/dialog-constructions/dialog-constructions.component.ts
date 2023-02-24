@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
@@ -13,13 +13,13 @@ import { ConstructionsService } from '../constructions.service';
 export class DialogConstructionsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly constructionsService: ConstructionsService,
     private readonly navigationService: NavigationService,
   ) { }
 
   public constructions: ConstructionModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-board-members',
@@ -8,11 +8,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogBoardMembersComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogBoardMembersComponent>
   ) {}
   public maxlength: number = 11;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     position: [null, Validators.required],
     name: [null, Validators.required],
     typeDocument: [null, Validators.required],

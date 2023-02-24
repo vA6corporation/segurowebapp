@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class PaymentOrdersComponent implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
     
   public displayedColumns: string[] = [ 'provider', 'company', 'concept', 'charge', 'paymentAt', 'actions' ];
@@ -39,7 +39,7 @@ export class PaymentOrdersComponent implements OnInit {
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
   public companies: CompanyModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
     companyId: '',

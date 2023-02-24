@@ -3,7 +3,8 @@
     <div mat-dialog-content>
       <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
         <mat-form-field>
-          <input type="text" matInput placeholder="Busqueda" formControlName="key">
+          <mat-label>Busqueda</mat-label>
+          <input type="text" matInput formControlName="key">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </form>
@@ -12,7 +13,7 @@
           {{ partnership.name | uppercase }}
           <br>
           <span class="text-muted text-uppercase">
-            {{ partnership.business?.name }}
+            {{ partnership.business.name }}
           </span>
         </mat-list-option>
       </mat-selection-list>

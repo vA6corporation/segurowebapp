@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChequeModel } from 'src/app/cheques/cheque.model';
 
@@ -17,11 +17,11 @@ export class DialogPercentCompletionsComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) 
     public readonly data: ChequeModel|null,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogPercentCompletionsComponent>,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     year: [ new Date().getFullYear(), Validators.required ],
     month: [ new Date().getMonth(), Validators.required ],
     percentProgrammated: null,

@@ -4,6 +4,7 @@ import { ChequeModel } from '../cheques/cheque.model';
 import { DepositModel } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
 import { MailModel } from '../mails/mail.model';
+import { PaymentModel } from '../payments/payment.model';
 import { CompliancePdfModel } from './compliance-pdf.model';
 import { ComplianceModel } from './compliance.model';
 
@@ -68,8 +69,8 @@ export class CompliancesService {
     return this.httpService.put(`compliances/status/${complianceId}`, { status });
   }
 
-  updateWithFinanicer(compliance: any, financier: any, complianceId: string): Observable<ComplianceModel> {
-    return this.httpService.put(`compliances/${complianceId}`, { compliance, financier });
+  updateWithFinanicer(compliance: any, financier: any, payments: PaymentModel[], complianceId: string): Observable<ComplianceModel> {
+    return this.httpService.put(`compliances/${complianceId}`, { compliance, financier, payments });
   }
 
 }

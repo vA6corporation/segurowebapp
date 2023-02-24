@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpSeaceService } from '../http-seace.service';
 import { HttpService } from '../http.service';
+import { PaymentModel } from '../payments/payment.model';
 import { IsoModel } from './iso.model';
 
 @Injectable({
@@ -33,8 +34,8 @@ export class IsosService {
     return this.httpService.post('isos', { iso });
   }
 
-  update(iso: IsoModel, isoId: string): Observable<void> {
-    return this.httpService.put(`isos/${isoId}`, { iso });
+  update(iso: IsoModel, payments: PaymentModel[], isoId: string): Observable<void> {
+    return this.httpService.put(`isos/${isoId}`, { iso, payments });
   }
 
   delete(isoId: string) {

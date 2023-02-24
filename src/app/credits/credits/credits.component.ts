@@ -107,8 +107,8 @@ export class CreditsComponent implements OnInit {
     this.navigationService.loadBarStart();
     this.creditsService.getCreditById(creditId).subscribe(async credit => {
       this.navigationService.loadBarFinish();
-      if (credit.company) {
-        const pdf = await buildCreditLine(credit, credit.bank);
+      for (const payment of credit.payments) {
+        const pdf = await buildCreditLine(credit, payment.bank, payment.company);
         pdf.save(`ORDEN_DE_SERVICIO_${credit.partnership ? credit.partnership.name : credit.business.name}.pdf`);
       }
     });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-salesmix',
@@ -8,11 +8,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogAddSalesmixComponent implements OnInit {
 
-  constructor(private readonly formBuilder: FormBuilder,
+  constructor(private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogAddSalesmixComponent>) { }
     d = new Date();
     year = this.d.getFullYear();
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     activity: [ null, Validators.required ],
     amountOne: [ null, Validators.required ],
     percentageOne: [ null, Validators.required ],

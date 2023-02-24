@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-main-suppliers',
@@ -8,12 +8,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogAddMainSuppliersComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogAddMainSuppliersComponent>
   ) {}
   d = new Date();
   year = this.d.getFullYear();
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     name: [null, Validators.required],
     document: [null, Validators.required],
     turnBusiness: [null, Validators.required],

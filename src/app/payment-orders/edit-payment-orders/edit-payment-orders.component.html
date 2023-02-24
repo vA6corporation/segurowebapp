@@ -11,7 +11,7 @@
       <button type="button" (click)="onAttachPdf()" [disabled]="isLoading" mat-raised-button color="primary">ADJUNTOS</button>
     </div>
     <mat-form-field appearance="fill">
-      <mat-label>Razon social *</mat-label>
+      <mat-label>Razon social</mat-label>
       <mat-select formControlName="companyId">
         <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
       </mat-select>
@@ -23,11 +23,11 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Descripcion *</mat-label>
+      <mat-label>Descripcion</mat-label>
       <input type="text" matInput formControlName="concept">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Importe *</mat-label>
+      <mat-label>Importe</mat-label>
       <input type="number" matInput formControlName="charge">
     </mat-form-field>
     <mat-form-field appearance="fill">

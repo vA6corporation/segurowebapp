@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProviderModel } from 'src/app/providers/provider.model';
 import { ProvidersService } from 'src/app/providers/providers.service';
@@ -16,14 +16,14 @@ export class DialogEditProvidersComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private readonly provider: ProviderModel,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly providersService: ProvidersService,
     private readonly dialogRef: MatDialogRef<DialogEditProvidersComponent>,
     private readonly navigationService: NavigationService,
   ) { }
 
-  public formArray: FormArray = this.formBuilder.array([]);
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formArray: UntypedFormArray = this.formBuilder.array([]);
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     _id: this.provider._id,
     documentType: this.provider.documentType,
     document: this.provider.document,

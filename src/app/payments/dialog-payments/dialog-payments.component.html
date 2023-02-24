@@ -8,7 +8,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Monto *</mat-label>
+      <mat-label>Monto</mat-label>
       <input type="number" matInput formControlName="charge">
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -18,7 +18,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Razon social *</mat-label>
+      <mat-label>Razon social</mat-label>
       <mat-select formControlName="companyId">
         <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
       </mat-select>

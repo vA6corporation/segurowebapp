@@ -2,7 +2,7 @@
   <form [formGroup]="financierForm" autocomplete="off">
     <mat-form-field appearance="fill">
       <mat-label>Financiera</mat-label>
-      <input type="text" matInput placeholder="Financiera *" formControlName="name" (click)="openDialogFinanciers()" readonly>
+      <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
     </mat-form-field>
   </form>
   <div class="mat-elevation-z2">

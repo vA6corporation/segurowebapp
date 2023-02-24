@@ -3,6 +3,7 @@ import { BusinessModel } from "../businesses/business.model"
 import { ConstructionModel } from "../constructions/construction.model"
 import { FinancierModel } from "../financiers/financier.model"
 import { InsurancePartnershipModel } from "../insurance-partnerships/insurance-partnership.model"
+import { PaymentModel } from "../payments/payment.model"
 import { WorkerModel } from "../workers/worker.model"
 
 export interface InsuranceModel {
@@ -22,6 +23,7 @@ export interface InsuranceModel {
     workerId: string
     partnership: InsurancePartnershipModel
     construction: ConstructionModel
+    payments: PaymentModel[]
     broker: BrokerModel
     financier: FinancierModel
     business: BusinessModel

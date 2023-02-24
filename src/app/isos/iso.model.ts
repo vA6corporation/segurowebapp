@@ -2,6 +2,7 @@ import { BusinessModel } from "../businesses/business.model"
 import { CompanyModel } from "../companies/company.model"
 import { FinancierModel } from "../financiers/financier.model"
 import { PartnershipModel } from "../partnerships/partnership.model"
+import { PaymentModel } from "../payments/payment.model"
 import { BankModel } from "../providers/bank.model"
 import { WorkerModel } from "../workers/worker.model"
 
@@ -19,6 +20,7 @@ export interface IsoModel {
   workerId: string
   createdAt: string
   partnership?: PartnershipModel
+  payments: PaymentModel[]
   financier: FinancierModel
   business: BusinessModel
   worker: WorkerModel

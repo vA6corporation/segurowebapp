@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { randomColor } from 'src/app/randomColor';
@@ -27,7 +27,7 @@ export class CollectionsComponent implements OnInit {
   constructor(
     private readonly reportsService: ReportsService,
     private readonly workersService: WorkersService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
   ) { }

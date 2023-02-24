@@ -68,8 +68,8 @@ export class MaterialsService {
     return this.httpService.put(`materials/status/${materialId}`, { status });
   }
 
-  updateWithFinanicer(material: any, financier: any, materialId: string): Observable<MaterialModel> {
-    return this.httpService.put(`materials/${materialId}`, { material, financier });
+  updateWithFinanicer(material: any, financier: any, payments: any[], materialId: string): Observable<MaterialModel> {
+    return this.httpService.put(`materials/${materialId}`, { material, financier, payments });
   }
 
 }

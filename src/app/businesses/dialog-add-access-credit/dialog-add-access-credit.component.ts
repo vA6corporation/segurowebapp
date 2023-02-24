@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-access-credit',
@@ -8,11 +8,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogAddAccessCreditComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogAddAccessCreditComponent>
   ) {}
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     insuranceCarrier: [null, Validators.required],
     financialProducts: [null, Validators.required],
     creditLine: [null, Validators.required],

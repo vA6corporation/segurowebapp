@@ -2,7 +2,7 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <h1>Accionista</h1>
         <mat-form-field appearance="fill">
-          <mat-label>Tipo de Documento *</mat-label>
+          <mat-label>Tipo de Documento</mat-label>
           <mat-select formControlName="documentType">
             <mat-option value="RUC">RUC</mat-option>
             <mat-option value="DNI">DNI</mat-option>
@@ -10,7 +10,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>N° de Documento *</mat-label>
+          <mat-label>N° de Documento</mat-label>
           <input
             type="text"
             matInput
@@ -19,7 +19,7 @@
           />
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>Nombres/Razon Social *</mat-label>
+          <mat-label>Nombres/Razon Social</mat-label>
           <input type="text" matInput formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="fill">
@@ -65,7 +65,7 @@
           <input type="text" matInput formControlName="position">
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>Estado civil *</mat-label>
+          <mat-label>Estado civil</mat-label>
           <mat-select formControlName="maritalStatus">
             <mat-option value="Soltero(a)">Soltero(a)</mat-option>
             <mat-option value="Casado(a)">Casado(a)</mat-option>
@@ -85,7 +85,7 @@
           <mat-datepicker #birthDatePicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>Porcentaje *</mat-label>
+          <mat-label>Porcentaje</mat-label>
           <input type="number" matInput formControlName="percent" />
         </mat-form-field>
         <mat-form-field appearance="fill">
@@ -144,7 +144,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>N° de Documento *</mat-label>
+          <mat-label>N° de Documento</mat-label>
           <input
             type="text"
             matInput

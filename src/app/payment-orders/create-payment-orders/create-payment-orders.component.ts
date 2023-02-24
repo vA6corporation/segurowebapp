@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -28,12 +28,12 @@ export class CreatePaymentOrdersComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly companiesService: CompaniesService,
     private readonly banksService: BanksService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     companyId: [ '', Validators.required ],
     concept: [ null, Validators.required ],
     charge: [ null, Validators.required ],

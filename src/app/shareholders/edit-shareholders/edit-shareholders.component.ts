@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -23,14 +23,14 @@ import { ShareholdersService } from '../shareholders.service';
 export class EditShareholdersComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly shareholdersService: ShareholdersService,
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     documentType: [ null, Validators.required ],
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-dialog-add-account-rotation',
@@ -8,11 +8,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogAddAccountRotationComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogAddAccountRotationComponent>
   ) {}
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     typeAccount: [null, Validators.required],
     rotation: [null, Validators.required],
   });

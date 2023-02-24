@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ExperienceModelIncome } from '../experience.model';
 
@@ -10,11 +10,11 @@ import { ExperienceModelIncome } from '../experience.model';
 })
 export class DialogExperiencesComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogExperiencesComponent>
   ) {}
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     contractor: [null, Validators.required],
     startAt: [null, Validators.required],
     location: [null, Validators.required],

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -16,14 +16,14 @@ import { UsersService } from '../users.service';
 export class EditUsersComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly usersService: UsersService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],

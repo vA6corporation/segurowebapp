@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -25,10 +25,10 @@ export class InsurancesComponent implements OnInit {
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: UntypedFormBuilder
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     workerId: '',
     startDate: '',
     endDate: '',

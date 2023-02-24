@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BeneficiariesService } from 'src/app/beneficiaries/beneficiaries.service';
 import { BeneficiaryModel } from 'src/app/beneficiaries/beneficiary.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -12,12 +12,12 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 })
 export class DialogBeneficiariesComponent implements OnInit {
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly beneficiariesService: BeneficiariesService,
     private readonly navigationService: NavigationService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
   public beneficiaries: BeneficiaryModel[] = [];

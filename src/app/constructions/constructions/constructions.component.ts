@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -32,7 +32,7 @@ export class ConstructionsComponent implements OnInit {
     private readonly constructionsService: ConstructionsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly officesService: OfficesService,
     private readonly authService: AuthService,
     private readonly router: Router,
@@ -55,7 +55,7 @@ export class ConstructionsComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     officeId: '',
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],

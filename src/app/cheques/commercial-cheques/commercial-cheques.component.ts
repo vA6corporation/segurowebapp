@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Params } from '@angular/router';
@@ -27,7 +27,7 @@ export class CommercialChequesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly authService: AuthService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
 
   public displayedColumns: string[] = [ 'guarantee', 'price', 'paymentAt', 'extensionAt', 'policyNumber', 'partnership', 'business', 'actions' ];
@@ -41,7 +41,7 @@ export class CommercialChequesComponent implements OnInit {
   };
   private user: UserModel|null = null;
   private workerId: string = '';
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     startDate: [ new Date(), Validators.required ],
     endDate: [ new Date(), Validators.required ],
   });

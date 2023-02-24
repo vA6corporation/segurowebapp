@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BeneficiariesService } from '../beneficiaries.service';
@@ -13,13 +13,13 @@ import { BeneficiariesService } from '../beneficiaries.service';
 export class CreateBeneficiariesComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly beneficiariesService: BeneficiariesService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     beneficiary: this.formBuilder.group({
       document: [null, Validators.required],
       name: [null, Validators.required],

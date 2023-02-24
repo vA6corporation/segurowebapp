@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PartnershipModel } from 'src/app/partnerships/partnership.model';
 import { PartnershipsService } from 'src/app/partnerships/partnerships.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -16,11 +16,11 @@ export class DialogPartnershipsComponent implements OnInit {
   constructor(
     private readonly partnershipsService: PartnershipsService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: UntypedFormBuilder
   ) { }
 
   public partnerships: PartnershipModel[] = [];
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
 

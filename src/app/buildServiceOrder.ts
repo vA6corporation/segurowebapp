@@ -3,7 +3,7 @@ import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable'
 import { base64Logo } from "./base64Logo";
 import { ConstructionModel } from "./constructions/construction.model";
-import { PaymentModel } from "./constructions/payment.model";
+import { PaymentModel } from "./payments/payment.model";
 import { BankModel } from "./providers/bank.model";
 
 export async function buildServiceOrder(

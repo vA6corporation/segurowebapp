@@ -2,18 +2,20 @@
   <h2 mat-dialog-title>Buscar Proveedor</h2>
   <div mat-dialog-content>
     <mat-form-field appearance="standard">
-      <mat-label>Tipo de Busqueda *</mat-label>
+      <mat-label>Tipo de Busqueda</mat-label>
       <mat-select formControlName="searchType" #searchType tabindex="-1">
         <mat-option *ngFor="let element of searchTypes" [value]="element.code">{{ element.name }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field *ngIf="searchType.value === 'NAME'; else elseBlock">
-      <input type="text" matInput placeholder="Busqueda *" formControlName="key" (keyup.enter)="onChangeKey()">
+      <mat-label>Busqueda</mat-label>
+      <input type="text" matInput formControlName="key" (keyup.enter)="onChangeKey()">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
     <ng-template #elseBlock>
       <mat-form-field>
-        <input type="text" matInput placeholder="Busqueda *" formControlName="key" (input)="onChangeKey()">
+        <mat-label>Busqueda</mat-label>
+        <input type="text" matInput formControlName="key" (input)="onChangeKey()">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </ng-template>

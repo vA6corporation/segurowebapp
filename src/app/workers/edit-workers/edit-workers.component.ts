@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { WorkersService } from '../workers.service';
@@ -13,14 +13,14 @@ import { WorkersService } from '../workers.service';
 export class EditWorkersComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
   ) { }
     
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     documentType: [ null, Validators.required ],
     document: [ null, Validators.required ],
     name: [ null, Validators.required ],

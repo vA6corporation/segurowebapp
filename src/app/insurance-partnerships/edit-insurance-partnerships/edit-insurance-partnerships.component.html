@@ -1,19 +1,24 @@
 <section class="container py-4">
     <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
       <mat-form-field>
-        <input type="text" matInput placeholder="N° de RUC" formControlName="document" maxlength="11">
+        <mat-label>N° de RUC</mat-label>
+        <input type="text" matInput formControlName="document" maxlength="11">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Razon Social *" formControlName="name">
+        <mat-label>Razon Social</mat-label>
+        <input type="text" matInput formControlName="name">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Direccion" formControlName="address">
+        <mat-label>Direccion</mat-label>
+        <input type="text" matInput formControlName="address">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Representante legal *" formControlName="representative">
+        <mat-label>Representante legal</mat-label>
+        <input type="text" matInput formControlName="representative">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Documento representante legal *" formControlName="representativeDocument">
+        <mat-label>Documento representante legal</mat-label>
+        <input type="text" matInput formControlName="representativeDocument">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Operador tributario</mat-label>

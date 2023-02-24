@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -13,14 +13,14 @@ import { CompanyModel } from 'src/app/companies/company.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { PaymentModel } from 'src/app/payments/payment.model';
 import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { ConstructionsService } from '../constructions.service';
 import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
-import { DialogPaymentsComponent } from '../dialog-payments/dialog-payments.component';
 import { DialogPercentCompletionsComponent } from '../dialog-percent-completions/dialog-percent-completions.component';
-import { PaymentModel } from '../payment.model';
 import { PercentCompletionModel } from '../percent-completion.model';
 
 @Component({
@@ -39,11 +39,11 @@ export class EditConstructionsComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly workersService: WorkersService,
     private readonly matDialog: MatDialog,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
     
   public isLoading: boolean = false;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     partnership: this.formBuilder.group({
       _id: null,
       name: null,
@@ -91,13 +91,11 @@ export class EditConstructionsComponent implements OnInit {
     'DICIEMBRE',
   ];
 
-  private workers$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription(); 
   private handleCompanies$: Subscription = new Subscription();
   private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
-    this.workers$.unsubscribe();
     this.handleAuth$.unsubscribe();
     this.handleCompanies$.unsubscribe();
     this.handleOffices$.unsubscribe();
@@ -151,6 +149,10 @@ export class EditConstructionsComponent implements OnInit {
     });
   }
 
+  onRemovePercentCompletion(index: number) {
+    this.percentCompletions.splice(index, 1);
+  }
+
   onDialogPayments() {
     const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
       width: '600px',
@@ -162,10 +164,6 @@ export class EditConstructionsComponent implements OnInit {
         this.payments.push(payment);
       }
     });
-  }
-
-  onRemovePercentCompletion(index: number) {
-    this.percentCompletions.splice(index, 1);
   }
 
   onRemovePayment(index: number) {

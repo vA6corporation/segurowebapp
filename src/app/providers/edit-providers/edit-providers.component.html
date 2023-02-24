@@ -1,7 +1,7 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
-      <mat-label>Tipo de Documento *</mat-label>
+      <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="documentType">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
@@ -9,11 +9,11 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>N° de Documento *</mat-label>
+      <mat-label>N° de Documento</mat-label>
       <input type="text" matInput formControlName="document" [maxlength]="maxLength">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Nombres/Razon Social *</mat-label>
+      <mat-label>Nombres/Razon Social</mat-label>
       <input type="text" matInput formControlName="name">
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -40,7 +40,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
-          <mat-label>N° de cuenta *</mat-label>
+          <mat-label>N° de cuenta</mat-label>
           <input type="text" matInput formControlName="accountNumber">
           <button type="button" mat-icon-button matSuffix (click)="onRemoveAccount(i)">
             <mat-icon>delete</mat-icon>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
@@ -31,7 +31,7 @@ export class GuarantiesComponent implements OnInit {
     private readonly reportsService: ReportsService,
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly matDialog: MatDialog,
     private readonly router: Router,
   ) { }
@@ -42,10 +42,11 @@ export class GuarantiesComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  public formGroup: FormGroup = this.formBuilder.group({
-    startDate: [ null, Validators.required ],
-    endDate: [ null, Validators.required ],
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
+    startDate: [ new Date(), Validators.required ],
+    endDate: [ new Date(), Validators.required ],
   });
+  private key: string = '';
 
   private queryParams$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
@@ -59,26 +60,25 @@ export class GuarantiesComponent implements OnInit {
     
   ngOnInit(): void {
     this.navigationService.setTitle('Renovaciones de fianzas');
+
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-
-      const { startDate, endDate } = params;
-
+      const { startDate, endDate, key } = params;
       if (startDate && endDate) {
         this.formGroup.get('startDate')?.patchValue(new Date(Number(startDate)));
         this.formGroup.get('endDate')?.patchValue(new Date(Number(endDate)));
       }
-
+      if (key) {
+        this.key = key;
+      }
       this.fetchData();
     });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
-      this.navigationService.loadBarStart();
-      
       const queryParams: Params = { startDate: null, endDate: null, pageIndex: 0, key };
 
       this.router.navigate([], {
@@ -87,12 +87,8 @@ export class GuarantiesComponent implements OnInit {
         queryParamsHandling: 'merge', // remove to replace all query params by provided
       });
 
-      const params = { key };
-
-      this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
-        this.navigationService.loadBarFinish();
-        this.dataSource = guaranties;
-      });
+      this.key = key;
+      this.fetchData();
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
@@ -132,11 +128,16 @@ export class GuarantiesComponent implements OnInit {
   }
 
   fetchData() {
-    if (this.formGroup.valid) {
+    this.navigationService.loadBarStart();
+    if (this.key) {
+      const params = { key: this.key };
+      this.reportsService.getGuarantiesByKey(params).subscribe(guaranties => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = guaranties;
+      });
+    } else {      
       const { startDate, endDate } = this.formGroup.value;
-      this.navigationService.loadBarStart();
       this.reportsService.getGuarantiesByRangeDate(startDate, endDate).subscribe(guaranties => {
-        console.log(guaranties);
         this.navigationService.loadBarFinish();
         this.dataSource = guaranties;
       });
@@ -144,17 +145,17 @@ export class GuarantiesComponent implements OnInit {
   }
 
   onRangeChange() {
-    const { startDate, endDate } = this.formGroup.value;
-
-    const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0, key: null };
-
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParams, 
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
-
-    this.fetchData();   
+    if (this.formGroup.valid) {
+      this.key = '';
+      const { startDate, endDate } = this.formGroup.value;
+      const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0, key: null };
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+      this.fetchData();   
+    }
   }
 
   onShowDetails(guarantee: GuaranteeModel) {
@@ -246,36 +247,41 @@ export class GuarantiesComponent implements OnInit {
 
   async sendMail(guarantee: any): Promise<any> {
     this.navigationService.loadBarStart();
-    // let mail: MailModel;
     try {
       switch (guarantee.guaranteeType) {
         case 'GFCF':
           this.compliancesService.sendMail(guarantee._id).subscribe(() => {
-
+            this.navigationService.showMessage('Email enviado');
+            this.navigationService.loadBarFinish();
+            this.fetchData();
           }, (error: HttpErrorResponse) => {
+            this.navigationService.loadBarFinish();
             this.navigationService.showMessage(error.error.message);
           });
           break;
         case 'GAMF':
           this.materialsService.sendMail(guarantee._id).subscribe(() => {
-
+            this.navigationService.showMessage('Email enviado');
+            this.navigationService.loadBarFinish();
+            this.fetchData();
           }, (error: HttpErrorResponse) => {
+            this.navigationService.loadBarFinish();
             this.navigationService.showMessage(error.error.message);
           });
           break;
         case 'GADF':
           this.directsService.sendMail(guarantee._id).subscribe(() => {
-
+            this.navigationService.showMessage('Email enviado');
+            this.navigationService.loadBarFinish();
+            this.fetchData();
           }, (error: HttpErrorResponse) => {
+            this.navigationService.loadBarFinish();
             this.navigationService.showMessage(error.error.message);
           });
           break;
         default:
-          // mail = { to: '' };
           break;
       }
-      this.navigationService.showMessage('Email enviado');
-      this.onRangeChange();
     } catch (error) {
       console.log(error);
     }

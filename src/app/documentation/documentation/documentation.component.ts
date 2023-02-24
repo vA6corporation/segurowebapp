@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class DocumentationComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly documentationService: DocumentationService,
     private readonly matDialog: MatDialog,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router
   ) { }
@@ -82,7 +82,7 @@ export class DocumentationComponent implements OnInit {
   public construction3 = 0;
   public contract3 = 0;
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
     isEmition: '',

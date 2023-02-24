@@ -2,17 +2,23 @@ import { formatDate } from "@angular/common";
 import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable';
 import { base64Logo } from "./base64Logo";
+import { CompanyModel } from "./companies/company.model";
 import { CreditModel } from "./credits/credit.model";
 import { BankModel } from "./providers/bank.model";
 
 export async function buildCreditLine(
   credit: CreditModel,
   bank: BankModel,
+  company: CompanyModel,
 ): Promise<jsPDF> {
   const title = 12;
   const header = 11;
   const body = 8.5;
-  const { business, company, partnership } = credit;
+  const { 
+    business, 
+    // company, 
+    partnership 
+  } = credit;
 
   const pdf = new jsPDF('p','mm', [297, 210]);
   let text: string = '';

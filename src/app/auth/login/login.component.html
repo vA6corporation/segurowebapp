@@ -22,10 +22,12 @@
     </div>
     <ng-template #elseBlock>
       <mat-form-field>
-        <input type="email" matInput placeholder="Email" formControlName="email">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email">
       </mat-form-field>
       <mat-form-field>
-        <input type="password" matInput placeholder="Contraseña" formControlName="password">
+        <mat-label>Contraseña</mat-label>
+        <input type="password" matInput formControlName="password">
       </mat-form-field>
       <div class="mb-3">
         <button type="submit" mat-raised-button color="primary" class="w-100" [disabled]="isLoading">INGRESAR</button>

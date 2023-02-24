@@ -4,6 +4,7 @@ import { ChequeModel } from '../cheques/cheque.model';
 import { DepositModel } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
 import { MailModel } from '../mails/mail.model';
+import { PaymentModel } from '../payments/payment.model';
 import { DirectPdfModel } from './direct-pdf.model';
 import { DirectModel } from './direct.model';
 
@@ -68,8 +69,8 @@ export class DirectsService {
     return this.httpService.put(`directs/status/${directId}`, { status });
   }
 
-  updateWithFinancier(direct: any, financier: any, directId: string): Observable<DirectModel> {
-    return this.httpService.put(`directs/${directId}`, { direct, financier });
+  updateWithFinancier(direct: any, financier: any, payments: PaymentModel[], directId: string): Observable<DirectModel> {
+    return this.httpService.put(`directs/${directId}`, { direct, financier, payments });
   }
 
 }

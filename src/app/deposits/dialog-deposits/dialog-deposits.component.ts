@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DepositModel } from '../deposit.model';
 
@@ -13,11 +13,11 @@ export class DialogDepositsComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) 
     public deposit: DepositModel|null,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogDepositsComponent>,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     _id: null,
     price: [ null, Validators.required ],
     currencyCode: 'PEN'

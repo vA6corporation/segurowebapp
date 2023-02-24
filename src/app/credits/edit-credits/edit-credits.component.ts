@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -15,9 +15,10 @@ import { WorkersService } from 'src/app/workers/workers.service';
 import { CreditsService } from '../credits.service';
 import { CreditPdfData, DialogAttachPdfComponent } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
-import { CompaniesService } from 'src/app/companies/companies.service';
-import { BankModel } from 'src/app/providers/bank.model';
-import { BanksService } from 'src/app/banks/banks.service';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { UserModel } from 'src/app/users/user.model';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-edit-credits',
@@ -27,17 +28,16 @@ import { BanksService } from 'src/app/banks/banks.service';
 export class EditCreditsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly creditsService: CreditsService,
     private readonly navigationService: NavigationService,
-    private readonly companiesService: CompaniesService,
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly banksService: BanksService,
+    private readonly authService: AuthService,
     private readonly matDialog: MatDialog,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     partnership: this.formBuilder.group({
       name: null,
       _id: null,
@@ -54,8 +54,6 @@ export class EditCreditsComponent implements OnInit {
       _id: [ null, Validators.required ]
     }),
     credit: this.formBuilder.group({
-      companyId: [ null, Validators.required ],
-      bankId: [ '', Validators.required ],
       days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
       prima: null,
@@ -69,14 +67,16 @@ export class EditCreditsComponent implements OnInit {
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
   private creditId: string = '';
-  public companies: any[] = [];
-  public banks: BankModel[] = [];
+  public payments: PaymentModel[] = [];
+  public user: UserModel|null = null;
 
+  private handleAuth$: Subscription = new Subscription();
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
   private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
+    this.handleAuth$.unsubscribe();
     this.handleCompanies$.unsubscribe();
     this.handleBanks$.unsubscribe();
     this.handleWorkers$.unsubscribe();
@@ -89,27 +89,40 @@ export class EditCreditsComponent implements OnInit {
       this.workers = workers;
     });
 
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
-    });
-
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
     });
     
     this.activatedRoute.params.subscribe(params => {
       this.creditId = params.creditId;
       this.navigationService.setTitle('Editar linea de credito');
       this.creditsService.getCreditById(this.creditId).subscribe(credit => {
-        console.log(credit);
         const { partnership, business, financier } = credit;
         this.formGroup.get('partnership')?.patchValue(partnership || {});
         this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('financier')?.patchValue(financier);
         this.formGroup.get('credit')?.patchValue(credit);
         this.formGroup.get('worker')?.patchValue({ _id: credit.workerId });
+        this.payments = credit.payments;
       });
     });
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   openDialogBusinesses() {
@@ -142,12 +155,6 @@ export class EditCreditsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(financier => {
       this.formGroup.patchValue({ financier: financier || {} });
-      if (this.formGroup.get('currencyCode')?.value === 'PEN') {
-        this.formGroup.get('bankId')?.patchValue(financier.bankPenId);
-      } else {
-        this.formGroup.get('bankId')?.patchValue(financier.bankUsdId);
-      }
-      this.formGroup.get('companyId')?.patchValue(financier.companyId);
     });
   }
 
@@ -229,7 +236,7 @@ export class EditCreditsComponent implements OnInit {
       credit.partnershipId = partnership._id;
       credit.workerId = worker._id;
       this.navigationService.loadBarStart();
-      this.creditsService.update(credit, this.creditId).subscribe(() => {
+      this.creditsService.update(credit, this.payments, this.creditId).subscribe(() => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Se han guardado los cambios');

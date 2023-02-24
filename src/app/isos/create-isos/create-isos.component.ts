@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -27,7 +27,7 @@ import { IsosService } from '../isos.service';
 export class CreateIsosComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly isosService: IsosService,
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
@@ -37,7 +37,7 @@ export class CreateIsosComponent implements OnInit {
     private readonly banksService: BanksService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
@@ -22,9 +22,9 @@ export class CreateInsuranceConstructionsComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
     
-  private formBuilder: FormBuilder = new FormBuilder();
+  private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
   public isLoading: boolean = false;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     business: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],

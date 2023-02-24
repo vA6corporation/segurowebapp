@@ -10,24 +10,24 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Moneda *</mat-label>
+    <mat-label>Moneda</mat-label>
     <mat-select formControlName="currencyCode">
       <mat-option value="Soles">Soles</mat-option>
       <mat-option value="Dolar">Dolar</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Plazo de la fianza *</mat-label>
+    <mat-label>Plazo de la fianza</mat-label>
     <input type="number" matInput formControlName="timeLimit">
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Vigencia desde *</mat-label>
+    <mat-label>Vigencia desde</mat-label>
     <input matInput [matDatepicker]="dateValidSincer" formControlName="validSincer">
     <mat-datepicker-toggle matSuffix [for]="dateValidSincer"></mat-datepicker-toggle>
     <mat-datepicker #dateValidSincer></mat-datepicker>
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Vigencia hasta *</mat-label>
+    <mat-label>Vigencia hasta</mat-label>
     <input matInput [matDatepicker]="dateValidUntil" formControlName="validUntil">
     <mat-datepicker-toggle matSuffix [for]="dateValidUntil"></mat-datepicker-toggle>
     <mat-datepicker #dateValidUntil></mat-datepicker>

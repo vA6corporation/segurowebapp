@@ -14,7 +14,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Razon social *</mat-label>
+        <mat-label>Razon social</mat-label>
         <mat-select (selectionChange)="fetchData()" formControlName="companyId">
           <mat-option value="">TODAS LAS RAZONES SOCIALES</mat-option>
           <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>

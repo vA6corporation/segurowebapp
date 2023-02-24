@@ -2,65 +2,65 @@
   <h2 mat-dialog-title>Editar expericia</h2>
   <div mat-dialog-content>
     <mat-form-field appearance="fill">
-      <mat-label>Entidad contratante *</mat-label>
+      <mat-label>Entidad contratante</mat-label>
       <input type="text" matInput formControlName="contractor" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>N° de Licitación y Objeto del Contrato *</mat-label>
+      <mat-label>N° de Licitación y Objeto del Contrato</mat-label>
       <input type="text" matInput formControlName="tenderObjectContract" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fecha Firma de Contrato *</mat-label>
+      <mat-label>Fecha Firma de Contrato</mat-label>
       <input matInput [matDatepicker]="signaturetAt" formControlName="signaturetAt" />
       <mat-datepicker-toggle matSuffix [for]="signaturetAt"></mat-datepicker-toggle>
       <mat-datepicker #signaturetAt></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de inicio de obra *</mat-label>
+      <mat-label>Fecha de inicio de obra</mat-label>
       <input matInput [matDatepicker]="startAt" formControlName="startAt" />
       <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>
       <mat-datepicker #startAt></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de Fin *</mat-label>
+      <mat-label>Fecha de Fin</mat-label>
       <input matInput [matDatepicker]="endingDate" formControlName="endingDate" />
       <mat-datepicker-toggle matSuffix [for]="endingDate"></mat-datepicker-toggle>
       <mat-datepicker #endingDate></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Ubicacion geografica de la obra *</mat-label>
+      <mat-label>Ubicacion geografica de la obra</mat-label>
       <input type="text" matInput formControlName="location" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Monto adjudicado *</mat-label>
+      <mat-label>Monto adjudicado</mat-label>
       <input type="number" matInput formControlName="price" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Plazo de la obra en dias *</mat-label>
+      <mat-label>Plazo de la obra en dias</mat-label>
       <input type="number" matInput formControlName="timeLimit" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Avance a la fecha *</mat-label>
+      <mat-label>Avance a la fecha</mat-label>
       <input type="number" matInput formControlName="advancePercent" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Tipo de obra / servicio *</mat-label>
+      <mat-label>Tipo de obra / servicio</mat-label>
       <input type="text" matInput formControlName="typeWork" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fiel Cumplimiento *</mat-label>
+      <mat-label>Fiel Cumplimiento</mat-label>
       <input type="text" matInput formControlName="faithfulCompliance" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Adelanto Directo *</mat-label>
+      <mat-label>Adelanto Directo</mat-label>
       <input type="text" matInput formControlName="directAdvance" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Adelanto Materiales *</mat-label>
+      <mat-label>Adelanto Materiales</mat-label>
       <input type="text" matInput formControlName="advanceMaterials" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Entidad Afianzadora *</mat-label>
+      <mat-label>Entidad Afianzadora</mat-label>
       <input type="text" matInput formControlName="bondingEntity" />
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -70,11 +70,11 @@
     <h2>INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</h2>
     <div class="d-flex">
       <mat-form-field appearance="fill">
-        <mat-label>Año *</mat-label>
+        <mat-label>Año</mat-label>
         <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>monto *</mat-label>
+        <mat-label>monto</mat-label>
         <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
       </mat-form-field>
     </div>

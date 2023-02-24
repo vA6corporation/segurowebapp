@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
@@ -24,11 +24,11 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { MaterialModel } from '../material.model';
 import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
-import { BankModel } from 'src/app/providers/bank.model';
-import { CompanyModel } from 'src/app/companies/company.model';
 import { Subscription } from 'rxjs';
-import { BanksService } from 'src/app/banks/banks.service';
-import { CompaniesService } from 'src/app/companies/companies.service';
+import { UserModel } from 'src/app/users/user.model';
+import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-edit-materials',
@@ -38,18 +38,17 @@ import { CompaniesService } from 'src/app/companies/companies.service';
 export class EditMaterialsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly materialsService: MaterialsService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
     private readonly navigationService: NavigationService,
     private readonly matDialog: MatDialog,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly banksService: BanksService,
-    private readonly companiesService: CompaniesService,
+    private readonly authService: AuthService,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
@@ -70,8 +69,6 @@ export class EditMaterialsComponent implements OnInit {
       isPaid: false,
       commission: null,
       currencyCode: 'PEN',
-      companyId: [ '', Validators.required ],
-      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -79,8 +76,7 @@ export class EditMaterialsComponent implements OnInit {
   private materialId: string = '';
   public cheques: ChequeModel[] = [];
   public deposits: DepositModel[] = [];
-  public banks: BankModel[] = [];
-  public companies: CompanyModel[] = [];
+  public user: UserModel|null = null;
 
   public construction: ConstructionModel|null = null;
   public business: BusinessModel|null = null;
@@ -88,32 +84,31 @@ export class EditMaterialsComponent implements OnInit {
   public beneficiary: BeneficiaryModel|null = null;
   public worker: WorkerModel|null = null;
   public material: MaterialModel|null = null;
+  public payments: PaymentModel[] = [];
 
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleCompanies$.unsubscribe();
     this.handleBanks$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto de materiales');
     this.navigationService.backTo();
-    
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
-    });
 
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
     });
 
     this.activatedRoute.params.subscribe(params => {
       this.materialId = params.materialId;
       this.materialsService.getMaterialById(this.materialId).subscribe(material => {
         this.material = material;
-        const { financier, beneficiary, cheques = [], deposits = [], construction } = material;
+        const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = material;
         this.formGroup.patchValue({ financier });
         this.formGroup.patchValue({ material });
         this.construction = construction;
@@ -123,9 +118,26 @@ export class EditMaterialsComponent implements OnInit {
         this.worker = material.worker;
         this.cheques = cheques;
         this.deposits = deposits;
+        this.payments = payments;
       });
     });
+  }
 
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
   }
 
   onEditConstruction() {
@@ -135,8 +147,6 @@ export class EditMaterialsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(construction => {
-      console.log(construction);
-      
       if (construction) {
         this.construction = construction;
         this.formGroup.patchValue({ material: { constructionId: construction._id } });
@@ -403,7 +413,7 @@ export class EditMaterialsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, material } = this.formGroup.value;
       material.financierId = financier._id;
-      this.materialsService.updateWithFinanicer(material, financier, this.materialId).subscribe(res => {
+      this.materialsService.updateWithFinanicer(material, financier, this.payments, this.materialId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

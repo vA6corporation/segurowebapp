@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export class RenewComponent implements OnInit {
   constructor(
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly matDialog: MatDialog
   ) { }
 
@@ -37,7 +37,7 @@ export class RenewComponent implements OnInit {
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     type: '',
   });
   public types: string[] = [

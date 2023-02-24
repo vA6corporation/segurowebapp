@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -19,10 +19,10 @@ export class SettingsComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly settingsService: SettingsService,
     private readonly navigationService: NavigationService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     activatedModules: this.formBuilder.group(this.authService.getObjectModules()),
     office: this.formBuilder.group({
       name: [ null, Validators.required ],

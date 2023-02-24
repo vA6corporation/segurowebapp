@@ -3,28 +3,36 @@
     <div formGroupName="beneficiary">
       <!-- <h1>Nuevo Beneficiario</h1> -->
       <mat-form-field>
-        <input type="text" matInput placeholder="N° de RUC *" formControlName="document" [maxlength]="maxlength">
+        <mat-label>N° de RUC</mat-label>
+        <input type="text" matInput formControlName="document" [maxlength]="maxlength">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Razon Social *" formControlName="name">
+        <mat-label>Razon Social</mat-label>
+        <input type="text" matInput formControlName="name">
       </mat-form-field>
       <mat-form-field>
-        <input type="email" matInput placeholder="Email" formControlName="email">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Celular" maxlength="12" formControlName="mobileNumber">
+        <mat-label>Celular</mat-label>
+        <input type="text" matInput maxlength="12" formControlName="mobileNumber">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Telefono" maxlength="12" formControlName="phoneNumber">
+        <mat-label>Telefono</mat-label>
+        <input type="text" matInput maxlength="12" formControlName="phoneNumber">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Anexo" formControlName="annexed">
+        <mat-label>Anexo</mat-label>
+        <input type="text" matInput formControlName="annexed">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Direccion" formControlName="address">
+        <mat-label>Direccion</mat-label>
+        <input type="text" matInput formControlName="address">
       </mat-form-field>
       <mat-form-field>
-        <input type="text" matInput placeholder="Actividad economica" formControlName="economicActivity">
+        <mat-label>Actividad economica</mat-label>
+        <input type="text" matInput formControlName="economicActivity">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Representante legal</mat-label>

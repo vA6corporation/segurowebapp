@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
@@ -30,7 +30,7 @@ import { MaterialsService } from '../materials.service';
 export class EditCommercialsComponent implements OnInit {
 
   constructor(
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly materialsService: MaterialsService,
     private readonly chequesService: ChequesService,
     private readonly depositsService: DepositsService,
@@ -39,7 +39,7 @@ export class EditCommercialsComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
   ) { }
 
-  public formGroup: FormGroup = this.formBuilder.group({
+  public formGroup: UntypedFormGroup = this.formBuilder.group({
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],

@@ -2,33 +2,33 @@
   <h2>Agregar bien inmueble</h2>
   <mat-dialog-content>
     <mat-form-field appearance="fill">
-      <mat-label>Inscripcion en registros publicos *</mat-label>
+      <mat-label>Inscripcion en registros publicos</mat-label>
       <input type="text" matInput formControlName="inscription">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de inscripcion *</mat-label>
+      <mat-label>Fecha de inscripcion</mat-label>
       <input matInput [matDatepicker]="datePicker" formControlName="purchaseAt">
       <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
       <mat-datepicker #datePicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Descripcion *</mat-label>
+      <mat-label>Descripcion</mat-label>
       <input type="text" matInput formControlName="description">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Ubicacion *</mat-label>
+      <mat-label>Ubicacion</mat-label>
       <input type="text" matInput formControlName="location">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Area terreno *</mat-label>
+      <mat-label>Area terreno</mat-label>
       <input type="number" matInput formControlName="landArea">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Area construccion *</mat-label>
+      <mat-label>Area construccion</mat-label>
       <input type="number" matInput formControlName="constructionArea">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Valor comercial *</mat-label>
+      <mat-label>Valor comercial</mat-label>
       <input type="number" matInput formControlName="commercialPrice">
     </mat-form-field>
     <mat-form-field appearance="fill">

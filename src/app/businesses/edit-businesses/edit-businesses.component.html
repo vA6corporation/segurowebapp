@@ -14,7 +14,7 @@
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
-      <mat-label>Tipo de Documento *</mat-label>
+      <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="documentType">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
@@ -22,7 +22,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>N° de Documento *</mat-label>
+      <mat-label>N° de Documento</mat-label>
       <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -38,11 +38,11 @@
       <input type="text" matInput formControlName="publicDeed" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Nombres/Razon Social *</mat-label>
+      <mat-label>Nombres/Razon Social</mat-label>
       <input type="text" matInput formControlName="name" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Email *</mat-label>
+      <mat-label>Email</mat-label>
       <input type="email" matInput formControlName="email" />
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -59,7 +59,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Personal a cargo *</mat-label>
+      <mat-label>Personal a cargo</mat-label>
       <mat-select formControlName="workerId">
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
@@ -108,7 +108,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Fecha de registro mercantil *</mat-label>
+      <mat-label>Fecha de registro mercantil</mat-label>
       <input matInput [matDatepicker]="inscriptionAt" formControlName="inscriptionAt" />
       <mat-datepicker-toggle matSuffix [for]="inscriptionAt"></mat-datepicker-toggle>
       <mat-datepicker #inscriptionAt></mat-datepicker>
@@ -119,11 +119,11 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Fuentes de ingreso *</mat-label>
+      <mat-label>Fuentes de ingreso</mat-label>
       <input type="text" matInput formControlName="sourcesOfIncome" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Pais de origen de los fondos *</mat-label>
+      <mat-label>Pais de origen de los fondos</mat-label>
       <input type="text" matInput formControlName="countrySource" />
     </mat-form-field>
 
@@ -204,7 +204,7 @@
 
     <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
-      <mat-label>Sexo *</mat-label>
+      <mat-label>Sexo</mat-label>
       <mat-select formControlName="representativeGender">
         <mat-option value="MASCULINO">MASCULINO</mat-option>
         <mat-option value="FEMENINO">FEMENINO</mat-option>
@@ -226,7 +226,7 @@
       <input type="text" matInput formControlName="representativeName" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Estudios *</mat-label>
+      <mat-label>Estudios</mat-label>
       <mat-select formControlName="representativeStudies">
         <mat-option value="PRIMARIA">PRIMARIA</mat-option>
         <mat-option value="SECUNDARIA">SECUNDARIA</mat-option>
@@ -267,7 +267,7 @@
       <input type="text" matInput formControlName="representativeAddressResidence" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Tipo de vivienda *</mat-label>
+      <mat-label>Tipo de vivienda</mat-label>
       <mat-select formControlName="representativeLivingPlace">
         <mat-option value="PROPIA">PROPIA</mat-option>
         <mat-option value="ALQUILADA">ALQUILADA</mat-option>
@@ -364,14 +364,14 @@
 
     <h1>Conyuge del representante legal</h1>
     <mat-form-field appearance="fill">
-      <mat-label>Sexo *</mat-label>
+      <mat-label>Sexo</mat-label>
       <mat-select formControlName="representativeSpouseGender">
         <mat-option value="MASCULINO">MASCULINO</mat-option>
         <mat-option value="FEMENINO">FEMENINO</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Tipo de Documento *</mat-label>
+      <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="representativeSpouseDocumentType">
         <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
@@ -379,19 +379,19 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>N° de Documento *</mat-label>
+      <mat-label>N° de Documento</mat-label>
       <input type="text" matInput formControlName="representativeSpouseDocument" [maxlength]="maxlength" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Nombres/Razon Social *</mat-label>
+      <mat-label>Nombres/Razon Social</mat-label>
       <input type="text" matInput formControlName="representativeSpouseName" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Nacionalidad *</mat-label>
+      <mat-label>Nacionalidad</mat-label>
       <input type="text" matInput formControlName="representativeSpouseNationality" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Estado civil *</mat-label>
+      <mat-label>Estado civil</mat-label>
       <mat-select formControlName="representativeSpouseMaritalStatus">
         <mat-option value="Soltero(a)">Soltero(a)</mat-option>
         <mat-option value="Casado(a)">Casado(a)</mat-option>

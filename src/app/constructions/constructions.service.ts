@@ -3,9 +3,9 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GuaranteeModel } from '../guarantees/guarantee.model';
 import { HttpService } from '../http.service';
+import { PaymentModel } from '../payments/payment.model';
 import { ConstructionPdfModel } from './construction-pdf.model';
 import { ConstructionModel } from './construction.model';
-import { PaymentModel } from './payment.model';
 
 @Injectable({
   providedIn: 'root'
