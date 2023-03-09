@@ -51,6 +51,7 @@ export class AuthService {
     { label: 'Lineas de credito', name: 'r8', info: 'Reportes' },
     { label: 'Avance de obras', name: 'r9', info: 'Reportes' },
     { label: 'Recaudacion', name: 'r10', info: 'Reportes' },
+    { label: 'Comisiones', name: 'r11', info: 'Reportes' },
   ]
 
   private objectModules = {
@@ -86,6 +87,7 @@ export class AuthService {
     r8: false,
     r9: false,
     r10: false,
+    r11: false,
   }
 
   getObjectModules() {

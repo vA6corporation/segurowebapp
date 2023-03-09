@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -7,7 +8,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { buildExcel } from 'src/app/xlsx';
+import { DialogEditSeaceComponent } from '../dialog-edit-seace/dialog-edit-seace.component';
 import { DialogSeaceDetailsComponent } from '../dialog-seace-details/dialog-seace-details.component';
+import { SeaceDataModel } from '../seace-data.model';
 import { SeaceService } from '../seace.service';
 
 @Component({
@@ -35,7 +39,7 @@ export class SeaceComponent implements OnInit {
     objetoContratacion: '',
     departamento: '',
   });
-  public displayedColumns: string[] = [ 'buenaPro', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'actions' ];
+  public displayedColumns: string[] = [ 'buenaPro', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'worker', 'observations', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -83,10 +87,12 @@ export class SeaceComponent implements OnInit {
 
   private queryParams$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
+  private handleClickMenu$: Subscription = new Subscription();
   
   ngOnDestroy() {
     this.queryParams$.unsubscribe();
     this.handleSearch$.unsubscribe();
+    this.handleClickMenu$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -94,6 +100,7 @@ export class SeaceComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
+      { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false },
     ]);
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
@@ -126,8 +133,65 @@ export class SeaceComponent implements OnInit {
 
     });
 
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      this.navigationService.loadBarStart();
+      const chunk = 500;
+      const promises: Promise<any>[] = [];
+
+      for (let index = 0; index < this.length / chunk; index++) {
+        const promise = this.seaceService.getSeaceDatasByPage(index + 1, chunk, this.params).toPromise();
+        promises.push(promise);
+      }
+
+      Promise.all(promises).then(values => {
+        this.navigationService.loadBarFinish();
+        const seaceDatas = values.flat() as SeaceDataModel[];
+        const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+        let body = [];
+        body.push([
+          'CONVOCATORIA',
+          'BUENA PRO',
+          'MOMENCLATURA',
+          'OBJETO DE CONTRATACION',
+          'ESTADO',
+          'VALOR REFERENCIAL',
+          'PERSONAL',
+          'OBSERVACIONES'
+        ]);
+        for (const seaceData of seaceDatas) {
+          body.push([
+            seaceData.convocatoriaDate ? formatDate(seaceData.convocatoriaDate, 'dd/MM/yyyy', 'en-US') : null,
+            formatDate(seaceData.buenaProDate, 'dd/MM/yyyy', 'en-US'),
+            seaceData.momenclatura,
+            seaceData.objetoContratacion,
+            seaceData.estado,
+            seaceData.valorReferencial,
+            seaceData.worker ? seaceData.worker.name : null,
+            seaceData.observations
+          ]);
+        }
+        const name = `SEACE_DATA_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+        buildExcel(body, name, wscols, [], []);
+      });
+
+    });
+
     this.fetchData();
     this.fetchCount();
+  }
+
+  onDialogEditSeace(seaceData: SeaceDataModel) {
+    const dialogRef = this.matDialog.open(DialogEditSeaceComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: seaceData,
+    });
+
+    dialogRef.afterClosed().subscribe(ok => {
+      if (ok) {
+        this.fetchData();
+      }
+    });
   }
 
   fetchCount() {

@@ -23,10 +23,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @NgModule({
   imports: [
     ClipboardModule,
+    MatBottomSheetModule,
     MatCardModule,
     MatExpansionModule,
     MatNativeDateModule, // Native module for datepicker
@@ -52,6 +54,7 @@ import { MatTreeModule } from '@angular/material/tree';
   ],
   exports: [
     ClipboardModule,
+    MatBottomSheetModule,
     MatCardModule,
     MatExpansionModule,
     MatDatepickerModule,

@@ -24,6 +24,9 @@ import { CompanyModel } from 'src/app/companies/company.model';
 import { CompaniesService } from 'src/app/companies/companies.service';
 import { BanksService } from 'src/app/banks/banks.service';
 import { FinancierModel } from 'src/app/financiers/financier.model';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SheetConstructionsComponent } from '../sheet-constructions/sheet-constructions.component';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 
 @Component({
   selector: 'app-create-insurances',
@@ -42,11 +45,13 @@ export class CreateInsurancesComponent implements OnInit {
     private readonly location: Location,
     private readonly companiesService: CompaniesService,
     private readonly banksService: BanksService,
+    private readonly matBottomSheet: MatBottomSheet,
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     construction: this.formBuilder.group({
       object: null,
+      onModel: null,
       _id: null,
     }),
     partnership: this.formBuilder.group({
@@ -185,15 +190,31 @@ export class CreateInsurancesComponent implements OnInit {
   }
 
   openDialogConstruction() {
-    const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
-      width: '100vw',
-      position: { top: '20px' }
+    const matBottomRef = this.matBottomSheet.open(SheetConstructionsComponent);
+    matBottomRef.instance.onDialogOne.subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+        width: '100vw',
+        position: { top: '20px' }
+      });
+  
+      dialogRef.afterClosed().subscribe(construction => {
+        if (construction) {
+          this.formGroup.patchValue({ construction });
+        }
+      });
     });
 
-    dialogRef.afterClosed().subscribe(construction => {
-      if (construction) {
-        this.formGroup.patchValue({ construction });
-      }
+    matBottomRef.instance.onDialogTwo.subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
+        width: '100vw',
+        position: { top: '20px' }
+      });
+  
+      dialogRef.afterClosed().subscribe(construction => {
+        if (construction) {
+          this.formGroup.patchValue({ construction });
+        }
+      });
     });
   }
 
@@ -313,8 +334,9 @@ export class CreateInsurancesComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       const { business, financier, broker, worker, partnership, insurance, construction } = this.formGroup.value;
-      insurance.constructionId = construction?._id || null;
-      insurance.partnershipId = partnership?._id || null;
+      insurance.constructionId = construction._id || null;
+      insurance.onModel = construction.onModel || null;
+      insurance.partnershipId = partnership._id || null;
       insurance.businessId = business._id;
       insurance.financierId = financier._id;
       insurance.brokerId = broker._id;

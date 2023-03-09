@@ -7,6 +7,7 @@ import { WorkersComponent } from './workers/workers.component';
 import { CreateWorkersComponent } from './create-workers/create-workers.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommissionsComponent } from './commissions/commissions.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EditWorkersComponent,
     WorkersComponent,
     CreateWorkersComponent,
+    CommissionsComponent
   ],
   imports: [
     CommonModule,

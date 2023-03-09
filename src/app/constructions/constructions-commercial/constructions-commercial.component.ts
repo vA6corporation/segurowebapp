@@ -157,43 +157,43 @@ export class ConstructionsCommercialComponent implements OnInit {
           const { startDate, endDate, officeId } = this.formGroup.value;
           const params = { officeId };
           this.navigationService.loadBarStart();
-          this.constructionsService.getConstructionsByRangeDate(startDate, endDate, params).subscribe(constructions=> {
-            this.navigationService.loadBarFinish();
-            const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-            let body = [];
-            body.push([
-              'ESTADO DE O.',
-              'CLIENTE',
-              'CONSORCIO',
-              'PERSONAL',
-              'A. PROGRAMADO',
-              'A. EJECUTADO',
-              'MES',
-              'AÑO',
-              'HONORARIOS',
-              'PENDIENTE',
-              'OBSERVACIONES',
-              'OBJETO',
-            ]);
-            for (const construction of constructions) {
-              body.push([
-                construction.constructionCodeType,
-                construction.business.name,
-                construction.partnership?.name,
-                construction.worker?.name,
-                construction.percentCompletion?.percentProgrammated,
-                construction.percentCompletion?.percentCompletion,
-                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-                construction.percentCompletion?.year,
-                construction.commission,
-                construction.debt,
-                construction.observations,
-                construction.object,
-              ]);
-            }
-            const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-            buildExcel(body, name, wscols, [], []);
-          });
+          // this.constructionsService.getConstructionsByRangeDate(startDate, endDate, params).subscribe(constructions=> {
+          //   this.navigationService.loadBarFinish();
+          //   const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+          //   let body = [];
+          //   body.push([
+          //     'ESTADO DE O.',
+          //     'CLIENTE',
+          //     'CONSORCIO',
+          //     'PERSONAL',
+          //     'A. PROGRAMADO',
+          //     'A. EJECUTADO',
+          //     'MES',
+          //     'AÑO',
+          //     'HONORARIOS',
+          //     'PENDIENTE',
+          //     'OBSERVACIONES',
+          //     'OBJETO',
+          //   ]);
+          //   for (const construction of constructions) {
+          //     body.push([
+          //       construction.constructionCodeType,
+          //       construction.business.name,
+          //       construction.partnership?.name,
+          //       construction.worker?.name,
+          //       construction.percentCompletion?.percentProgrammated,
+          //       construction.percentCompletion?.percentCompletion,
+          //       construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+          //       construction.percentCompletion?.year,
+          //       construction.commission,
+          //       construction.debt,
+          //       construction.observations,
+          //       construction.object,
+          //     ]);
+          //   }
+          //   const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+          //   buildExcel(body, name, wscols, [], []);
+          // });
           break;
         }
         case 'export_emitions': {
@@ -351,18 +351,18 @@ export class ConstructionsCommercialComponent implements OnInit {
           this.navigationService.showMessage(error.error.message);
         });
       } else {
-        this.navigationService.loadBarStart();
-        this.constructionsService.getConstructionsByRangeDateOfficeFinancierPage(
-          this.pageIndex + 1, 
-          this.pageSize, 
-          this.params
-        ).subscribe(constructions => {
-          this.navigationService.loadBarFinish();
-          this.dataSource = constructions;
-        }, (error: HttpErrorResponse) => {
-          this.navigationService.loadBarFinish();
-          this.navigationService.showMessage(error.error.message);
-        });
+        // this.navigationService.loadBarStart();
+        // this.constructionsService.getConstructionsByRangeDateOfficeFinancierPage(
+        //   this.pageIndex + 1, 
+        //   this.pageSize, 
+        //   this.params
+        // ).subscribe(constructions => {
+        //   this.navigationService.loadBarFinish();
+        //   this.dataSource = constructions;
+        // }, (error: HttpErrorResponse) => {
+        //   this.navigationService.loadBarFinish();
+        //   this.navigationService.showMessage(error.error.message);
+        // });
       }
     }
   }

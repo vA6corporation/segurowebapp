@@ -141,6 +141,12 @@
     <a href="#" mat-list-item routerLink="/insurances/ACCIDENTES" (click)="onClose()">
       <span>ACCIDENTES P.</span>
     </a>
+    <a href="#" mat-list-item routerLink="/insurances/FOLA" (click)="onClose()">
+      <span>FOLA</span>
+    </a>
+    <a href="#" mat-list-item routerLink="/insurances/VIAJES" (click)="onClose()">
+      <span>VIAJES</span>
+    </a>
     <mat-divider></mat-divider>
     <a href="#" mat-list-item routerLink="/insuranceBusinesses" (click)="onClose()">
       <span>Empresas</span>
@@ -239,8 +245,11 @@
       <a href="#" mat-list-item routerLink="/constructions/percentCompletions" (click)="onClose()" *ngIf="privileges.r9">
         <span>Avance de obras</span>
       </a>
-      <a href="#" mat-list-item routerLink="/constructions/updatePercentCompletions" (click)="onClose()" *ngIf="privileges.r9">
+      <a href="#" mat-list-item routerLink="/constructions/updatePercentCompletions" (click)="onClose()" *ngIf="privileges.r10">
         <span>Actualizacion de avanze de obras</span>
+      </a>
+      <a href="#" mat-list-item routerLink="/workers/commissions" (click)="onClose()" *ngIf="privileges.r11">
+        <span>Comisiones</span>
       </a>
     </mat-expansion-panel>
   </mat-accordion>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpService } from '../http.service';
+import { SummaryCommission } from './summary-commission.model';
 import { WorkerModel } from './worker.model';
 
 @Injectable({
@@ -17,6 +18,13 @@ export class WorkersService {
 
   getWorkersByPage(pageIndex: number, pageSize: number) {
     return this.httpService.get(`workers/activeWorkersByPage/${pageIndex}/${pageSize}`);
+  }
+
+  getCommissions(
+    startDate: string,
+    endDate: string
+  ): Observable<SummaryCommission[]> {
+    return this.httpService.get(`workers/commissions/${startDate}/${endDate}`);
   }
 
   getWorkerById(workerId: string): Observable<WorkerModel> {

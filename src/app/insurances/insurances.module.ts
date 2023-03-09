@@ -13,10 +13,11 @@ import { ReportPieComponent } from './report-pie/report-pie.component';
 import { RenewComponent } from './renew/renew.component';
 import { DialogSelectPdfComponent } from './dialog-select-pdf/dialog-select-pdf.component';
 import { CreateInsurancesWithInsuranceGroupComponent } from './create-insurances-with-insurance-group/create-insurances-with-insurance-group.component';
+import { SheetConstructionsComponent } from './sheet-constructions/sheet-constructions.component';
 
 
 @NgModule({
-  declarations: [InsurancesComponent, CreateInsurancesComponent, EditInsurancesComponent, DialogAttachPdfComponent, ReportComponent, ReportPieComponent, RenewComponent, DialogSelectPdfComponent, CreateInsurancesWithInsuranceGroupComponent],
+  declarations: [InsurancesComponent, CreateInsurancesComponent, EditInsurancesComponent, DialogAttachPdfComponent, ReportComponent, ReportPieComponent, RenewComponent, DialogSelectPdfComponent, CreateInsurancesWithInsuranceGroupComponent, SheetConstructionsComponent],
   imports: [
     CommonModule,
     InsurancesRoutingModule,

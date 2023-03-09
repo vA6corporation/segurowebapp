@@ -89,8 +89,8 @@ export class ConstructionsService {
     return this.httpService.get('constructions/countWithoutDocumentation');
   }
 
-  getCountConstructions(): Observable<number> {
-    return this.httpService.get(`constructions/countConstructions`);
+  getCountConstructions(params: Params): Observable<number> {
+    return this.httpService.get(`constructions/countConstructions`, { params });
   }
 
   getConstructionById(constructionId: string): Observable<ConstructionModel> {
@@ -114,21 +114,25 @@ export class ConstructionsService {
     return this.httpService.get(`constructions/countConstructionsByRangeDateOfficeFinancier`, { params });
   }
 
-  getConstructionsByPage(pageIndex: number, pageSize: number): Observable<ConstructionModel[]> {
-    return this.httpService.get(`constructions/${pageIndex}/${pageSize}`);
-  }
-
-  getConstructionsByRangeDate(startDate: string, endDate: string, params: Params): Observable<ConstructionModel[]> {
-    return this.httpService.get(`constructions/byRangeDate/${startDate}/${endDate}`, { params });
-  }
-
-  getConstructionsByRangeDateOfficeFinancierPage(
+  getConstructionsByPage(
     pageIndex: number, 
-    pageSize: number, 
+    pageSize: number,
     params: Params
   ): Observable<ConstructionModel[]> {
-    return this.httpService.get(`constructions/byRangeDateOfficeFinancierPage/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`constructions/byPage/${pageIndex}/${pageSize}`, { params });
   }
+
+  // getConstructionsByRangeDate(startDate: string, endDate: string, params: Params): Observable<ConstructionModel[]> {
+  //   return this.httpService.get(`constructions/byRangeDate/${startDate}/${endDate}`, { params });
+  // }
+
+  // getConstructionsByPage(
+  //   pageIndex: number, 
+  //   pageSize: number, 
+  //   params: Params
+  // ): Observable<ConstructionModel[]> {
+  //   return this.httpService.get(`constructions/byRangeDateOfficeFinancierPage/${pageIndex}/${pageSize}`, { params });
+  // }
 
   create(construction: any, percentCompletions: any[], payments: any[]): Observable<any> {
     return this.httpService.post('constructions', { construction, percentCompletions, payments });

@@ -14,7 +14,6 @@ import { InsurancesService } from '../insurances.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogAttachPdfComponent, InsurancePdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
-import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
@@ -25,6 +24,10 @@ import { PaymentModel } from 'src/app/payments/payment.model';
 import { UserModel } from 'src/app/users/user.model';
 import { AuthService } from 'src/app/auth/auth.service';
 import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SheetConstructionsComponent } from '../sheet-constructions/sheet-constructions.component';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
+import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
 
 @Component({
   selector: 'app-edit-insurances',
@@ -42,11 +45,13 @@ export class EditInsurancesComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly matDialog: MatDialog,
+    private readonly matBottomSheet: MatBottomSheet,
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     construction: this.formBuilder.group({
       object: null,
+      onModel: null,
       _id: null,
     }),
     partnership: this.formBuilder.group({
@@ -126,6 +131,7 @@ export class EditInsurancesComponent implements OnInit {
       this.insuranceId = params.insuranceId;
       this.navigationService.setTitle('Editar seguro');
       this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
+        console.log(insurance);
         const { broker, business, financier, construction } = insurance;
         this.financier = financier;
         this.formGroup.get('construction')?.patchValue(construction || {});
@@ -171,15 +177,31 @@ export class EditInsurancesComponent implements OnInit {
   }
 
   openDialogConstruction() {
-    const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
-      width: '100vw',
-      position: { top: '20px' }
+    const matBottomRef = this.matBottomSheet.open(SheetConstructionsComponent);
+    matBottomRef.instance.onDialogOne.subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+        width: '100vw',
+        position: { top: '20px' }
+      });
+  
+      dialogRef.afterClosed().subscribe(construction => {
+        if (construction) {
+          this.formGroup.patchValue({ construction });
+        }
+      });
     });
 
-    dialogRef.afterClosed().subscribe(construction => {
-      if (construction) {
-        this.formGroup.patchValue({ construction });
-      }
+    matBottomRef.instance.onDialogTwo.subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
+        width: '100vw',
+        position: { top: '20px' }
+      });
+  
+      dialogRef.afterClosed().subscribe(construction => {
+        if (construction) {
+          this.formGroup.patchValue({ construction });
+        }
+      });
     });
   }
 
@@ -306,8 +328,9 @@ export class EditInsurancesComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       const { business, financier, broker, worker, insurance, partnership, construction } = this.formGroup.value;
-      insurance.constructionId = construction?._id || null;
-      insurance.partnershipId = partnership?._id || null,
+      insurance.constructionId = construction._id || null;
+      insurance.onModel = construction.onModel || null;
+      insurance.partnershipId = partnership._id || null,
       insurance.businessId = business._id;
       insurance.financierId = financier._id;
       insurance.brokerId = broker._id;

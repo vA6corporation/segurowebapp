@@ -16,6 +16,10 @@ export class NotificationsService {
     return this.httpService.get('notifications/activeNotifications');
   }
 
+  getNotificationsByWorker(workerId: string): Observable<NotificationModel[]> {
+    return this.httpService.get(`notifications/byWorker/${workerId}`);
+  }
+
   getDisableNotification(notificationId: string): Observable<void> {
     return this.httpService.get(`notifications/disableNotification/${notificationId}`);
   }

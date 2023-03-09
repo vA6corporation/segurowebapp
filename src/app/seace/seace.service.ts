@@ -25,5 +25,9 @@ export class SeaceService {
   getCountSeaceDatas(params: Params): Observable<number> {
     return this.httpService.get(`seace/countSeaceDatas`, { params });
   }
+
+  update(seaceData: any, seaceDataId: string): Observable<void> {
+    return this.httpService.put(`seace/${seaceDataId}`, { seaceData });
+  }
   
 }

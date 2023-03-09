@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
 import { NavigationService } from './navigation/navigation.service';
 import { DialogNotificationsComponent } from './notifications/dialog-notifications/dialog-notifications.component';
@@ -32,13 +33,29 @@ export class AppComponent {
     });
 
     this.authService.handleAuthStatus().subscribe(() => {
-      this.notificationsService.getActiveNotifications().subscribe(notifications => {
-        if (notifications.length) {
-          this.matDialog.open(DialogNotificationsComponent, {
-            width: '600px',
-            position: { top: '20px' },
-            data: notifications,
+      this.authService.handleAuth().pipe(first()).subscribe(auth => {
+        if (auth.user.isAdmin) {
+          this.notificationsService.getActiveNotifications().subscribe(notifications => {
+            if (notifications.length) {
+              this.matDialog.open(DialogNotificationsComponent, {
+                width: '800px',
+                position: { top: '20px' },
+                data: notifications,
+              });
+            }
           });
+        } else {
+          if (auth.user.workerId) {
+            this.notificationsService.getNotificationsByWorker(auth.user.workerId).subscribe(notifications => {
+              if (notifications.length) {
+                this.matDialog.open(DialogNotificationsComponent, {
+                  width: '800px',
+                  position: { top: '20px' },
+                  data: notifications,
+                });
+              }
+            });
+          }
         }
       });
     });

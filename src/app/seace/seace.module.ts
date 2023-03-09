@@ -6,10 +6,11 @@ import { SeaceComponent } from './seace/seace.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogSeaceDetailsComponent } from './dialog-seace-details/dialog-seace-details.component';
+import { DialogEditSeaceComponent } from './dialog-edit-seace/dialog-edit-seace.component';
 
 
 @NgModule({
-  declarations: [SeaceComponent, DialogSeaceDetailsComponent],
+  declarations: [SeaceComponent, DialogSeaceDetailsComponent, DialogEditSeaceComponent],
   imports: [
     CommonModule,
     SeaceRoutingModule,

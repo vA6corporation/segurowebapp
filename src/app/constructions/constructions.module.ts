@@ -15,7 +15,6 @@ import { WithoutDocumentationComponent } from './without-documentation/without-d
 import { DialogAddBailComponent } from './dialog-add-bail/dialog-add-bail.component';
 import { DialogPercentCompletionsComponent } from './dialog-percent-completions/dialog-percent-completions.component';
 import { PercentCompletionsComponent } from './percent-completions/percent-completions.component';
-// import { DialogPaymentsComponent } from './dialog-payments/dialog-payments.component';
 import { DebtorsComponent } from './debtors/debtors.component';
 import { UpdatePercentCompletionsComponent } from './update-percent-completions/update-percent-completions.component';
 import { ConstructionsCommercialComponent } from './constructions-commercial/constructions-commercial.component';
