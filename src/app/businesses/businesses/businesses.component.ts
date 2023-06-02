@@ -68,7 +68,7 @@ export class BusinessesComponent implements OnInit {
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.businessesService.getCountBusinesses().subscribe(count => {
+    this.businessesService.getCountBusinesses({}).subscribe(count => {
       this.length = count;
     });
 
@@ -103,7 +103,7 @@ export class BusinessesComponent implements OnInit {
 
   fetchData() {
     this.navigationService.loadBarStart();
-    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize).subscribe(businesses => {
+    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize, {}).subscribe(businesses => {
       this.navigationService.loadBarFinish();
       this.dataSource = businesses;
     });
@@ -164,6 +164,7 @@ export class BusinessesComponent implements OnInit {
   downloadExcel() {
     this.navigationService.loadBarStart();
     this.businessesService.getBusinesses().subscribe(businesses => {
+      console.log(businesses);
       this.navigationService.loadBarFinish();
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
@@ -172,6 +173,13 @@ export class BusinessesComponent implements OnInit {
         'RAZON SOCIAL',
         'EMAIL',
         'CELULAR',
+        'PERSONAL A CARGO',
+        'DEPARTAMENTO O.',
+        'PROVINCIA O.',
+        'DISTRITO O.',
+        'DEPARTAMENTO R.',
+        'PROVINCIA R.',
+        'DISTRITO R.'
       ]);
       for (const business of businesses) {
         body.push([
@@ -179,6 +187,13 @@ export class BusinessesComponent implements OnInit {
           business.name,
           business.email,
           business.mobileNumber,
+          business.worker.name,
+          (business.departmentOrigin || '').toUpperCase(),
+          (business.provinceOrigin || '').toUpperCase(),
+          (business.districtOrigin || '').toUpperCase(),
+          (business.departmentResidence || '').toUpperCase(),
+          (business.provinceResidence || '').toUpperCase(),
+          (business.districtResidence || '').toUpperCase()
         ]);
       }
       const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -187,9 +202,9 @@ export class BusinessesComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    this.businessesService.getBusinessesByPage(event.pageIndex + 1, event.pageSize).subscribe(businesses => {
-      this.dataSource = businesses;
-    });
+    // this.businessesService.getBusinessesByPage(event.pageIndex + 1, event.pageSize).subscribe(businesses => {
+    //   this.dataSource = businesses;
+    // });
   }
 
 }

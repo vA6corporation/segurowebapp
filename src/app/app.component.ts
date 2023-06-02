@@ -34,7 +34,7 @@ export class AppComponent {
 
     this.authService.handleAuthStatus().subscribe(() => {
       this.authService.handleAuth().pipe(first()).subscribe(auth => {
-        if (auth.user.isAdmin) {
+        if (auth.user.showAllNotifications) {
           this.notificationsService.getActiveNotifications().subscribe(notifications => {
             if (notifications.length) {
               this.matDialog.open(DialogNotificationsComponent, {

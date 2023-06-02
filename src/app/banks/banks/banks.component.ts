@@ -35,7 +35,7 @@ export class BanksComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    this.navigationService.loadBarStart();
+    // this.navigationService.loadBarStart();
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
 

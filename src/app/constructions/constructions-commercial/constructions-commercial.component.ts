@@ -351,25 +351,26 @@ export class ConstructionsCommercialComponent implements OnInit {
           this.navigationService.showMessage(error.error.message);
         });
       } else {
-        // this.navigationService.loadBarStart();
-        // this.constructionsService.getConstructionsByRangeDateOfficeFinancierPage(
-        //   this.pageIndex + 1, 
-        //   this.pageSize, 
-        //   this.params
-        // ).subscribe(constructions => {
-        //   this.navigationService.loadBarFinish();
-        //   this.dataSource = constructions;
-        // }, (error: HttpErrorResponse) => {
-        //   this.navigationService.loadBarFinish();
-        //   this.navigationService.showMessage(error.error.message);
-        // });
+        this.navigationService.loadBarStart();
+        this.constructionsService.getConstructionsByPage(
+          this.pageIndex + 1, 
+          this.pageSize, 
+          this.params
+        ).subscribe(constructions => {
+          this.navigationService.loadBarFinish();
+          this.dataSource = constructions;
+          console.log(constructions);
+        }, (error: HttpErrorResponse) => {
+          this.navigationService.loadBarFinish();
+          this.navigationService.showMessage(error.error.message);
+        });
       }
     }
   }
 
   fetchCount() {
     if (this.user?.workerId) {
-      this.constructionsService.getCountConstructionsByRangeDateOfficeFinancier(this.params).subscribe(count => {
+      this.constructionsService.getCountConstructions(this.params).subscribe(count => {
         this.length = count;
       });
     }

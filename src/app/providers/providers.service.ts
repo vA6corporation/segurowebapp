@@ -13,6 +13,10 @@ export class ProvidersService {
     private readonly httpService: HttpService,
   ) { }
 
+  getProviders(): Observable<ProviderModel[]> {
+    return this.httpService.get('providers');
+  }
+
   getProvidersByKey(key: string): Observable<ProviderModel[]> {
     return this.httpService.get(`providers/byKey/${key}`);
   }

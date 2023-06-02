@@ -9,6 +9,7 @@ import { BusinessPdfModel } from './business-pdf.model';
 import { BusinessModel } from './business.model';
 import { GuarantiesModel } from './dialog-add-guaranties/guaranties.model';
 import { FacilityCreditModel } from './facility-credit.model';
+import { Params } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -35,16 +36,16 @@ export class BusinessesService {
     return this.httpService.get(`businesses/byWorkerKey/${workerId}/${key}`);
   }
 
-  getBusinessesByPage(pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
-    return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`);
+  getBusinessesByPage(pageIndex: number, pageSize: number, params: Params): Observable<BusinessModel[]> {
+    return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`, { params });
   }
 
   getBusinessesByWorkerPage(workerId: string, pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
     return this.httpService.get(`businesses/byWorkerPage/${workerId}/${pageIndex}/${pageSize}`);
   }
 
-  getCountBusinesses(): Observable<number> {
-    return this.httpService.get('businesses/countBusinesses');
+  getCountBusinesses(params: Params): Observable<number> {
+    return this.httpService.get('businesses/countBusinesses', { params });
   }
 
   getCountBusinessesByWorker(workerId: string): Observable<number> {
@@ -106,6 +107,10 @@ export class BusinessesService {
 
   delete(businessId: string) {
     return this.httpService.delete(`businesses/${businessId}`);
+  }
+
+  restore(businessId: string) {
+    return this.httpService.get(`businesses/restore/${businessId}`);
   }
 
   getBusinessNodes(type: string, businessId: string): Observable<any[]> {

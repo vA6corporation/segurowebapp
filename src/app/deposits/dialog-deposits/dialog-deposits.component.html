@@ -4,7 +4,7 @@
     <h2 mat-dialog-title>Agregar deposito</h2>
   </ng-template>
   <div mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Suma asegurada</mat-label>
       <input type="number" matInput formControlName="price">
     </mat-form-field>
@@ -15,12 +15,6 @@
         <mat-option value="USD">USD</mat-option>
       </mat-select>
     </mat-form-field>
-    <!-- <mat-form-field appearance="fill">
-      <mat-label>Fecha de cobro</mat-label>
-      <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
-      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #endDatePicker></mat-datepicker>
-    </mat-form-field> -->
   </div>
   <div class="spacer"></div>
   <mat-dialog-actions align="end">

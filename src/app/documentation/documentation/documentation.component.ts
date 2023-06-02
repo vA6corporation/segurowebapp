@@ -386,7 +386,7 @@ export class DocumentationComponent implements OnInit {
   }
 
   findContract(element: any, type: string) {
-    return !element.documentation.find((e: string) => e == type) && !element.isEmition;
+    return !element.documentation.find((e: string) => e == type) && element.isEmition;
   }
 
   findConstruction(element: any, type: string) {

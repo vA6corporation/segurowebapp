@@ -13,6 +13,7 @@ import { DialogEditSeaceComponent } from '../dialog-edit-seace/dialog-edit-seace
 import { DialogSeaceDetailsComponent } from '../dialog-seace-details/dialog-seace-details.component';
 import { SeaceDataModel } from '../seace-data.model';
 import { SeaceService } from '../seace.service';
+import { DialogOffersComponent } from '../dialog-offers/dialog-offers.component';
 
 @Component({
   selector: 'app-seace',
@@ -39,7 +40,7 @@ export class SeaceComponent implements OnInit {
     objetoContratacion: '',
     departamento: '',
   });
-  public displayedColumns: string[] = [ 'buenaPro', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'worker', 'observations', 'actions' ];
+  public displayedColumns: string[] = [ 'buenaPro', 'departamento', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'worker', 'observations', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -105,7 +106,8 @@ export class SeaceComponent implements OnInit {
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
-      this.seaceService.getSeaceDatasByKey(key).subscribe(seaceDatas => {
+      this.seaceService.getSeaceDatasByKey(key, this.params).subscribe(seaceDatas => {
+        console.log(seaceDatas);
         this.navigationService.loadBarFinish();
         this.dataSource = seaceDatas;
       }, (error: HttpErrorResponse) => {
@@ -178,6 +180,19 @@ export class SeaceComponent implements OnInit {
 
     this.fetchData();
     this.fetchCount();
+  }
+
+  onClickCopy() {
+    this.navigationService.showMessage('Copiado al portapapeles');
+  }
+
+  onDialogOffers(seaceData: SeaceDataModel) {
+    this.matDialog.open(DialogOffersComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: seaceData,
+    });
   }
 
   onDialogEditSeace(seaceData: SeaceDataModel) {

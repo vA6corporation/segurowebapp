@@ -68,38 +68,30 @@
       <mat-label>Nombre de Entidades Afianzadoras </mat-label>
       <input type="text" matInput formControlName="nameSuretyEntities" />
     </mat-form-field>
-
-    <mat-card>
-      <mat-card-subtitle>INGRESOS PASADOS, VIGENTES Y PROYECTADOS (S/.)</mat-card-subtitle>
-      <mat-card-content>
+    <h2>Ingresos pasados, vigentes y proyectados (S/)</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Año</mat-label>
+      <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>monto</mat-label>
+      <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
+    </mat-form-field>
+    <mat-list class="mb-3">
+      <div mat-subheader>Experiencia</div>
+      <mat-list-item *ngFor="let income of incomes; let i = index">
         <div>
-          <mat-form-field appearance="fill">
-            <mat-label>Año</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>monto</mat-label>
-            <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
-          </mat-form-field>
+          Año: {{ income.year }}, Monto {{ income.amount }}
         </div>
-
-        <mat-list class="mb-3">
-          <div mat-subheader>Experiencia</div>
-          <mat-list-item *ngFor="let income of incomes; let i = index">
-            <div>
-              Año: {{ income.year }}, Monto {{ income.amount }}
-            </div>
-            <span class="spacer"></span>
-            <button type="button" mat-icon-button (click)="removeIncomes(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button type="button" mat-button (click)="addIncomes()">Agregar ingresos</button>
-      </mat-card-actions>
-    </mat-card>
+        <span class="spacer"></span>
+        <button type="button" mat-icon-button (click)="removeIncomes(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+    <div class="mb-3">
+      <button mat-raised-button color="primary" type="button" mat-button (click)="addIncomes()" class="w-100">AGREGAR INGRESOS</button>
+    </div>
 
     <div class="mb-3">
       <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
@@ -109,6 +101,9 @@
     </div>
     <div class="mb-3">
       <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isCommonRepresentative">Representante comun</mat-slide-toggle>
     </div>
     <div class="mb-3">
       <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio">Consorcio</mat-slide-toggle>

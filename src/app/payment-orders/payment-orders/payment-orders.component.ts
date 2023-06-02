@@ -85,6 +85,7 @@ export class PaymentOrdersComponent implements OnInit {
     this.navigationService.setMenu([
       { id: 'search', label: 'Buscar', icon: 'search', show: true },
       { id: 'export_excel', label: 'Exportar excel', icon: 'file_download', show: false },
+      { id: 'import_excel', label: 'Importar Excel', icon: 'file_upload', show: false },
     ]);
 
     this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
@@ -103,67 +104,77 @@ export class PaymentOrdersComponent implements OnInit {
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      this.navigationService.loadBarStart();
-      if (this.formGroup.valid) {
-        const params = this.formGroup.value;
-        this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
-          this.navigationService.loadBarFinish();
-          const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          let body = [];
-          body.push([
-            'F. DE PAGO',
-            'PROVEEDOR',
-            'CONCEPTO',
-            'IMPORTE',
-            'RAZON SOCIAL',
-            'N° DE CUENTA',
-            'BANCO'
-          ]);
-          for (const paymentOrder of paymentOrders) {
-            body.push([
-              formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
-              paymentOrder.provider.name,
-              paymentOrder.concept,
-              paymentOrder.charge.toFixed(2),
-              paymentOrder.company?.name,
-              paymentOrder.bank?.accountNumber,
-              paymentOrder.bank?.bankName,
-            ]);
-          }
-          const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-          buildExcel(body, name, wscols, [], []);
-        });
-      } else {
-        const { companyId } = this.formGroup.value;
-        const params = { companyId };
-        this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
-          this.navigationService.loadBarFinish();
-          const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          let body = [];
-          body.push([
-            'F. DE PAGO',
-            'PROVEEDOR',
-            'CONCEPTO',
-            'IMPORTE',
-            'RAZON SOCIAL',
-            'N° DE CUENTA',
-            'BANCO'
-          ]);
-          for (const paymentOrder of paymentOrders) {
-            body.push([
-              formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
-              paymentOrder.provider.name,
-              paymentOrder.concept,
-              paymentOrder.charge.toFixed(2),
-              paymentOrder.company?.name,
-              paymentOrder.bank?.accountNumber,
-              paymentOrder.bank?.bankName,
-            ]);
-          }
-          const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-          buildExcel(body, name, wscols, [], []);
-        });
+      switch (id) {
+        case 'export_excel':
+          this.navigationService.loadBarStart();
+          if (this.formGroup.valid) {
+            const params = this.formGroup.value;
+            this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
+              this.navigationService.loadBarFinish();
+              const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+              let body = [];
+              body.push([
+                'F. DE PAGO',
+                'PROVEEDOR',
+                'CONCEPTO',
+                'IMPORTE',
+                'RAZON SOCIAL',
+                'N° DE CUENTA',
+                'BANCO'
+              ]);
+              for (const paymentOrder of paymentOrders) {
+                body.push([
+                  formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
+                  paymentOrder.provider.name,
+                  paymentOrder.concept,
+                  paymentOrder.charge.toFixed(2),
+                  paymentOrder.company?.name,
+                  paymentOrder.bank?.accountNumber,
+                  paymentOrder.bank?.bankName,
+                ]);
+              }
+              const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+              buildExcel(body, name, wscols, [], []);
+            });
+          } else {
+            const { companyId } = this.formGroup.value;
+            const params = { companyId };
+            this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
+              this.navigationService.loadBarFinish();
+              const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+              let body = [];
+              body.push([
+                'F. DE PAGO',
+                'PROVEEDOR',
+                'CONCEPTO',
+                'IMPORTE',
+                'RAZON SOCIAL',
+                'N° DE CUENTA',
+                'BANCO'
+              ]);
+              for (const paymentOrder of paymentOrders) {
+                body.push([
+                  formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
+                  paymentOrder.provider.name,
+                  paymentOrder.concept,
+                  paymentOrder.charge.toFixed(2),
+                  paymentOrder.company?.name,
+                  paymentOrder.bank?.accountNumber,
+                  paymentOrder.bank?.bankName,
+                ]);
+              }
+              const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+              buildExcel(body, name, wscols, [], []);
+            });
+          }    
+
+          break;
+      
+        case 'import_excel':
+          this.router.navigate(['/tools/paymentOrders']);
+          break;
       }
+      
     });
   }
 

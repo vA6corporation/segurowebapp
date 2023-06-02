@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://seguroin.com/api/',
-  baseUrlSeace: 'https://seguroin.com/api/',
+  baseUrl: 'https://app.fidenzaconsultores.com/api/',
+  baseUrlSeaceFiles: 'https://seace.fidenzaconsultores.com/',
   version: '1.12.0',
 };

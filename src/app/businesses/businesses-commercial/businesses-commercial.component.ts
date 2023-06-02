@@ -87,9 +87,7 @@ export class BusinessesCommercialComponent implements OnInit {
           this.length = count;
         });
     
-        this.businessesService.getBusinessesByWorkerPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(businesses => {
-          this.dataSource = businesses;
-        });
+        this.fetchData();
       }
     });
 
@@ -117,6 +115,12 @@ export class BusinessesCommercialComponent implements OnInit {
         default:
           break;
       }
+    });
+  }
+  
+  fetchData() {
+    this.businessesService.getBusinessesByWorkerPage(this.workerId, this.pageIndex + 1, this.pageSize).subscribe(businesses => {
+      this.dataSource = businesses;
     });
   }
 
@@ -193,9 +197,9 @@ export class BusinessesCommercialComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    this.businessesService.getBusinessesByPage(event.pageIndex + 1, event.pageSize).subscribe(businesses => {
-      this.dataSource = businesses;
-    });
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchData();
   }
 
 }

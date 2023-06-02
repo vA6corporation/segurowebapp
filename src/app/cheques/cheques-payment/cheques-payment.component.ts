@@ -94,6 +94,7 @@ export class ChequesPaymentComponent implements OnInit {
         'N° DE POLIZA',
         'CONSORCIO',
         'CLIENTE',
+        'FINANCIERA'
       ]);
       for (const cheque of this.dataSource) {
         body.push([
@@ -104,6 +105,7 @@ export class ChequesPaymentComponent implements OnInit {
           cheque.guarantee?.policyNumber,
           cheque.guarantee?.partnership?.name,
           cheque.guarantee?.business?.name,
+          cheque.guarantee?.financier?.name,
         ]);
       }
       const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;

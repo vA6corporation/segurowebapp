@@ -27,7 +27,7 @@ export class DialogEditSeaceComponent implements OnInit {
 
   public workers: WorkerModel[] = [];
   public formGroup: UntypedFormGroup = this.formBuilder.group({
-    workerId: [ null, Validators.required ],
+    workerId: null,
     observations: null,
   });
 
@@ -41,9 +41,6 @@ export class DialogEditSeaceComponent implements OnInit {
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
-
-    console.log(this.seaceData.workerId);
-
     this.formGroup.patchValue(this.seaceData);
   }
 

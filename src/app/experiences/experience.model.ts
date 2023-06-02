@@ -10,6 +10,7 @@ export interface ExperienceModel {
   isArbitration: boolean
   isOperation: boolean
   isConsorcio: boolean
+  isCommonRepresentative: boolean
 
   typeWork: string
   endingDate: string

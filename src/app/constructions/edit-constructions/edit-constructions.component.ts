@@ -22,6 +22,7 @@ import { ConstructionsService } from '../constructions.service';
 import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogPercentCompletionsComponent } from '../dialog-percent-completions/dialog-percent-completions.component';
 import { PercentCompletionModel } from '../percent-completion.model';
+import { ConstructionPdfTypes } from '../construction-pdf.enum';
 
 @Component({
   selector: 'app-edit-constructions',
@@ -42,6 +43,7 @@ export class EditConstructionsComponent implements OnInit {
     private readonly formBuilder: UntypedFormBuilder,
   ) { }
     
+  readonly ConstructionPdfTypes = ConstructionPdfTypes;
   public isLoading: boolean = false;
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     partnership: this.formBuilder.group({
@@ -61,12 +63,16 @@ export class EditConstructionsComponent implements OnInit {
     awardedAmount: [ null, Validators.required ],
     code: [ null, Validators.required ],
     observations: null,
+    observationsPayment: null,
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
+    startAt: null,
+    dayLimit: null,
     processStatusCode: '01',
     constructionCode: '01',
     officeId: '',
     commission: null,
+    isExonerated: false,
   });
   public offices: OfficeModel[] = [];
   public companies: CompanyModel[] = [];
@@ -228,10 +234,10 @@ export class EditConstructionsComponent implements OnInit {
     });
   }
 
-  onAttachPdfDocument() {
+  onAttachPdf(type: ConstructionPdfTypes) {
     const data: DialogAttachPdfData = {
       constructionId: this.constructionId,
-      type: 'DOCUMENT',
+      type,
     }
 
     this.matDialog.open(DialogAttachPdfComponent, {
@@ -241,35 +247,6 @@ export class EditConstructionsComponent implements OnInit {
       data,
     });
   }
-
-  onAttachPdfCompletion() {
-    const data: DialogAttachPdfData = {
-      constructionId: this.constructionId,
-      type: 'COMPLETION',
-    }
-
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
-
-  onAttachPdfVoucher() {
-    const data: DialogAttachPdfData = {
-      constructionId: this.constructionId,
-      type: 'VOUCHER',
-    }
-
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
-
 
   async onSubmit() {
     if (this.formGroup.valid) {

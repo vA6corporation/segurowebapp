@@ -29,6 +29,7 @@ export class DialogEditExperiencesComponent implements OnInit {
     isArbitration: this.experience.isArbitration,
     isOperator: this.experience.isOperation,
     isConsorcio: this.experience.isConsorcio,
+    isCommonRepresentative: this.experience.isCommonRepresentative,
 
     typeWork: this.experience.typeWork,
     endingDate: this.experience.endingDate,

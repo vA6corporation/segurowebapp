@@ -3,8 +3,16 @@
   <table>
     <tbody>
       <tr>
-        <td style="width: 13rem">Comvocatoria ID:</td>
+        <td style="width: 8rem">Comvocatoria ID:</td>
         <td>{{ seaceData.convocatoriaId }}</td>
+      </tr>
+      <tr>
+        <td style="width: 8rem">F. Publicacion:</td>
+        <td>{{ seaceData.publicacionDate | date }}</td>
+      </tr>
+      <tr>
+        <td style="width: 8rem">Observaciones:</td>
+        <td>{{ seaceData.observations }}</td>
       </tr>
     </tbody>
   </table>

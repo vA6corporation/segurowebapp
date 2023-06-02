@@ -56,7 +56,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element;">
-          <button mat-icon-button *ngIf="element.isPaid; else elseBlockIcon">
+          <button mat-icon-button *ngIf="element.isPaid || element.isExonerated; else elseBlockIcon">
             <mat-icon>
               attach_money
             </mat-icon>

@@ -4,6 +4,7 @@ export interface UserModel {
   name: string,
   email: string,
   password: string,
+  showAllNotifications: boolean
   isAdmin: boolean
   workerId?: string,
   businessId?: string,

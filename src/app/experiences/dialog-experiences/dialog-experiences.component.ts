@@ -9,10 +9,11 @@ import { ExperienceModelIncome } from '../experience.model';
   styleUrls: ['./dialog-experiences.component.sass'],
 })
 export class DialogExperiencesComponent implements OnInit {
+
   constructor(
     private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogExperiencesComponent>
-  ) {}
+  ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     contractor: [null, Validators.required],
@@ -26,6 +27,7 @@ export class DialogExperiencesComponent implements OnInit {
     isArbitration: false,
     isOperator: false,
     isConsorcio: false,
+    isCommonRepresentative: false,
 
     typeWork: null,
     endingDate: null,
@@ -40,6 +42,7 @@ export class DialogExperiencesComponent implements OnInit {
     bondedConsortium: null,
     participationConsortium: null,
   });
+  
   incomes: ExperienceModelIncome[] = [];
   incomesYear: null|string = null;
   incomesAmount: null|number = null;

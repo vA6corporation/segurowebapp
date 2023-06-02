@@ -59,7 +59,6 @@ export class LegalsComponent implements OnInit {
   public renovationCount: number = 0;
   public isEmition: boolean|null = null;
 
-  private users$: Subscription = new Subscription();
   private handleWorkers$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
@@ -88,10 +87,10 @@ export class LegalsComponent implements OnInit {
   });
 
   ngOnDestroy() {
-    this.users$.unsubscribe();
     this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
     this.queryParams$.unsubscribe();
+    this.handleOffices$.unsubscribe();
   }
 
   ngOnInit() {
@@ -102,7 +101,7 @@ export class LegalsComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.users$ = this.usersService.getActiveUsers().subscribe(users => {
+    this.usersService.getActiveUsers().subscribe(users => {
       this.users = users;
     });
 
@@ -138,27 +137,67 @@ export class LegalsComponent implements OnInit {
     });
 
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      const wscols = [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ];
-      let body = [];
-      body.push([
-        'CLIENTE',
-        'CONSORCIO',
-        'PERSONAL',
-        'E. DE TRAMITE',
-        'OBJETO',
-      ]);
+      const params: any = {};
 
-      for (const construction of this.dataSource) {
-        body.push([
-          construction.business.name,
-          construction.partnership?.name,
-          construction.worker?.name,
-          construction.processStatusCodeType,
-          construction.object,
-        ]);
+      params.processStatusCode = this.statusForm.value.processStatusCode;
+      
+      if (this.financierForm.valid) {
+        params.financierId = this.financierForm.value._id;
       }
-      const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-      buildExcel(body, name, wscols, [], []);
+      
+      if (this.workerForm.valid) {
+        params.workerId = this.workerForm.value._id; 
+      }
+  
+      if (this.officeForm.valid) {
+        params.officeId = this.officeForm.value.officeId;
+      }
+  
+      if (this.dateForm.valid) {
+        const { startDate, endDate } = this.dateForm.value;
+        params.startDate = startDate;
+        params.endDate = endDate;
+      }
+
+      this.navigationService.loadBarStart();
+      this.constructionsService.getConstructionsByRangeDateFinancierWorkerStatusWithGuaranteis(params).subscribe(constructions => {
+        console.log(constructions);
+        this.navigationService.loadBarFinish();
+        // this.dataSource = constructions;
+        const wscols = [ 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 ];
+        let body = [];
+        body.push([
+          'CLIENTE',
+          'CONSORCIO',
+          'ASEGURADORAS',
+          'PERSONAL',
+          'E. DE TRAMITE',
+          'OBJETO',
+        ]);
+  
+        for (const construction of constructions) {
+          const financiers: any[] = [];
+          for (const material of construction.materials || []) {
+            financiers.push(material.financier);
+          }
+          for (const compliance of construction.compliances || []) {
+            financiers.push(compliance.financier);
+          }
+          for (const direct of construction.directs || []) {
+            financiers.push(direct.financier);
+          }
+          body.push([
+            construction.business.name,
+            construction.partnership?.name,
+            financiers.map(e => e.name),
+            construction.worker?.name,
+            construction.processStatusCodeType,
+            construction.object,
+          ]);
+        }
+        const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+        buildExcel(body, name, wscols, [], []);
+      });
     });
   }
 

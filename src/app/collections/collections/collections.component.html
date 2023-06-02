@@ -17,40 +17,54 @@
           <mat-option *ngFor="let element of workers" [value]="element._id" class="text-uppercase">{{ element.name | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Emision/renovacion</mat-label>
+        <mat-select (selectionChange)="onChangeEmition()" placeholder="EMISIONES Y RENOVACIONES" formControlName="isEmition">
+          <mat-option value="">EMISIONES Y RENOVACIONES</mat-option>
+          <mat-option [value]="true">SOLO EMISIONES</mat-option>
+          <mat-option [value]="false">SOLO RENOVACIONES</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="d-flex">
+      <mat-form-field appearance="fill" formGroupName="financier">
+        <mat-label>Financiera</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
+      </mat-form-field>
+      <mat-form-field appearance="fill" formGroupName="business">
+        <mat-label>Empresa</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
+      </mat-form-field>
     </div>
   </form>
-  
-  <form [formGroup]="financierForm" autocomplete="off">
-    <mat-form-field appearance="fill">
-      <mat-label>Financiera</mat-label>
-      <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
-    </mat-form-field>
-  </form>
-
-  <form [formGroup]="businessForm" autocomplete="off">
-    <mat-form-field appearance="fill">
-      <mat-label>Empresa</mat-label>
-      <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
-    </mat-form-field>
-  </form>
-
   <div class="d-flex">
     <div style="margin-right: 5rem; min-width: 10rem;">
-      <mat-action-list>
-        <button type="button" (click)="onSetEmition(true)" mat-list-item>
+      <table>
+        <tbody>
+          <tr>
+            <td class="pb-3" width="120">Emisiones:</td>
+            <td>{{ emitionCount }}</td>
+          </tr>
+          <tr>
+            <td>Renovaciones:</td>
+            <td>{{ renovationCount }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <mat-list>
+        <button type="button" mat-list-item>
           Emisiones:
           <span class="spacer"></span>
-          {{ emitionCount }}
         </button>
-        <button type="button" (click)="onSetEmition(false)" mat-list-item>
+        <button type="button" mat-list-item>
           Renovaciones:
           <span class="spacer"></span>
           {{ renovationCount }}
         </button>
-      </mat-action-list>
+      </mat-list> -->
     </div>
     <div>
-      <h2>Suma asegurada</h2>
+      <!-- <h2>Suma asegurada</h2> -->
       <div>
         <canvas #collectionChartPrice width="300" height="300"></canvas>
       </div>

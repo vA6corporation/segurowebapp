@@ -3,6 +3,14 @@
     <p class="text-capitalize text-bold mb-1">Horvi</p>
     <span class="m-0 text-capitalize text-truncate">{{ office?.name }}</span>
   </div>
+  <!-- <a href="#" #search mat-list-item routerLink="/notifications" (click)="onClose()" *ngIf="privileges.notifications">
+    <mat-icon class="mr-2">notifications</mat-icon>
+    <span>Notificaciones</span>
+  </a> -->
+  <a href="#" #search mat-list-item routerLink="/seace/seaceInbox" (click)="onClose()" *ngIf="privileges.seaceInbox">
+    <mat-icon class="mr-2">inbox</mat-icon>
+    <span>Buzon Seace</span>
+  </a>
   <a href="#" #search mat-list-item routerLink="/seace" (click)="onClose()" *ngIf="privileges.seace">
     <mat-icon class="mr-2">travel_explore</mat-icon>
     <span>Seace</span>

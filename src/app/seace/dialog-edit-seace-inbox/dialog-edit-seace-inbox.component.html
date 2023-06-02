@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2 mat-dialog-title>Editar seace</h2>
+  <mat-dialog-content>
+    <!-- <mat-form-field appearance="fill">
+      <mat-label>Personal a cargo</mat-label>
+      <mat-select formControlName="workerId">
+        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field> -->
+    <mat-form-field appearance="fill">
+      <mat-label>Observaciones</mat-label>
+      <input type="text" matInput formControlName="observations">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>VOLVER</button>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

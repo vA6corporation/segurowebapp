@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit {
         console.log(res);
         const { accessToken, userId, name, email, isAdmin } = res;
         if (rememberme) {
-          const user: UserModel = {
+          const user: any = {
             _id: userId,
             isAdmin,
             name,

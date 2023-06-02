@@ -2,6 +2,10 @@ import { OfficeModel } from "../auth/office.model";
 import { BeneficiaryModel } from "../beneficiaries/beneficiary.model";
 import { BusinessModel } from "../businesses/business.model";
 import { CompanyModel } from "../companies/company.model";
+import { ComplianceModel } from "../compliances/compliance.model";
+import { DirectModel } from "../directs/direct.model";
+import { GuaranteeModel } from "../guarantees/guarantee.model";
+import { MaterialModel } from "../materials/material.model";
 import { PartnershipModel } from "../partnerships/partnership.model";
 import { PaymentModel } from "../payments/payment.model";
 import { UserModel } from "../users/user.model";
@@ -26,6 +30,9 @@ export interface ConstructionModel {
   business: BusinessModel
   beneficiary: BeneficiaryModel
   company: CompanyModel
+  materials?: MaterialModel[]
+  compliances?: ComplianceModel[]
+  directs?: DirectModel[]
   percentCompletions: PercentCompletionModel[]
   percentCompletion: PercentCompletionModel|null
   payments: PaymentModel[]

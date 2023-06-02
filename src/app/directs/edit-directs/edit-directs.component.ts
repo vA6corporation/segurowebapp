@@ -439,7 +439,7 @@ export class EditDirectsComponent implements OnInit {
         console.log(error);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
+        this.navigationService.showMessage(error.error.message);
       });
     }
   }

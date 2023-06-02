@@ -37,6 +37,7 @@ export class EditPaymentOrdersComponent implements OnInit {
     companyId: [ '', Validators.required ],
     concept: [ null, Validators.required ],
     charge: [ null, Validators.required ],
+    currencyCode: 'PEN',
     observations: null,
     paymentAt: [ new Date(), Validators.required ],
     bankId: null,

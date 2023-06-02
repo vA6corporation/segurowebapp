@@ -5,6 +5,7 @@ import { InvestmentModel } from '../investments/investment.model';
 import { MovablePropertyModel } from '../movable-properties/movable-property.model';
 import { PropertyModel } from '../properties/property.model';
 import { ShareholderModel } from '../shareholders/shareholder.model';
+import { WorkerModel } from '../workers/worker.model';
 import { AccessCreditModel } from './dialog-add-access-credit/access-credit.model';
 import { AccountRotationModel } from './dialog-add-account-rotation/account-rotation.model';
 import { GuarantiesModel } from './dialog-add-guaranties/guaranties.model';
@@ -109,4 +110,5 @@ export interface BusinessModel {
   guaranties: GuarantiesModel[];
   facilityCredits: FacilityCreditModel[];
   linkedBusinesses: BusinessModel[];
+  worker: WorkerModel
 }

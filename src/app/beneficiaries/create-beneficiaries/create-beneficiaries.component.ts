@@ -20,20 +20,18 @@ export class CreateBeneficiariesComponent implements OnInit {
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
-    beneficiary: this.formBuilder.group({
-      document: [null, Validators.required],
-      name: [null, Validators.required],
-      email: null,
-      mobileNumber: null,
-      phoneNumber: null,
-      annexed: null,
-      address: null,
-      legalRepresentative: null,
-      positionLegalRepresentative: null,
-      contactPerson: null,
-      positioncontactPerson: null,
-      economicActivity: null,
-    }),
+    document: [null, Validators.required],
+    name: [null, Validators.required],
+    email: null,
+    mobileNumber: null,
+    phoneNumber: null,
+    annexed: null,
+    address: null,
+    legalRepresentative: null,
+    positionLegalRepresentative: null,
+    contactPerson: null,
+    positioncontactPerson: null,
+    economicActivity: null,
   });
   public isLoading: boolean = false;
   public maxlength: number = 11;
@@ -47,8 +45,7 @@ export class CreateBeneficiariesComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { beneficiary } = this.formGroup.value;
-      this.beneficiariesService.create(beneficiary).subscribe(res => {
+      this.beneficiariesService.create(this.formGroup.value).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

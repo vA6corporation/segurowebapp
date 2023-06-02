@@ -1,21 +1,32 @@
-<h2 mat-dialog-title>Notificaciones ({{ notifications.length }})</h2>
+<h2 mat-dialog-title>Notificaciones</h2>
 <mat-dialog-content>
-  <div *ngFor="let notification of notifications; let i = index">
+  <div *ngFor="let notification of tmpNotifications; let i = index" style="position: relative;" class="mb-4">
+    <!-- <div class="absolute-top d-flex">
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onDisableNotification(notification._id, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div> -->
     <span class="text-muted">
       <small>
-        {{ notification.createdAt | date: 'dd/MM/yyyy' }}
+        {{ notification.createdAt | date: 'dd/MM/yyyy' }} - {{ notification.worker.name | uppercase }}
       </small>
     </span>
     <h3 class="mb-0 d-flex">
       {{ notification.title }}
       <span class="spacer"></span>
-      <button mat-icon-button (click)="onDisableNotification(notification._id, i)">
-        <mat-icon>delete</mat-icon>
-      </button>
     </h3>
     <p class="text-muted" style="white-space: pre-line">{{ notification.message }}</p>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions>
+  <mat-form-field appearance="standard" class="w-auto">
+    <mat-label>Personal a cargo</mat-label>
+    <mat-select [(value)]="worker" placeholder="TODOS LOS PERSONALES" (selectionChange)="onSelectionChange()">
+      <mat-option [value]="null">TODOS LOS PERSONALES</mat-option>
+      <mat-option *ngFor="let element of workers" [value]="element">{{ element.name | uppercase }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <span class="spacer"></span>
   <button mat-button mat-dialog-close>VOLVER</button>
 </mat-dialog-actions>

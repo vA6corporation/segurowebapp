@@ -8,8 +8,16 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'tools',
+    loadChildren: () => import('./tools/tools.module').then(m => m.ToolsModule)
+  },
+  {
     path: 'notifications',
     loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule)
+  },
+  {
+    path: 'activities',
+    loadChildren: () => import('./activities/activities.module').then(m => m.ActivitiesModule)
   },
   {
     path: 'payments',

@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "predeploy": "ng build --configuration production",
-    "deploy": "gcloud app deploy --project horviconsultores"
+    "deploy": "gcloud app deploy --project fidenzaconsultores"
   },
   "private": true,
   "dependencies": {

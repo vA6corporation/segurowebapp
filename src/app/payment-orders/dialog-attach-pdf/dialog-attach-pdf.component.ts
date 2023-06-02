@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { NavigationService } from 'src/app/navigation/navigation.service';
 import { environment } from 'src/environments/environment';
 import { PaymentOrderPdfModel } from '../payment-order-pdf.model';
 import { PaymentOrdersService } from '../payment-orders.service';

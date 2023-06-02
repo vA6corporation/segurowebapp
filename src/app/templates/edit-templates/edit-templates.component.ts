@@ -66,6 +66,7 @@ export class EditTemplatesComponent implements OnInit {
       this.templateId = params.templateId;
       this.templatesService.getTemplateById(this.templateId).subscribe(template => {
         const { business, partnership, beneficiary, guaranties, ...rest } = template;
+        console.log(guaranties);
         this.formGroup.patchValue(rest);
         this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('beneficiary')?.patchValue(beneficiary);

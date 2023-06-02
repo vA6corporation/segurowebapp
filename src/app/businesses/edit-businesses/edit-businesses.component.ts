@@ -205,7 +205,7 @@ export class EditBusinessesComponent implements OnInit {
 
     this.activatedRoute.params.subscribe((params) => {
       this.businessId = params.businessId;
-      this.businessesService.getBusinessById(this.businessId).subscribe((business) => {
+      this.businessesService.getBusinessById(this.businessId).subscribe(business => {
         this.linkedBusinesses = business.linkedBusinesses ? business.linkedBusinesses : [];
         this.salesMix = business.salesMix;
         this.mainSuppliers = business.mainSuppliers;
@@ -489,7 +489,10 @@ export class EditBusinessesComponent implements OnInit {
   }
 
   onRemoveExperience(index: number) {
-    this.experiences.splice(index, 1);
+    const ok = confirm('Esta seguro de eliminar?...');
+    if (ok) {
+      this.experiences.splice(index, 1);
+    }
   }
 
   onRemoveFacilityCredit(index: number) {

@@ -43,17 +43,13 @@ export class EditPrivilegesComponent implements OnInit {
       this.userId = params.userId;
       this.usersService.getUserById(params.userId).subscribe(user => {
         this.navigationService.setTitle(`Permisos ${user.name}`);
-        console.log(user);
         this.user = user;
-        console.log(user.privileges);
-        
         this.formGroup.patchValue(user.privileges || {});
       });
     });
   }
 
   onSubmit() {
-    // this.user.privileges = this.formGroup.value;
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.privilegesService.update(this.formGroup.value, this.userId).subscribe(() => {
@@ -64,8 +60,6 @@ export class EditPrivilegesComponent implements OnInit {
         this.navigationService.showMessage(error.error.message);
         this.isLoading = false;
       });
-    } else {
-      
     }
   }
 

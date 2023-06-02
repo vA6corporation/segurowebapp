@@ -4,8 +4,8 @@
     <h2 mat-dialog-title>Agregar cheque</h2>
   </ng-template>
   <div mat-dialog-content>
-    <mat-form-field>
-      <mat-label>Suma asegurada</mat-label>
+    <mat-form-field appearance="fill">
+      <mat-label>Monto</mat-label>
       <input type="number" matInput formControlName="price">
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -27,11 +27,13 @@
       <mat-datepicker-toggle matSuffix [for]="extensionPicker"></mat-datepicker-toggle>
       <mat-datepicker #extensionPicker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Observaciones</mat-label>
       <input type="text" matInput formControlName="observations">
     </mat-form-field>
-    <div class="my-3"></div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isPaid">Pagado</mat-slide-toggle>
+    </div>
   </div>
   <div class="spacer"></div>
   <mat-dialog-actions>

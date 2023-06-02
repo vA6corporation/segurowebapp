@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import jsPDF from 'jspdf';
 import { environment } from 'src/environments/environment';
 import { ConstructionPdfModel } from '../construction-pdf.model';
 import { ConstructionsService } from '../constructions.service';
+import jsPDF from 'jspdf';
 
 export interface DialogAttachPdfData {
   constructionId: string
@@ -54,20 +54,15 @@ export class DialogAttachPdfComponent implements OnInit {
   onChangePdf(constructionPdf: ConstructionPdfModel) {
     this.pdfId = constructionPdf.pdfId;
     this.constructionPdfId = constructionPdf._id;
-    if (constructionPdf.fileType === 'application/pdf') {
+    if (constructionPdf.contentType === 'application/pdf' || constructionPdf.contentType.includes('image')) {
       this.tabIndex = 1;
       this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.baseUrl}constructions/pdfs/${this.pdfId}`);
-    } else if (constructionPdf.fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      // this.downloadURI(`${environment.baseUrl}construction/docx/${this.pdfId}`, constructionPdf.filename)
     } else {
-      // this.downloadURI(`${environment.baseUrl}insurances/xls/${this.pdfId}`, constructionPdf.filename)
+      this.downloadURI(`${environment.baseUrl}paymentOrderPdfs/byPdfIdDownload/${this.pdfId}/${constructionPdf.filename}`, constructionPdf.filename)
     }
   }
 
-  downloadURI(uri: string, name: string) {
-    console.log(uri);
-    console.log(name);
-    
+  downloadURI(uri: string, name: string) {  
     var link = document.createElement("a");
     link.download = name;
     link.href = uri;

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:3000/api/',
-  baseUrlSeace: 'http://localhost:3001/api/',
+  baseUrlSeaceFiles: 'http://localhost:3001/api/',
   version: '1.0.0',
 };
 

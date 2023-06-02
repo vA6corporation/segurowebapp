@@ -124,11 +124,12 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   onDeletePdf(businessNode: BusinessNode) {
+    console.log(businessNode);
+    
     const nodeIndex = this.treeControl.dataNodes.indexOf(businessNode);
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
       this.businessesService.deletePdf(businessNode._id, businessNode.pdfId).subscribe(() => {
-        // this.fetchData();
         this.treeControl.dataNodes.splice(nodeIndex, 1);
         const isExpanded = this.treeControl.isExpanded(businessNode);
         if (isExpanded) {
@@ -137,7 +138,6 @@ export class DialogAttachPdfComponent implements OnInit {
         } else {
           this.treeControl.toggle(businessNode);
         }
-        // this.treeControl.expansionModel.changed();
       });
     }
   }
@@ -174,12 +174,12 @@ export class DialogAttachPdfComponent implements OnInit {
         formData.append('file', file);
         const promise = this.businessesService.uploadFile(formData, this.data.type, this.data.businessId, businessNodeId).toPromise().then(businessPdf => {
           const createdBusinessNode: BusinessNode = {
-            _id: businessPdf.pdfId,
+            _id: businessPdf._id,
             isTop: false,
             expandable: false,
             name: businessPdf.filename,
             contentType: businessPdf.contentType,
-            pdfId: businessPdf._id,
+            pdfId: businessPdf.pdfId,
             level: 1,
           }
           this.treeControl.dataNodes.splice(nodeIndex + 1, 0, createdBusinessNode);

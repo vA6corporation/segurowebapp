@@ -1,11 +1,11 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Objeto</mat-label>
       <input type="text" matInput formControlName="object">
     </mat-form-field>
     <div formGroupName="business">
-      <mat-form-field>
+      <mat-form-field appearance="fill">
         <mat-label>Empresa</mat-label>
         <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
       </mat-form-field>

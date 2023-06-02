@@ -27,9 +27,9 @@ export class EditUsersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],
+    showAllNotifications: false,
     isActive: false,
     isAdmin: false,
-    // allGuaranties: false,
     workerId: ''
   });
 

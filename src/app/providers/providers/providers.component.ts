@@ -60,6 +60,7 @@ export class ProvidersComponent implements OnInit {
       this.pageIndex = Number(pageIndex || 0);
       this.pageSize = Number(pageSize || 10);
       this.fetchData();
+      this.fetchCount();
     });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
@@ -84,11 +85,13 @@ export class ProvidersComponent implements OnInit {
     });
   }
 
-  fetchData() {
+  fetchCount() {
     this.providersService.getProvidersCount().subscribe(count => {
       this.length = count;
     });
+  }
 
+  fetchData() {
     this.navigationService.loadBarStart();
     this.providersService.getProvidersByPage(this.pageIndex + 1, this.pageSize).subscribe(providers => {
       this.navigationService.loadBarFinish();

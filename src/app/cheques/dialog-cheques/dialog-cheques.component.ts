@@ -23,6 +23,7 @@ export class DialogChequesComponent implements OnInit {
     currencyCode: 'PEN',
     extensionAt: null,
     observations: null,
+    isPaid: false,
   });
 
   ngOnInit(): void {

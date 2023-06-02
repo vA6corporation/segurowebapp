@@ -29,6 +29,13 @@
       <input type="number" matInput formControlName="charge">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Moneda</mat-label>
+      <mat-select formControlName="currencyCode">
+        <mat-option value="PEN">PEN</mat-option>
+        <mat-option value="USD">USD</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Observaciones</mat-label>
       <input type="text" matInput formControlName="observations">
     </mat-form-field>
