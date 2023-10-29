@@ -10,9 +10,12 @@ import { WorkerModel } from "../workers/worker.model";
 
 export interface ComplianceModel {
   _id: string
+  status: string
+  statusLabel: string
+  prima: number
   price: number
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   policyNumber: string
   diffDays: number
   object: string
@@ -24,7 +27,7 @@ export interface ComplianceModel {
   beneficiary: BeneficiaryModel
   partnership: PartnershipModel|null
   construction: ConstructionModel
-  worker: WorkerModel
+  worker: WorkerModel|null
   guaranteeType: string
   isMarked: boolean
   cheques: ChequeModel[]
@@ -32,5 +35,7 @@ export interface ComplianceModel {
   payments: PaymentModel[]
   createdAt: any
   updatedAt: any
+  observations: string
+  renewObservations: string
   userId: string
 }

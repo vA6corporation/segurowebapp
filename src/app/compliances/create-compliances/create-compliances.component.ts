@@ -238,7 +238,7 @@ export class CreateCompliancesComponent implements OnInit {
       compliance.financierId = financier._id;
       compliance.workerId = this.worker?._id;
       compliance.constructionId = this.construction?._id;
-      this.compliancesService.create(compliance, financier, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
+      this.compliancesService.create(compliance, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

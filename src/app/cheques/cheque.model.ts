@@ -1,4 +1,4 @@
-import { GuaranteeModel } from "../guarantees/guarantee.model"
+import { GuaranteeModel } from "../guaranties/guarantee.model"
 
 export interface ChequeModel {
   _id: string

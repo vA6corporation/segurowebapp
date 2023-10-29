@@ -87,7 +87,7 @@ export async function buildCreditLine(
       ]
     ],
     body: [
-      [ { content: `SERVICIO DE ASESORIA Y GESTION DE LINEA DE CREDITO ${partnership ? 'CONSORCIO ' + partnership.name : ''}`, colSpan: 1 }, { content: `S/ ${credit.commission.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
+      [ { content: `SERVICIO DE ASESORIA Y GESTION DE LINEA DE CREDITO ${partnership ? 'CONSORCIO ' + partnership.name : ''}`, colSpan: 1 }, { content: `S/ ${credit.commission.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
       [],
       [],
       [],

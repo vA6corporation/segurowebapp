@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties.component';
 
 describe('DialogAddGuarantiesComponent', () => {

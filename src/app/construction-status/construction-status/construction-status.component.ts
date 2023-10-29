@@ -8,7 +8,8 @@ import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { DirectsService } from 'src/app/directs/directs.service';
 import { FinancierModelsService } from 'src/app/financiers/financiers.service';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
+import { GuaranteeModel } from 'src/app/guaranties/guarantee.model';
+import { GuaranteeTypes } from 'src/app/guaranties/guaranteeTypes.enum';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -70,14 +71,14 @@ export class ConstructionStatusComponent implements OnInit {
   async onRenewGuarantee(guarantee: any) {
     guarantee.status = '02';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -86,14 +87,14 @@ export class ConstructionStatusComponent implements OnInit {
   async onNotRenewGuarantee(guarantee: any) {
     guarantee.status = '03';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -102,14 +103,14 @@ export class ConstructionStatusComponent implements OnInit {
   async onFreeGuarantee(guarantee: any) {
     guarantee.status = '04';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -118,14 +119,14 @@ export class ConstructionStatusComponent implements OnInit {
   async onNotLookGuarantee(guarantee: any) {
     guarantee.status = '01';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -136,7 +137,7 @@ export class ConstructionStatusComponent implements OnInit {
     if (ok) {
       this.navigationService.loadBarStart();
       switch (guarantee.guaranteeType) {
-        case 'GAMF':
+        case GuaranteeTypes.MATERIAL:
           this.materialsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.fetchData();
@@ -146,8 +147,8 @@ export class ConstructionStatusComponent implements OnInit {
             this.navigationService.showMessage(error.error.message);
           });
           break;
-        case 'GADF':
-          this.directsService.delete(guarantee._id).subscribe(() => {
+        case GuaranteeTypes.COMPLIANCE:
+          this.compliancesService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.fetchData();
             this.navigationService.loadBarFinish();
@@ -156,8 +157,8 @@ export class ConstructionStatusComponent implements OnInit {
             this.navigationService.showMessage(error.error.message);
           });
           break;
-        case 'GFCF':
-          this.compliancesService.delete(guarantee._id).subscribe(() => {
+        case GuaranteeTypes.DIRECT:
+          this.directsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.fetchData();
             this.navigationService.loadBarFinish();
@@ -172,20 +173,20 @@ export class ConstructionStatusComponent implements OnInit {
 
   onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.matDialog.open(DialogMaterialComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GADF':
-        this.matDialog.open(DialogDirectComponent, {
+      case GuaranteeTypes.COMPLIANCE:
+        this.matDialog.open(DialogComplianceComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GFCF':
-        this.matDialog.open(DialogComplianceComponent, {
+      case GuaranteeTypes.DIRECT:
+        this.matDialog.open(DialogDirectComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });

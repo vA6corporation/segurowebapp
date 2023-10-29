@@ -24,67 +24,6 @@
       <mat-label>Anexo</mat-label>
       <input type="text" matInput formControlName="annexed">
     </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Dias al año</mat-label>
-      <input type="number" matInput formControlName="daysAtYear">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Prima minima</mat-label>
-      <input type="number" matInput formControlName="minimumPrima">
-    </mat-form-field>
-    <h2>Prima emision</h2>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de tasa anual</mat-label>
-      <input type="number" matInput formControlName="emitionYearlyRatePercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de prima</mat-label>
-      <input type="number" matInput formControlName="emitionPrimaPercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de derecho de emision</mat-label>
-      <input type="number" matInput formControlName="emitionLawPercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Gastos</mat-label>
-      <input type="number" matInput formControlName="emitionCharge">
-    </mat-form-field>
-    <h2>Prima renovacion</h2>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de tasa anual</mat-label>
-      <input type="number" matInput formControlName="renewalYearlyRatePercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de prima</mat-label>
-      <input type="number" matInput formControlName="renewalPrimaPercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Porcentaje de derecho de emision</mat-label>
-      <input type="number" matInput formControlName="renewalLawPercentage">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Gastos</mat-label>
-      <input type="number" matInput formControlName="renewalCharge">
-    </mat-form-field>
-    <h2>Cuentas y razon social</h2>
-    <mat-form-field appearance="fill">
-      <mat-label>Razon social</mat-label>
-      <mat-select formControlName="companyId">
-        <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Cuenta en soles</mat-label>
-      <mat-select formControlName="bankPenId">
-        <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Cuenta en dolares</mat-label>
-      <mat-select formControlName="bankUsdId">
-        <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
-      </mat-select>
-    </mat-form-field>
     <div class="d-flex">
       <span class="spacer"></span>
       <button type="button" mat-stroked-button color="primary" routerLink="/financiers" class="mr-2">CANCELAR</button>

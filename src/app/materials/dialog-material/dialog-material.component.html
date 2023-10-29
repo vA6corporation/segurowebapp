@@ -3,6 +3,10 @@
   <h3>Garantia</h3>
   <table>
     <tbody>
+      <tr class="text-bold">
+        <td style="width: 13rem">Observaciones:</td>
+        <td class="text-uppercase">{{ material?.observations }}</td>
+      </tr>
       <tr>
         <td style="width: 13rem">Personal a cargo:</td>
         <td class="text-uppercase">{{ material?.worker?.name || 'NINGUNO' }}</td>
@@ -10,6 +14,10 @@
       <tr>
         <td style="width: 13rem">N° de poliza:</td>
         <td class="text-uppercase">{{ material?.policyNumber }}</td>
+      </tr>
+      <tr>
+        <td style="width: 13rem">Codigo de obra:</td>
+        <td class="text-uppercase">{{ material?.construction?.code }}</td>
       </tr>
       <tr>
         <td style="width: 13rem">Objeto:</td>
@@ -57,15 +65,15 @@
     <tbody>
       <tr>
         <td style="width: 13rem">Razon social:</td>
-        <td class="text-uppercase">{{ (partnership?.name || 'Ninguno') }}</td>
+        <td class="text-uppercase">{{ (partnership?.name || 'NINGUNO') }}</td>
       </tr>
       <tr>
         <td>Documento:</td>
-        <td>{{ (partnership?.document || 'Ninguno') }}</td>
+        <td>{{ (partnership?.document || 'NINGUNO') }}</td>
       </tr>
       <tr>
         <td>Operador tributario:</td>
-        <td>{{ (partnership?.business?.name || 'Ninguno') }}</td>
+        <td>{{ (partnership?.business?.name || 'NINGUNO') }}</td>
       </tr>
     </tbody>
   </table>

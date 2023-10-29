@@ -20,6 +20,9 @@
             </span>
           </div>
           <span class="spacer"></span>
+          <button type="button" mat-icon-button (click)="onEditGuarantee(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
           <button type="button" mat-icon-button (click)="onRemoveGuarantee(i)">
             <mat-icon>delete</mat-icon>
           </button>
@@ -61,6 +64,12 @@
         <mat-label>Nombre del depositante</mat-label>
         <input type="text" matInput formControlName="depositorName">
       </mat-form-field>
+      <div formGroupName="beneficiary">
+        <mat-form-field appearance="fill">
+          <mat-label>Beneficiario</mat-label>
+          <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
+        </mat-form-field>
+      </div>
       <div formGroupName="partnership">
         <mat-form-field appearance="fill">
           <mat-label>Consorcio</mat-label>
@@ -73,12 +82,16 @@
           <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
         </mat-form-field>
       </div>
-      <div formGroupName="beneficiary">
-        <mat-form-field appearance="fill">
-          <mat-label>Beneficiario</mat-label>
-          <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
-        </mat-form-field>
-      </div>
+      <mat-list class="mb-3">
+        <div mat-subheader>
+          Empresas
+        </div>
+        <mat-list-item *ngFor="let partnershipItem of partnershipItems; let i = index;">
+          <div mat-line>{{ partnershipItem.business.name | uppercase }}</div>
+          <div mat-line>{{ partnershipItem.business.document }}</div>
+          <b mat-line>{{ partnershipItem.business.observations }}</b>
+        </mat-list-item>
+      </mat-list>
       <div class="d-flex">
         <span class="spacer"></span>
         <button type="button" mat-stroked-button color="primary" routerLink="/constructions"

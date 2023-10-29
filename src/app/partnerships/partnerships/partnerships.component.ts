@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { PartnershipModel } from '../partnership.model';
@@ -74,12 +73,12 @@ export class PartnershipsComponent implements OnInit {
             'REPRESENTANTE LEGAL',
           ]);
   
-          for (const item of partnerships) {
+          for (const partnership of partnerships) {
             body.push([
-              item.document,
-              item.name,
-              item.business.name,
-              item.representative,
+              partnership.document,
+              partnership.name,
+              partnership.business?.name,
+              partnership.representative,
             ]);
           }
   
@@ -97,13 +96,15 @@ export class PartnershipsComponent implements OnInit {
   }
 
   fetchData() {
+    this.navigationService.loadBarStart();
     this.partnershipsService.getPartnershipsByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(partnerships => {
+      this.navigationService.loadBarFinish();
       this.dataSource = partnerships;
     });
   }
 
   onDelete(partnershipId: string) {
-    const ok = confirm('Estas seguro de anular?...');
+    const ok = confirm('Estas seguro de eliminar?...');
     if (ok) {
       this.navigationService.loadBarStart();
       this.partnershipsService.delete(partnershipId).subscribe(() => {
@@ -115,9 +116,9 @@ export class PartnershipsComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent): void {
-    // this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
-    //   this.dataSource = partnerships;
-    // });
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchData();
   }
 
 }

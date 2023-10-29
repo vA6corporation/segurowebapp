@@ -8,6 +8,16 @@
       </mat-select>
     </mat-form-field> -->
     <mat-form-field appearance="fill">
+      <mat-label>Estado de gestion</mat-label>
+      <mat-select formControlName="statusCode">
+        <mat-option value="01">SIN GESTION</mat-option>
+        <mat-option value="02">EN GESTION</mat-option>
+        <mat-option value="03">GESTIONADO</mat-option>
+        <mat-option value="04">OBSERVADO</mat-option>
+        <mat-option value="05">NO HABIDO</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Observaciones</mat-label>
       <input type="text" matInput formControlName="observations">
     </mat-form-field>

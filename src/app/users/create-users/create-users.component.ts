@@ -4,6 +4,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { UsersService } from '../users.service';
+import { OfficesService } from 'src/app/offices/offices.service';
+import { OfficeModel } from 'src/app/auth/office.model';
 
 @Component({
   selector: 'app-create-users',
@@ -16,6 +18,7 @@ export class CreateUsersComponent implements OnInit {
     private readonly formBuilder: UntypedFormBuilder,
     private readonly usersService: UsersService,
     private readonly navigationService: NavigationService,
+    private readonly officesService: OfficesService,
     private readonly router: Router,
   ) { }
 
@@ -23,14 +26,19 @@ export class CreateUsersComponent implements OnInit {
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],
-    // allGuaranties: false,
+    assignedOfficeId: null,
   });
   public isLoading: boolean = false;
   public hide: boolean = true;
+  public offices: OfficeModel[] = [];
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nuevo usuario');
     this.navigationService.backTo();
+
+    this.officesService.getOffices().subscribe(offices => {
+      this.offices = offices;
+    });
   }
   
   onSubmit(): void {

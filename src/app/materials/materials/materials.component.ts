@@ -4,12 +4,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { DialogMaterialComponent } from '../dialog-material/dialog-material.component';
 import { MaterialModel } from '../material.model';
 import { MaterialsService } from '../materials.service';
+import { GuaranteeModel, GuaranteeStatusTypes } from 'src/app/guaranties/guarantee.model';
 
 @Component({
   selector: 'app-materials',
@@ -81,92 +81,33 @@ export class MaterialsComponent implements OnInit {
           'P. A CARGO'
         ]);
 
-
-
-        // for (const item of this.dataSource) {
-        //   body.push([
-        //     .document,
-        //     business.name,
-        //     business.email,
-        //     business.mobileNumber,
-        //   ]);
-        // }
-
         const name = `ADELANTO_DE_MATERIALES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
         buildExcel(body, name, wscols, [], []);
       }
     });
   }
 
-  // onDialogDocumentations(guarantee: GuaranteeModel) {
-  //   this.matDialog.open(DialogDocumentationGuarantiesComponent, {
-  //     width: '600px',
-  //     position: { top: '20px' },
-  //     data: guarantee,
-  //   });
-  // }
-
   async onRenewGuarantee(guarantee: GuaranteeModel) {
-    guarantee.status = '02';
-    switch (guarantee.guaranteeType) {
-      case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
+    guarantee.status = GuaranteeStatusTypes.RENEW;
+    this.materialsService.update(guarantee, guarantee._id).toPromise();
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotRenewGuarantee(guarantee: any) {
-    guarantee.status = '03';
-    switch (guarantee.guaranteeType) {
-      case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
+  async onNotRenewGuarantee(guarantee: GuaranteeModel) {
+    guarantee.status = GuaranteeStatusTypes.NOT_RENEW;
+    this.materialsService.update(guarantee, guarantee._id).toPromise();
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onFreeGuarantee(guarantee: any) {
-    guarantee.status = '04';
-    switch (guarantee.guaranteeType) {
-      case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
+  async onFreeGuarantee(guarantee: GuaranteeModel) {
+    guarantee.status = GuaranteeStatusTypes.FREE;
+    this.materialsService.update(guarantee, guarantee._id).toPromise();
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotLookGuarantee(guarantee: any) {
-    guarantee.status = '01';
-    switch (guarantee.guaranteeType) {
-      case 'GAMF':
-        this.materialsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.materialsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
+  async onNotLookGuarantee(guarantee: GuaranteeModel) {
+    guarantee.status = GuaranteeStatusTypes.NOT_LOOK;
+    this.materialsService.update(guarantee, guarantee._id).toPromise();
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 

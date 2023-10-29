@@ -55,13 +55,14 @@ export class CreateConstructionsComponent implements OnInit {
     companyId: null,
     object: [ null, Validators.required ],
     awardedAmount: [ null, Validators.required ],
-    code: [ null, Validators.required ],
     observations: null,
     emitionAt: [ new Date(), Validators.required ],
     workerId: [ null, Validators.required ],
     processStatusCode: '01',
     constructionCode: '01',
-    commission: null
+    commission: null,
+    isService: false,
+    isHousingFund: false,
   });
   public user: UserModel|null = null;
 

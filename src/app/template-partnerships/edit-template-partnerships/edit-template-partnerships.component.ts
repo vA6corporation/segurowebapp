@@ -25,24 +25,22 @@ export class EditTemplatePartnershipsComponent implements OnInit {
   ) { }
     
   public formGroup: UntypedFormGroup = this.formBuilder.group({
-    _id: [ null, Validators.required ],
     document: null,
     name: [ null, Validators.required ],
+    address: [ null ],
     constitutedAt: null,
-    address: null,
-    representativeName: [ null, Validators.required ],
-    representativeDocument: [ null, Validators.required ],
-    businessId: null,
-    independentAccounting: null,
     email: null,
     phoneNumber: null,
-    economicActivity: null,
+    economicActivity: [ null, Validators.required ],
     representativeNationality: null,
+    representativeDocumentType: 'DNI',
+    representativeDocument: [ null, Validators.required ],
+    representativeName: [ null, Validators.required ],
+    businessId: null,
   });
 
   public isLoading: boolean = false;
   public partnershipItems: PartnershipItemModel[] = [];
-  public independentAccounting = false;
   private partnershipId: string = '';
 
   ngOnInit(): void { 

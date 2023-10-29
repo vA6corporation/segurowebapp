@@ -10,8 +10,10 @@ import { WorkerModel } from "../workers/worker.model";
 
 export interface MaterialModel {
   _id: string
+  status: string
+  statusLabel: string
+  prima: number
   price: number
-  advance: number
   policyNumber: string
   object: string
   diffDays: number
@@ -24,8 +26,8 @@ export interface MaterialModel {
   financier: FinancierModel
   beneficiary: BeneficiaryModel
   partnership: PartnershipModel|null
-  construction: ConstructionModel;
-  worker: WorkerModel
+  construction: ConstructionModel
+  worker: WorkerModel|null
   guaranteeType: string
   isMarked: boolean
   cheques: ChequeModel[]
@@ -33,5 +35,7 @@ export interface MaterialModel {
   payments: PaymentModel[]
   createdAt: any
   updatedAt: any
+  observations: string
+  renewObservations: string
   userId: string
 }

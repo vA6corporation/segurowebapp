@@ -7,6 +7,8 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { UsersService } from '../users.service';
+import { OfficesService } from 'src/app/offices/offices.service';
+import { OfficeModel } from 'src/app/auth/office.model';
 
 @Component({
   selector: 'app-edit-users',
@@ -21,6 +23,7 @@ export class EditUsersComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly officesService: OfficesService,
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
@@ -28,15 +31,19 @@ export class EditUsersComponent implements OnInit {
     email: [ null, [ Validators.required, Validators.email ] ],
     password: [ null, Validators.required ],
     showAllNotifications: false,
+    allowChangeWorkerOnBusiness: false,
+    allowChangeConstructionCode: false,
     isActive: false,
     isAdmin: false,
-    workerId: ''
+    workerId: null,
+    assignedOfficeId: null,
   });
 
   public isLoading: boolean = false;
   public hide: boolean = true;
   public workers: WorkerModel[] = [];
   private userId: string = '';
+  public offices: OfficeModel[] = [];
 
   private handleWorkers$: Subscription = new Subscription();
 
@@ -57,6 +64,10 @@ export class EditUsersComponent implements OnInit {
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.officesService.getOffices().subscribe(offices => {
+      this.offices = offices;
     });
   }
 

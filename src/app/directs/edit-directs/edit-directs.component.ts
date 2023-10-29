@@ -430,7 +430,7 @@ export class EditDirectsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, direct } = this.formGroup.value;
       direct.financierId = financier._id;
-      this.directsService.updateWithFinancier(direct, financier, this.payments, this.directId).subscribe(res => {
+      this.directsService.updateWithPayments(direct, this.payments, this.directId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

@@ -21,7 +21,7 @@ export class IsosComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'business', 'financier', 'partnership', 'emitionAt', 'days', 'prima', 'actions' ];
+  public displayedColumns: string[] = [ 'isoType', 'customer', 'certifier', 'worker', 'emitionAt', 'actions' ];
   public dataSource: IsoModel[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -40,23 +40,6 @@ export class IsosComponent implements OnInit {
 
     this.navigationService.setTitle('Isos');
 
-    this.isosService.getCountIsos().subscribe(count => {
-      this.length = count;
-    });
-
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
-      // this.navigationService.loadBarStart();
-      // this.isosService.getIsosByKey(key).subscribe(isos => {
-      //   this.navigationService.loadBarFinish();
-      //   this.dataSource = isos;
-      // }, (error: HttpErrorResponse) => {
-      //   this.navigationService.loadBarFinish();
-      //   this.navigationService.showMessage(error.error.message);
-      // });
-    });
-    
-    this.fetchData();
-
     this.navigationService.setMenu([
       { id: 'search', label: '', icon: 'search', show: true },
       { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
@@ -72,23 +55,19 @@ export class IsosComponent implements OnInit {
           let body = [];
           body.push([
             'F. DE EMISION',
-            'CONSORCIO',
             'CLIENTE',
-            'FINANCIERA',
+            'CERTIFICADORA',
             'MONTO',
-            'PRIMA',
-            'DIAS',
+            'COMISION',
           ]);
 
           for (const iso of isos) {
             body.push([
               formatDate(new Date(iso.emitionAt), 'dd/MM/yyyy', 'en-US'),
-              iso.partnership ? iso.partnership.name : '',
-              iso.business.name,
-              iso.financier.name,
+              iso.customer.name,
+              iso.certifier.name,
               iso.charge,
               iso.commission,
-              iso.days
             ]);
           }
 
@@ -96,18 +75,20 @@ export class IsosComponent implements OnInit {
           buildExcel(body, name, wscols, [], []);
         });
       }
-
     });
+
+    this.fetchData();
+    this.fetchCount();
   }
 
   onExportPdf(isoId: string) {
     this.navigationService.loadBarStart();
     this.isosService.getIsoById(isoId).subscribe(async iso => {
       this.navigationService.loadBarFinish();
-      if (iso.company) {
-        const pdf = await buildIso(iso, iso.bank);
-        pdf.save(`ORDEN_DE_SERVICIO_${iso.partnership ? iso.partnership.name : iso.business.name}.pdf`);
-      }
+      // if (iso.company) {
+      //   const pdf = await buildIso(iso, iso.bank);
+      //   pdf.save(`ORDEN_DE_SERVICIO_${iso.customer.name.toUpperCase()}.pdf`);
+      // }
     });
   }
 
@@ -115,13 +96,6 @@ export class IsosComponent implements OnInit {
     this.isosService.getIsosByPage(event.pageIndex + 1, event.pageSize).subscribe(isos => {
       this.dataSource = isos;
     });
-  }
-
-  onShowDetails(isoId: string) {
-    // this.matDialog.open(DialogDetailCreditsComponent, {
-    //   position: { top: '20px' },
-    //   data: isoId,
-    // });
   }
 
   async onDelete(isoId: string) {
@@ -147,6 +121,12 @@ export class IsosComponent implements OnInit {
     }, (error: HttpErrorResponse) => {
       this.navigationService.loadBarFinish();
       this.navigationService.showMessage(error.error.message);
+    });
+  }
+
+  async fetchCount() {
+    this.isosService.getCountIsos().subscribe(count => {
+      this.length = count;
     });
   }
 

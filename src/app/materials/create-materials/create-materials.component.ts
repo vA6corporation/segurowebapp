@@ -238,7 +238,7 @@ export class CreateMaterialsComponent implements OnInit {
       material.financierId = financier._id;
       material.workerId = this.worker?._id;
       material.constructionId = this.construction?._id;
-      this.materialsService.create(material, financier, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
+      this.materialsService.create(material, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

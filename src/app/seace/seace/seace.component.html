@@ -27,6 +27,13 @@
           <mat-option *ngFor="let element of estados" [value]="element._id">{{ element._id | uppercase }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Personal</mat-label>
+        <mat-select formControlName="workerId" (selectionChange)="onWorkerChange()">
+          <mat-option value="">TODOS LOS PERSONALES</mat-option>
+          <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="d-flex">
       <mat-form-field appearance="fill">
@@ -39,30 +46,32 @@
       <mat-form-field appearance="fill">
         <mat-label>Clientes horvi</mat-label>
         <mat-select formControlName="isCustomer" (selectionChange)="onCustomerChange()">
-          <mat-option [value]="false">TODOS</mat-option>
+          <mat-option [value]="false">TODOS LOS CLIENTES</mat-option>
           <mat-option [value]="true">SOLO CLIENTES HORVI</mat-option>
-          <!-- <mat-option *ngFor="let element of departamentos" [value]="element">{{ element }}</mat-option> -->
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Estado de gestion</mat-label>
+        <mat-select formControlName="statusCode" (selectionChange)="onStatusChange()">
+          <mat-option value="">TODOS LOS ESTADOS</mat-option>
+          <mat-option value="01">SIN GESTION</mat-option>
+          <mat-option value="02">EN GESTION</mat-option>
+          <mat-option value="03">GESTIONADO</mat-option>
+          <mat-option value="04">OBSERVADO</mat-option>
+          <mat-option value="05">NO HABIDO</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
   </form>
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" class="w-100">
-      <ng-container matColumnDef="buenaPro">
-        <th mat-header-cell *matHeaderCellDef>Buena pro</th>
-        <td mat-cell *matCellDef="let element">{{ element.buenaProDate | date }}</td>
+      <ng-container matColumnDef="adjudicadoDate">
+        <th mat-header-cell *matHeaderCellDef>F. adjudicacion</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.adjudicadoDate }">{{ element.adjudicadoDate ? (element.adjudicadoDate | date) : 'NINGUNO' }}</td>
       </ng-container>
-      <!-- <ng-container matColumnDef="publicationAt">
-        <th mat-header-cell *matHeaderCellDef>F. Publicacion</th>
-        <td mat-cell *matCellDef="let element">{{ element.publicacionDate | date }}</td>
-      </ng-container> -->
-      <ng-container matColumnDef="convocatoria">
-        <th mat-header-cell *matHeaderCellDef>Convocatoria</th>
-        <td mat-cell *matCellDef="let element">{{ element.convocatoriaDate ? (element.convocatoriaDate | date) : 'NINGUNO' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="departamento">
-        <th mat-header-cell *matHeaderCellDef>Departamento</th>
-        <td mat-cell *matCellDef="let element">{{ element.departamento }}</td>
+      <ng-container matColumnDef="managementDate">
+        <th mat-header-cell *matHeaderCellDef>F. de gestion</th>
+        <td mat-cell *matCellDef="let element">{{ element.managementDate | date }}</td>
       </ng-container>
       <ng-container matColumnDef="momenclatura">
         <th mat-header-cell *matHeaderCellDef>Momenclatura</th>
@@ -74,8 +83,8 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="objetoContratacion">
-        <th mat-header-cell *matHeaderCellDef>Objeto de contratacion</th>
-        <td mat-cell *matCellDef="let element">{{ element.objetoContratacion }}</td>
+        <th mat-header-cell *matHeaderCellDef>Objeto</th>
+        <td mat-cell *matCellDef="let element">{{ element.objetoContratacion.slice(0, 8) }}</td>
       </ng-container>
       <ng-container matColumnDef="estado">
         <th mat-header-cell *matHeaderCellDef>Estado</th>
@@ -87,7 +96,7 @@
       </ng-container>
       <ng-container matColumnDef="worker">
         <th mat-header-cell *matHeaderCellDef>Personal</th>
-        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.worker }">{{ element.worker?.name || 'NINGUNO' }}</td>
+        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.worker }" class="truncate-cell">{{ element.worker?.name || 'NINGUNO' | uppercase }}</td>
       </ng-container>
       <ng-container matColumnDef="observations">
         <th mat-header-cell *matHeaderCellDef>Observaciones</th>
@@ -96,16 +105,11 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element" class="text-right">
-          <button mat-icon-button *ngIf="element.countFiles">
+          <button mat-icon-button *ngIf="element.isNotify">
             <mat-icon>
-              sell
+              star
             </mat-icon>
           </button>
-          <!-- <button mat-icon-button *ngIf="element.businesses.length">
-            <mat-icon>
-              people
-            </mat-icon>
-          </button> -->
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -122,12 +126,16 @@
               <mat-icon>sell</mat-icon>
               <span>Ofertas presentadas</span>
             </button>
+            <button (click)="onDialogBase(element)" mat-menu-item>
+              <mat-icon>sell</mat-icon>
+              <span>Bases integradas</span>
+            </button>
           </mat-menu>
         </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.statusCode === '03' || row.statusCode === '06', 'bg-danger': row.statusCode === '04' || row.statusCode === '05', 'bg-warning': row.statusCode === '02' }"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
   </div>

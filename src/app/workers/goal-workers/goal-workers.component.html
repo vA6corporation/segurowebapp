@@ -1,0 +1,65 @@
+<div class="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Año</mat-label>
+      <mat-select formControlName="year" class="text-uppercase">
+        <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+      <mat-label>Enero</mat-label>
+      <input type="text" matInput formControlName="january">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Febrero</mat-label>
+      <input type="text" matInput formControlName="february">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Marzo</mat-label>
+      <input type="text" matInput formControlName="march">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Abril</mat-label>
+      <input type="text" matInput formControlName="april">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Mayo</mat-label>
+      <input type="text" matInput formControlName="may">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Junio</mat-label>
+      <input type="text" matInput formControlName="june">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Julio</mat-label>
+      <input type="text" matInput formControlName="july">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Agosto</mat-label>
+      <input type="text" matInput formControlName="august">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Setiembre</mat-label>
+      <input type="text" matInput formControlName="september">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Octubre</mat-label>
+      <input type="text" matInput formControlName="october">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>November</mat-label>
+      <input type="text" matInput formControlName="november">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>December</mat-label>
+      <input type="text" matInput formControlName="december">
+    </mat-form-field>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/settings">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+</div>

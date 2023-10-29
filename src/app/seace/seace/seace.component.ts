@@ -14,6 +14,9 @@ import { DialogSeaceDetailsComponent } from '../dialog-seace-details/dialog-seac
 import { SeaceDataModel } from '../seace-data.model';
 import { SeaceService } from '../seace.service';
 import { DialogOffersComponent } from '../dialog-offers/dialog-offers.component';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { DialogBaseComponent } from '../dialog-base/dialog-base.component';
 
 @Component({
   selector: 'app-seace',
@@ -24,6 +27,7 @@ export class SeaceComponent implements OnInit {
 
   constructor(
     private readonly seaceService: SeaceService,
+    private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
     private readonly formBuilder: UntypedFormBuilder,
     private readonly router: Router,
@@ -35,12 +39,14 @@ export class SeaceComponent implements OnInit {
     startDate: [ null, Validators.required ],
     endDate: [ null, Validators.required ],
     isCustomer: false,
+    workerId: '',
     key: '',
     estado: '',
     objetoContratacion: '',
     departamento: '',
+    statusCode: '',
   });
-  public displayedColumns: string[] = [ 'buenaPro', 'departamento', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'worker', 'observations', 'actions' ];
+  public displayedColumns: string[] = [ 'adjudicadoDate', 'managementDate', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'worker', 'observations', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -54,6 +60,7 @@ export class SeaceComponent implements OnInit {
     { _id: 'Desierto' },
     { _id: 'Convocado' }  
   ]
+  public workers: WorkerModel[] = [];
 
   public departamentos: string[] = [
     'AMAZONAS',
@@ -89,11 +96,13 @@ export class SeaceComponent implements OnInit {
   private queryParams$: Subscription = new Subscription();
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   
   ngOnDestroy() {
     this.queryParams$.unsubscribe();
     this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -103,6 +112,10 @@ export class SeaceComponent implements OnInit {
       { id: 'search', label: 'search', icon: 'search', show: true },
       { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false },
     ]);
+
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
@@ -117,7 +130,7 @@ export class SeaceComponent implements OnInit {
     });
     
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-      const { startDate, endDate, estado, departamento, objetoContratacion, key } = params;
+      const { startDate, endDate, estado, departamento, objetoContratacion, statusCode, workerId, key, pageIndex, pageSize } = params;
 
       if (startDate && endDate) {
         this.formGroup.patchValue({
@@ -126,12 +139,19 @@ export class SeaceComponent implements OnInit {
         });
       }
 
+      this.pageIndex = Number(pageIndex) || 0;
+      this.pageSize = Number(pageSize) || 10;
+
       this.formGroup.patchValue({
         key: key || '',
         estado: estado || '',
         departamento: departamento || '',
         objetoContratacion: objetoContratacion || '',
+        workerId: workerId || '',
+        statusCode: statusCode || '',
       });
+
+      Object.assign(this.params, params);
 
     });
 
@@ -182,6 +202,19 @@ export class SeaceComponent implements OnInit {
     this.fetchCount();
   }
 
+  onWorkerChange() {
+    const queryParams: Params = { };
+    Object.assign(queryParams, { workerId: this.formGroup.value.workerId || '', pageIndex: 0 });
+    Object.assign(this.params, queryParams);
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+    this.fetchData();
+    this.fetchCount();
+  }
+
   onClickCopy() {
     this.navigationService.showMessage('Copiado al portapapeles');
   }
@@ -210,28 +243,14 @@ export class SeaceComponent implements OnInit {
   }
 
   fetchCount() {
-    const { startDate, endDate, estado, objetoContratacion, departamento, key, isCustomer } = this.formGroup.value;
-    const params: any = { estado, objetoContratacion, departamento, key, isCustomer };
-
-    if (startDate && endDate) {
-      Object.assign(params, { startDate, endDate });
-    }
-
-    this.seaceService.getCountSeaceDatas(params).subscribe(count => {
+    this.seaceService.getCountSeaceDatas(this.params).subscribe(count => {
       this.length = count;
     });
   }
 
   fetchData() {
-    const { startDate, endDate, estado, objetoContratacion, departamento, isCustomer } = this.formGroup.value;
-    const params: any = { estado, objetoContratacion, departamento, isCustomer };
-
-    if (startDate && endDate) {
-      Object.assign(params, { startDate, endDate });
-    }
-
     this.navigationService.loadBarStart();
-    this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, params).subscribe(seaceDatas => {
+    this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(seaceDatas => {
       this.navigationService.loadBarFinish();
       this.dataSource = seaceDatas;
       console.log(seaceDatas);
@@ -334,6 +353,25 @@ export class SeaceComponent implements OnInit {
     this.fetchData();
   }
 
+  onStatusChange() {
+    this.pageIndex = 0;
+
+    const { statusCode } = this.formGroup.value;
+
+    const queryParams: Params = { statusCode, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchCount();
+    this.fetchData();
+  }
+
   onRangeChange() {
     if (this.formGroup.valid) {
       this.pageIndex = 0;
@@ -360,6 +398,15 @@ export class SeaceComponent implements OnInit {
       data: seaceData,
       width: '600px',
       position: { top: '20px' }
+    });
+  }
+
+  onDialogBase(seaceData: any) {
+    this.matDialog.open(DialogBaseComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: seaceData,
     });
   }
 

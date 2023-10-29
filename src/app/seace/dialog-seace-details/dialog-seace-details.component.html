@@ -7,12 +7,32 @@
         <td>{{ seaceData.convocatoriaId }}</td>
       </tr>
       <tr>
+        <td style="width: 8rem">F. de adjudicacion:</td>
+        <td>{{ seaceData.adjudicadoDate | date }}</td>
+      </tr>
+      <tr>
         <td style="width: 8rem">F. Publicacion:</td>
         <td>{{ seaceData.publicacionDate | date }}</td>
       </tr>
       <tr>
+        <td style="width: 8rem">F. Convocatoria:</td>
+        <td>{{ seaceData.convocatoriaDate | date }}</td>
+      </tr>
+      <tr>
+        <td style="width: 8rem">F. Buena pro:</td>
+        <td>{{ seaceData.buenaProDate | date }}</td>
+      </tr>
+      <tr>
+        <td style="width: 8rem">E. de gestion:</td>
+        <td>{{ seaceData.status }}</td>
+      </tr>
+      <tr>
+        <td style="width: 8rem">Departamento:</td>
+        <td>{{ seaceData.departamento }}</td>
+      </tr>
+      <tr>
         <td style="width: 8rem">Observaciones:</td>
-        <td>{{ seaceData.observations }}</td>
+        <td [ngClass]="{ 'text-muted': !seaceData.observations }">{{ seaceData.observations || 'NINGUNO' }}</td>
       </tr>
     </tbody>
   </table>

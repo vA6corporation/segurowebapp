@@ -33,19 +33,6 @@ export class CreateFinancierModelsComponent implements OnInit {
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
-    minimumPrima: null,
-    daysAtYear: [ null, Validators.required ],
-    emitionYearlyRatePercentage: [ null, Validators.required ],
-    emitionPrimaPercentage: [ null, Validators.required ],
-    emitionLawPercentage: [ null, Validators.required ],
-    emitionCharge: [ null, Validators.required ],
-    renewalYearlyRatePercentage: [ null, Validators.required ],
-    renewalPrimaPercentage: [ null, Validators.required ],
-    renewalLawPercentage: [ null, Validators.required ],
-    renewalCharge: [ null, Validators.required ],
-    companyId: [ null, Validators.required ],
-    bankPenId: [ null, Validators.required ],
-    bankUsdId: [ null, Validators.required ],
   });
 
   public isLoading: boolean = false;

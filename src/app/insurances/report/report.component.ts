@@ -90,27 +90,33 @@ export class ReportComponent implements OnInit {
           const endDate = new Date(year, 0, 1);
           endDate.setFullYear(endDate.getFullYear() + 1);
           const params: Params = { workerId };
+          this.navigationService.loadBarStart();
           this.insurancesService.getInsurancesByRangeDateTypeWorker(startDate, endDate, params).subscribe(insurances => {
+            this.navigationService.loadBarFinish();
             const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
             let body = [];
             body.push([
+              'TIPO',
               'CONSORCIO',
               'CLIENTE',
               'N° POLIZA',
               'OBJETO',
+              'F. DE REGISTRO',
               'F. DE EMISION',
               'F. DE VENCIMIENTO',
               'PRIMA',
               'COMISION',
               'ESTADO DE PAGO',
-              'PROMOTOR'
+              'PROMOTOR',
             ]);
             for (const insurance of insurances) {
               body.push([
+                insurance.type,
                 insurance.partnership?.name.toUpperCase(),
                 insurance.business.name.toUpperCase(),
                 insurance.policyNumber,
                 insurance.construction?.object,
+                formatDate(insurance.createdAt, 'dd/MM/yyyy', 'en-US'),
                 formatDate(insurance.emitionAt, 'dd/MM/yyyy', 'en-US'),
                 formatDate(insurance.expirationAt, 'dd/MM/yyyy', 'en-US'),
                 insurance.prima,

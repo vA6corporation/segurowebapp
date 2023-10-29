@@ -1,0 +1,14 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+  <h2 mat-dialog-title>Observaciones sobre la renovacion</h2>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Observaciones</mat-label>
+      <input type="text" matInput formControlName="renewObservations">
+    </mat-form-field>
+  </div>
+  <div class="spacer"></div>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>CANCELAR</button>
+    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+  </mat-dialog-actions>
+</form>

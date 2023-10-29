@@ -133,6 +133,12 @@ export class CreateInsurancesComponent implements OnInit {
       this.navigationService.setTitle('Renovar ' + this.type);
       this.insurancesService.getInsurancesByInsuranceGroup(this.insuranceGroupId).subscribe(insurances => {
         this.insurances = insurances;
+        const insurance = insurances[0];
+        if (insurance) {
+          const { business, financier, partnership, construction, broker, worker, policyNumber, bankId, companyId } = insurance;
+          this.financier = financier;
+          this.formGroup.patchValue({ business, financier, partnership, construction, broker, worker, policyNumber, insurance: { bankId, companyId, policyNumber } });
+        }
       });
     });
   }

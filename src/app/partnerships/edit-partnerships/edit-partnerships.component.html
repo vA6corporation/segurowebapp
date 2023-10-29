@@ -22,6 +22,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Tipo de documento</mat-label>
       <mat-select formControlName="representativeDocumentType">
+        <mat-option value="RUC">RUC</mat-option>
         <mat-option value="DNI">DNI</mat-option>
         <mat-option value="CE">CE</mat-option>
       </mat-select>
@@ -41,19 +42,12 @@
     <mat-form-field appearance="fill">
       <mat-label>Operador tributario</mat-label>
       <mat-select formControlName="businessId">
+        <mat-option>SIN OPERADOR TRIBUTARIO</mat-option>
         <mat-option class="text-uppercase" *ngFor="let partnershipItem of partnershipItems" [value]="partnershipItem.businessId">
           {{ partnershipItem.business.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <!-- <mat-form-field appearance="fill">
-      <mat-label>Operador tributario</mat-label>
-      <mat-select formControlName="businessId">
-        <mat-option class="text-uppercase" *ngFor="let partnershipItem of partnershipItems" [value]="partnershipItem.businessId">
-          {{ partnershipItem.business.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field> -->
     <mat-list class="mb-1">
       <div mat-subheader>
         Empresas

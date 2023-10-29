@@ -1,0 +1,10 @@
+<mat-list role="list">
+  <mat-list-item role="listitem" *ngFor="let survey of surveys">
+    {{ survey.createdAt | date: 'short' }}
+    <span class="spacer"></span>
+    <button [routerLink]="['/surveys', survey._id, 'edit']" mat-dialog-close mat-icon-button>
+      <mat-icon>edit</mat-icon>
+      <!-- <span>Nueva</span> -->
+    </button>
+  </mat-list-item>
+</mat-list>

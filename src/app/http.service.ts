@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -47,6 +47,18 @@ export class HttpService {
       'Authorization': `Bearer ${this.accessToken}`
     });
     return this.http.post(`${this.baseUrl}${url}`, body, { headers });
+  }
+
+  postProgress(url: string, body: any): Observable<any> {
+    const headers = new HttpHeaders({
+      // 'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.accessToken}`
+    });
+    const req = new HttpRequest('POST', `${this.baseUrl}${url}`, body, {
+      headers,
+      reportProgress: true
+    });
+    return this.http.request(req);
   }
 
   put(url: string, body: any): Observable<any> {

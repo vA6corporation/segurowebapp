@@ -73,6 +73,37 @@ export class DialogAttachPdfComponent implements OnInit {
     document.body.removeChild(link);
   }
 
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer && event.dataTransfer.items) {
+      [...event.dataTransfer.items as any].forEach((item, i) => {
+        const files: File[] = [];
+        if (item.kind === "file") {
+          const file = item.getAsFile();
+          files.push(file);
+          console.log(`… file[${i}].name = ${file.name}`);
+        }
+        const promises: Promise<any>[] = [];
+        for (let index = 0; index < files.length; index++) {
+          const file = files[index];
+          const formData = new FormData();
+          formData.append('file', file);
+          const promise = this.paymentOrdersService.uploadFile(formData, this.paymentOrderId).toPromise();
+          promises.push(promise);
+        }
+        Promise.all(promises).then(() => {
+          this.fetchData();
+          this.onChangePdfEvent$.next();
+        });
+      });
+    }
+  }
+
+  onDragOver(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   onFileSelected(files: FileList|null, input: HTMLInputElement) {
     if (files !== null) {
       const promises: Promise<any>[] = [];

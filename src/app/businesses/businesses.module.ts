@@ -26,6 +26,8 @@ import { DialogAddTrialsComponent } from './dialog-add-trials/dialog-add-trials.
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { BusinessesCommercialComponent } from './businesses-commercial/businesses-commercial.component';
 import { DeletedBusinessesComponent } from './deleted-businesses/deleted-businesses.component';
+import { DialogBirthdayComponent } from './dialog-birthday/dialog-birthday.component';
+import { WithoutDocumentationComponent } from './without-documentation/without-documentation.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { DeletedBusinessesComponent } from './deleted-businesses/deleted-busines
     EditBusinessesComponent, 
     DialogBusinessesComponent, 
     DialogConstructionBusinessesComponent, 
-    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent, BusinessesCommercialComponent, DeletedBusinessesComponent,
+    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent, BusinessesCommercialComponent, DeletedBusinessesComponent, DialogBirthdayComponent, WithoutDocumentationComponent,
   ],
   imports: [
     CommonModule,

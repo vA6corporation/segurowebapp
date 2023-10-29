@@ -7,6 +7,7 @@ import { SeaceService } from '../seace.service';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-dialog-edit-seace-inbox',
@@ -28,7 +29,9 @@ export class DialogEditSeaceInboxComponent implements OnInit {
   public workers: WorkerModel[] = [];
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     workerId: null,
+    statusCode: '01',
     observations: null,
+    managementDate: null,
   });
 
   private handleWorkers$: Subscription = new Subscription();
@@ -50,6 +53,8 @@ export class DialogEditSeaceInboxComponent implements OnInit {
       this.seaceService.update(this.formGroup.value, this.seaceData._id).subscribe(() => {
         this.navigationService.loadBarFinish();
         this.matDialogRef.close(true);
+      }, (error: HttpErrorResponse) => {
+        console.log(error);
       });
     }
   }

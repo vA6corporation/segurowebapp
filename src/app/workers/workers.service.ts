@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpService } from '../http.service';
 import { SummaryCommission } from './summary-commission.model';
 import { WorkerModel } from './worker.model';
@@ -13,11 +13,10 @@ export class WorkersService {
     private readonly httpService: HttpService,
   ) { }
 
-  private workers$: Subject<WorkerModel[]> = new Subject();
-  private workers: WorkerModel[] = [];
+  private workers$: BehaviorSubject<WorkerModel[]>|null = null;
 
   getWorkersByPage(pageIndex: number, pageSize: number) {
-    return this.httpService.get(`workers/activeWorkersByPage/${pageIndex}/${pageSize}`);
+    return this.httpService.get(`workers/byPage/${pageIndex}/${pageSize}`);
   }
 
   getCommissions(
@@ -27,12 +26,30 @@ export class WorkersService {
     return this.httpService.get(`workers/commissions/${startDate}/${endDate}`);
   }
 
+  getCommissionsByYear(
+    year: number
+  ): Observable<any[]> {
+    return this.httpService.get(`workers/commissionsByYear/${year}`);
+  }
+
   getWorkerById(workerId: string): Observable<WorkerModel> {
     return this.httpService.get(`workers/byId/${workerId}`);
   }
 
-  getWorkersCount() {
-    return this.httpService.get('workers/count');
+  getCountWorkers() {
+    return this.httpService.get('workers/countWorkers');
+  }
+
+  getCountDeletedWorkers() {
+    return this.httpService.get('workers/countDeletedWorkers');
+  }
+
+  getDeletedWorkersByPage(pageIndex: number, pageSize: number) {
+    return this.httpService.get(`workers/deletedByPage/${pageIndex}/${pageSize}`);
+  }
+
+  getCountWorkersByOffice() {
+    return this.httpService.get('workers/countWorkersByOffice');
   }
 
   create(worker: WorkerModel) {
@@ -44,29 +61,33 @@ export class WorkersService {
   }
 
   handleWorkers(): Observable<WorkerModel[]> {
-    if (!this.workers.length) {
+    if (this.workers$ == null) {
+      this.workers$ = new BehaviorSubject<WorkerModel[]>([]);
       this.loadWorkers();
-    } else {
-      setTimeout(() => {
-        this.workers$.next(this.workers);
-      });
     }
     return this.workers$.asObservable();
   }
 
   loadWorkers() {
     this.httpService.get('workers').subscribe(workers => {
-      this.workers = workers;
-      this.workers$.next(workers);
+      this.workers$?.next(workers);
     });
   }
 
-  getActiveWorkersGlobal() {
-    return this.httpService.get('workers/global');
+  getGoalByYear(year: string): Observable<any> {
+    return this.httpService.get(`workers/goalByYear/${year}`);
+  }
+
+  createGoal(goal: any) {
+    return this.httpService.post('workers/createGoal', { goal });
   }
 
   delete(workerId: string) {
     return this.httpService.delete(`workers/${workerId}`);
+  } 
+
+  restore(workerId: string) {
+    return this.httpService.delete(`workers/restore/${workerId}`);
   } 
 
 }

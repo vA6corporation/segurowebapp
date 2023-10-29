@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GuaranteeModel } from '../guarantees/guarantee.model';
 import { HttpService } from '../http.service';
 import { PaymentModel } from '../payments/payment.model';
 import { ConstructionPdfModel } from './construction-pdf.model';
 import { ConstructionModel } from './construction.model';
+import { GuaranteeModel } from '../guaranties/guarantee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +55,10 @@ export class ConstructionsService {
 
   getDebtorConstructions(params: Params): Observable<any> {
     return this.httpService.get(`constructions/debtorConstructions`, { params });
+  }
+
+  getCountDebtorConstructions(params: Params) {
+    return this.httpService.get(`constructions/countDebtorConstructions`, { params });
   }
 
   getConstructionsByBusiness(businessId: string): Observable<ConstructionModel[]> {
@@ -117,10 +121,6 @@ export class ConstructionsService {
   ): Observable<ConstructionModel[]> {
     return this.httpService.get(`constructions/byPageKey/${pageIndex}/${pageSize}/${key}`, { params });
   }
-
-  // getCountConstructionsByRangeDateOfficeFinancier(params: Params): Observable<number> {
-  //   return this.httpService.get(`constructions/countConstructionsByRangeDateOfficeFinancier`, { params });
-  // }
 
   getConstructionsByPage(
     pageIndex: number, 

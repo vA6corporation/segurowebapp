@@ -30,25 +30,31 @@
       <mat-label>Direccion</mat-label>
       <input type="text" matInput formControlName="address">
     </mat-form-field>
+    <h2>Representante legal</h2>
     <mat-form-field appearance="fill">
-      <mat-label>Representante legal</mat-label>
-      <input type="text" matInput formControlName="representativeName">
+      <mat-label>Tipo de documento</mat-label>
+      <mat-select formControlName="representativeDocumentType">
+        <mat-option value="RUC">RUC</mat-option>
+        <mat-option value="DNI">DNI</mat-option>
+        <mat-option value="CE">CE</mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Documento representante legal</mat-label>
       <input type="text" matInput formControlName="representativeDocument">
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Representante legal</mat-label>
+      <input type="text" matInput formControlName="representativeName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Nacionalidad del representante legal</mat-label>
       <input type="text" matInput formControlName="representativeNationality" />
     </mat-form-field>
-    <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="independentAccounting" formControlName="independentAccounting">Contabilidad independiente
-      </mat-slide-toggle>
-    </div>
-    <mat-form-field appearance="fill" *ngIf="!independentAccounting">
+    <mat-form-field appearance="fill">
       <mat-label>Operador tributario</mat-label>
       <mat-select formControlName="businessId">
+        <mat-option>SIN OPERADOR TRIBUTARIO</mat-option>
         <mat-option class="text-uppercase" *ngFor="let partnershipItem of partnershipItems" [value]="partnershipItem.businessId">
           {{ partnershipItem.business.name }}
         </mat-option>

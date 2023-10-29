@@ -40,6 +40,8 @@ import { DialogAttachPdfComponent, DialogAttachPdfData, Types } from '../dialog-
 import { DialogBusinessesComponent } from '../dialog-businesses/dialog-businesses.component';
 import { DialogFacilityCreditsComponent } from '../dialog-facility-credits/dialog-facility-credits.component';
 import { FacilityCreditModel } from '../facility-credit.model';
+import { UserModel } from 'src/app/users/user.model';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-edit-businesses',
@@ -47,16 +49,20 @@ import { FacilityCreditModel } from '../facility-credit.model';
   styleUrls: ['./edit-businesses.component.sass'],
 })
 export class EditBusinessesComponent implements OnInit {
+  
   constructor(
     private readonly formBuilder: UntypedFormBuilder,
     private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly workersService: WorkersService,
+    private readonly authService: AuthService,
     private readonly matDialog: MatDialog
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
+    isOnlyPartnership: false,
+    observations: null,
     documentType: [ null, Validators.required ],
     document: [ null, Validators.required ],
     electronicDeparture: null,
@@ -64,6 +70,7 @@ export class EditBusinessesComponent implements OnInit {
     publicDeed: null,
     name: [ null, Validators.required ],
     email: [ null, [ Validators.required, Validators.email ] ],
+    emailTwo: [ null, Validators.email ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,
@@ -166,11 +173,14 @@ export class EditBusinessesComponent implements OnInit {
   public accountRotation: AccountRotationModel[] = [];
   public trials: TrialsModel[] = [];
   public workers: WorkerModel[] = [];
+  public user: UserModel|null = null;
 
   private handleWorkers$: Subscription = new Subscription();
+  private handleAuth$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
+    this.handleAuth$.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -179,6 +189,10 @@ export class EditBusinessesComponent implements OnInit {
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
+    });
+
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
     });
 
     this.formGroup.get('documentType')?.valueChanges.subscribe((value) => {

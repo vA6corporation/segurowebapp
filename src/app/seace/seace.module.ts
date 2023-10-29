@@ -11,10 +11,11 @@ import { SeaceInboxComponent } from './seace-inbox/seace-inbox.component';
 import { SeaceErrosComponent } from './seace-erros/seace-erros.component';
 import { DialogOffersComponent } from './dialog-offers/dialog-offers.component';
 import { DialogEditSeaceInboxComponent } from './dialog-edit-seace-inbox/dialog-edit-seace-inbox.component';
+import { DialogBaseComponent } from './dialog-base/dialog-base.component';
 
 
 @NgModule({
-  declarations: [SeaceComponent, DialogSeaceDetailsComponent, DialogEditSeaceComponent, SeaceInboxComponent, SeaceErrosComponent, DialogOffersComponent, DialogEditSeaceInboxComponent],
+  declarations: [SeaceComponent, DialogSeaceDetailsComponent, DialogEditSeaceComponent, SeaceInboxComponent, SeaceErrosComponent, DialogOffersComponent, DialogEditSeaceInboxComponent, DialogBaseComponent],
   imports: [
     CommonModule,
     SeaceRoutingModule,

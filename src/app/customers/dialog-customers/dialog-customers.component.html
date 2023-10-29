@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Seleccione un cliente</h2>
+<div mat-dialog-content>
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field>
+      <mat-label>Busqueda</mat-label>
+      <input type="text" matInput formControlName="key">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </form>
+  <mat-selection-list [multiple]="false">
+    <mat-list-option *ngFor="let customer of customers" [mat-dialog-close]="customer">
+      <div class="text-truncate">
+        {{ customer.name | uppercase }}
+      </div>
+      <span class="text-muted">RUC: {{ customer.ruc }}</span>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+<div class="spacer"></div>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>CANCELAR</button>
+</mat-dialog-actions>

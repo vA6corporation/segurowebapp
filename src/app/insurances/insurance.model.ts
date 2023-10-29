@@ -20,12 +20,15 @@ export interface InsuranceModel {
     financierId: string
     businessId: string
     brokerId: string
+    bankId: string
+    companyId: string
     workerId: string
-    partnership: InsurancePartnershipModel
+    partnership: InsurancePartnershipModel|null
     construction: ConstructionModel
     payments: PaymentModel[]
     broker: BrokerModel
     financier: FinancierModel
     business: BusinessModel
     worker: WorkerModel
+    createdAt: string
 }

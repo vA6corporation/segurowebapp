@@ -1,22 +1,22 @@
+import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
 import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Subscription } from 'rxjs';
+import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { randomColor } from 'src/app/randomColor';
 import { ReportsService } from 'src/app/reports/reports.service';
 import { UserModel } from 'src/app/users/user.model';
 import { UsersService } from 'src/app/users/users.service';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
-import { buildExcel } from 'src/app/xlsx';
-import { formatDate } from '@angular/common';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { buildExcel } from 'src/app/xlsx';
 Chart.register(...registerables);
 
 @Component({
@@ -144,6 +144,7 @@ export class PrimasComponent implements OnInit {
                 'E. DE TRAMITE',
                 'E. DE REVISION',
                 'F. CUMPLIMIENTO',
+                'F. INICIO',
                 'OBRA'
               ]);
 
@@ -162,6 +163,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }
@@ -183,6 +185,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }
@@ -203,6 +206,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }
@@ -223,6 +227,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }
@@ -243,6 +248,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }
@@ -263,6 +269,7 @@ export class PrimasComponent implements OnInit {
                     guarantee.processStatus,
                     guarantee.statusLabel,
                     formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                    formatDate(guarantee.startDate, 'dd/MM/yyyy', 'en-US'),
                     guarantee.construction?.object
                   ]);
                 }

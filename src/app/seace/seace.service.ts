@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { SeaceDataModel } from './seace-data.model';
 import { SeaceErrorModel } from './seace-error.model';
 import { HttpService } from '../http.service';
-// import { HttpSeaceFilesService } from '../http-seace-files.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,6 @@ export class SeaceService {
 
   constructor(
     private readonly httpService: HttpService,
-    // private readonly httpSeaceFilesService: HttpSeaceFilesService
   ) { }
 
   getSeaceDatasByKey(key: string, params: Params): Observable<SeaceDataModel[]> {
@@ -23,6 +21,10 @@ export class SeaceService {
 
   getBusinessOfferPdfsBySeaceData(seaceDataId: string): Observable<any[]> {
     return this.httpService.get(`seace/businessOfferPdfsBySeaceData/${seaceDataId}`);
+  }
+
+  getBusinessBasePdfsBySeaceData(seaceDataId: string): Observable<any[]> {
+    return this.httpService.get(`seace/businessBasePdfsBySeaceData/${seaceDataId}`);
   }
 
   getSeaceDatasByPage(pageIndex: number, pageSize: number, params: Params): Observable<any[]> {

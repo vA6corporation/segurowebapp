@@ -12,10 +12,12 @@ import { ReportsService } from '../reports.service';
 import { formatDate } from '@angular/common';
 import { buildExcel } from 'src/app/xlsx';
 import { Subscription } from 'rxjs';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { GuaranteeTypes } from 'src/app/guaranties/guaranteeTypes.enum';
+import { DialogRenewObservationsComponent } from 'src/app/guaranties/dialog-renew-observations/dialog-renew-observations.component';
+import { GuaranteeModel } from 'src/app/guaranties/guarantee.model';
 
 @Component({
   selector: 'app-guaranties',
@@ -36,7 +38,7 @@ export class GuarantiesComponent implements OnInit {
     private readonly router: Router,
   ) { }
 
-  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'actions' ];
+  public displayedColumns: string[] = [ 'guaranteeType', 'partnership', 'business', 'worker', 'policyNumber', 'endDate', 'renewObservations', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -105,6 +107,8 @@ export class GuarantiesComponent implements OnInit {
         'E. DE TRAMITE',
         'E. DE REVISION',
         'F. CUMPLIMIENTO',
+        'PERSONAL',
+        'OBSERVACIONES',
       ]);
 
       for (const guarantee of this.dataSource) {
@@ -120,6 +124,8 @@ export class GuarantiesComponent implements OnInit {
           guarantee.processStatus,
           guarantee.statusLabel,
           formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+          guarantee.worker.name.toUpperCase(),
+          guarantee.renewObservations,
         ]);
       }
       const name = `RENOVACIONES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -144,6 +150,14 @@ export class GuarantiesComponent implements OnInit {
     }
   }
 
+  onDialogMessage(guaranteeId: string) {
+    this.matDialog.open(DialogRenewObservationsComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: guaranteeId
+    });
+  }
+
   onRangeChange() {
     if (this.formGroup.valid) {
       this.key = '';
@@ -160,20 +174,20 @@ export class GuarantiesComponent implements OnInit {
 
   onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.matDialog.open(DialogMaterialComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GADF':
-        this.matDialog.open(DialogDirectComponent, {
+      case GuaranteeTypes.COMPLIANCE:
+        this.matDialog.open(DialogComplianceComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GFCF':
-        this.matDialog.open(DialogComplianceComponent, {
+      case GuaranteeTypes.DIRECT:
+        this.matDialog.open(DialogDirectComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
@@ -184,14 +198,14 @@ export class GuarantiesComponent implements OnInit {
   async onRenewGuarantee(guarantee: any) {
     guarantee.status = '02';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -200,14 +214,14 @@ export class GuarantiesComponent implements OnInit {
   async onNotRenewGuarantee(guarantee: any) {
     guarantee.status = '03';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -216,14 +230,14 @@ export class GuarantiesComponent implements OnInit {
   async onFreeGuarantee(guarantee: any) {
     guarantee.status = '04';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -232,14 +246,14 @@ export class GuarantiesComponent implements OnInit {
   async onNotLookGuarantee(guarantee: any) {
     guarantee.status = '01';
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.update(guarantee, guarantee._id).toPromise();
         break;
-      case 'GADF':
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.update(guarantee, guarantee._id).toPromise();
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.update(guarantee, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
@@ -249,17 +263,7 @@ export class GuarantiesComponent implements OnInit {
     this.navigationService.loadBarStart();
     try {
       switch (guarantee.guaranteeType) {
-        case 'GFCF':
-          this.compliancesService.sendMail(guarantee._id).subscribe(() => {
-            this.navigationService.showMessage('Email enviado');
-            this.navigationService.loadBarFinish();
-            this.fetchData();
-          }, (error: HttpErrorResponse) => {
-            this.navigationService.loadBarFinish();
-            this.navigationService.showMessage(error.error.message);
-          });
-          break;
-        case 'GAMF':
+        case GuaranteeTypes.MATERIAL:
           this.materialsService.sendMail(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Email enviado');
             this.navigationService.loadBarFinish();
@@ -269,7 +273,17 @@ export class GuarantiesComponent implements OnInit {
             this.navigationService.showMessage(error.error.message);
           });
           break;
-        case 'GADF':
+        case GuaranteeTypes.COMPLIANCE:
+          this.compliancesService.sendMail(guarantee._id).subscribe(() => {
+            this.navigationService.showMessage('Email enviado');
+            this.navigationService.loadBarFinish();
+            this.fetchData();
+          }, (error: HttpErrorResponse) => {
+            this.navigationService.loadBarFinish();
+            this.navigationService.showMessage(error.error.message);
+          });
+          break;
+        case GuaranteeTypes.DIRECT:
           this.directsService.sendMail(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Email enviado');
             this.navigationService.loadBarFinish();
@@ -285,6 +299,14 @@ export class GuarantiesComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  onDialogObservations(guarantee: GuaranteeModel) {
+    this.matDialog.open(DialogRenewObservationsComponent, {
+      width: '600px',
+      position: { top: '20px' },
+      data: guarantee,
+    });
   }
 
 }

@@ -58,13 +58,16 @@ export class CreateBusinessesComponent implements OnInit {
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
-    documentType: [null, Validators.required],
-    document: [null, Validators.required],
+    isOnlyPartnership: false,
+    observations: null,
+    documentType: [ null, Validators.required ],
+    document: [ null, Validators.required ],
     electronicDeparture: null,
     registryArea: null,
     publicDeed: null,
-    name: [null, Validators.required],
-    email: [null, [Validators.required, Validators.email]],
+    name: [ null, Validators.required ],
+    email: [ null, [ Validators.required, Validators.email ] ],
+    emailTwo: [ null, Validators.email ],
     mobileNumber: null,
     phoneNumber: null,
     annexed: null,

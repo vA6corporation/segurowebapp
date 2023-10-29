@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogTemplatesComponent } from './dialog-templates/dialog-templates.component';
 import { DialogAddGuarantiesComponent } from './dialog-add-guaranties/dialog-add-guaranties.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { DialogEditGuarantiesComponent } from './dialog-edit-guaranties/dialog-edit-guaranties.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     EditTemplatesComponent,
     DialogTemplatesComponent,
     DialogAddGuarantiesComponent,
+    DialogEditGuarantiesComponent,
   ],
   imports: [
     CommonModule,

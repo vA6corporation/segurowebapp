@@ -19,8 +19,11 @@ export class AuthService {
   private authStatus$: Subject<boolean> = new Subject();
   private auth: AuthModel|null = null;
   private modules: ModuleModel[] = [
+    { label: 'Encuestas', name: 'surveys' },
+    { label: 'Operaciones', name: 'operations' },
     { label: 'Buzon Seace', name: 'seaceInbox' },
     { label: 'Seace', name: 'seace' },
+    { label: 'Notificaciones Seace', name: 'notifications' },
     { label: 'Busqueda Admin', name: 'search' },
     { label: 'Busqueda', name: 'searchCommercial', info: 'Area comercial' },
     { label: 'Obras Admin', name: 'constructions' },
@@ -39,25 +42,33 @@ export class AuthService {
     { label: 'Garantias', name: 'chequesCommercial', info: 'Area comercial' },
     { label: 'Lineas de credito', name: 'credits' },
     { label: 'Fideicomisos', name: 'fideicomisos' },
-    { label: 'Isos', name: 'isos' },
+    { label: 'ISOS', name: 'isos' },
+    { label: 'Incremento de capital', name: 'capitalIncreases' },
+    { label: 'Clientes ISOS', name: 'customers' },
+    { label: 'Certificadoras', name: 'certifiers' },
     { label: 'Fianzas', name: 'guaranties' },
     { label: 'Seguros', name: 'insurances' },
     { label: 'Suma asegurada', name: 'r1', info: 'Reportes' },
     { label: 'Primas', name: 'r2', info: 'Reportes' },
     { label: 'Documentacion legal', name: 'r3', info: 'Reportes' },
-    { label: 'Documentacion faltante', name: 'r4', info: 'Reportes' },
+    { label: 'Fianzas sin documentacion', name: 'r4', info: 'Reportes' },
     { label: 'Obras sin documentacion', name: 'r5', info: 'Reportes' },
-    { label: 'Seguro 1', name: 'r6', info: 'Reportes' },
-    { label: 'Seguro 2', name: 'r7', info: 'Reportes' },
-    { label: 'Lineas de credito', name: 'r8', info: 'Reportes' },
-    { label: 'Avance de obras', name: 'r9', info: 'Reportes' },
-    { label: 'Recaudacion', name: 'r10', info: 'Reportes' },
-    { label: 'Comisiones', name: 'r11', info: 'Reportes' },
+    { label: 'Empresas sin documentacion', name: 'r6', info: 'Reportes' },
+    { label: 'Seguro 1', name: 'r7', info: 'Reportes' },
+    { label: 'Seguro 2', name: 'r8', info: 'Reportes' },
+    { label: 'Lineas de credito', name: 'r9', info: 'Reportes' },
+    { label: 'Avance de obras', name: 'r10', info: 'Reportes' },
+    { label: 'Recaudacion', name: 'r11', info: 'Reportes' },
+    { label: 'Comisiones', name: 'r12', info: 'Reportes' },
+    { label: 'Timing', name: 'r13', info: 'Reportes' },
   ]
 
   private objectModules = {
+    surveys: false,
+    operations: false,
     seaceInbox: false,
     seace: false,
+    notifications: false,
     search: false,
     searchCommercial: false,
     constructions: false,
@@ -70,6 +81,9 @@ export class AuthService {
     beneficiaries: false,
     financiers: false,
     isos: false,
+    capitalIncreases: false,
+    customers: false,
+    certifiers: false,
     users: false,
     expenses: false,
     workers: false,
@@ -90,6 +104,8 @@ export class AuthService {
     r9: false,
     r10: false,
     r11: false,
+    r12: false,
+    r13: false,
   }
 
   getObjectModules() {
@@ -151,6 +167,10 @@ export class AuthService {
     this.setAccessToken(null);
     this.authStatus$.next(false);
     location.reload();
+  }
+
+  createDevice(device: any) {
+    return this.httpService.post('devices', { device });
   }
 
   getSession(accessToken: string|null): Observable<AuthModel> {

@@ -43,15 +43,15 @@ export class CollectionsComponent implements OnInit {
   
   public formGroup = this.formBuilder.group({
     workerId: '',
-    startDate: [ null, Validators.required ],
-    endDate: [ null, Validators.required ],
+    startDate: [ '', Validators.required ],
+    endDate: [ '', Validators.required ],
     financier: this.formBuilder.group({
-      name: null,
-      _id: null,
+      name: '',
+      _id: '',
     }),
     business: this.formBuilder.group({
-      name: null,
-      _id: null,
+      name: '',
+      _id: '',
     }),
     isEmition: '',
   });
@@ -75,6 +75,21 @@ export class CollectionsComponent implements OnInit {
   private handleClickMenu$: Subscription = new Subscription();
   private queryParams$: Subscription = new Subscription();
 
+  public months: any[] = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
+
   ngOnDestroy() {
     this.handleWorkers$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
@@ -82,10 +97,10 @@ export class CollectionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.navigationService.setTitle("Suma Asegurada");
+    this.navigationService.setTitle("Suma asegurada");
 
     this.navigationService.setMenu([
-      { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
+      { id: 'excel_simple', label: 'Exportar excel', icon: 'file_download', show: false },
     ]);
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
@@ -107,33 +122,23 @@ export class CollectionsComponent implements OnInit {
     this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
       switch (id) {
         case 'excel_simple':
-          if (this.formGroup.valid) {
-            this.navigationService.loadBarStart();
-            const { startDate, endDate, workerId } = this.formGroup.value;
+          this.navigationService.loadBarStart();
+            const { startDate, endDate, workerId, financier } = this.formGroup.value;
       
             const params: Params = {
-              startDate, endDate, workerId,
+              startDate, endDate, workerId, financierId: financier._id
             };
       
-            // if (this.financierForm.valid) {
-            //   params.financierId = this.financierForm.value._id;
-            // }
-      
-            // if (this.businessForm.valid) {
-            //   params.businessId = this.businessForm.value._id;
-            // }
-      
-            // params.isEmition = this.isEmition;
-            
             this.reportsService.getPrimasByRangeDateWorker(
               params
             ).subscribe(collection => {
-              console.log(collection);
               const { payedDirect, notPayedDirect, payedCompliance, notPayedCompliance, payedMaterial, notPayedMaterial } = collection;
               this.navigationService.loadBarFinish();
               const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
               let body = [];
               body.push([
+                'MES DE EMISION',
+                'AÑO DE EMISION',
                 'GARANTIA',
                 'FINANCIERA',
                 'CONSORCIO',
@@ -145,12 +150,16 @@ export class CollectionsComponent implements OnInit {
                 'E. DE TRAMITE',
                 'E. DE REVISION',
                 'F. CUMPLIMIENTO',
+                'OFICINA',
+                'EMISION',
                 'OBRA'
               ]);
 
               for (const guarantee of payedCompliance) {
                 const { business, partnership, financier } = guarantee;
                 body.push([
+                  this.months[new Date(guarantee.startDate).getMonth()],
+                  new Date(guarantee.startDate).getFullYear(),
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
@@ -162,6 +171,8 @@ export class CollectionsComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.office.name.toUpperCase(),
+                  guarantee.isEmition ? 'SI' : 'NO',
                   guarantee.construction?.object
                 ]);
               }
@@ -169,6 +180,8 @@ export class CollectionsComponent implements OnInit {
               for (const guarantee of payedDirect) {
                 const { business, partnership, financier } = guarantee;
                 body.push([
+                  this.months[new Date(guarantee.startDate).getMonth()],
+                  new Date(guarantee.startDate).getFullYear(),
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
@@ -180,6 +193,8 @@ export class CollectionsComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.office.name.toUpperCase(),
+                  guarantee.isEmition ? 'SI' : 'NO',
                   guarantee.construction?.object
                 ]);
               }
@@ -187,6 +202,8 @@ export class CollectionsComponent implements OnInit {
               for (const guarantee of payedMaterial) {
                 const { business, partnership, financier } = guarantee;
                 body.push([
+                  this.months[new Date(guarantee.startDate).getMonth()],
+                  new Date(guarantee.startDate).getFullYear(),
                   guarantee.guaranteeType,
                   financier?.name || null,
                   partnership?.name || null,
@@ -198,6 +215,8 @@ export class CollectionsComponent implements OnInit {
                   guarantee.processStatus,
                   guarantee.statusLabel,
                   formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+                  guarantee.office.name.toUpperCase(),
+                  guarantee.isEmition ? 'SI' : 'NO',
                   guarantee.construction?.object
                 ]);
               }
@@ -205,7 +224,6 @@ export class CollectionsComponent implements OnInit {
               const name = `SUMAS_ASEGURADAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
               buildExcel(body, name, wscols, [], []);
             });
-          }
           break;
       
         default:

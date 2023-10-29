@@ -1,8 +1,14 @@
 <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
   <mat-tab label="Documentos">
-    <mat-action-list>
+    <mat-action-list (drop)="onDrop($event)" (dragover)="onDragOver($event)">
       <button mat-list-item (click)="onChangePdf(paymentOrderPdf)" *ngFor="let paymentOrderPdf of paymentOrderPdfs">{{ paymentOrderPdf.filename }}</button>
     </mat-action-list>
+    <!-- <label for="fileInput" style="height: 30rem;">
+      Arrastrar aqui
+    </label> -->
+    <!-- <div id="hola"  style="height: 30rem;" class="bg-success">
+      hola mundo
+    </div> -->
   </mat-tab>
   <mat-tab label="Preview">
     <iframe [src]="url" frameborder="0"></iframe>
@@ -13,5 +19,5 @@
   <span class="spacer"></span>
   <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
   <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">ADJUNTAR</button>
-  <input type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput)" [accept]="accept" hidden multiple>  
+  <input id="fileInput" type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput)" [accept]="accept" hidden multiple>  
 </mat-dialog-actions>

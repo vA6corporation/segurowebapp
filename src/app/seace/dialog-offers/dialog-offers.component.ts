@@ -13,7 +13,7 @@ export class DialogOffersComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private readonly seaceData: SeaceDataModel,
+    readonly seaceData: SeaceDataModel,
     private readonly seaceService: SeaceService,
   ) { }
 

@@ -72,17 +72,17 @@
         <mat-list-item class="text-uppercase">
           GFCF
           <span class="spacer"></span>
-          {{ compliancePrice.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+          {{ compliancePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
         </mat-list-item>
         <mat-list-item class="text-uppercase">
           GADF
           <span class="spacer"></span>
-          {{ directPrice.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+          {{ directPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
         </mat-list-item>
         <mat-list-item class="text-uppercase">
           GAMF
           <span class="spacer"></span>
-          {{ materialPrice.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+          {{ materialPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
         </mat-list-item>
       </mat-list>
     </div>

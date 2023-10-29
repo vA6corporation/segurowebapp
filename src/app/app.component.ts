@@ -7,6 +7,10 @@ import { AuthService } from './auth/auth.service';
 import { NavigationService } from './navigation/navigation.service';
 import { DialogNotificationsComponent } from './notifications/dialog-notifications/dialog-notifications.component';
 import { NotificationsService } from './notifications/notifications.service';
+import { BusinessesService } from './businesses/businesses.service';
+import { DialogBirthdayComponent } from './businesses/dialog-birthday/dialog-birthday.component';
+import { environment } from 'src/environments/environment';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +21,7 @@ export class AppComponent {
 
   constructor(
     private readonly notificationsService: NotificationsService,
+    private readonly businessesService: BusinessesService,
     private readonly navigationService: NavigationService,
     private readonly authService: AuthService,
     private readonly router: Router,
@@ -34,19 +39,19 @@ export class AppComponent {
 
     this.authService.handleAuthStatus().subscribe(() => {
       this.authService.handleAuth().pipe(first()).subscribe(auth => {
-        if (auth.user.showAllNotifications) {
-          this.notificationsService.getActiveNotifications().subscribe(notifications => {
-            if (notifications.length) {
-              this.matDialog.open(DialogNotificationsComponent, {
+        if (environment.production) {
+          this.businessesService.getBusinessesBirthday().subscribe(businesses => {
+            if (businesses.length) {
+              this.matDialog.open(DialogBirthdayComponent, {
                 width: '800px',
                 position: { top: '20px' },
-                data: notifications,
+                data: businesses,
               });
             }
           });
-        } else {
-          if (auth.user.workerId) {
-            this.notificationsService.getNotificationsByWorker(auth.user.workerId).subscribe(notifications => {
+  
+          if (auth.user.showAllNotifications) {
+            this.notificationsService.getActiveNotifications().subscribe(notifications => {
               if (notifications.length) {
                 this.matDialog.open(DialogNotificationsComponent, {
                   width: '800px',
@@ -55,22 +60,49 @@ export class AppComponent {
                 });
               }
             });
+          } else {
+            if (auth.user.workerId) {
+              this.notificationsService.getNotificationsByWorker(auth.user.workerId).subscribe(notifications => {
+                if (notifications.length) {
+                  this.matDialog.open(DialogNotificationsComponent, {
+                    width: '800px',
+                    position: { top: '20px' },
+                    data: notifications,
+                  });
+                }
+              });
+            }
           }
         }
       });
     });
 
-    const accessToken = localStorage.getItem('accessToken');
+    let deviceId = localStorage.getItem('deviceId');
 
+    if (deviceId === null) {
+      deviceId = uuidv4();
+      localStorage.setItem('deviceId', deviceId);
+    }
+    
+    const accessToken = localStorage.getItem('accessToken');
     this.authService.getSession(accessToken).subscribe(auth => {
       this.authService.setAccessToken(accessToken);
       this.authService.setAuth(auth);
-      this.navigationService.loadSpinnerFinish();
-      this.isStart = true;
-      if (auth.office) {
-        this.authService.loggedIn();
+      if (auth.user.devices.find(e => e.deviceId === deviceId)) {
+        this.navigationService.loadSpinnerFinish();
+        this.isStart = true;
+        if (auth.office) {
+          this.authService.loggedIn();
+          if (location.pathname === '/login') {
+            this.router.navigate(['/']);
+          }
+        } else {
+          this.router.navigate(['/setOffice']);
+        }
       } else {
-        this.router.navigate(['/setOffice']);
+        this.isStart = true;
+        this.navigationService.loadSpinnerFinish();
+        this.router.navigate(['/device']);
       }
     }, (error: HttpErrorResponse) => {
       console.log(error);
@@ -78,6 +110,7 @@ export class AppComponent {
       this.navigationService.loadSpinnerFinish();
       this.isStart = true;
     });
+
 
     this.router.events.forEach(event => {
       if (event instanceof NavigationEnd) {

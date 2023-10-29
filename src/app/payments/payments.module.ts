@@ -6,12 +6,14 @@ import { PaymentsComponent } from './payments/payments.component';
 import { DialogPaymentsComponent } from './dialog-payments/dialog-payments.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogCreatePaymentsComponent } from './dialog-create-payments/dialog-create-payments.component';
 
 
 @NgModule({
   declarations: [
     PaymentsComponent,
-    DialogPaymentsComponent
+    DialogPaymentsComponent,
+    DialogCreatePaymentsComponent
   ],
   imports: [
     CommonModule,

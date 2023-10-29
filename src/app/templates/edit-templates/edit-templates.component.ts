@@ -10,6 +10,8 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogTemplatePartnershipsComponent } from 'src/app/template-partnerships/dialog-template-partnerships/dialog-template-partnerships.component';
 import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
 import { TemplatesService } from '../templates.service';
+import { DialogEditGuarantiesComponent, DialogEditGugaranteeData } from '../dialog-edit-guaranties/dialog-edit-guaranties.component';
+import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 
 @Component({
   selector: 'app-edit-templates',
@@ -51,6 +53,7 @@ export class EditTemplatesComponent implements OnInit {
   });
   public guaranties: any[] = [];
   private templateId: string = '';
+  public partnershipItems: PartnershipItemModel[] = [];
 
   private activatedRoute$: Subscription = new Subscription();
 
@@ -71,6 +74,9 @@ export class EditTemplatesComponent implements OnInit {
         this.formGroup.get('business')?.patchValue(business);
         this.formGroup.get('beneficiary')?.patchValue(beneficiary);
         this.guaranties = guaranties;
+        if (partnership?.partnershipItems) {
+          this.partnershipItems = partnership.partnershipItems;
+        }
         if (partnership) {
           this.formGroup.get('partnership')?.patchValue(partnership);
         }
@@ -112,9 +118,7 @@ export class EditTemplatesComponent implements OnInit {
     const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
       width: '600px',
       position: { top: '20px' },
-      data: {
-        amount: this.formGroup.controls['contractMount'].value
-      }
+      data: this.formGroup.value.contractMount,
     });
 
     dialogRef.afterClosed().subscribe(guarantee => {
@@ -128,6 +132,31 @@ export class EditTemplatesComponent implements OnInit {
     this.guaranties.splice(index, 1);
   }
 
+  onEditGuarantee(index: number) {
+    const { contractMount } = this.formGroup.value;
+    if (contractMount) {
+      const guarantee = this.guaranties[index];
+      const data: DialogEditGugaranteeData = {
+        guarantee,
+        contractMount,
+      };
+
+      const dialogRef = this.matDialog.open(DialogEditGuarantiesComponent, {
+        width: '600px',
+        position: { top: '20px' },
+        data,
+      });
+  
+      dialogRef.afterClosed().subscribe(guarantee => {
+        if (guarantee) {
+          this.guaranties.splice(index, 1, guarantee);
+        }
+      });
+    } else {
+      this.navigationService.showMessage('Debe agregar el monto del contrato');
+    }
+  }
+
   openDialogPartnerships() {
     const dialogRef = this.matDialog.open(DialogTemplatePartnershipsComponent, {
       width: '600px',
@@ -136,7 +165,8 @@ export class EditTemplatesComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { business } = partnership;
+        const { business, partnershipItems } = partnership;
+        this.partnershipItems = partnershipItems;
         this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }

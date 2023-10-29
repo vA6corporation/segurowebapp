@@ -1,19 +1,8 @@
-<!-- <mat-action-list>
-  <button type="button" mat-list-item *ngFor="let businessOfferPdf of businessOfferPdfs" (click)="onBusinessOfferSelect(businessOfferPdf)">
-    <div>
-      {{ businessOfferPdf.name }}
-      <br>
-      <span class="text-muted">
-        {{ businessOfferPdf.ruc }}
-      </span>
-    </div>
-  </button>
-</mat-action-list> -->
 <div mat-dialog-content class="mx-0 px-0" style="height: calc(100% - 44px)">
   <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event" style="overflow: hidden;">
     <mat-tab label="Documentos">
       <mat-action-list>
-        <button mat-list-item *ngFor="let businessOfferPdf of businessOfferPdfs" (click)="onBusinessOfferSelect(businessOfferPdf)">
+        <button mat-list-item *ngFor="let businessOfferPdf of businessOfferPdfs" [ngClass]="{ 'bg-success': businessOfferPdf.businessOffer.name === seaceData.bidder }" (click)="onBusinessOfferSelect(businessOfferPdf)">
           <div>
             {{ businessOfferPdf.businessOffer.name }}
             <br>
@@ -26,9 +15,6 @@
         </button>
       </mat-action-list>
     </mat-tab>
-    <!-- <mat-tab label="Preview" style="overflow: hidden;">
-      <iframe [src]="url" frameborder="0" style="overflow:hidden;height:100%;width:100%"></iframe>
-    </mat-tab> -->
   </mat-tab-group>
 </div>
 <mat-dialog-actions>

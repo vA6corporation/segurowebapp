@@ -20,6 +20,10 @@ export class TemplatesService {
     return this.httpService.get(`templates/byId/${templateId}`);
   }
 
+  getTemplatesByKey(key: string): Observable<TemplateModel[]> {
+    return this.httpService.get(`templates/byKey/${key}`);
+  }
+
   getTemplatesByPage(pageIndex: number, pageSize: number): Observable<TemplateModel[]> {
     return this.httpService.get(`templates/byPage/${pageIndex}/${pageSize}`);
   }

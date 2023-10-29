@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
 import { Inject } from '@angular/core';
+
 @Component({
   selector: 'app-dialog-add-guaranties',
   templateUrl: './dialog-add-guaranties.component.html',
@@ -11,10 +11,12 @@ import { Inject } from '@angular/core';
 export class DialogAddGuarantiesComponent implements OnInit {
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) 
+    private readonly contractMount: number,
     private readonly formBuilder: UntypedFormBuilder,
     private readonly dialogRef: MatDialogRef<DialogAddGuarantiesComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {amount : number}
   ) { }
+
   public typeBail = 'GAMF';
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     guaranteeCode: 'GAMF',
@@ -26,7 +28,7 @@ export class DialogAddGuarantiesComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.setPercentage('10');
+    this.setPercentage(10);
   }
 
   onSubmit() {
@@ -35,8 +37,9 @@ export class DialogAddGuarantiesComponent implements OnInit {
     }
   }
 
-  setPercentage(percentaje: string){
-    this.formGroup.controls['mount'].setValue((parseInt(percentaje, 10)*this.data.amount)/100);
+  setPercentage(percentaje: number) {
+    const mount = Number(((percentaje * this.contractMount) / 100).toFixed(2));
+    this.formGroup.patchValue({ mount });
   }
 
 }

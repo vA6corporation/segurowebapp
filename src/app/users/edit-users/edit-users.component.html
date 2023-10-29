@@ -15,13 +15,26 @@
         <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Personal a cargo</mat-label>
-      <mat-select formControlName="workerId">
-        <mat-option value="">NINGUNO</mat-option>
-        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      <mat-select formControlName="workerId" placeholder="SIN PERSONAL A CARGO">
+        <mat-option [value]="null">SIN PERSONAL A CARGO</mat-option>
+        <mat-option *ngFor="let worker of workers" [value]="worker._id">{{ worker.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Sucursal</mat-label>
+      <mat-select formControlName="assignedOfficeId" placeholder="ACCESO A TODAS LAS SUCURSALES" class="text-uppercase">
+        <mat-option [value]="null">ACCESO A TODAS LAS SUCURSALES</mat-option>
+        <mat-option *ngFor="let office of offices" [value]="office._id">{{ office.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="allowChangeWorkerOnBusiness">Reasignar personal en empresas</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="allowChangeConstructionCode">Reasignar estado de obras</mat-slide-toggle>
+    </div>
     <div class="mb-3">
       <mat-slide-toggle formControlName="showAllNotifications">Mostrar notificaciones</mat-slide-toggle>
     </div>

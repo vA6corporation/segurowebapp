@@ -6,12 +6,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { LogoutComponent } from './logout/logout.component';
+import { DeviceComponent } from './device/device.component';
 
 @NgModule({
   declarations: [
     LogoutComponent,
     LoginComponent,
     SignupComponent,
+    DeviceComponent,
   ],
   imports: [
     CommonModule,

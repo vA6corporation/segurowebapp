@@ -14,7 +14,7 @@ export interface PartnershipModel {
   representativeNationality: string
   representative: string
   representativeDocument: string
-  business: BusinessModel
+  business: BusinessModel|null
   partnershipItems: PartnershipItemModel[]
   businessId: string
   createdAt: any

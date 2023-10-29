@@ -4,7 +4,6 @@
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.COMPLETION)" [disabled]="isLoading" mat-raised-button color="primary">AVANCE DE OBRA</button>
     <span class="divider"></span>
-
     <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.PARTNERSHIP)" [disabled]="isLoading" mat-raised-button color="primary">CONTRATO DE CONSORCIO</button>
     <span class="divider"></span>
     <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.CONSTRUCTION)" [disabled]="isLoading" mat-raised-button color="primary">CONTRATO DE OBRA</button>
@@ -30,10 +29,6 @@
     <mat-form-field appearance="fill">
       <mat-label>Monto adjudicado</mat-label>
       <input type="number" matInput formControlName="awardedAmount">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Codigo</mat-label>
-      <input type="text" matInput formControlName="code">
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Observaciones</mat-label>
@@ -84,7 +79,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Estado de obra</mat-label>
-      <mat-select formControlName="constructionCode">
+      <mat-select formControlName="constructionCode" [disabled]="!user?.allowChangeConstructionCode">
         <mat-option value="01">EJECUCION</mat-option>
         <mat-option value="02">POR TERMINAR</mat-option>
         <mat-option value="03">PARALIZADA</mat-option>
@@ -101,6 +96,14 @@
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isService">Es bien/servicio</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isHousingFund">Es fondo mi vivienda</mat-slide-toggle>
+    </div>
+    
     <ng-container *ngIf="user?.isAdmin">
       <mat-form-field appearance="fill">
         <mat-label>Honorarios</mat-label>
@@ -117,7 +120,7 @@
         <div mat-subheader>Pagos</div>
         <mat-list-item *ngFor="let payment of payments; let i = index">
           <div>
-            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
             <br />
             <span class="text-muted">
               {{ payment.paymentAt | date: 'dd/MM/yyyy' }}

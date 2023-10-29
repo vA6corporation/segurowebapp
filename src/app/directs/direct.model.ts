@@ -10,6 +10,9 @@ import { WorkerModel } from "../workers/worker.model";
 
 export interface DirectModel {
   _id: string
+  status: string
+  statusLabel: string
+  prima: number
   price: number
   startDate: string
   endDate: string
@@ -30,8 +33,10 @@ export interface DirectModel {
   isMarked: boolean
   cheques: ChequeModel[]
   deposits: DepositModel[]
-  payments: PaymentModel[],
+  payments: PaymentModel[]
   createdAt: any
   updatedAt: any
+  observations: string
+  renewObservations: string
   userId: string
 }

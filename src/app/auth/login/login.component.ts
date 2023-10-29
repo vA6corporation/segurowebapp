@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   public rememberUsers: UserModel[] = [];
 
   ngOnInit(): void { 
-    this.navigationService.setTitle('Horvi');
+    this.navigationService.setTitle('Fidenza');
     this.loadDb().then(() => {
       this.loadUsers();
     });
@@ -157,10 +157,11 @@ export class LoginComponent implements OnInit {
         }
         this.isLoading = false;
         this.authService.setAccessToken(accessToken);
-        this.navigationService.loadBarFinish();
-        this.router.navigate(['/setOffice']).then(() => {
-          location.reload();
-        });
+        location.reload();
+        // this.navigationService.loadBarFinish();
+        // this.router.navigate(['/setOffice']).then(() => {
+        //   location.reload();
+        // });
       }, (error: HttpErrorResponse) => {
         console.log(error);
         this.isLoading = false;

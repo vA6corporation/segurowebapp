@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
@@ -42,6 +41,19 @@ export class TemplatesComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Formatos');
     this.fetchData();
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart();
+      this.templatesService.getTemplatesByKey(key).subscribe(templates => {
+        this.navigationService.loadBarFinish();
+        this.dataSource = templates;
+      });
+    });
+
+    this.navigationService.setMenu([
+      { id: 'search', label: 'search', icon: 'search', show: true },
+      // { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
+    ]);
   }
 
   onDialogTemplates(template: TemplateModel) {

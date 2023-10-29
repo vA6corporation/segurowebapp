@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionsService } from '../constructions.service';
+import { GuaranteeModel } from 'src/app/guaranties/guarantee.model';
 
 @Component({
   selector: 'app-dialog-detail-constructions',
@@ -24,7 +24,6 @@ export class DialogDetailConstructionsComponent implements OnInit {
   public guarantiesGFCF: any[] = [];
 
   ngOnInit(): void { 
-    // this.navigationService.loadBarStart();
     this.constructionsService.getGuarantiesByConstructionId(this.constructionId).subscribe(guaranties => {
       this.navigationService.loadBarFinish();
       this.guarantiesGAMF = guaranties.filter(e => e.guaranteeType === 'GAMF');

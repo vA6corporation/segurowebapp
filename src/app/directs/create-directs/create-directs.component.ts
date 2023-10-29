@@ -242,7 +242,7 @@ export class CreateDirectsComponent implements OnInit {
       direct.financierId = financier._id;
       direct.workerId = this.worker?._id;
       direct.constructionId = this.construction?._id;
-      this.directsService.create(direct, financier, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
+      this.directsService.create(direct, this.cheques, this.deposits, this.construction.officeId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

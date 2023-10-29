@@ -8,6 +8,30 @@ const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'capitalIncreases',
+    loadChildren: () => import('./capital-increases/capital-increases.module').then(m => m.CapitalIncreasesModule)
+  },
+  {
+    path: 'surveys',
+    loadChildren: () => import('./surveys/surveys.module').then(m => m.SurveysModule)
+  },
+  {
+    path: 'customers',
+    loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
+  },
+  {
+    path: 'certifiers',
+    loadChildren: () => import('./certifiers/certifiers.module').then(m => m.CertifiersModule)
+  },
+  {
+    path: 'devices',
+    loadChildren: () => import('./devices/devices.module').then(m => m.DevicesModule)
+  },
+  {
+    path: 'operations',
+    loadChildren: () => import('./operations/operations.module').then(m => m.OperationsModule)
+  },
+  {
     path: 'tools',
     loadChildren: () => import('./tools/tools.module').then(m => m.ToolsModule)
   },

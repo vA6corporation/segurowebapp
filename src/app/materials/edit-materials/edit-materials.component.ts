@@ -413,7 +413,7 @@ export class EditMaterialsComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, material } = this.formGroup.value;
       material.financierId = financier._id;
-      this.materialsService.updateWithFinanicer(material, financier, this.payments, this.materialId).subscribe(res => {
+      this.materialsService.updateWithPayments(material, this.payments, this.materialId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

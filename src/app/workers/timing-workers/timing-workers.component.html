@@ -1,0 +1,1029 @@
+<div class="container">
+  <form [formGroup]="formGroup" autocomplete="off" class="d-flex">
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Año</mat-label>
+      <mat-select formControlName="year" class="text-uppercase" (selectionChange)="fetchData()">
+        <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Trimestre</mat-label>
+      <mat-select formControlName="index" class="text-uppercase">
+        <mat-option *ngFor="let trimestre of trimestres" [value]="trimestre.index">{{ trimestre.label | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <ng-container *ngIf="formGroup.value.index === 1 || formGroup.value.index === 0">
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="text-center w-100 mb-0 mat-h2 d-flex">
+        <span>META TRIMESTRAL</span>
+        <span class="spacer"></span>
+        {{ ((goal?.january || 0) + (goal?.february || 0) + (goal?.march || 0)).toLocaleString('en-US') }}
+      </div>
+    </div>
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Enero
+          <span class="spacer"></span>
+          {{ (goal?.january || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Febrero
+          <span class="spacer"></span>
+          {{ (goal?.february || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100">
+        <div class="mat-h4 d-flex mb-0">
+          Marzo
+          <span class="spacer"></span>
+          {{ (goal?.march || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+    </div>
+    <ng-container *ngFor="let worker of sortOne(workers)">
+      <ng-container *ngIf="worker.summaryPayments[0].totalCharge || worker.summaryPayments[1].totalCharge || worker.summaryPayments[2].totalCharge">
+        <div class="d-flex mb-2">
+          <small style="min-width: 120px;">{{ shortName(worker.name) | uppercase }}</small>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="((worker.summaryPayments[0].totalCharge + worker.summaryPayments[1].totalCharge + worker.summaryPayments[2].totalCharge) / ((goal?.january || 0) + (goal?.february || 0) + (goal?.march || 0))) * 100"></mat-progress-bar>
+            <div class="d-flex">
+              <small>
+                {{ (((worker.summaryPayments[0].totalCharge + worker.summaryPayments[1].totalCharge + worker.summaryPayments[2].totalCharge) / ((goal?.january || 0) + (goal?.february || 0) + (goal?.march || 0))) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ (worker.summaryPayments[0].totalCharge + worker.summaryPayments[1].totalCharge + worker.summaryPayments[2].totalCharge).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex mb-5">
+          <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[0].totalCharge / (goal?.january || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[0].totalCharge / (goal?.january || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[0].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksJanuary"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[0].week1 / ((goal?.january || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[0].week1 / ((goal?.january || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[0].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[0].week2 / ((goal?.january || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[0].week2 / ((goal?.january || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[0].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[0].week3 / ((goal?.january || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[0].week3 / ((goal?.january || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[0].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[0].week4 / ((goal?.january || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[0].week4 / ((goal?.january || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[0].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[1].totalCharge / (goal?.february || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[1].totalCharge / (goal?.february || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[1].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksFebruary"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[1].week1 / ((goal?.february || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[1].week1 / ((goal?.february || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[1].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[1].week2 / ((goal?.february || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[1].week2 / ((goal?.february || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[1].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[1].week3 / ((goal?.february || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[1].week3 / ((goal?.february || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[1].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[1].week4 / ((goal?.february || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[1].week4 / ((goal?.february || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[1].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[2].totalCharge / (goal?.march || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[2].totalCharge / (goal?.march || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[2].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksMarch"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[2].week1 / ((goal?.march || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[2].week1 / ((goal?.march || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[2].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[2].week2 / ((goal?.march || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[2].week2 / ((goal?.march || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[2].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[2].week3 / ((goal?.march || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[2].week3 / ((goal?.march || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[2].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[2].week4 / ((goal?.march || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[2].week4 / ((goal?.march || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[2].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pb-5"></div>
+      </ng-container>
+    </ng-container>
+    <div class="pb-5"></div>
+  </ng-container>
+
+  <ng-container *ngIf="formGroup.value.index === 2 || formGroup.value.index === 0">
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="text-center w-100 mb-0 mat-h2 d-flex">
+        <span>META TRIMESTRAL</span>
+        <span class="spacer"></span>
+        {{ ((goal?.april || 0) + (goal?.may || 0) + (goal?.june || 0)).toLocaleString('en-US') }}
+      </div>
+    </div>
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Abril
+          <span class="spacer"></span>
+          {{ (goal?.april || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Mayo
+          <span class="spacer"></span>
+          {{ (goal?.may || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100">
+        <div class="mat-h4 d-flex mb-0">
+          Junio
+          <span class="spacer"></span>
+          {{ (goal?.june || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+    </div>
+    <ng-container *ngFor="let worker of sortTwo(workers)">
+      <ng-container *ngIf="worker.summaryPayments[3].totalCharge || worker.summaryPayments[4].totalCharge || worker.summaryPayments[5].totalCharge">
+        <div class="d-flex mb-2">
+          <small style="min-width: 120px;">{{ shortName(worker.name) | uppercase }}</small>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="((worker.summaryPayments[4].totalCharge + worker.summaryPayments[5].totalCharge + worker.summaryPayments[6].totalCharge) / ((goal?.april || 0) + (goal?.may || 0) + (goal?.june || 0))) * 100"></mat-progress-bar>
+            <div class="d-flex">
+              <small>
+                {{ (((worker.summaryPayments[4].totalCharge + worker.summaryPayments[5].totalCharge + worker.summaryPayments[6].totalCharge) / ((goal?.april || 0) + (goal?.may || 0) + (goal?.june || 0))) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ (worker.summaryPayments[4].totalCharge + worker.summaryPayments[5].totalCharge + worker.summaryPayments[6].totalCharge).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex mb-5">
+          <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[3].totalCharge / (goal?.april || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[3].totalCharge / (goal?.april || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[3].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksApril"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[3].week1 / ((goal?.april || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[3].week1 / ((goal?.april || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[3].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[3].week2 / ((goal?.april || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[3].week2 / ((goal?.april || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[3].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[3].week3 / ((goal?.april || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[3].week3 / ((goal?.april || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[3].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[3].week4 / ((goal?.april || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[3].week4 / ((goal?.april || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[3].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[4].totalCharge / (goal?.may || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[4].totalCharge / (goal?.may || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[4].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksMay"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[4].week1 / ((goal?.may || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[4].week1 / ((goal?.may || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[4].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[4].week2 / ((goal?.may || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[4].week2 / ((goal?.may || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[4].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[4].week3 / ((goal?.may || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[4].week3 / ((goal?.may || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[4].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[4].week4 / ((goal?.may || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[4].week4 / ((goal?.may || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[4].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[5].totalCharge / (goal?.june || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[5].totalCharge / (goal?.june || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[5].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksJune"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[5].week1 / ((goal?.june || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[5].week1 / ((goal?.june || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[5].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[5].week2 / ((goal?.june || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[5].week2 / ((goal?.june || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[5].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[5].week3 / ((goal?.june || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[5].week3 / ((goal?.june || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[5].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[5].week4 / ((goal?.june || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[5].week4 / ((goal?.june || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[5].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pb-5"></div>
+      </ng-container>
+    </ng-container>
+    <div class="pb-5"></div>
+  </ng-container>
+
+  
+
+  
+  <ng-container *ngIf="formGroup.value.index === 3 || formGroup.value.index === 0">
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="text-center w-100 mb-0 mat-h2 d-flex">
+        <span>META TRIMESTRAL</span>
+        <span class="spacer"></span>
+        {{ ((goal?.july || 0) + (goal?.august || 0) + (goal?.september || 0)).toLocaleString('en-US') }}
+      </div>
+    </div>
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Julio
+          <span class="spacer"></span>
+          {{ (goal?.july || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Agosto
+          <span class="spacer"></span>
+          {{ (goal?.august || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100">
+        <div class="mat-h4 d-flex mb-0">
+          Septiembre
+          <span class="spacer"></span>
+          {{ (goal?.september || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+    </div>
+    <ng-container *ngFor="let worker of sortThree(workers)">
+      <ng-container *ngIf="worker.summaryPayments[6].totalCharge || worker.summaryPayments[7].totalCharge || worker.summaryPayments[8].totalCharge">
+        <div class="d-flex mb-2">
+          <small style="min-width: 120px;">{{ shortName(worker.name) | uppercase }}</small>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="((worker.summaryPayments[6].totalCharge + worker.summaryPayments[7].totalCharge + worker.summaryPayments[8].totalCharge) / ((goal?.july || 0) + (goal?.august || 0) + (goal?.september || 0))) * 100"></mat-progress-bar>
+            <div class="d-flex">
+              <small>
+                {{ (((worker.summaryPayments[6].totalCharge + worker.summaryPayments[7].totalCharge + worker.summaryPayments[8].totalCharge) / ((goal?.july || 0) + (goal?.august || 0) + (goal?.september || 0))) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ (worker.summaryPayments[6].totalCharge + worker.summaryPayments[7].totalCharge + worker.summaryPayments[8].totalCharge).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex mb-5">
+          <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[6].totalCharge / (goal?.july || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[6].totalCharge / (goal?.july || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[6].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksJuly"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[6].week1 / ((goal?.july || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[6].week1 / ((goal?.july || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[6].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[6].week2 / ((goal?.july || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[6].week2 / ((goal?.july || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[6].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[6].week3 / ((goal?.july || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[6].week3 / ((goal?.july || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[6].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[6].week4 / ((goal?.july || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[6].week4 / ((goal?.july || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[6].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[7].totalCharge / (goal?.august || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[7].totalCharge / (goal?.august || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[7].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksAugust"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[7].week1 / ((goal?.august || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[7].week1 / ((goal?.august || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[7].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[7].week2 / ((goal?.august || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[7].week2 / ((goal?.august || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[7].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[7].week3 / ((goal?.august || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[7].week3 / ((goal?.august || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[7].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[7].week4 / ((goal?.august || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[7].week4 / ((goal?.august || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[7].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[8].totalCharge / (goal?.september || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[8].totalCharge / (goal?.september || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[8].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+            <!-- <div class="weeksSetember"></div> -->
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[8].week1 / ((goal?.september || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[8].week1 / ((goal?.september || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[8].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[8].week2 / ((goal?.september || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[8].week2 / ((goal?.september || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[8].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[8].week3 / ((goal?.september || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[8].week3 / ((goal?.september || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[8].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[8].week4 / ((goal?.september || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[8].week4 / ((goal?.september || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[8].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pb-5"></div>
+      </ng-container>
+    </ng-container>
+    <div class="pb-5"></div>
+  </ng-container>
+
+
+
+
+
+  <ng-container *ngIf="formGroup.value.index === 4 || formGroup.value.index === 0">
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="text-center w-100 mb-0 mat-h2 d-flex">
+        <span>META TRIMESTRAL</span>
+        <span class="spacer"></span>
+        {{ ((goal?.october || 0) + (goal?.november || 0) + (goal?.december || 0)).toLocaleString('en-US') }}
+      </div>
+    </div>
+    <div class="d-flex mb-3">
+      <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Octubre
+          <span class="spacer"></span>
+          {{ (goal?.october || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100 mr-3">
+        <div class="mat-h4 d-flex mb-0">
+          Noviembre
+          <span class="spacer"></span>
+          {{ (goal?.november || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+      <div class="w-100">
+        <div class="mat-h4 d-flex mb-0">
+          Diciembre
+          <span class="spacer"></span>
+          {{ (goal?.december || 0).toLocaleString('en-US') }}
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let worker of sortFour(workers)">
+      <ng-container *ngIf="worker.summaryPayments[9].totalCharge || worker.summaryPayments[10].totalCharge || worker.summaryPayments[11].totalCharge">
+        <div class="d-flex mb-2">
+          <small style="min-width: 120px;">{{ shortName(worker.name) | uppercase }}</small>
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="((worker.summaryPayments[9].totalCharge + worker.summaryPayments[10].totalCharge + worker.summaryPayments[11].totalCharge) / ((goal?.october || 0) + (goal?.november || 0) + (goal?.december || 0))) * 100"></mat-progress-bar>
+            <div class="d-flex">
+              <small>
+                {{ (((worker.summaryPayments[9].totalCharge + worker.summaryPayments[10].totalCharge + worker.summaryPayments[11].totalCharge) / ((goal?.october || 0) + (goal?.november || 0) + (goal?.december || 0))) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ (worker.summaryPayments[9].totalCharge + worker.summaryPayments[10].totalCharge + worker.summaryPayments[11].totalCharge).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex mb-5">
+          <small style="min-width: 120px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></small>
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[9].totalCharge / (goal?.october || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[9].totalCharge / (goal?.october || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[9].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+
+
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[9].week1 / ((goal?.october || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[9].week1 / ((goal?.october || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[9].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[9].week2 / ((goal?.october || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[9].week2 / ((goal?.october || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[9].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[9].week3 / ((goal?.october || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[9].week3 / ((goal?.october || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[9].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[9].week4 / ((goal?.october || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[9].week4 / ((goal?.october || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[9].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="w-100 mr-3">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[10].totalCharge / (goal?.november || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[10].totalCharge / (goal?.november || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[10].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+
+
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[10].week1 / ((goal?.november || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[10].week1 / ((goal?.november || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[10].week1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[10].week2 / ((goal?.november || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[10].week2 / ((goal?.november || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[10].week2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[10].week3 / ((goal?.november || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[10].week3 / ((goal?.november || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[10].week3.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[10].week4 / ((goal?.november || 0) / 4)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[10].week4 / ((goal?.november || 0) / 4)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[10].week4.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="w-100">
+            <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100"></mat-progress-bar>
+            <div class="d-flex mb-2">
+              <small>
+                {{ ((worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100).toFixed(0) }}%
+              </small>
+              <span class="spacer"></span>
+              <small>
+                {{ worker.summaryPayments[11].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+              </small>
+            </div>
+
+
+            <div class="d-flex">
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[11].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[11].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100 mr-1">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[11].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+              <div class="w-100">
+                <mat-progress-bar mode="determinate" [value]="(worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100"></mat-progress-bar>
+                <div class="d-flex">
+                  <small>
+                    {{ ((worker.summaryPayments[11].totalCharge / (goal?.december || 0)) * 100).toFixed(0) }}%
+                  </small>
+                  <span class="spacer"></span>
+                  <small>
+                    {{ worker.summaryPayments[11].totalCharge.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="pb-5"></div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  
+</div>

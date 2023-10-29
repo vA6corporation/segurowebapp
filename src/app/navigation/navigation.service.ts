@@ -98,7 +98,6 @@ export class NavigationService {
   }
 
   backTo() {
-    // this.backTo$.emit(backTo);
     this.isMainToolbar$.emit(false);
   }
 

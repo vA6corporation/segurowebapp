@@ -2,10 +2,8 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
 import { InsuranceModel } from '../insurance.model';
@@ -22,7 +20,6 @@ export class RenewComponent implements OnInit {
     private readonly insurancesService: InsurancesService,
     private readonly navigationService: NavigationService,
     private readonly formBuilder: UntypedFormBuilder,
-    private readonly matDialog: MatDialog
   ) { }
 
   public displayedColumns: string[] = [ 
@@ -105,68 +102,7 @@ export class RenewComponent implements OnInit {
 
     this.fetchData();
   }
-
-  // onShowDetails(materialId: string) {
-  //   this.matDialog.open(DialogMaterialComponent, {
-  //     position: { top: '20px' },
-  //     data: materialId,
-  //   });
-  // }
-
-  async onRenewGuarantee(insuranceId: string) {
-    const status = '02';
-    this.insurancesService.updateStatus(insuranceId, status).toPromise();
-    this.navigationService.showMessage('Se han guardado los cambios');
-  }
-
-  async onNotRenewGuarantee(guarantee: GuaranteeModel) {
-    guarantee.status = '03';
-    switch (guarantee.guaranteeType) {
-      // case 'GAMF':
-      //   this.materialsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
-    this.navigationService.showMessage('Se han guardado los cambios');
-  }
-
-  async onFreeGuarantee(guarantee: GuaranteeModel) {
-    guarantee.status = '04';
-    switch (guarantee.guaranteeType) {
-      // case 'GAMF':
-      //   this.materialsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
-    this.navigationService.showMessage('Se han guardado los cambios');
-  }
-
-  async onNotLookGuarantee(guarantee: GuaranteeModel) {
-    guarantee.status = '01';
-    switch (guarantee.guaranteeType) {
-      // case 'GAMF':
-      //   this.materialsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GADF':
-      //   this.directsService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-      // case 'GFCF':
-      //   this.compliancesService.update(guarantee, guarantee._id).toPromise();
-      //   break;
-    }
-    this.navigationService.showMessage('Se han guardado los cambios');
-  }
-
+  
   fetchData() {
     const { type } = this.formGroup.value;
     this.navigationService.loadBarStart();

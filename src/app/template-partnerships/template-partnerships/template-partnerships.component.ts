@@ -42,13 +42,15 @@ export class TemplatePartnershipsComponent implements OnInit {
       { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.partnershipsService.getTemplatePartnershipsCount().subscribe(count => {
-      this.length = count;
-    });
+    // this.partnershipsService.getTemplatePartnershipsCount().subscribe(count => {
+    //   this.length = count;
+    // });
 
-    this.partnershipsService.getTemplatePartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
-      this.dataSource = partnerships;
-    });
+    // this.partnershipsService.getTemplatePartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
+    //   this.dataSource = partnerships;
+    // });
+    this.fetchData();
+    this.fetchCount();
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
@@ -75,12 +77,12 @@ export class TemplatePartnershipsComponent implements OnInit {
             'REPRESENTANTE LEGAL',
           ]);
   
-          for (const item of partnerships) {
+          for (const partnership of partnerships) {
             body.push([
-              item.document,
-              item.name,
-              item.business.name,
-              item.representative,
+              partnership.document,
+              partnership.name,
+              partnership.business?.name,
+              partnership.representative,
             ]);
           }
   
@@ -91,11 +93,32 @@ export class TemplatePartnershipsComponent implements OnInit {
     });
   }
 
-  handlePageEvent(event: PageEvent): void {
-    // this.partnershipsService.getPartnershipsByPage(event.pageIndex + 1, event.pageSize).subscribe(partnerships => {
-    //   this.dataSource = partnerships;
-    // });
+  fetchCount() {
+    this.partnershipsService.getTemplatePartnershipsCount().subscribe(count => {
+      this.length = count;
+    });
   }
 
+  fetchData() {
+    this.navigationService.loadBarStart();
+    this.partnershipsService.getTemplatePartnershipsByPage(this.pageIndex + 1, this.pageSize).subscribe(partnerships => {
+      this.navigationService.loadBarFinish();
+      this.dataSource = partnerships;
+    });
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchData();
+  }
+
+  onDelete(templatePartnershipId: string): void {
+    this.partnershipsService.delete(templatePartnershipId).subscribe(() => {
+      this.navigationService.showMessage('Eliminado correctamente');
+      this.dataSource = this.dataSource.filter(e => e._id === templatePartnershipId);
+      this.fetchCount();
+    });
+  }
 
 }

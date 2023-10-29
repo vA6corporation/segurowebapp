@@ -20,8 +20,32 @@ export class BusinessesService {
     private readonly httpService: HttpService,
   ) { }
   
-  getBusinesses(): Observable<BusinessModel[]> {
-    return this.httpService.get('businesses');
+  getBusinessesWithoutDocumentation(params: Params): Observable<BusinessModel[]> {
+    return this.httpService.get('businesses/withoutDocumentation', { params }); 
+  }
+
+  getBusinessesByIds(businessIds: string[]): Observable<BusinessModel[]> {
+    return this.httpService.post('businesses/byIds', { businessIds });
+  }
+
+  getRandomBusinesses(): Observable<BusinessModel[]> {
+    return this.httpService.get('businesses/random');
+  }
+
+  updateExperienceObservations(experienceObservations: string, businessId: string): Observable<void> {
+    return this.httpService.get(`businesses/experienceObservations/${experienceObservations}/${businessId}`); 
+  }
+
+  updateEmail(email: string, businessId: string): Observable<void> {
+    return this.httpService.get(`businesses/email/${email}/${businessId}`); 
+  }
+
+  updateMobileNumber(mobileNumber: string, businessId: string): Observable<void> {
+    return this.httpService.get(`businesses/mobileNumber/${mobileNumber}/${businessId}`); 
+  }
+
+  getBusinessesBirthday(): Observable<BusinessModel[]> {
+    return this.httpService.get('businesses/birthday');
   }
 
   getBusinessById(businessId: string): Observable<BusinessModel> {

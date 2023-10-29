@@ -9,11 +9,11 @@
         <h2 class="text-center text-uppercase">Horvi seguros</h2>
         <mat-action-list>
           <button type="button" class="m-1" mat-list-item *ngFor="let office of offices" (click)="onOfficeSelected(office)">
-          <span class="spacer"></span>
-          <div class="text-center">
-            {{ office.name | uppercase }}
-          </div>
-          <span class="spacer"></span>
+            <span class="spacer"></span>
+            <div class="text-center">
+              {{ office.name | uppercase }}
+            </div>
+            <span class="spacer"></span>
           </button>
         </mat-action-list>
       </mat-card>

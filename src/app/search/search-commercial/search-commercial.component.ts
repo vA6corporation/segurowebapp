@@ -8,7 +8,7 @@ import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { DirectsService } from 'src/app/directs/directs.service';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
+import { GuaranteeModel } from 'src/app/guaranties/guarantee.model';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';

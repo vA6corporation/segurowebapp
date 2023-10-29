@@ -83,7 +83,7 @@ export async function buildServiceOrder(
       ]
     ],
     body: [
-      [ { content: `SERVICIO DE ASESORIA Y GESTION DE FIANZAS PARA LA OBRA/SERVICIO/BIEN/CONSULTORIA DE OBRA ${construction.object}`, colSpan: 1 }, { content: `S/ ${payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
+      [ { content: `SERVICIO DE ASESORIA Y GESTION DE FIANZAS PARA LA OBRA/SERVICIO/BIEN/CONSULTORIA DE OBRA ${construction.object}`, colSpan: 1 }, { content: `S/ ${payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
       [],
       [],
       [],

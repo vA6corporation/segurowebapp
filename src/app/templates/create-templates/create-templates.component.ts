@@ -9,6 +9,9 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogTemplatePartnershipsComponent } from 'src/app/template-partnerships/dialog-template-partnerships/dialog-template-partnerships.component';
 import { DialogAddGuarantiesComponent } from '../dialog-add-guaranties/dialog-add-guaranties.component';
 import { TemplatesService } from '../templates.service';
+import { DialogEditGuarantiesComponent, DialogEditGugaranteeData } from '../dialog-edit-guaranties/dialog-edit-guaranties.component';
+import { BusinessModel } from 'src/app/businesses/business.model';
+import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 
 @Component({
   selector: 'app-create-templates',
@@ -49,6 +52,7 @@ export class CreateTemplatesComponent implements OnInit {
     tenderNumber: null,
   });
   public guaranties: any[] = [];
+  public partnershipItems: PartnershipItemModel[] = [];
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nueva documentacion');
@@ -82,27 +86,51 @@ export class CreateTemplatesComponent implements OnInit {
   }
 
   openDialogAddGuaranties() {
-    if(this.formGroup.controls['contractMount'].value == null){
+    const { contractMount } = this.formGroup.value;
+    if (contractMount) {
+      const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
+        width: '600px',
+        position: { top: '20px' },
+        data: contractMount,
+      });
+  
+      dialogRef.afterClosed().subscribe(guarantee => {
+        if (guarantee) {
+          this.guaranties.push(guarantee);
+        }
+      });
+    } else {
       this.navigationService.showMessage('Debe agregar el monto del contrato');
-      return
     }
-    const dialogRef = this.matDialog.open(DialogAddGuarantiesComponent, {
-      width: '600px',
-      position: { top: '20px' },
-      data: {
-        amount: this.formGroup.controls['contractMount'].value
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(guarantee => {
-      if (guarantee) {
-        this.guaranties.push(guarantee);
-      }
-    });
   }
 
   onRemoveGuarantee(index: number) {
     this.guaranties.splice(index, 1);
+  }
+
+  onEditGuarantee(index: number) {
+    const { contractMount } = this.formGroup.value;
+    if (contractMount) {
+      const guarantee = this.guaranties[index];
+      const data: DialogEditGugaranteeData = {
+        guarantee,
+        contractMount,
+      };
+
+      const dialogRef = this.matDialog.open(DialogEditGuarantiesComponent, {
+        width: '600px',
+        position: { top: '20px' },
+        data,
+      });
+  
+      dialogRef.afterClosed().subscribe(guarantee => {
+        if (guarantee) {
+          this.guaranties.splice(index, 1, guarantee);
+        }
+      });
+    } else {
+      this.navigationService.showMessage('Debe agregar el monto del contrato');
+    }
   }
 
   openDialogPartnerships() {
@@ -113,7 +141,8 @@ export class CreateTemplatesComponent implements OnInit {
     
     dialogRef.afterClosed().subscribe(partnership => {
       if (partnership) {
-        const { business } = partnership;
+        const { business, partnershipItems } = partnership;
+        this.partnershipItems = partnershipItems;
         this.formGroup.patchValue({ business: business || {} });
         this.formGroup.patchValue({ partnership: partnership || {} });
       }

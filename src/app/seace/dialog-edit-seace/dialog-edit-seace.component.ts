@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -28,6 +28,8 @@ export class DialogEditSeaceComponent implements OnInit {
   public workers: WorkerModel[] = [];
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     workerId: null,
+    statusCode: '01',
+    managementDate: null,
     observations: null,
   });
 

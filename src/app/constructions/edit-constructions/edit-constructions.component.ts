@@ -13,16 +13,16 @@ import { CompanyModel } from 'src/app/companies/company.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
-import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
 import { PaymentModel } from 'src/app/payments/payment.model';
 import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
+import { ConstructionPdfTypes } from '../construction-pdf.enum';
 import { ConstructionsService } from '../constructions.service';
 import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { DialogPercentCompletionsComponent } from '../dialog-percent-completions/dialog-percent-completions.component';
 import { PercentCompletionModel } from '../percent-completion.model';
-import { ConstructionPdfTypes } from '../construction-pdf.enum';
 
 @Component({
   selector: 'app-edit-constructions',
@@ -61,7 +61,6 @@ export class EditConstructionsComponent implements OnInit {
     companyId: '',
     object: [ null, Validators.required ],
     awardedAmount: [ null, Validators.required ],
-    code: [ null, Validators.required ],
     observations: null,
     observationsPayment: null,
     emitionAt: [ new Date(), Validators.required ],
@@ -73,6 +72,8 @@ export class EditConstructionsComponent implements OnInit {
     officeId: '',
     commission: null,
     isExonerated: false,
+    isService: false,
+    isHousingFund: false,
   });
   public offices: OfficeModel[] = [];
   public companies: CompanyModel[] = [];
@@ -99,37 +100,39 @@ export class EditConstructionsComponent implements OnInit {
 
   private handleAuth$: Subscription = new Subscription(); 
   private handleCompanies$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
   private handleOffices$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleAuth$.unsubscribe();
     this.handleCompanies$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
     this.handleOffices$.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.navigationService.setTitle('Editar obra');
     this.navigationService.backTo();
-
+    
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
       this.companies = companies;
     });
-
-    this.workersService.getActiveWorkersGlobal().subscribe(workers => {
+    
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });
-
+    
     this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
       this.offices = offices;
     });
-
+    
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
     });
-
+    
     this.activatedRoute.params.subscribe(params => {
       this.constructionId = params.constructionId;
       this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
+        this.navigationService.setTitle('Editar obra ' + construction.code);
         console.log(construction);
         const { partnership, business, beneficiary, ...value } = construction;
         this.formGroup.patchValue(value);
@@ -160,7 +163,7 @@ export class EditConstructionsComponent implements OnInit {
   }
 
   onDialogPayments() {
-    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+    const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
       width: '600px',
       position: { top: '20px' }
     });

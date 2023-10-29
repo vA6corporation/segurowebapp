@@ -1,0 +1,46 @@
+<section class="container py-4">
+  <div class="mb-3 d-flex">
+    <div class="w-100 mr-3">
+      <button type="button" class="w-100" (click)="onAttachFile()" mat-raised-button color="primary">ADJUNTAR DOCUMENTOS</button>
+    </div>
+    <ng-container *ngFor="let business of businesses">
+      <span class="divider"></span>
+      <div class="w-100 mr-3">
+        <button type="button" class="w-100 mb-3" (click)="onDialogAttachPdfDocuments(business._id)" [disabled]="isLoading" mat-raised-button color="primary">
+          DOCUMENTOS {{ business.name }}
+        </button>
+        <button type="button" class="w-100 mb-3" (click)="onDialogAttachPdfExperiences(business._id)" [disabled]="isLoading" mat-raised-button color="primary">
+          EXPERIENCIA {{ business.name }}
+        </button>
+        <button type="button" class="w-100" (click)="onDialogAttachPdfFinancials(business._id)" [disabled]="isLoading" mat-raised-button color="primary">
+          D. FINANCIEROS {{ business.name }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre de operacion</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <div formGroupName="partnership">
+      <mat-form-field appearance="fill">
+        <mat-label>Consorcio</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
+      </mat-form-field>
+    </div>
+    <div formGroupName="business">
+      <mat-form-field appearance="fill">
+        <mat-label>Empresa</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
+      </mat-form-field>
+    </div>
+    <div class="mb-1"></div>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/operations">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+</section>

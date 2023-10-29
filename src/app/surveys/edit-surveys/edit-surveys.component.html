@@ -1,0 +1,58 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>
+        ¿De qué parte del país nos contacta y cuál es su rubro?
+      </mat-label>
+      <input type="text" matInput formControlName="fromCountry">
+    </mat-form-field>
+    <label id="example-radio-group-label">
+      ¿Cuanto tiempo viene trabajando con Horvi - Fidenza?
+    </label>
+    <mat-radio-group class="example-radio-group" formControlName="time">
+      <mat-radio-button class="example-radio-button" *ngFor="let time of times" [value]="time.value">
+        {{ time.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <label id="example-radio-group-label">
+      ¿Qué tan satisfecho se encuentra con la atención recibida de parte de nuestros colaboradores?
+    </label>
+    <mat-radio-group class="example-radio-group" formControlName="experienceAdvisor">
+      <mat-radio-button class="example-radio-button" *ngFor="let experienceAdvisor of experienceAdvisors" [value]="experienceAdvisor.value">
+        {{ experienceAdvisor.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <label id="example-radio-group-label">
+      ¿Cómo consideras que fue la atención para resolver su consulta y/o problema?
+    </label>
+    <mat-radio-group class="example-radio-group" formControlName="experienceAttention">
+      <mat-radio-button class="example-radio-button" *ngFor="let experienceAttention of experienceAttentions" [value]="experienceAttention.value">
+        {{ experienceAttention.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <label id="example-radio-group-label">
+      ¿Cuál es la probabilidad que nos recomiende con sus familiares, amigos y conocidos?
+    </label>
+    <mat-radio-group class="example-radio-group" formControlName="experienceRecommend">
+      <mat-radio-button class="example-radio-button" *ngFor="let experienceRecommend of experienceRecommends" [value]="experienceRecommend.value">
+        {{ experienceRecommend.label }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field appearance="fill">
+      <mat-label>
+        Déjanos su(s) sugerencia(s), para mejorar su experiencia con nosotros.
+      </mat-label>
+      <input type="text" matInput formControlName="suggestion">
+    </mat-form-field>
+    <div class="d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/surveys">
+        CANCELAR
+      </button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">
+        GUARDAR
+      </button>
+    </div>
+  </form>
+</section>

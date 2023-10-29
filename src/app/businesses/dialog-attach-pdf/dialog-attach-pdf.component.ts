@@ -20,13 +20,13 @@ export interface DialogAttachPdfData {
 }
 
 interface BusinessNode {
-  isTop: boolean;
-  expandable: boolean;
-  name: string;
-  contentType: string;
-  pdfId: string;
-  level: number;
-  _id: string;
+  _id: string
+  isTop: boolean
+  expandable: boolean
+  name: string
+  contentType: string
+  pdfId: string
+  level: number
   childrens?: BusinessNode[]
 }
 
@@ -60,7 +60,6 @@ export class DialogAttachPdfComponent implements OnInit {
       contentType: node.contentType,
       pdfId: node.pdfId,
       level: level,
-      // childrens: node.childrens,
       _id: node._id,
     };
   };
@@ -116,16 +115,15 @@ export class DialogAttachPdfComponent implements OnInit {
 
   fetchData() {
     this.businessesService.getBusinessNodes(this.data.type, this.data.businessId).subscribe(businessNodes => {
+      console.log(businessNodes);
       this.dataSource.data = businessNodes;
-      console.log(this.treeControl.dataNodes);
+      // console.log(this.treeControl.dataNodes);
     }, (error: HttpErrorResponse) => {
       console.log(error);    
     });
   }
 
   onDeletePdf(businessNode: BusinessNode) {
-    console.log(businessNode);
-    
     const nodeIndex = this.treeControl.dataNodes.indexOf(businessNode);
     const ok = confirm('Esta seguro de eliminar?...');
     if (ok) {
@@ -143,7 +141,6 @@ export class DialogAttachPdfComponent implements OnInit {
   }
 
   onChangePdf(businessPdf: BusinessPdfModel) {
-    console.log(businessPdf);
     this.pdfId = businessPdf.pdfId;
     this.businessPdfId = businessPdf._id;
     if (businessPdf.contentType === 'application/pdf' || businessPdf.contentType.includes('image')) {

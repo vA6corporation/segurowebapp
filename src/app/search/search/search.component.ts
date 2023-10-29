@@ -5,13 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { CompliancesService } from 'src/app/compliances/compliances.service';
 import { DialogComplianceComponent } from 'src/app/compliances/dialog-compliance/dialog-compliance.component';
 import { DialogDirectComponent } from 'src/app/directs/dialog-direct/dialog-direct.component';
 import { DirectsService } from 'src/app/directs/directs.service';
-import { GuaranteeModel } from 'src/app/guarantees/guarantee.model';
+import { GuaranteeModel, GuaranteeStatusTypes } from 'src/app/guaranties/guarantee.model';
+import { GuaranteeTypes } from 'src/app/guaranties/guaranteeTypes.enum';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
 import { MaterialsService } from 'src/app/materials/materials.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
@@ -34,7 +34,6 @@ export class SearchComponent implements OnInit {
     private readonly directsService: DirectsService,
     private readonly compliancesService: CompliancesService,
     private readonly officesService: OfficesService,
-    private readonly authService: AuthService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
   ) { }
@@ -154,6 +153,9 @@ export class SearchComponent implements OnInit {
       'E. DE TRAMITE',
       'E. DE REVISION',
       'F. CUMPLIMIENTO',
+      'F. REGISTRO',
+      'EMISION',
+      'OBRA'
     ]);
     for (const guarantee of this.dataSource) {
       const { business, partnership, financier } = guarantee;
@@ -168,6 +170,9 @@ export class SearchComponent implements OnInit {
         guarantee.processStatus,
         guarantee.statusLabel,
         formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
+        formatDate(guarantee.createdAt, 'dd/MM/yyyy', 'en-US'),
+        guarantee.isEmition ? 'SI' : 'NO',
+        guarantee.construction?.object
       ]);
     }
     const name = `GARANTIAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
@@ -189,6 +194,7 @@ export class SearchComponent implements OnInit {
 
     this.navigationService.loadBarStart();
     this.reportsService.getGuarantiesByStatus(this.processStatusCode, this.status).subscribe(guaranties => {
+      console.log(guaranties);
       this.navigationService.loadBarFinish();
       this.dataSource = guaranties;
     }, (error: HttpErrorResponse) => {
@@ -197,127 +203,109 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  async onRenewGuarantee(guarantee: any) {
-    const status = '02';
+  async onDeleteGuarantee(guarantee: GuaranteeModel) {
+    const status = GuaranteeStatusTypes.DELETED;
+    guarantee.status = status;
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.updateStatus(status, guarantee._id).toPromise();
         break;
-      case 'GADF':
+      case GuaranteeTypes.DIRECT:
         this.directsService.updateStatus(status, guarantee._id).toPromise();
         break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.updateStatus(status, guarantee._id).toPromise();
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotRenewGuarantee(guarantee: any) {
-    const status = '03';
+  async onRenewGuarantee(guarantee: GuaranteeModel) {
+    const status = GuaranteeStatusTypes.RENEW;
+    guarantee.status = status;
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GADF':
+      case GuaranteeTypes.DIRECT:
         this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onFreeGuarantee(guarantee: any) {
-    const status = '04';
+  async onNotRenewGuarantee(guarantee: GuaranteeModel) {
+    const status = GuaranteeStatusTypes.NOT_RENEW;
+    guarantee.status = status;
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GADF':
+      case GuaranteeTypes.DIRECT:
         this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
     }
     this.navigationService.showMessage('Se han guardado los cambios');
   }
 
-  async onNotLookGuarantee(guarantee: any) {
-    const status = '01';
+  async onFreeGuarantee(guarantee: GuaranteeModel) {
+    const status = GuaranteeStatusTypes.FREE;
+    guarantee.status = status;
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GADF':
+      case GuaranteeTypes.DIRECT:
         this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
-          if (this.key) {
-            this.fetchData();
-          }
-          if (this.status || this.processStatusCode) {
-            this.onStatusChange();
-          }
+          this.navigationService.showMessage('Se han guardado los cambios');
+        });
+        break;
+    }
+    this.navigationService.showMessage('Se han guardado los cambios');
+  }
+
+  async onNotLookGuarantee(guarantee: GuaranteeModel) {
+    const status = GuaranteeStatusTypes.NOT_LOOK;
+    guarantee.status = status;
+    switch (guarantee.guaranteeType) {
+      case GuaranteeTypes.MATERIAL:
+        this.materialsService.updateStatus(status, guarantee._id).subscribe(() => {
+          this.navigationService.showMessage('Se han guardado los cambios');
+        });
+        break;
+      case GuaranteeTypes.DIRECT:
+        this.directsService.updateStatus(status, guarantee._id).subscribe(() => {
+          this.navigationService.showMessage('Se han guardado los cambios');
+        });
+        break;
+      case GuaranteeTypes.COMPLIANCE:
+        this.compliancesService.updateStatus(status, guarantee._id).subscribe(() => {
+          this.navigationService.showMessage('Se han guardado los cambios');
         });
         break;
     }
@@ -329,33 +317,30 @@ export class SearchComponent implements OnInit {
     if (ok) {
       this.navigationService.loadBarStart();
       switch (guarantee.guaranteeType) {
-        case 'GAMF':
+        case GuaranteeTypes.MATERIAL:
           this.materialsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
-            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();
             this.navigationService.showMessage(error.error.message);
           });
           break;
-        case 'GADF':
+        case GuaranteeTypes.DIRECT:
           this.directsService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
-            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();
             this.navigationService.showMessage(error.error.message);
           });
           break;
-        case 'GFCF':
+        case GuaranteeTypes.COMPLIANCE:
           this.compliancesService.delete(guarantee._id).subscribe(() => {
             this.navigationService.showMessage('Eliminado correctamente');
             this.dataSource = this.dataSource.filter(e => e._id !== guarantee._id);
-            // this.fetchData();
             this.navigationService.loadBarFinish();
           }, (error: HttpErrorResponse) => {
             this.navigationService.loadBarFinish();
@@ -368,19 +353,19 @@ export class SearchComponent implements OnInit {
 
   onShowDetails(guarantee: GuaranteeModel) {
     switch (guarantee.guaranteeType) {
-      case 'GAMF':
+      case GuaranteeTypes.MATERIAL:
         this.matDialog.open(DialogMaterialComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GADF':
+      case GuaranteeTypes.DIRECT:
         this.matDialog.open(DialogDirectComponent, {
           position: { top: '20px' },
           data: guarantee._id,
         });
         break;
-      case 'GFCF':
+      case GuaranteeTypes.COMPLIANCE:
         this.matDialog.open(DialogComplianceComponent, {
           position: { top: '20px' },
           data: guarantee._id,

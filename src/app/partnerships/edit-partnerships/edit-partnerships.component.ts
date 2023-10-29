@@ -32,19 +32,17 @@ export class EditPartnershipsComponent implements OnInit {
     constitutedAt: null,
     email: null,
     phoneNumber: null,
-    economicActivity: null,
+    economicActivity: [ null, Validators.required ],
     representativeNationality: null,
     representativeDocumentType: 'DNI',
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],
-    businessId: [ null, Validators.required ],
-    independentAccounting: false
+    businessId: null,
   });
 
   public isLoading: boolean = false;
   private partnershipId: string = '';
   public partnershipItems: PartnershipItemModel[] = [];
-  public independentAccounting = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar consorcio');
@@ -90,7 +88,6 @@ export class EditPartnershipsComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       this.partnershipsService.update(this.formGroup.value, this.partnershipItems, this.partnershipId).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Se han guardado los cambios');

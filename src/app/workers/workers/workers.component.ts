@@ -33,7 +33,7 @@ export class WorkersComponent implements OnInit {
   
   ngOnInit(): void {
     this.navigationService.setTitle('Personal');
-    this.workersService.getWorkersCount().subscribe(count => {
+    this.workersService.getCountWorkers().subscribe(count => {
       this.length = count;
     });
 

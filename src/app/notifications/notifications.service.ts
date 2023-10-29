@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { NotificationModel } from './notification.model';
+import { Params } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +13,27 @@ export class NotificationsService {
     private readonly httpService: HttpService,
   ) { }
 
-  getCountNotifications(): Observable<number> {
-    return this.httpService.get('notifications/countNotifications');
+  getCountNotificationsByRangeDate(
+    startDate: string,
+    endDate: string,
+    params: Params
+  ): Observable<number> {
+    return this.httpService.get(`notifications/countNotificationsByRangeDate/${startDate}/${endDate}`, { params });
+  }
+
+  getNotificationsByKey(key: string): Observable<NotificationModel[]> {
+    const params = { key };
+    return this.httpService.get(`notifications/byKey`, { params });
   }
 
   getNotificationsByPage(
+    startDate: string,
+    endDate: string,
     pageIndex: number, 
-    pageSize: number
+    pageSize: number,
+    params: Params
   ): Observable<NotificationModel[]> {
-    return this.httpService.get(`notifications/byPage/${pageIndex}/${pageSize}`);
+    return this.httpService.get(`notifications/byRangeDatePage/${startDate}/${endDate}/${pageIndex}/${pageSize}`, { params });
   }
 
   getActiveNotifications(): Observable<NotificationModel[]> {

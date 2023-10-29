@@ -56,8 +56,13 @@ export class MaterialsService {
     return this.httpService.delete(`materials/deletePdf/${pdfId}`);
   }
 
-  create(material: any, financier: any, cheques: ChequeModel[], deposits: DepositModel[], officeId: string): Observable<MaterialModel> {
-    return this.httpService.post(`materials/${officeId}`, { material, financier, cheques, deposits });
+  create(
+    material: any, 
+    cheques: ChequeModel[], 
+    deposits: DepositModel[], 
+    officeId: string
+  ): Observable<MaterialModel> {
+    return this.httpService.post(`materials/${officeId}`, { material, cheques, deposits });
   }
 
   update(material: any, materialId: string): Observable<MaterialModel> {
@@ -68,8 +73,8 @@ export class MaterialsService {
     return this.httpService.put(`materials/status/${materialId}`, { status });
   }
 
-  updateWithFinanicer(material: any, financier: any, payments: any[], materialId: string): Observable<MaterialModel> {
-    return this.httpService.put(`materials/${materialId}`, { material, financier, payments });
+  updateWithPayments(material: any, payments: any[], materialId: string): Observable<MaterialModel> {
+    return this.httpService.put(`materials/withPayments/${materialId}`, { material, payments });
   }
 
 }

@@ -15,10 +15,6 @@
       <input type="number" matInput formControlName="awardedAmount">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Codigo</mat-label>
-      <input type="text" matInput formControlName="code">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
       <mat-label>Observaciones</mat-label>
       <input type="text" matInput formControlName="observations">
     </mat-form-field>
@@ -74,6 +70,14 @@
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>
+    
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isService">Es bien/servicio</mat-slide-toggle>
+    </div>
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isHousingFund">Es fondo mi vivienda</mat-slide-toggle>
+    </div>
+
     <mat-form-field appearance="fill" *ngIf="user?.isAdmin">
       <mat-label>Honorarios</mat-label>
       <input type="number" matInput formControlName="commission">
@@ -83,7 +87,7 @@
         <div mat-subheader>Pagos</div>
         <mat-list-item *ngFor="let payment of payments; let i = index">
           <div>
-            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}
+            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
             <br />
             <span class="text-muted">
               {{ payment.paymentAt | date: 'dd/MM/yyyy' }}

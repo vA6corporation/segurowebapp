@@ -12,6 +12,12 @@ import { buildExcel } from 'src/app/xlsx';
 import { BusinessModel } from '../business.model';
 import { BusinessesService } from '../businesses.service';
 import { DialogConstructionBusinessesComponent } from '../dialog-construction-businesses/dialog-construction-businesses.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { UserModel } from 'src/app/users/user.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
 
 @Component({
   selector: 'app-businesses',
@@ -25,16 +31,20 @@ export class BusinessesComponent implements OnInit {
     private readonly navigationService: NavigationService,
     private readonly constructionsService: ConstructionsService,
     private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly workersService: WorkersService,
     private readonly matDialog: MatDialog,
+    private readonly formBuilder: FormBuilder,
   ) { }
     
-  public displayedColumns: string[] = [ 'document', 'name', 'email', 'mobileNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'email', 'emailPerfilprov', 'mobileNumber', 'mobileNumberPerfilprov', 'actions' ];
   public dataSource: BusinessModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
-  private office: OfficeModel = new OfficeModel();
+  public workers: WorkerModel[] = [];
   public months: any[] = [
     'ENERO',
     'FEBRERO',
@@ -49,15 +59,28 @@ export class BusinessesComponent implements OnInit {
     'NOVIEMBRE',
     'DICIEMBRE',
   ];
+  public formGroup: FormGroup = this.formBuilder.group({
+    startDate: [ null, Validators.required ],
+    endDate: [ null, Validators.required ],
+    isOnlyPartnership: '',
+    workerId: ''
+  });
+  private office: OfficeModel = new OfficeModel();
+  private user: UserModel|null = null;
+  private params: Params = {};
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
   private handleAuth$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription();
+  private handleWorkers$: Subscription = new Subscription();
 
   ngOnDestroy() {
     this.handleSearch$.unsubscribe();
     this.handleClickMenu$.unsubscribe();
     this.handleAuth$.unsubscribe();
+    this.queryParams$.unsubscribe();
+    this.handleWorkers$.unsubscribe();
   }
     
   ngOnInit(): void {
@@ -68,15 +91,29 @@ export class BusinessesComponent implements OnInit {
       { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
-    this.businessesService.getCountBusinesses({}).subscribe(count => {
-      this.length = count;
-    });
-
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.office = auth.office;
     });
 
-    this.fetchData();
+    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+      this.workers = workers;
+    });
+
+    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+      const { pageIndex, pageSize, startDate, endDate, workerId, isOnlyPartnership } = params;
+      this.pageIndex = Number(pageIndex || 0);
+      this.pageSize = Number(pageSize || 10);
+      if (startDate && endDate) {
+        this.formGroup.patchValue({ startDate: new Date(startDate), endDate: new Date(endDate) });
+        Object.assign(this.params, { startDate: new Date(startDate), endDate: new Date(endDate) });
+      }
+      if (workerId) {
+        this.formGroup.patchValue({ workerId });
+        Object.assign(this.params, { workerId });
+      }
+      this.fetchData();
+      this.fetchCount();
+    });
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
       this.navigationService.loadBarStart();
@@ -101,9 +138,54 @@ export class BusinessesComponent implements OnInit {
     });
   }
 
+  onSelectChange() {
+    this.pageIndex = 0;
+
+    const { isOnlyPartnership, workerId } = this.formGroup.value;
+    console.log(typeof(workerId));
+    const queryParams: Params = { isOnlyPartnership, workerId, pageIndex: 0 };
+
+    Object.assign(this.params, queryParams);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchData();
+    this.fetchCount();
+  }
+
+  onRangeChange() {
+    if (this.formGroup.valid) {
+      this.pageIndex = 0;
+
+      const { startDate, endDate } = this.formGroup.value;
+      const queryParams: Params = { startDate: startDate, endDate: endDate, pageIndex: 0 };
+
+      Object.assign(this.params, { startDate, endDate });
+
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParams, 
+        queryParamsHandling: 'merge', // remove to replace all query params by provided
+      });
+
+      this.fetchData();
+      this.fetchCount();
+    }
+  }
+
+  fetchCount() {
+    this.businessesService.getCountBusinesses(this.params).subscribe(count => {
+      this.length = count;
+    });
+  }
+
   fetchData() {
     this.navigationService.loadBarStart();
-    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize, {}).subscribe(businesses => {
+    this.businessesService.getBusinessesByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(businesses => {
       this.navigationService.loadBarFinish();
       this.dataSource = businesses;
     });
@@ -130,41 +212,53 @@ export class BusinessesComponent implements OnInit {
   }
 
   onExportConstructions(businessId: string) {
-    this.navigationService.loadBarStart();
-    this.constructionsService.getConstructionsByBusiness(businessId).subscribe(constructions => {
-      this.navigationService.loadBarFinish();
-      const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-      let body = [];
-      body.push([
-        'ESTADO DE O.',
-        'CLIENTE',
-        'CONSORCIO',
-        'PERSONAL',
-        'OBJETO',
-      ]);
-      for (const construction of constructions) {
+    if (this.user && this.user.isAdmin) {
+      this.navigationService.loadBarStart();
+      this.constructionsService.getConstructionsByBusiness(businessId).subscribe(constructions => {
+        this.navigationService.loadBarFinish();
+        const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+        let body = [];
         body.push([
-          construction.constructionCodeType,
-          construction.business.name,
-          construction.partnership?.name,
-          construction.worker?.name,
-          construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-          construction.percentCompletion?.year,
-          construction.object,
+          'ESTADO DE O.',
+          'CLIENTE',
+          'CONSORCIO',
+          'PERSONAL',
+          'OBJETO',
         ]);
-      }
-      const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}_${this.office.name.toUpperCase()}`;
-      buildExcel(body, name, wscols, [], []);
-    }, (error: HttpErrorResponse) => {
-      this.navigationService.loadBarFinish();
-      this.navigationService.showMessage(error.error.message);
-    });
+        for (const construction of constructions) {
+          body.push([
+            construction.constructionCodeType,
+            construction.business.name,
+            construction.partnership?.name,
+            construction.worker?.name,
+            construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+            construction.percentCompletion?.year,
+            construction.object,
+          ]);
+        }
+        const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}_${this.office.name.toUpperCase()}`;
+        buildExcel(body, name, wscols, [], []);
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    } else {
+      this.navigationService.showMessage('Esta opcion es solo para administradores');
+    }
   }
 
   downloadExcel() {
     this.navigationService.loadBarStart();
-    this.businessesService.getBusinesses().subscribe(businesses => {
-      console.log(businesses);
+    const chunk = 500;
+    const promises: Promise<any>[] = [];
+
+    for (let index = 0; index < this.length / chunk; index++) {
+      const promise = this.businessesService.getBusinessesByPage(index + 1, chunk, this.params).toPromise();
+      promises.push(promise);
+    }
+
+    Promise.all(promises).then(values => {
+      const businesses = values.flat();
       this.navigationService.loadBarFinish();
       const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
@@ -179,7 +273,9 @@ export class BusinessesComponent implements OnInit {
         'DISTRITO O.',
         'DEPARTAMENTO R.',
         'PROVINCIA R.',
-        'DISTRITO R.'
+        'DISTRITO R.',
+        'SEDE',
+        'ULT. ENCUESTA'
       ]);
       for (const business of businesses) {
         body.push([
@@ -193,18 +289,29 @@ export class BusinessesComponent implements OnInit {
           (business.districtOrigin || '').toUpperCase(),
           (business.departmentResidence || '').toUpperCase(),
           (business.provinceResidence || '').toUpperCase(),
-          (business.districtResidence || '').toUpperCase()
+          (business.districtResidence || '').toUpperCase(),
+          business.office.name.toUpperCase(),
+          business.lastSurvey ? formatDate(new Date(business.lastSurvey.createdAt), 'dd/MM/yyyy', 'en-US') : null, 
         ]);
       }
-      const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+      const name = `EMPRESAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
       buildExcel(body, name, wscols, [], []);
     });
   }
 
   handlePageEvent(event: PageEvent): void {
-    // this.businessesService.getBusinessesByPage(event.pageIndex + 1, event.pageSize).subscribe(businesses => {
-    //   this.dataSource = businesses;
-    // });
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParams, 
+      queryParamsHandling: 'merge', // remove to replace all query params by provided
+    });
+
+    this.fetchData();
   }
 
 }

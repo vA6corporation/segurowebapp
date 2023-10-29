@@ -11,16 +11,19 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
 import { BanksService } from 'src/app/banks/banks.service';
 import { buildServiceOrder } from 'src/app/buildServiceOrder';
+import { ComplianceModel } from 'src/app/compliances/compliance.model';
+import { DirectModel } from 'src/app/directs/direct.model';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { MaterialModel } from 'src/app/materials/material.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { BankModel } from 'src/app/providers/bank.model';
+import { UserModel } from 'src/app/users/user.model';
 import { buildExcel } from 'src/app/xlsx';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 import { DialogAddBailComponent } from '../dialog-add-bail/dialog-add-bail.component';
 import { DialogDetailConstructionsComponent } from '../dialog-detail-constructions/dialog-detail-constructions.component';
-import { UserModel } from 'src/app/users/user.model';
 
 @Component({
   selector: 'app-constructions',
@@ -67,7 +70,6 @@ export class ConstructionsComponent implements OnInit {
   });
   public offices: OfficeModel[] = [];
   private user: UserModel|null = null;
-  // private office: OfficeModel = new OfficeModel(); 
   private banks: BankModel[] = [];
   private key: string|null = null;
   public months: any[] = [
@@ -84,7 +86,7 @@ export class ConstructionsComponent implements OnInit {
     'NOVIEMBRE',
     'DICIEMBRE',
   ];
-  params: Params = {};
+  private params: Params = {};
 
   private handleSearch$: Subscription = new Subscription();
   private handleClickMenu$: Subscription = new Subscription();
@@ -106,7 +108,6 @@ export class ConstructionsComponent implements OnInit {
     this.navigationService.setTitle('Obras admin');
 
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
-      // this.office = auth.office;
       this.user = auth.user;
     });
 
@@ -131,10 +132,6 @@ export class ConstructionsComponent implements OnInit {
       }
       if (key) {
         this.key = key;
-        // this.constructionsService.getConstructionsByPageKey(this.pageIndex + 1, this.pageSize, key, {}).subscribe(constructions => {
-        //   this.navigationService.loadBarFinish();
-        //   this.dataSource = constructions;
-        // });
       } else {
         if (startDate && endDate) {
           this.formGroup.patchValue({ 
@@ -207,6 +204,7 @@ export class ConstructionsComponent implements OnInit {
                 'F.F. DE OBRA',
                 'OBS. DE PAGOS',
                 'OBSERVACIONES',
+                'FINANCIERA',
                 'OBJETO',
               ]);
               for (const construction of constructions) {
@@ -232,6 +230,11 @@ export class ConstructionsComponent implements OnInit {
                   construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
                   construction.observationsPayment,
                   construction.observations,
+                  [
+                    ...construction.materials.map((e: MaterialModel) => e.financier.name), 
+                    ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                    ...construction.materials.map((e: DirectModel) => e.financier.name),
+                  ],
                   construction.object,
                 ]);
               }  
@@ -252,6 +255,7 @@ export class ConstructionsComponent implements OnInit {
                 'PLAZO EN DIAS',
                 'F.F. DE OBRA',
                 'OBSERVACIONES',
+                'FINANCIERA',
                 'OBJETO',
               ]);
               for (const construction of constructions) {
@@ -272,6 +276,11 @@ export class ConstructionsComponent implements OnInit {
                   construction.dayLimit,
                   construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
                   construction.observations,
+                  [
+                    ...construction.materials.map((e: MaterialModel) => e.financier.name), 
+                    ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                    ...construction.materials.map((e: DirectModel) => e.financier.name),
+                  ],
                   construction.object,
                 ]);
               }
@@ -297,7 +306,6 @@ export class ConstructionsComponent implements OnInit {
               'N° DE POLIZA',
               'SUMA ASEGURADA',
               'PRIMA',
-              'E. DE TRAMITE',
               'E. DE REVISION',
               'F. CUMPLIMIENTO',
               'OBSERVACIONES',
@@ -314,7 +322,6 @@ export class ConstructionsComponent implements OnInit {
                 guarantee.policyNumber,
                 guarantee.price,
                 guarantee.prima,
-                guarantee.processStatus,
                 guarantee.statusLabel,
                 formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
                 guarantee.observations,
@@ -391,7 +398,7 @@ export class ConstructionsComponent implements OnInit {
     });
   }
 
-  onChangeOffice() {
+  onOfficeChange() {
     this.pageIndex = 0;
     this.key = null;
     const { officeId } = this.formGroup.value;

@@ -57,8 +57,13 @@ export class DirectsService {
     return this.httpService.delete(`directs/deletePdf/${pdfId}`);
   }
 
-  create(direct: any, financier: any, cheques: ChequeModel[], deposits: DepositModel[], officeId: string): Observable<DirectModel> {
-    return this.httpService.post(`directs/${officeId}`, { direct, financier, cheques, deposits });
+  create(
+    direct: any, 
+    cheques: ChequeModel[], 
+    deposits: DepositModel[], 
+    officeId: string
+  ): Observable<DirectModel> {
+    return this.httpService.post(`directs/${officeId}`, { direct, cheques, deposits });
   }
 
   update(direct: any, directId: string): Observable<DirectModel> {
@@ -69,8 +74,8 @@ export class DirectsService {
     return this.httpService.put(`directs/status/${directId}`, { status });
   }
 
-  updateWithFinancier(direct: any, financier: any, payments: PaymentModel[], directId: string): Observable<DirectModel> {
-    return this.httpService.put(`directs/${directId}`, { direct, financier, payments });
+  updateWithPayments(direct: any, payments: PaymentModel[], directId: string): Observable<DirectModel> {
+    return this.httpService.put(`directs/withPayments/${directId}`, { direct, payments });
   }
 
 }

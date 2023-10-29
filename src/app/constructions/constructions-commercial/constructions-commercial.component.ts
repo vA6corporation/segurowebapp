@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -16,7 +15,6 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
 import { BankModel } from 'src/app/providers/bank.model';
 import { UserModel } from 'src/app/users/user.model';
-import { buildExcel } from 'src/app/xlsx';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
 import { DialogAddBailComponent } from '../dialog-add-bail/dialog-add-bail.component';
@@ -123,14 +121,6 @@ export class ConstructionsCommercialComponent implements OnInit {
       this.banks = banks;
     });
 
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_constructions_date', label: 'Exportar excel por fecha', icon: 'download', show: false },
-      { id: 'export_constructions_office', label: 'Exportar excel por oficina', icon: 'download', show: false },
-      { id: 'export_constructions_all', label: 'Exportar excel todos', icon: 'download', show: false },
-      { id: 'export_emitions', label: 'Exportar emisiones', icon: 'download', show: false },
-    ]);
-
     this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
       this.offices = offices;
     });
@@ -148,189 +138,6 @@ export class ConstructionsCommercialComponent implements OnInit {
 
       this.fetchData();
       this.fetchCount();
-    });
-
-    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-
-      switch (id) {
-        case 'export_constructions_date': {
-          const { startDate, endDate, officeId } = this.formGroup.value;
-          const params = { officeId };
-          this.navigationService.loadBarStart();
-          // this.constructionsService.getConstructionsByRangeDate(startDate, endDate, params).subscribe(constructions=> {
-          //   this.navigationService.loadBarFinish();
-          //   const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          //   let body = [];
-          //   body.push([
-          //     'ESTADO DE O.',
-          //     'CLIENTE',
-          //     'CONSORCIO',
-          //     'PERSONAL',
-          //     'A. PROGRAMADO',
-          //     'A. EJECUTADO',
-          //     'MES',
-          //     'AÑO',
-          //     'HONORARIOS',
-          //     'PENDIENTE',
-          //     'OBSERVACIONES',
-          //     'OBJETO',
-          //   ]);
-          //   for (const construction of constructions) {
-          //     body.push([
-          //       construction.constructionCodeType,
-          //       construction.business.name,
-          //       construction.partnership?.name,
-          //       construction.worker?.name,
-          //       construction.percentCompletion?.percentProgrammated,
-          //       construction.percentCompletion?.percentCompletion,
-          //       construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-          //       construction.percentCompletion?.year,
-          //       construction.commission,
-          //       construction.debt,
-          //       construction.observations,
-          //       construction.object,
-          //     ]);
-          //   }
-          //   const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-          //   buildExcel(body, name, wscols, [], []);
-          // });
-          break;
-        }
-        case 'export_emitions': {
-          this.navigationService.loadBarStart();
-          this.constructionsService.getEmitions().subscribe(guaranties => {
-            this.navigationService.loadBarFinish();
-            
-            const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-            let body = [];
-            body.push([
-              'GARANTIA',
-              'FINANCIERA',
-              'CONSORCIO',
-              'CLIENTE',
-              'N° DE POLIZA',
-              'SUMA ASEGURADA',
-              'PRIMA',
-              'E. DE TRAMITE',
-              'E. DE REVISION',
-              'F. CUMPLIMIENTO',
-              'OBSERVACIONES',
-              'OBJETO'
-            ]);
-      
-            for (const guarantee of guaranties) {
-              const { business, partnership, financier } = guarantee;
-              body.push([
-                guarantee.guaranteeType,
-                financier?.name || null,
-                partnership?.name || null,
-                business?.name || null,
-                guarantee.policyNumber,
-                guarantee.price,
-                guarantee.prima,
-                guarantee.processStatus,
-                guarantee.statusLabel,
-                formatDate(guarantee.endDate, 'dd/MM/yyyy', 'en-US'),
-                guarantee.observations,
-                guarantee.construction.object
-              ]);
-            }
-            const name = `RENOVACIONES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-            buildExcel(body, name, wscols, [], []);
-          }, (error: HttpErrorResponse) => {
-            this.navigationService.showMessage(error.error.message);
-          });
-          break;
-        }
-        case 'export_constructions_all': {
-          this.navigationService.loadBarStart();
-          this.constructionsService.getConstructions().subscribe(constructions => {
-            this.navigationService.loadBarFinish();
-            const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-            let body = [];
-            body.push([
-              'ESTADO DE O.',
-              'CLIENTE',
-              'CONSORCIO',
-              'PERSONAL',
-              'A. PROGRAMADO',
-              'A. EJECUTADO',
-              'MES',
-              'AÑO',
-              'HONORARIOS',
-              'PENDIENTE',
-              'OBSERVACIONES',
-              'OBJETO',
-            ]);
-            for (const construction of constructions) {
-              body.push([
-                construction.constructionCodeType,
-                construction.business.name,
-                construction.partnership?.name,
-                construction.worker?.name,
-                construction.percentCompletion?.percentProgrammated,
-                construction.percentCompletion?.percentCompletion,
-                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-                construction.percentCompletion?.year,
-                construction.commission,
-                construction.debt,
-                construction.observations,
-                construction.object,
-              ]);
-            }
-            const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-            buildExcel(body, name, wscols, [], []);
-          });
-          break;
-        }
-        case 'export_constructions_office': {
-          this.navigationService.loadBarStart();
-          this.constructionsService.getConstructionsByOffice().subscribe(constructions => {
-            this.navigationService.loadBarFinish();
-            const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-            let body = [];
-            body.push([
-              'ESTADO DE O.',
-              'CLIENTE',
-              'CONSORCIO',
-              'PERSONAL',
-              'A. PROGRAMADO',
-              'A. EJECUTADO',
-              'MES',
-              'AÑO',
-              'HONORARIOS',
-              'PENDIENTE',
-              'OBSERVACIONES',
-              'OBJETO',
-            ]);
-            for (const construction of constructions) {
-              body.push([
-                construction.constructionCodeType,
-                construction.business.name,
-                construction.partnership?.name,
-                construction.worker?.name,
-                construction.percentCompletion?.percentProgrammated,
-                construction.percentCompletion?.percentCompletion,
-                construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-                construction.percentCompletion?.year,
-                construction.commission,
-                construction.debt,
-                construction.observations,
-                construction.object,
-              ]);
-            }
-            const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}_${this.office.name.toUpperCase()}.pdf`;
-            buildExcel(body, name, wscols, [], []);
-          }, (error: HttpErrorResponse) => {
-            this.navigationService.loadBarFinish();
-            this.navigationService.showMessage(error.error.message);
-          });
-          break;
-        }
-        default:
-          break;
-      }
-
     });
   }
 
@@ -436,6 +243,7 @@ export class ConstructionsCommercialComponent implements OnInit {
     });
 
     this.fetchData();
+    this.fetchCount();
   }
 
   onRangeChange() {
@@ -444,7 +252,7 @@ export class ConstructionsCommercialComponent implements OnInit {
 
       const { startDate, endDate } = this.formGroup.value;
 
-      const queryParams: Params = { startDate: startDate.getTime(), endDate: endDate.getTime(), pageIndex: 0, key: null };
+      const queryParams: Params = { startDate: startDate, endDate: endDate, pageIndex: 0, key: null };
 
       Object.assign(this.params, queryParams);
 

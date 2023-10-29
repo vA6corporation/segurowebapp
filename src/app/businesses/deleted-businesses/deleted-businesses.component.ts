@@ -89,16 +89,16 @@ export class DeletedBusinessesComponent implements OnInit {
       });
     });
 
-    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      switch (id) {
-        case 'export_businesses': {
-          this.downloadExcel();
-          break;
-        }
-        default:
-          break;
-      }
-    });
+    // this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+    //   switch (id) {
+    //     case 'export_businesses': {
+    //       this.downloadExcel();
+    //       break;
+    //     }
+    //     default:
+    //       break;
+    //   }
+    // });
   }
 
   fetchData() {
@@ -161,40 +161,37 @@ export class DeletedBusinessesComponent implements OnInit {
     });
   }
 
-  downloadExcel() {
-    this.navigationService.loadBarStart();
-    this.businessesService.getBusinesses().subscribe(businesses => {
-      console.log(businesses);
-      this.navigationService.loadBarFinish();
-      const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-      let body = [];
-      body.push([
-        'RUC',
-        'RAZON SOCIAL',
-        'EMAIL',
-        'CELULAR',
-        'PERSONAL A CARGO'
-      ]);
-      for (const business of businesses) {
-        body.push([
-          business.document,
-          business.name,
-          business.email,
-          business.mobileNumber,
-          business.worker.name
-        ]);
-      }
-      const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-      buildExcel(body, name, wscols, [], []);
-    });
-  }
+  // downloadExcel() {
+  //   this.navigationService.loadBarStart();
+  //   this.businessesService.getBusinesses().subscribe(businesses => {
+  //     console.log(businesses);
+  //     this.navigationService.loadBarFinish();
+  //     const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+  //     let body = [];
+  //     body.push([
+  //       'RUC',
+  //       'RAZON SOCIAL',
+  //       'EMAIL',
+  //       'CELULAR',
+  //       'PERSONAL A CARGO'
+  //     ]);
+  //     for (const business of businesses) {
+  //       body.push([
+  //         business.document,
+  //         business.name,
+  //         business.email,
+  //         business.mobileNumber,
+  //         business.worker.name
+  //       ]);
+  //     }
+  //     const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+  //     buildExcel(body, name, wscols, [], []);
+  //   });
+  // }
 
   handlePageEvent(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize
     this.fetchData();
-    // this.businessesService.getBusinessesByPage(event.pageIndex + 1, event.pageSize).subscribe(businesses => {
-    //   this.dataSource = businesses;
-    // });
   }
 }

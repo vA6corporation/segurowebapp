@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
@@ -160,7 +159,6 @@ export class PaymentOrdersComponent implements OnInit {
           alert('Error desconocido');
         }
       }
-      // table.renderRows();
     }
   }
 
@@ -174,8 +172,6 @@ export class PaymentOrdersComponent implements OnInit {
       if (provider) {
         paymentOrder.providerId = provider._id,
         paymentOrder.provider = provider;
-        // this.provider = provider;
-        // this.providerBanks = provider.banks;
       }
     });
   }

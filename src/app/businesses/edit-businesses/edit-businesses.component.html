@@ -13,6 +13,9 @@
     </button>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <div class="mb-3">
+      <mat-slide-toggle formControlName="isOnlyPartnership">Solo es un consorciado</mat-slide-toggle>
+    </div>
     <mat-form-field appearance="fill">
       <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="documentType">
@@ -24,6 +27,10 @@
     <mat-form-field appearance="fill">
       <mat-label>N° de Documento</mat-label>
       <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Observaciones</mat-label>
+      <input type="text" matInput formControlName="observations" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de partida electrónica</mat-label>
@@ -42,8 +49,12 @@
       <input type="text" matInput formControlName="name" />
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
+      <mat-label>Email 1</mat-label>
       <input type="email" matInput formControlName="email" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email 2</mat-label>
+      <input type="email" matInput formControlName="emailTwo" />
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Celular</mat-label>
@@ -59,7 +70,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Personal a cargo</mat-label>
-      <mat-select formControlName="workerId">
+      <mat-select formControlName="workerId" [disabled]="!user?.allowChangeWorkerOnBusiness">
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
       </mat-select>
     </mat-form-field>

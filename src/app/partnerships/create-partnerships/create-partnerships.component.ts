@@ -32,18 +32,16 @@ export class CreatePartnershipsComponent implements OnInit {
     constitutedAt: null,
     email: null,
     phoneNumber: null,
-    economicActivity: null,
-    representativeNationality: null,
+    economicActivity: [ null, Validators.required ],
     representativeDocumentType: 'DNI',
+    representativeNationality: [ null, Validators.required ],
     representativeDocument: [ null, Validators.required ],
     representativeName: [ null, Validators.required ],
-    businessId: [ null, Validators.required ],
-    independentAccounting: false
+    businessId: null,
   });
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
   public partnershipItems: PartnershipItemModel[] = [];
-  public independentAccounting = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio');
@@ -82,7 +80,6 @@ export class CreatePartnershipsComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       this.partnershipsService.create(this.formGroup.value, this.partnershipItems).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.router.navigate(['/partnerships']);

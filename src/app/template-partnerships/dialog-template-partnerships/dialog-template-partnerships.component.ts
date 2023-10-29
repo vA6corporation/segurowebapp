@@ -31,6 +31,7 @@ export class DialogTemplatePartnershipsComponent implements OnInit {
       const key = this.formGroup.get('key')?.value;
       this.formGroup.reset();
       this.partnershipsService.getPartnershipsByKey(key).subscribe(partnerships => {
+        console.log(partnerships);
         this.navigationService.loadBarFinish();
         this.partnerships = partnerships;
       }, (error: HttpErrorResponse) => {

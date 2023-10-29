@@ -7,7 +7,10 @@ import { WorkersComponent } from './workers/workers.component';
 import { CreateWorkersComponent } from './create-workers/create-workers.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommissionsComponent } from './commissions/commissions.component';
+import { DeletedWorkersComponent } from './deleted-workers/deleted-workers.component';
+import { TimingWorkersComponent } from './timing-workers/timing-workers.component';
+import { CommissionWorkersComponent } from './commission-workers/commission-workers.component';
+import { GoalWorkersComponent } from './goal-workers/goal-workers.component';
 
 
 @NgModule({
@@ -15,7 +18,10 @@ import { CommissionsComponent } from './commissions/commissions.component';
     EditWorkersComponent,
     WorkersComponent,
     CreateWorkersComponent,
-    CommissionsComponent
+    DeletedWorkersComponent,
+    TimingWorkersComponent,
+    CommissionWorkersComponent,
+    GoalWorkersComponent
   ],
   imports: [
     CommonModule,

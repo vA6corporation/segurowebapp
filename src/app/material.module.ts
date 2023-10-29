@@ -24,6 +24,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatMenuModule,
     MatSlideToggleModule,
     MatTreeModule,
+    MatRadioModule,
   ],
   exports: [
     ClipboardModule,
@@ -76,7 +78,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatMenuModule,
     MatSlideToggleModule,
     MatGridListModule,
-    MatTreeModule
+    MatTreeModule,
+    MatRadioModule,
   ],
 })
 export class MaterialModule {}

@@ -11,6 +11,10 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DocumentationService } from '../documentation.service';
+import { Subscription } from 'rxjs';
+import { formatDate } from '@angular/common';
+import { buildExcel } from 'src/app/xlsx';
+import { GuaranteeTypes } from 'src/app/guaranties/guaranteeTypes.enum';
 
 @Component({
   selector: 'app-documentation',
@@ -92,6 +96,104 @@ export class DocumentationComponent implements OnInit {
     name: [ null, Validators.required ],
     _id: [ null, Validators.required ],
   });
+
+  private handleClickMenu$: Subscription = new Subscription();
+
+  ngOnDestroy() {
+    this.handleClickMenu$.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.navigationService.setTitle('Fianzas sin documentacion');
+    
+    this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+      this.financierForm.patchValue(params);
+      this.formGroup.patchValue(params);
+      if (params.startDate && params.endDate) {
+        this.formGroup.patchValue({
+          startDate: new Date(Number(params.startDate)),
+          endDate: new Date(Number(params.endDate))
+        });
+      }
+      this.fetchData();
+    });
+
+    this.navigationService.setMenu([
+      // { id: 'search', label: 'search', icon: 'search', show: true },
+      { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
+    ]);
+
+    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+      const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+      let body = [];
+      body.push([
+        'TIPO',
+        'F. REGISTRO',
+        'N° DE POLIZA',
+        'FACTURA',
+        'VOUCHER',
+        'CHEQUE',
+        'DEPOSITO',
+        'FIANZA',
+        'E. DE OBRA',
+        'C. DE OBRA',
+        'EMISION',
+        'FINANCIERA'
+      ]);
+      for (const material of this.materials) {
+        body.push([
+          GuaranteeTypes.MATERIAL,
+          formatDate(new Date(material.createdAt), 'dd/MM/yyyy', 'en-US'),
+          material.policyNumber,
+          this.findDocumentation(material, 'invoice') ? 'X' : '',
+          this.findDocumentation(material, 'voucher') ? 'X' : '',
+          this.findDocumentation(material, 'cheque') ? 'X' : '',
+          this.findDocumentation(material, 'deposit') ? 'X' : '',
+          this.findDocumentation(material, 'fianza') ? 'X' : '',
+          this.findConstruction(material, 'construction') ? 'X' : '',
+          this.findContract(material, 'construction') ? 'X' : '',
+          material.isEmition ? 'SI' : 'NO',
+          material.financier?.name
+        ]);
+      }
+      body.push([]);
+      for (const compliance of this.compliances) {
+        body.push([
+          GuaranteeTypes.COMPLIANCE,
+          formatDate(new Date(compliance.createdAt), 'dd/MM/yyyy', 'en-US'),
+          compliance.policyNumber,
+          this.findDocumentation(compliance, 'invoice') ? 'X' : '',
+          this.findDocumentation(compliance, 'voucher') ? 'X' : '',
+          this.findDocumentation(compliance, 'cheque') ? 'X' : '',
+          this.findDocumentation(compliance, 'deposit') ? 'X' : '',
+          this.findDocumentation(compliance, 'fianza') ? 'X' : '',
+          this.findConstruction(compliance, 'construction') ? 'X' : '',
+          this.findContract(compliance, 'construction') ? 'X' : '',
+          compliance.isEmition ? 'SI' : 'NO',
+          compliance.financier?.name
+        ]);
+      }
+      body.push([]);
+      for (const direct of this.directs) {
+        body.push([
+          GuaranteeTypes.DIRECT,
+          formatDate(new Date(direct.createdAt), 'dd/MM/yyyy', 'en-US'),
+          direct.policyNumber,
+          this.findDocumentation(direct, 'invoice') ? 'X' : '',
+          this.findDocumentation(direct, 'voucher') ? 'X' : '',
+          this.findDocumentation(direct, 'cheque') ? 'X' : '',
+          this.findDocumentation(direct, 'deposit') ? 'X' : '',
+          this.findDocumentation(direct, 'fianza') ? 'X' : '',
+          this.findConstruction(direct, 'construction') ? 'X' : '',
+          this.findContract(direct, 'construction') ? 'X' : '',
+          direct.isEmition ? 'SI' : 'NO',
+          direct.financier?.name
+        ]);
+      }
+      const name = `FIANZAS_SIN_DOCUMENTACION`;
+      buildExcel(body, name, wscols, [], []);
+    });
+  }
 
   openDialogFinanciers() {
     const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
@@ -195,22 +297,6 @@ export class DocumentationComponent implements OnInit {
     this.updateTableHead();
   }
     
-  ngOnInit(): void {
-    this.navigationService.setTitle('Documentacion faltante');
-    
-    this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-      this.financierForm.patchValue(params);
-      this.formGroup.patchValue(params);
-      if (params.startDate && params.endDate) {
-        this.formGroup.patchValue({
-          startDate: new Date(Number(params.startDate)),
-          endDate: new Date(Number(params.endDate))
-        });
-      }
-      this.fetchData();
-    });
-  }
-
   fetchData() {
     this.navigationService.loadBarStart();
     const params = {};

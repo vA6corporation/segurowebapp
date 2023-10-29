@@ -1,0 +1,59 @@
+<section class="container py-4">
+  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+    <div formGroupName="customer">
+      <mat-form-field appearance="fill">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogCustomers()" readonly>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Promotor</mat-label>
+      <mat-select formControlName="workerId">
+        <mat-option *ngFor="let worker of workers" [value]="worker._id">{{ worker.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Capital</mat-label>
+      <input type="number" matInput formControlName="capital">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Monto</mat-label>
+      <input type="number" matInput formControlName="charge">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Comision</mat-label>
+      <input type="number" matInput formControlName="commission">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de emision</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+    <ng-container *ngIf="user?.isAdmin">
+      <mat-list class="mb-3">
+        <div mat-subheader>Pagos</div>
+        <mat-list-item *ngFor="let payment of payments; let i = index">
+          <div>
+            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            <br />
+            <span class="text-muted">
+              {{ payment.paymentAt | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+          <span class="spacer"></span>
+          <button type="button" mat-icon-button (click)="onRemovePayment(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+      <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogPayments()">AGREGAR PAGO</button>
+    </ng-container>
+    <div class="mt-3 d-flex">
+      <span class="spacer"></span>
+      <button type="button" mat-stroked-button color="primary" routerLink="/isos">CANCELAR</button>
+      <div class="divider"></div>
+      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+    </div>
+  </form>
+</section>

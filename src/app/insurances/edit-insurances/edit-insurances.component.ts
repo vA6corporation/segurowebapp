@@ -28,6 +28,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SheetConstructionsComponent } from '../sheet-constructions/sheet-constructions.component';
 import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
 import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
+import { BanksService } from 'src/app/banks/banks.service';
+import { CompaniesService } from 'src/app/companies/companies.service';
 
 @Component({
   selector: 'app-edit-insurances',
@@ -46,6 +48,8 @@ export class EditInsurancesComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly matDialog: MatDialog,
     private readonly matBottomSheet: MatBottomSheet,
+    private readonly banksService: BanksService,
+    private readonly companiesService: CompaniesService,
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
@@ -84,6 +88,8 @@ export class EditInsurancesComponent implements OnInit {
       isEmition: false,
       officeId: '',
       type: '',
+      companyId: [ '', Validators.required ],
+      bankId: [ '', Validators.required ],
     }),
   });
 
@@ -125,6 +131,14 @@ export class EditInsurancesComponent implements OnInit {
 
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
       this.user = auth.user;
+    });
+
+    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+      this.banks = banks;
+    });
+
+    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+      this.companies = companies;
     });
     
     this.activatedRoute.params.subscribe(params => {

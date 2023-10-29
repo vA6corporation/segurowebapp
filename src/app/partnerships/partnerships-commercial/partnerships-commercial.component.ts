@@ -93,12 +93,12 @@ export class PartnershipsCommercialComponent implements OnInit {
             'REPRESENTANTE LEGAL',
           ]);
   
-          for (const item of partnerships) {
+          for (const partnership of partnerships) {
             body.push([
-              item.document,
-              item.name,
-              item.business.name,
-              item.representative,
+              partnership.document,
+              partnership.name,
+              partnership.business?.name,
+              partnership.representative,
             ]);
           }
   

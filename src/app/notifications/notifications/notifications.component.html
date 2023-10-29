@@ -1,44 +1,86 @@
 <section class="container">
+  <form [formGroup]="formGroup" autocomplete="off">
+    <mat-form-field appearance="fill">
+      <mat-label>Seleccione un rango de fechas</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Desde" formControlName="startDate">
+        <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Personal a cargo</mat-label>
+      <mat-select formControlName="workerId" (selectionChange)="onRangeChange()">
+        <mat-option value="">TODOS LOS PERSONALES</mat-option>
+        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
   <div class="mat-elevation-z2">
     <table mat-table [dataSource]="dataSource" class="w-100">
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>F. de registro</th>
-        <td mat-cell *matCellDef="let element">{{ element.createdAt | date: 'dd/MM/yyyy' }}</td>
+      <ng-container matColumnDef="buenaPro">
+        <th mat-header-cell *matHeaderCellDef>F. registro</th>
+        <td mat-cell *matCellDef="let element">{{ element.createdAt | date }}</td>
       </ng-container>
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Titulo</th>
-        <td mat-cell *matCellDef="let element" class="text-capitalize">{{ element.title }}</td>
+      <ng-container matColumnDef="momenclatura">
+        <th mat-header-cell *matHeaderCellDef>Momenclatura</th>
+        <td mat-cell *matCellDef="let element" class="text-pre">
+          {{ element.seaceData.momenclatura }}
+          <button mat-icon-button type="button" (click)="onClickCopy()" [cdkCopyToClipboard]="element.momenclatura">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+        </td>
       </ng-container>
-      <!-- <ng-container matColumnDef="message">
-        <th mat-header-cell *matHeaderCellDef>Mensaje</th>
-        <td mat-cell *matCellDef="let element">{{ element.message.slice(0, 150) }}</td>
-      </ng-container> -->
+      <ng-container matColumnDef="objetoContratacion">
+        <th mat-header-cell *matHeaderCellDef>Objeto</th>
+        <td mat-cell *matCellDef="let element">{{ element.seaceData.objetoContratacion.slice(0, 8) }}</td>
+      </ng-container>
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let element">{{ element.seaceData.estado }}</td>
+      </ng-container>
+      <ng-container matColumnDef="valorReferencial">
+        <th mat-header-cell *matHeaderCellDef>Valor referencial</th>
+        <td mat-cell *matCellDef="let element">{{ element.seaceData.valorReferencial }}</td>
+      </ng-container>
+      <ng-container matColumnDef="worker">
+        <th mat-header-cell *matHeaderCellDef>Personal relacionado</th>
+        <td mat-cell *matCellDef="let element" class="truncate-cell" [ngClass]="{ 'text-muted': !element.worker }">{{ element.worker?.name || 'NINGUNO' | uppercase }}</td>
+      </ng-container>
+      <ng-container matColumnDef="observations">
+        <th mat-header-cell *matHeaderCellDef>Observaciones</th>
+        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.seaceData.observations }}</td>
+      </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" class="text-right">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="before">
-            <button [routerLink]="['/users', element._id, 'edit']" mat-menu-item>
+            <button (click)="onDialogDetails(element.seaceData)" mat-menu-item>
+              <mat-icon>info</mat-icon>
+              <span>Detalles</span>
+            </button>
+            <button (click)="onDialogEditSeace(element.seaceData)" mat-menu-item>
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </button>
-            <button [routerLink]="['/privileges', element._id, 'edit']" mat-menu-item>
-              <mat-icon>key</mat-icon>
-              <span>Permisos</span>
+            <button (click)="onDialogOffers(element.seaceData)" mat-menu-item>
+              <mat-icon>sell</mat-icon>
+              <span>Ofertas presentadas</span>
+            </button>
+            <button (click)="onDialogBase(element.seaceData)" mat-menu-item>
+              <mat-icon>sell</mat-icon>
+              <span>Bases integradas</span>
             </button>
           </mat-menu>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.seaceData.statusCode === '03' || row.statusCode === '06', 'bg-danger': row.seaceData.statusCode === '04' || row.seaceData.statusCode === '05', 'bg-warning': row.seaceData.statusCode === '02' }"></tr>
     </table>
     <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator>
   </div>
-  <!-- <div class="fixed-bottom p-3" style="right: 0; left: unset; width: auto;">
-    <button mat-fab color="primary" class="float-right" routerLink="/users/create">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div> -->
 </section>

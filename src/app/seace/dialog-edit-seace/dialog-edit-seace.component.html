@@ -4,7 +4,19 @@
     <mat-form-field appearance="fill">
       <mat-label>Personal a cargo</mat-label>
       <mat-select formControlName="workerId">
+        <mat-option [value]="null">SIN PERSONAL</mat-option>
         <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado de gestion</mat-label>
+      <mat-select formControlName="statusCode">
+        <mat-option value="01">SIN GESTION</mat-option>
+        <mat-option value="02">EN GESTION</mat-option>
+        <mat-option value="03">GESTIONADO</mat-option>
+        <mat-option value="06">TRATO CERRADO</mat-option>
+        <mat-option value="04">OBSERVADO</mat-option>
+        <mat-option value="05">NO HABIDO</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">

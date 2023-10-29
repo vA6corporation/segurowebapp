@@ -16,6 +16,7 @@ import { SeaceDataModel } from '../seace-data.model';
 import { SeaceService } from '../seace.service';
 import { DialogOffersComponent } from '../dialog-offers/dialog-offers.component';
 import { DialogEditSeaceInboxComponent } from '../dialog-edit-seace-inbox/dialog-edit-seace-inbox.component';
+import { DialogBaseComponent } from '../dialog-base/dialog-base.component';
 
 @Component({
   selector: 'app-seace-inbox',
@@ -43,7 +44,7 @@ export class SeaceInboxComponent implements OnInit {
     objetoContratacion: '',
     departamento: '',
   });
-  public displayedColumns: string[] = [ 'buenaPro', 'convocatoria', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'observations', 'actions' ];
+  public displayedColumns: string[] = [ 'buenaPro', 'momenclatura', 'objetoContratacion', 'estado','valorReferencial', 'status', 'managementDate', 'observations', 'actions' ];
   public dataSource: any[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -140,10 +141,10 @@ export class SeaceInboxComponent implements OnInit {
 
       this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
         this.user = auth.user;
+        Object.assign(this.params, { workerId: this.user.workerId });
         this.fetchData();
         this.fetchCount();
       });
-
 
     });
 
@@ -159,7 +160,7 @@ export class SeaceInboxComponent implements OnInit {
 
       Promise.all(promises).then(values => {
         this.navigationService.loadBarFinish();
-        const seaceDatas = values.flat() as SeaceDataModel[];
+        const seaceDatas: SeaceDataModel[] = values.flat();
         const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
         let body = [];
         body.push([
@@ -220,14 +221,14 @@ export class SeaceInboxComponent implements OnInit {
 
   fetchCount() {
     if (this.user && this.user.workerId) {
-      const { startDate, endDate, estado, objetoContratacion, departamento, key, isCustomer } = this.formGroup.value;
-      const params: any = { estado, objetoContratacion, departamento, key, isCustomer, workerId: this.user.workerId };
+      // const { startDate, endDate, estado, objetoContratacion, departamento, key, isCustomer } = this.formGroup.value;
+      // const params: any = { estado, objetoContratacion, departamento, key, isCustomer, workerId: this.user.workerId };
   
-      if (startDate && endDate) {
-        Object.assign(params, { startDate, endDate });
-      }
+      // if (startDate && endDate) {
+      //   Object.assign(params, { startDate, endDate });
+      // }
   
-      this.seaceService.getCountSeaceDatas(params).subscribe(count => {
+      this.seaceService.getCountSeaceDatas(this.params).subscribe(count => {
         this.length = count;
       });
     }
@@ -235,15 +236,8 @@ export class SeaceInboxComponent implements OnInit {
 
   fetchData() {
     if (this.user && this.user.workerId) {
-      const { startDate, endDate, estado, objetoContratacion, departamento, isCustomer } = this.formGroup.value;
-      const params: any = { estado, objetoContratacion, departamento, isCustomer, workerId: this.user.workerId };
-  
-      if (startDate && endDate) {
-        Object.assign(params, { startDate, endDate });
-      }
-  
       this.navigationService.loadBarStart();
-      this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, params).subscribe(seaceDatas => {
+      this.seaceService.getSeaceDatasByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(seaceDatas => {
         this.navigationService.loadBarFinish();
         this.dataSource = seaceDatas;
         console.log(seaceDatas);
@@ -375,6 +369,15 @@ export class SeaceInboxComponent implements OnInit {
       data: seaceData,
       width: '600px',
       position: { top: '20px' }
+    });
+  }
+
+  onDialogBase(seaceData: any) {
+    this.matDialog.open(DialogBaseComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: seaceData,
     });
   }
 

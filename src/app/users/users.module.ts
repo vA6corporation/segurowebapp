@@ -7,13 +7,13 @@ import { EditUsersComponent } from './edit-users/edit-users.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DisabledUsersComponent } from './disabled-users/disabled-users.component';
-
+import { IndexUsersComponent } from './index-users/index-users.component';
 
 @NgModule({
   declarations: [
     UsersComponent, 
     CreateUsersComponent, 
-    EditUsersComponent, DisabledUsersComponent
+    EditUsersComponent, DisabledUsersComponent, IndexUsersComponent
   ],
   imports: [
     CommonModule,

@@ -28,22 +28,21 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
   public formGroup: UntypedFormGroup = this.formBuilder.group({
     document: null,
     name: [ null, Validators.required ],
-    constitutedAt: null,
     address: [ null ],
-    representativeName: [ null, Validators.required ],
-    representativeDocument: [ null, Validators.required ],
-    businessId: null,
-    isTemplate: true,
-    independentAccounting: null,
+    constitutedAt: null,
     email: null,
     phoneNumber: null,
-    economicActivity: null,
+    economicActivity: [ null, Validators.required ],
     representativeNationality: null,
+    representativeDocumentType: 'DNI',
+    representativeDocument: [ null, Validators.required ],
+    representativeName: [ null, Validators.required ],
+    businessId: null,
+    isTemplate: true,
   });
   public isLoading: boolean = false;
   public businesses: BusinessModel[] = [];
   public partnershipItems: PartnershipItemModel[] = [];
-  public independentAccounting = false;
   
   ngOnInit(): void { 
     this.navigationService.setTitle('Nuevo consorcio para formatos');
@@ -82,7 +81,6 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
       this.isLoading = true;
       this.navigationService.loadBarStart();
       this.partnershipsService.create(this.formGroup.value, this.partnershipItems).subscribe(res => {
-        console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.router.navigate(['/templatePartnerships']);
@@ -95,26 +93,5 @@ export class CreateTemplatePartnershipsComponent implements OnInit {
       });
     }
   }
-
-  // onSubmit(): void {
-  //   if (this.formGroup.valid) {
-  //     this.isLoading = true;
-  //     this.navigationService.loadBarStart();
-  //     const partnership = this.formGroup.value;
-  //     partnership.businessIds = this.businesses.map(e => e._id);
-  //     this.partnershipsService.create(partnership).subscribe(res => {
-  //       console.log(res);
-  //       this.isLoading = false;
-  //       this.navigationService.loadBarFinish();
-  //       this.router.navigate(['/templatePartnerships']);
-  //       this.navigationService.showMessage('Registrado correctamente');
-  //     }, (error: HttpErrorResponse) => {
-  //       console.log(error);
-  //       this.isLoading = false;
-  //       this.navigationService.loadBarFinish();
-  //       this.navigationService.showMessage(error.error.message);
-  //     });
-  //   }
-  // }
 
 }

@@ -29,7 +29,7 @@ export class BusinessesCommercialComponent implements OnInit {
     private readonly matDialog: MatDialog,
   ) { }
     
-  public displayedColumns: string[] = [ 'document', 'name', 'email', 'mobileNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'document', 'name', 'email', 'emailPerfilprov', 'mobileNumber', 'mobileNumberPerfilprov', 'actions' ];
   public dataSource: BusinessModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -68,7 +68,7 @@ export class BusinessesCommercialComponent implements OnInit {
 
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
+      // { id: 'export_businesses', label: 'Exportar excel', icon: 'download', show: false }
     ]);
 
     this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
@@ -106,16 +106,16 @@ export class BusinessesCommercialComponent implements OnInit {
       });
     });
 
-    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      switch (id) {
-        case 'export_businesses': {
-          this.downloadExcel();
-          break;
-        }
-        default:
-          break;
-      }
-    });
+    // this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+    //   switch (id) {
+    //     case 'export_businesses': {
+    //       this.downloadExcel();
+    //       break;
+    //     }
+    //     default:
+    //       break;
+    //   }
+    // });
   }
   
   fetchData() {
@@ -171,30 +171,30 @@ export class BusinessesCommercialComponent implements OnInit {
     });
   }
 
-  downloadExcel() {
-    this.navigationService.loadBarStart();
-    this.businessesService.getBusinesses().subscribe(businesses => {
-      this.navigationService.loadBarFinish();
-      const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-      let body = [];
-      body.push([
-        'RUC',
-        'RAZON SOCIAL',
-        'EMAIL',
-        'CELULAR',
-      ]);
-      for (const business of businesses) {
-        body.push([
-          business.document,
-          business.name,
-          business.email,
-          business.mobileNumber,
-        ]);
-      }
-      const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-      buildExcel(body, name, wscols, [], []);
-    });
-  }
+  // downloadExcel() {
+  //   this.navigationService.loadBarStart();
+  //   this.businessesService.getBusinesses().subscribe(businesses => {
+  //     this.navigationService.loadBarFinish();
+  //     const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
+  //     let body = [];
+  //     body.push([
+  //       'RUC',
+  //       'RAZON SOCIAL',
+  //       'EMAIL',
+  //       'CELULAR',
+  //     ]);
+  //     for (const business of businesses) {
+  //       body.push([
+  //         business.document,
+  //         business.name,
+  //         business.email,
+  //         business.mobileNumber,
+  //       ]);
+  //     }
+  //     const name = `CLIENTES_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+  //     buildExcel(body, name, wscols, [], []);
+  //   });
+  // }
 
   handlePageEvent(event: PageEvent): void {
     this.pageIndex = event.pageIndex;

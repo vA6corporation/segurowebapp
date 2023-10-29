@@ -2,7 +2,7 @@
   <form [formGroup]="formGroup" autocomplete="off">
     <mat-form-field appearance="fill">
       <mat-label>Cuenta de la empresa</mat-label>
-      <mat-select formControlName="bankId" (selectionChange)="fetchData()">
+      <mat-select formControlName="bankId" (selectionChange)="onChangeBank()">
         <mat-option value="">TODAS LAS CUENTAS</mat-option>
         <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
       </mat-select>
@@ -11,7 +11,7 @@
       <mat-label>Seleccione un rango de fechas</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Desde" formControlName="startDate">
-        <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="fetchData()">
+        <input matEndDate placeholder="Hasta" formControlName="endDate" (dateChange)="onRangeChange()">
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
@@ -44,11 +44,11 @@
       </ng-container>
       <ng-container matColumnDef="commission">
           <th mat-header-cell *matHeaderCellDef>Honorarios</th>
-          <td mat-cell *matCellDef="let element" class="text-uppercase">{{ (element.commission || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</td>
+          <td mat-cell *matCellDef="let element" class="text-uppercase">{{ (element.commission || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
         </ng-container>
       <ng-container matColumnDef="debt">
         <th mat-header-cell *matHeaderCellDef>Deuda</th>
-        <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">{{ (element.debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</td>
+        <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">{{ (element.debt || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
       </ng-container>
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
@@ -76,6 +76,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" [ngClass]="{ 'bg-danger': row.constructionCode === '06' }"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" showFirstLastButtons></mat-paginator>
+    <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" showFirstLastButtons></mat-paginator> -->
   </div>
 </section>

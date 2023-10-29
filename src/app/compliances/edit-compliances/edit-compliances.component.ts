@@ -333,7 +333,7 @@ export class EditCompliancesComponent implements OnInit {
       this.navigationService.loadBarStart();
       const { financier, compliance } = this.formGroup.value;
       compliance.financierId = financier._id;
-      this.compliancesService.updateWithFinanicer(compliance, financier, this.payments, this.complianceId).subscribe(res => {
+      this.compliancesService.updateWithPayments(compliance, this.payments, this.complianceId).subscribe(res => {
         console.log(res);
         this.isLoading = false;
         this.navigationService.loadBarFinish();

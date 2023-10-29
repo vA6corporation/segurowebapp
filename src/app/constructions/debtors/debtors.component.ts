@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
@@ -11,6 +11,7 @@ import { buildExcel } from 'src/app/xlsx';
 import { BankModel } from 'src/app/providers/bank.model';
 import { BanksService } from 'src/app/banks/banks.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Params } from '@angular/router';
 Chart.register(...registerables);
 
 @Component({
@@ -30,6 +31,7 @@ export class DebtorsComponent implements OnInit {
   @ViewChild('chartDebtor') 
   private chartDebtorViewChild!: ElementRef<HTMLCanvasElement>;
   public chartDebtor: Chart|null = null;
+  private params: Params = {};
 
   public displayedColumns: string[] = [ 
     'emitionAt',
@@ -43,12 +45,12 @@ export class DebtorsComponent implements OnInit {
   ];
   public formGroup = this.formBuilder.group({
     bankId: '',
-    startDate: '',
-    endDate: '',
+    startDate: [ null, Validators.required ],
+    endDate: [ null, Validators.required ],
   });
   public summaries: any[] = [];
   public dataSource: ConstructionModel[] = [];
-  public length: number = 100;
+  public length: number = 0;
   public pageSize: number = 10;
   public pageSizeOptions: number[] = [10, 30, 50];
   public pageIndex: number = 0;
@@ -80,28 +82,36 @@ export class DebtorsComponent implements OnInit {
       const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
       let body = [];
       body.push([
+        'F. EMISION',
+        'CODIGO',
         'ESTADO DE O.',
         'CLIENTE',
         'CONSORCIO',
         'PERSONAL',
         'HONORARIOS',
         'PENDIENTE',
+        'OBSERVACIONES',
         'OBJETO',
       ]);
       for (const construction of this.dataSource) {
         body.push([
+          formatDate(new Date(construction.emitionAt), 'dd/MM/yyyy', 'en-US'),
+          construction.code,
           construction.constructionCodeType,
           construction.business.name,
           construction.partnership?.name,
           construction.worker?.name,
           construction.commission,
           construction.debt,
+          construction.observationsPayment,
           construction.object,
         ]);
       }
       const name = `OBRAS_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
       buildExcel(body, name, wscols, [], []);
     });
+
+    this.fetchData();
   }
 
   ngAfterViewInit() {
@@ -109,81 +119,89 @@ export class DebtorsComponent implements OnInit {
   }
 
   onRangeChange() {
+    if (this.formGroup.valid) {
+      const { startDate, endDate } = this.formGroup.value;
+      Object.assign(this.params, { startDate, endDate });
+      this.fetchData();
+    }
+  }
+
+  onChangeBank() {
+    const { bankId } = this.formGroup.value;
+    Object.assign(this.params, { bankId });
     this.fetchData();
   }
 
   fetchData() {
-    if (this.formGroup.valid) {
-      this.navigationService.loadBarStart();
-      const { bankId, startDate, endDate } = this.formGroup.value;
-      const params = { bankId, startDate, endDate };
-      this.constructionsService.getDebtorConstructions(params).subscribe(constructions => {
-        this.dataSource = constructions;
-        this.navigationService.loadBarFinish();
-        let totalPaid = 0;
-        let totalDebt = 0;
-        for (const construction of constructions) {
-          const payments = construction.payments;
-          totalDebt += construction.commission;
-          totalPaid += payments.map((e: any) => e.charge).reduce((a: number, b: number) => a + b, 0);
-        }
-        const colors = [
-          '#00ff00',
-          '#ff0000', 
-        ];
-        this.chartDebtor?.destroy();
-        const dataSet = {
-          labels: [
-            'PAGADO',
-            'PENDIENTE',
-          ],
-          datasets: [
-            {
-              label: 'Primas',
-              data: [
-                totalPaid,
-                totalDebt - totalPaid,
-              ],
-              backgroundColor: colors,
-            },
-          ]
-        };
-        const configPrima = {
-          type: 'pie' as ChartType,
-          data: dataSet,
-          plugins: [ChartDataLabels],
-          options: {
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                backgroundColor: function(context) {
-                  return 'rgba(73, 79, 87, 0.5)'
-                  // return context.dataset.backgroundColor;
-                },
-                borderRadius: 4,
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: function(value) {
-                  if (value === 0) {
-                    return null;
-                  } else {
-                    return (Math.round(value)).toLocaleString('en-US', { minimumFractionDigits: 2 });
-                  }
-                },
-                padding: 6
+    this.navigationService.loadBarStart();
+    this.constructionsService.getDebtorConstructions(this.params).subscribe(constructions => {
+      this.dataSource = constructions;
+      this.navigationService.loadBarFinish();
+      let totalPaid = 0;
+      let totalDebt = 0;
+      for (const construction of constructions) {
+        const payments = construction.payments;
+        totalDebt += construction.commission;
+        totalPaid += payments.map((e: any) => e.charge).reduce((a: number, b: number) => a + b, 0);
+      }
+      const colors = [
+        '#00ff00',
+        '#ff0000', 
+      ];
+      this.chartDebtor?.destroy();
+      const dataSet = {
+        labels: [
+          'PAGADO',
+          'PENDIENTE',
+        ],
+        datasets: [
+          {
+            label: 'Primas',
+            data: [
+              totalPaid,
+              totalDebt - totalPaid,
+            ],
+            backgroundColor: colors,
+          },
+        ]
+      };
+      const configPrima = {
+        type: 'pie' as ChartType,
+        data: dataSet,
+        plugins: [ChartDataLabels],
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            datalabels: {
+              backgroundColor: function(context) {
+                return 'rgba(73, 79, 87, 0.5)'
+                // return context.dataset.backgroundColor;
               },
-            }
-          } as ChartOptions,
-        };
-        const canvasPrima = this.chartDebtorViewChild.nativeElement;
-        this.chartDebtor = new Chart(canvasPrima, configPrima);
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.showMessage(error.error.message);
-        this.navigationService.loadBarFinish();
-      });
-    }
+              borderRadius: 4,
+              color: 'white',
+              font: {
+                weight: 'bold'
+              },
+              formatter: function(value) {
+                if (value === 0) {
+                  return null;
+                } else {
+                  return (Math.round(value)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+              },
+              padding: 6
+            },
+          }
+        } as ChartOptions,
+      };
+      const canvasPrima = this.chartDebtorViewChild.nativeElement;
+      this.chartDebtor = new Chart(canvasPrima, configPrima);
+    }, (error: HttpErrorResponse) => {
+      this.navigationService.showMessage(error.error.message);
+      this.navigationService.loadBarFinish();
+    });
+    // if (this.formGroup.valid) {
+    // }
   }
 
 }

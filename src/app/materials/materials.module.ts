@@ -13,7 +13,7 @@ import { DialogMaterialComponent } from './dialog-material/dialog-material.compo
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogPdfMaterialsComponent } from './dialog-pdf-materials/dialog-pdf-materials.component';
 import { EditCommercialsComponent } from './edit-commercials/edit-commercials.component';
-import { GuaranteesModule } from '../guarantees/guarantees.module';
+import { GuarantiesModule } from '../guaranties/guaranties.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { GuaranteesModule } from '../guarantees/guarantees.module';
     ChequesModule,
     DepositsModule,
     MatDialogModule,
-    GuaranteesModule
+    GuarantiesModule
   ]
 })
 export class MaterialsModule { }

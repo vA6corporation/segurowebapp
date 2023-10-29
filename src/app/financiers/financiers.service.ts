@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs';
-import { GuaranteeModel } from '../guarantees/guarantee.model';
 import { HttpService } from '../http.service';
 import { FinancierModel } from './financier.model'
+import { GuaranteeModel } from '../guaranties/guarantee.model';
 
 @Injectable({
   providedIn: 'root'

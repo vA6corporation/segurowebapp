@@ -1,3 +1,4 @@
+import { SeaceDataModel } from "../seace/seace-data.model"
 import { WorkerModel } from "../workers/worker.model"
 
 export interface NotificationModel {
@@ -7,4 +8,5 @@ export interface NotificationModel {
   createdAt: string
   workerId: string
   worker: WorkerModel
+  seaceData: SeaceDataModel
 }

@@ -98,9 +98,11 @@ export class ToolbarComponent implements OnInit {
 
   onSubmit() {
     const { key } = this.formGroup.value;
-    this.formGroup.reset();
-    if (key) {
-      this.navigationService.search(key);
+    if (key.length >= 2) {
+      this.formGroup.reset();
+      if (key) {
+        this.navigationService.search(key);
+      }
     }
   }
 

@@ -11,6 +11,8 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { InsuranceModel } from '../insurance.model';
 import { InsurancesService } from '../insurances.service';
+import { formatDate } from '@angular/common';
+import { buildExcel } from 'src/app/xlsx';
 
 @Component({
   selector: 'app-insurances',
@@ -60,14 +62,17 @@ export class InsurancesComponent implements OnInit {
     });
 
     this.activatedRoute.params.subscribe(params => {
+      setTimeout(() => {
+        this.navigationService.setMenu([
+          { id: 'search', label: 'search', icon: 'search', show: true },
+          { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
+        ]);
+      }, 1000);
       this.type = params.type;
       this.navigationService.setTitle(this.type);
       this.fetchData();
-      this.navigationService.setMenu([
-        { id: 'search', label: 'search', icon: 'search', show: true },
-        // { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
-      ]);
     });
+    
 
     this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
       this.navigationService.loadBarStart();
@@ -84,26 +89,59 @@ export class InsurancesComponent implements OnInit {
 
       if (id == 'export_excel') {
         this.navigationService.loadBarStart();
-        this.navigationService.loadBarFinish();
+        const { workerId, startDate, endDate } = this.formGroup.value;
+
+        const params: Params = {
+          workerId,
+          startDate,
+          endDate
+        };
+
+        const chunk = 500;
+        const promises: Promise<any>[] = [];
+  
+        for (let index = 0; index < this.length / chunk; index++) {
+          const promise = this.insurancesService.getInsurancesByPageType(index + 1, chunk, this.type, params).toPromise();
+          promises.push(promise);
+        }
+
         const wscols = [ 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-        let body = [];
-        body.push([
-          'CONSORCIO',
-          'CLIENTE',
-          'N° POLIZA',
-          'OBJETO',
-          'F. DE INICIO',
-          'F. DE CUMPLIMIENTO',
-          'SUMA ASEGURADA',
-          'PRIMA',
-          'GARANTIA',
-          'COMISION',
-          'ESTADO DE TRAMITE',
-          'ESTADO DE OBRA',
-          'P. A CARGO',
-        ]);
+        
+        Promise.all(promises).then(values => {
+          this.navigationService.loadBarFinish();
+          const insurances: InsuranceModel[] = values.flat();
+          
+          let body = [];
+          body.push([
+            'N° DE POLIZA',
+            'F. DE EMISION',
+            'F. DE VENCIMIENTO',
+            'CONSORCIO',
+            'EMPRESA',
+            'FINANCIERA',
+            'BROKER',
+            'PRIMA',
+            'COMISION'
+          ]);
+          
+          for (const insurance of insurances) {
+            body.push([
+              insurance.policyNumber,
+              formatDate(new Date(insurance.emitionAt), 'dd/MM/yyyy', 'en-US'),
+              formatDate(new Date(insurance.expirationAt), 'dd/MM/yyyy', 'en-US'),
+              insurance.partnership?.name,
+              insurance.business.name,
+              insurance.financier.name,
+              insurance.worker.name.toUpperCase(),
+              Number(insurance.prima.toFixed(2)),
+              Number(insurance.commission.toFixed(2))
+            ]);
+          }
+
+          const name = `SEGUROS_${this.type}_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+          buildExcel(body, name, wscols, [], []);
+        });
       }
-      
     });
   }
 
