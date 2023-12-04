@@ -12,7 +12,7 @@ export async function buildFideicomiso(
   const title = 12;
   const header = 11;
   const body = 8.5;
-  const { business, company, partnership } = fideicomiso;
+  const { customer } = fideicomiso;
 
   const pdf = new jsPDF('p','mm', [297, 210]);
   let text: string = '';
@@ -45,11 +45,11 @@ export async function buildFideicomiso(
       ]
     ],
     body: [
-      [ { content: `Razon social: ${business.name}`, styles: {  } }],
-      [`RUC: ${business.document}`],
-      [`Direccion: ${business.addressResidence}`],
-      [`Telefeno: ${business.mobileNumber}`],
-      [`Correo electronico: ${business.email}`]
+      [ { content: `Razon social: ${customer.name}`, styles: {  } }],
+      [`RUC: ${customer.ruc}`],
+      [`Direccion: ${customer.address}`],
+      [`Telefeno: ${customer.mobileNumber}`],
+      [`Correo electronico: ${customer.email}`]
     ],
   });
 
@@ -61,13 +61,13 @@ export async function buildFideicomiso(
         { content: 'Proveedor', colSpan: 3, styles: { halign: 'center', fillColor: [255, 165, 0] } }, 
       ]
     ],
-    body: [
-      [ { content: `Razon social: ${company.name}`, styles: {  } } ],
-      [`RUC: ${company.ruc}`],
-      [`Direccion: ${company.address}`],
-      [`Telefeno: ${company.mobileNumber}`],
-      [`Correo electronico: ${company.email}`]
-    ],
+    // body: [
+    //   [ { content: `Razon social: ${company.name}`, styles: {  } } ],
+    //   [`RUC: ${company.ruc}`],
+    //   [`Direccion: ${company.address}`],
+    //   [`Telefeno: ${company.mobileNumber}`],
+    //   [`Correo electronico: ${company.email}`]
+    // ],
   });
 
   autoTable(pdf, {
@@ -81,7 +81,7 @@ export async function buildFideicomiso(
       ]
     ],
     body: [
-      [ { content: `SERVICIO DE ASESORIA Y GESTION DE LINEA DE CREDITO ${partnership ? 'CONSORCIO ' + partnership.name : ''}`, colSpan: 1 }, { content: `S/ ${(fideicomiso.commission || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
+      [ { content: `SERVICIO DE ASESORIA Y GESTION DE LINEA DE CREDITO ${customer.partnershipName ? 'CONSORCIO ' + customer.partnershipName : ''}`, colSpan: 1 }, { content: `S/ ${(fideicomiso.commission || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, styles: { halign: 'right', cellWidth: 30 } } ],
       [],
       [],
       [],

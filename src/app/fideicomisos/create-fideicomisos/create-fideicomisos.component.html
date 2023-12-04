@@ -1,15 +1,13 @@
 <section class="container py-4">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <div formGroupName="partnership">
+    <div formGroupName="customer">
+      <mat-form-field appearance="fill">
+        <mat-label>Cliente</mat-label>
+        <input type="text" matInput formControlName="name" (click)="openDialogCustomers()" readonly>
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Consorcio</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
-      </mat-form-field>
-    </div>
-    <div formGroupName="business">
-      <mat-form-field appearance="fill">
-        <mat-label>Empresa</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
+        <input type="text" matInput formControlName="partnershipName" readonly>
       </mat-form-field>
     </div>
     <div formGroupName="financier">
@@ -28,31 +26,8 @@
     </div>
     <div formGroupName="fideicomiso">
       <mat-form-field appearance="fill">
-        <mat-label>Razon social</mat-label>
-        <mat-select formControlName="companyId">
-          <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Cuenta de la empresa</mat-label>
-        <mat-select formControlName="bankId">
-          <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Moneda</mat-label>
-        <mat-select formControlName="currencyCode">
-          <mat-option value="PEN">PEN</mat-option>
-          <mat-option value="USD">USD</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
         <mat-label>Monto</mat-label>
         <input type="number" matInput formControlName="charge">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Prima</mat-label>
-        <input type="number" matInput formControlName="prima">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Comision</mat-label>

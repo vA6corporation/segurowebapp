@@ -10,4 +10,5 @@ export interface WorkerModel {
   email: string
   birthDate: string
   office: OfficeModel
+  showTiming: boolean
 }

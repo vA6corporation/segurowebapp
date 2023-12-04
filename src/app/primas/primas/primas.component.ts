@@ -95,7 +95,7 @@ export class PrimasComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.users$ = this.usersService.getActiveUsers().subscribe(users => {
+    this.users$ = this.usersService.getUsers().subscribe(users => {
       this.users = users;
     });
 

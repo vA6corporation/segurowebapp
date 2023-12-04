@@ -7,10 +7,11 @@ import { CreateFideicomisosComponent } from './create-fideicomisos/create-fideic
 import { EditFideicomisosComponent } from './edit-fideicomisos/edit-fideicomisos.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
+import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 
 
 @NgModule({
-  declarations: [FideicomisosComponent, CreateFideicomisosComponent, EditFideicomisosComponent],
+  declarations: [FideicomisosComponent, CreateFideicomisosComponent, EditFideicomisosComponent, DialogAttachPdfComponent],
   imports: [
     CommonModule,
     FideicomisosRoutingModule,

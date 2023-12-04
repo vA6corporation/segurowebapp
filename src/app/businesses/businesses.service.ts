@@ -1,157 +1,150 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ExperienceModel } from '../experiences/experience.model';
 import { HttpService } from '../http.service';
 import { InvestmentModel } from '../investments/investment.model';
 import { MovablePropertyModel } from '../movable-properties/movable-property.model';
 import { PropertyModel } from '../properties/property.model';
-import { BusinessPdfModel } from './business-pdf.model';
+import { BusinessNodeModel } from './business-node.model';
 import { BusinessModel } from './business.model';
 import { GuarantiesModel } from './dialog-add-guaranties/guaranties.model';
 import { FacilityCreditModel } from './facility-credit.model';
-import { Params } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class BusinessesService {
 
-  constructor(
-    private readonly httpService: HttpService,
-  ) { }
-  
-  getBusinessesWithoutDocumentation(params: Params): Observable<BusinessModel[]> {
-    return this.httpService.get('businesses/withoutDocumentation', { params }); 
-  }
+    constructor(
+        private readonly httpService: HttpService,
+    ) { }
 
-  getBusinessesByIds(businessIds: string[]): Observable<BusinessModel[]> {
-    return this.httpService.post('businesses/byIds', { businessIds });
-  }
+    getBusinessesWithoutDocumentation(params: Params): Observable<BusinessModel[]> {
+        return this.httpService.get('businesses/withoutDocumentation', { params });
+    }
 
-  getRandomBusinesses(): Observable<BusinessModel[]> {
-    return this.httpService.get('businesses/random');
-  }
+    getBusinessesByIds(businessIds: string[]): Observable<BusinessModel[]> {
+        return this.httpService.post('businesses/byIds', { businessIds });
+    }
 
-  updateExperienceObservations(experienceObservations: string, businessId: string): Observable<void> {
-    return this.httpService.get(`businesses/experienceObservations/${experienceObservations}/${businessId}`); 
-  }
+    getRandomBusinesses(): Observable<BusinessModel[]> {
+        return this.httpService.get('businesses/random');
+    }
 
-  updateEmail(email: string, businessId: string): Observable<void> {
-    return this.httpService.get(`businesses/email/${email}/${businessId}`); 
-  }
+    updateExperienceObservations(experienceObservations: string, businessId: string): Observable<void> {
+        return this.httpService.get(`businesses/experienceObservations/${experienceObservations}/${businessId}`);
+    }
 
-  updateMobileNumber(mobileNumber: string, businessId: string): Observable<void> {
-    return this.httpService.get(`businesses/mobileNumber/${mobileNumber}/${businessId}`); 
-  }
+    updateEmail(email: string, businessId: string): Observable<void> {
+        return this.httpService.get(`businesses/email/${email}/${businessId}`);
+    }
 
-  getBusinessesBirthday(): Observable<BusinessModel[]> {
-    return this.httpService.get('businesses/birthday');
-  }
+    updateMobileNumber(mobileNumber: string, businessId: string): Observable<void> {
+        return this.httpService.get(`businesses/mobileNumber/${mobileNumber}/${businessId}`);
+    }
 
-  getBusinessById(businessId: string): Observable<BusinessModel> {
-    return this.httpService.get(`businesses/byId/${businessId}`);
-  }
+    getBusinessesBirthday(): Observable<BusinessModel[]> {
+        return this.httpService.get('businesses/birthday');
+    }
 
-  getBusinessesByKey(key: string): Observable<BusinessModel[]> {
-    return this.httpService.get(`businesses/byKey/${key}`);
-  }
+    getBusinessById(businessId: string): Observable<BusinessModel> {
+        return this.httpService.get(`businesses/byId/${businessId}`);
+    }
 
-  getBusinessesByWorkerKey(workerId: string, key: string): Observable<BusinessModel[]> {
-    return this.httpService.get(`businesses/byWorkerKey/${workerId}/${key}`);
-  }
+    getBusinessesByKey(key: string): Observable<BusinessModel[]> {
+        return this.httpService.get(`businesses/byKey/${key}`);
+    }
 
-  getBusinessesByPage(pageIndex: number, pageSize: number, params: Params): Observable<BusinessModel[]> {
-    return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`, { params });
-  }
+    getBusinessesByWorkerKey(workerId: string, key: string): Observable<BusinessModel[]> {
+        return this.httpService.get(`businesses/byWorkerKey/${workerId}/${key}`);
+    }
 
-  getBusinessesByWorkerPage(workerId: string, pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
-    return this.httpService.get(`businesses/byWorkerPage/${workerId}/${pageIndex}/${pageSize}`);
-  }
+    getBusinessesByPage(pageIndex: number, pageSize: number, params: Params): Observable<BusinessModel[]> {
+        return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`, { params });
+    }
 
-  getCountBusinesses(params: Params): Observable<number> {
-    return this.httpService.get('businesses/countBusinesses', { params });
-  }
+    getBusinessesByWorkerPage(workerId: string, pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
+        return this.httpService.get(`businesses/byWorkerPage/${workerId}/${pageIndex}/${pageSize}`);
+    }
 
-  getCountBusinessesByWorker(workerId: string): Observable<number> {
-    return this.httpService.get(`businesses/countBusinessesByWorker/${workerId}`);
-  }
+    getCountBusinesses(params: Params): Observable<number> {
+        return this.httpService.get('businesses/countBusinesses', { params });
+    }
 
-  create(
-    business: BusinessModel, 
-    guaranties: GuarantiesModel[],
-    experiences: ExperienceModel[],
-    investments: InvestmentModel[],
-    properties: PropertyModel[],
-    movableProperties: MovablePropertyModel[],
-    facilityCredits: FacilityCreditModel[],
-  ): Observable<BusinessModel> {
-    return this.httpService.post('businesses', { 
-      business, 
-      guaranties,
-      experiences,
-      investments,
-      properties,
-      facilityCredits,
-      movableProperties, 
-    });
-  }
+    getCountBusinessesByWorker(workerId: string): Observable<number> {
+        return this.httpService.get(`businesses/countBusinessesByWorker/${workerId}`);
+    }
 
-  createNode(businessNode: any): Observable<any> {
-    return this.httpService.post('businessPdfs/createNode', { businessNode });
-  }
+    create(
+        business: BusinessModel,
+        guaranties: GuarantiesModel[],
+        experiences: ExperienceModel[],
+        investments: InvestmentModel[],
+        properties: PropertyModel[],
+        movableProperties: MovablePropertyModel[],
+        facilityCredits: FacilityCreditModel[],
+    ): Observable<BusinessModel> {
+        return this.httpService.post('businesses', {
+            business,
+            guaranties,
+            experiences,
+            investments,
+            properties,
+            facilityCredits,
+            movableProperties,
+        });
+    }
 
-  updateNode(businessNode: any, businessNodeId: string): Observable<any> {
-    return this.httpService.post(`businessPdfs/updateNode/${businessNodeId}`, { businessNode });
-  }
+    update(
+        business: BusinessModel,
+        guaranties: GuarantiesModel[],
+        experiences: ExperienceModel[],
+        investments: InvestmentModel[],
+        properties: PropertyModel[],
+        movableProperties: MovablePropertyModel[],
+        facilityCredits: FacilityCreditModel[],
+        businessId: string
+    ): Observable<void> {
+        return this.httpService.put(`businesses/${businessId}`, {
+            business,
+            guaranties,
+            experiences,
+            investments,
+            properties,
+            facilityCredits,
+            movableProperties,
+        });
+    }
 
-  deleteNode(businessNodeId: string): Observable<void> {
-    return this.httpService.delete(`businessPdfs/deleteNode/${businessNodeId}`);
-  }
+    delete(businessId: string) {
+        return this.httpService.delete(`businesses/${businessId}`);
+    }
 
-  update(
-    business: BusinessModel, 
-    guaranties: GuarantiesModel[],
-    experiences: ExperienceModel[],
-    investments: InvestmentModel[],
-    properties: PropertyModel[],
-    movableProperties: MovablePropertyModel[],
-    facilityCredits: FacilityCreditModel[],
-    businessId: string
-  ): Observable<BusinessModel> {
-    return this.httpService.put(`businesses/${businessId}`, { 
-      business, 
-      guaranties,
-      experiences,
-      investments,
-      properties,
-      facilityCredits,
-      movableProperties, 
-    });
-  }
+    restore(businessId: string) {
+        return this.httpService.get(`businesses/restore/${businessId}`);
+    }
 
-  delete(businessId: string) {
-    return this.httpService.delete(`businesses/${businessId}`);
-  }
+    getBusinessNodesByTypeBusiness(type: string, businessId: string): Observable<BusinessNodeModel[]> {
+        return this.httpService.get(`businessNodes/byTypeBusiness/${type}/${businessId}`);
+    }
 
-  restore(businessId: string) {
-    return this.httpService.get(`businesses/restore/${businessId}`);
-  }
+    uploadFile(
+        formData: FormData,
+    ): Observable<any> {
+        return this.httpService.postProgress(`businessNodes/uploadFile`, formData);
+    }
 
-  getBusinessNodes(type: string, businessId: string): Observable<any[]> {
-    return this.httpService.get(`businessPdfs/businessNodesByTypeBusinessId/${type}/${businessId}`);
-  }
+    createNode(businessNode: any): Observable<BusinessModel> {
+        return this.httpService.post('businessNodes', { businessNode });
+    }
 
-  uploadFile(
-    formData: FormData, 
-    type: string, 
-    businessId: string,
-    businessNodeId: string
-  ): Observable<BusinessPdfModel> {
-    return this.httpService.postForm(`businessPdfs/uploadPdf/${type}/${businessId}/${businessNodeId}`, formData);
-  }
+    updateNode(businessNode: any, businessNodeId: string): Observable<void> {
+        return this.httpService.put(`businessNodes/${businessNodeId}`, { businessNode });
+    }
 
-  deletePdf(businessPdfId: string, pdfId: string): Observable<void> {
-    return this.httpService.delete(`businessPdfs/deletePdf/${businessPdfId}/${pdfId}`);
-  }
+    deleteNode(businessNodeId: string): Observable<void> {
+        return this.httpService.delete(`businessNodes/${businessNodeId}`);
+    }
 
 }

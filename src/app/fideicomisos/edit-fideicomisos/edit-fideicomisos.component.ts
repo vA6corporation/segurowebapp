@@ -5,20 +5,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
-import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
 import { ConstructionModel } from 'src/app/constructions/construction.model';
+import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
-import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
 import { PaymentModel } from 'src/app/payments/payment.model';
 import { BankModel } from 'src/app/providers/bank.model';
 import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
+import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
 import { FideicomisosService } from '../fideicomisos.service';
+import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
   selector: 'app-edit-fideicomisos',
@@ -38,29 +38,22 @@ export class EditFideicomisosComponent implements OnInit {
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
-    partnership: this.formBuilder.group({
-      name: null,
-      _id: null,
-    }),
-    financier: this.formBuilder.group({
+    customer: this.formBuilder.group({
       name: [ null, Validators.required ],
+      partnershipName: '',
       _id: [ null, Validators.required ],
     }),
-    business: this.formBuilder.group({
+    financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
     }),
     worker: this.formBuilder.group({
       _id: [ null, Validators.required ]
     }),
-    fideicomiso: this.formBuilder.group({
-      days: [ null, Validators. required ],
-      emitionAt: [ null, Validators.required ],
-      prima: null,
-      commission: null,
-      currencyCode: 'PEN',
-      charge: [ null, Validators.required ],
-    }),
+    days: [ null, Validators. required ],
+    emitionAt: [ null, Validators.required ],
+    charge: [ null, Validators.required ],
+    commission: null,
   });
 
   public construction: ConstructionModel|null = null;
@@ -99,19 +92,27 @@ export class EditFideicomisosComponent implements OnInit {
       this.fideicomisoId = params.fideicomisoId;
       this.navigationService.setTitle('Editar fideicomiso');
       this.fideicomisosService.getFideicomisoById(this.fideicomisoId).subscribe(fideicomiso => {
-        const { partnership, business, financier } = fideicomiso;
-        this.formGroup.get('partnership')?.patchValue(partnership || {});
-        this.formGroup.get('business')?.patchValue(business);
-        this.formGroup.get('financier')?.patchValue(financier);
-        this.formGroup.get('fideicomiso')?.patchValue(fideicomiso);
-        this.formGroup.get('worker')?.patchValue({ _id: fideicomiso.workerId });
+        this.formGroup.patchValue(fideicomiso);
         this.payments = fideicomiso.payments;
       });
     });
   }
 
+  onAttachPdf(type: string) {
+    const data: DialogAttachPdfData = {
+      fideicomisoId: this.fideicomisoId,
+      type,
+    } 
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: data
+    });
+  }
+
   onDialogPayments() {
-    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+    const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
       width: '600px',
       position: { top: '20px' }
     });
@@ -127,15 +128,28 @@ export class EditFideicomisosComponent implements OnInit {
     this.payments.splice(index, 1);
   }
 
-  openDialogBusinesses() {
-    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
+  openDialogCustomers() {
+    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
-    });
+    })
 
-    dialogRef.afterClosed().subscribe(business => {
-      this.formGroup.patchValue({ business: business || {} });
-    });
+    dialogRef.afterClosed().subscribe(customer => {
+      this.formGroup.patchValue({ customer });
+    })
+
+    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+        width: '600px',
+        position: { top: '20px' }
+      })
+
+      dialogRef.afterClosed().subscribe(customer => {
+        if (customer) {
+          this.formGroup.patchValue({ customer })
+        }
+      })
+    })
   }
 
   openDialogBrokers() {
@@ -160,40 +174,13 @@ export class EditFideicomisosComponent implements OnInit {
     });
   }
 
-  openDialogBeneficiaries() {
-    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(beneficiary => {
-      this.formGroup.patchValue({ beneficiary: beneficiary || {} });
-    });
-  }
-
-  openDialogPartnerships() {
-    const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-    
-    dialogRef.afterClosed().subscribe(partnership => {
-      if (partnership) {
-        const { business } = partnership;
-        this.formGroup.patchValue({ business: business || {} });
-        this.formGroup.patchValue({ partnership: partnership || {} });
-      }
-    });
-  }
-
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { business, financier, partnership, worker, fideicomiso } = this.formGroup.value;
-      fideicomiso.businessId = business._id;
+      const { customer, financier, worker, ...fideicomiso } = this.formGroup.value;
+      fideicomiso.customerId = customer._id;
       fideicomiso.financierId = financier._id;
-      fideicomiso.partnershipId = partnership._id;
       fideicomiso.workerId = worker._id;
       this.navigationService.loadBarStart();
       this.fideicomisosService.update(fideicomiso, this.payments, this.fideicomisoId).subscribe(() => {

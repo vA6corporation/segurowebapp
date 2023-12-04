@@ -32,335 +32,320 @@ import { BanksService } from 'src/app/banks/banks.service';
 import { CompaniesService } from 'src/app/companies/companies.service';
 
 @Component({
-  selector: 'app-edit-insurances',
-  templateUrl: './edit-insurances.component.html',
-  styleUrls: ['./edit-insurances.component.sass']
+    selector: 'app-edit-insurances',
+    templateUrl: './edit-insurances.component.html',
+    styleUrls: ['./edit-insurances.component.sass']
 })
 export class EditInsurancesComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly insurancesService: InsurancesService,
-    private readonly navigationService: NavigationService,
-    private readonly workersService: WorkersService,
-    private readonly officesService: OfficesService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly matDialog: MatDialog,
-    private readonly matBottomSheet: MatBottomSheet,
-    private readonly banksService: BanksService,
-    private readonly companiesService: CompaniesService,
-  ) { }
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly insurancesService: InsurancesService,
+        private readonly navigationService: NavigationService,
+        private readonly workersService: WorkersService,
+        private readonly officesService: OfficesService,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly authService: AuthService,
+        private readonly matDialog: MatDialog,
+        private readonly matBottomSheet: MatBottomSheet,
+        private readonly banksService: BanksService,
+        private readonly companiesService: CompaniesService,
+    ) { }
 
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    construction: this.formBuilder.group({
-      object: null,
-      onModel: null,
-      _id: null,
-    }),
-    partnership: this.formBuilder.group({
-      _id: null,
-      name: null,
-    }),
-    business: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    broker: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    financier: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    worker: this.formBuilder.group({
-      _id: [ null, Validators.required ]
-    }),
-    insurance: this.formBuilder.group({
-      policyNumber: [ null, Validators.required ],
-      expirationAt: [null, Validators. required ],
-      emitionAt: [ null, Validators.required ],
-      prima: null,
-      commission: null,
-      currencyCode: 'PEN',
-      isPaid: false,
-      isEmition: false,
-      officeId: '',
-      type: '',
-      companyId: [ '', Validators.required ],
-      bankId: [ '', Validators.required ],
-    }),
-  });
-
-  public construction: ConstructionModel|null = null;
-  public isLoading: boolean = false;
-  public workers: WorkerModel[] = [];
-  public offices: OfficeModel[] = [];
-  private insuranceId: string = '';
-  public banks: BankModel[] = [];
-  public companies: CompanyModel[] = [];
-  private financier: FinancierModel|null = null;
-  public payments: PaymentModel[] = [];
-  public user: UserModel|null = null;
-
-  private handleAuth$: Subscription = new Subscription();
-  private handleCompanies$: Subscription = new Subscription();
-  private handleBanks$: Subscription = new Subscription();
-  private handleWorkers$: Subscription = new Subscription();
-  private handleOffices$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleAuth$.unsubscribe();
-    this.handleCompanies$.unsubscribe();
-    this.handleBanks$.unsubscribe();
-    this.handleWorkers$.unsubscribe();
-    this.handleOffices$.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.navigationService.backTo();
-    
-    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
-      this.workers = workers;
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        construction: this.formBuilder.group({
+            object: null,
+            onModel: null,
+            _id: null,
+        }),
+        partnership: this.formBuilder.group({
+            _id: null,
+            name: null,
+        }),
+        business: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        broker: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        financier: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        observations: '',
+        policyNumber: [null, Validators.required],
+        expirationAt: [null, Validators.required],
+        emitionAt: [null, Validators.required],
+        prima: null,
+        commission: null,
+        currencyCode: 'PEN',
+        isPaid: false,
+        isEmition: false,
+        officeId: '',
+        type: '',
+        workerId: ['', Validators.required],
+        companyId: ['', Validators.required],
+        bankId: ['', Validators.required],
     });
 
-    this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
-      this.offices = offices;
-    });
+    construction: ConstructionModel | null = null;
+    isLoading: boolean = false;
+    workers: WorkerModel[] = [];
+    offices: OfficeModel[] = [];
+    banks: BankModel[] = [];
+    companies: CompanyModel[] = [];
+    payments: PaymentModel[] = [];
+    user: UserModel | null = null;
+    private insuranceId: string = '';
 
-    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
-      this.user = auth.user;
-    });
+    private handleAuth$: Subscription = new Subscription();
+    private handleCompanies$: Subscription = new Subscription();
+    private handleBanks$: Subscription = new Subscription();
+    private handleWorkers$: Subscription = new Subscription();
+    private handleOffices$: Subscription = new Subscription();
 
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
-    });
-
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
-    });
-    
-    this.activatedRoute.params.subscribe(params => {
-      this.insuranceId = params.insuranceId;
-      this.navigationService.setTitle('Editar seguro');
-      this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
-        console.log(insurance);
-        const { broker, business, financier, construction } = insurance;
-        this.financier = financier;
-        this.formGroup.get('construction')?.patchValue(construction || {});
-        this.formGroup.get('broker')?.patchValue(broker);
-        this.formGroup.get('business')?.patchValue(business);
-        this.formGroup.get('financier')?.patchValue(financier);
-        this.formGroup.get('insurance')?.patchValue(insurance);
-        this.formGroup.get('worker')?.patchValue({ _id: insurance.workerId });
-        this.payments = insurance.payments;
-      });
-    });
-  }
-
-  onDialogPayments() {
-    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(payment => {
-      if (payment) {
-        this.payments.push(payment);
-      }
-    });
-  }
-
-  onRemovePayment(index: number) {
-    this.payments.splice(index, 1);
-  }
-
-  onChangeOffice() {
-    if (this.formGroup.valid) {
-      this.navigationService.loadBarStart();
-      const { insurance } = this.formGroup.value;
-      this.insurancesService.updateOffice(this.insuranceId, insurance.officeId).subscribe(() => {
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    ngOnDestroy() {
+        this.handleAuth$.unsubscribe();
+        this.handleCompanies$.unsubscribe();
+        this.handleBanks$.unsubscribe();
+        this.handleWorkers$.unsubscribe();
+        this.handleOffices$.unsubscribe();
     }
-  }
 
-  openDialogConstruction() {
-    const matBottomRef = this.matBottomSheet.open(SheetConstructionsComponent);
-    matBottomRef.instance.onDialogOne.subscribe(() => {
-      const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
-        width: '100vw',
-        position: { top: '20px' }
-      });
-  
-      dialogRef.afterClosed().subscribe(construction => {
-        if (construction) {
-          this.formGroup.patchValue({ construction });
+    ngOnInit(): void {
+        this.navigationService.backTo();
+
+        this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+            this.workers = workers;
+        });
+
+        this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
+            this.offices = offices;
+        });
+
+        this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+            this.user = auth.user;
+        });
+
+        this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+            this.banks = banks;
+        });
+
+        this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+            this.companies = companies;
+        });
+
+        this.activatedRoute.params.subscribe(params => {
+            this.insuranceId = params.insuranceId
+            this.navigationService.setTitle('Editar seguro');
+            this.insurancesService.getInsuranceById(this.insuranceId).subscribe(insurance => {
+                this.payments = insurance.payments
+                this.formGroup.patchValue(insurance)
+            });
+        });
+    }
+
+    onDialogPayments() {
+        const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(payment => {
+            if (payment) {
+                this.payments.push(payment);
+            }
+        });
+    }
+
+    onRemovePayment(index: number) {
+        this.payments.splice(index, 1);
+    }
+
+    onChangeOffice() {
+        if (this.formGroup.valid) {
+            this.navigationService.loadBarStart();
+            const { insurance } = this.formGroup.value;
+            this.insurancesService.updateOffice(this.insuranceId, insurance.officeId).subscribe(() => {
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
         }
-      });
-    });
+    }
 
-    matBottomRef.instance.onDialogTwo.subscribe(() => {
-      const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
-        width: '100vw',
-        position: { top: '20px' }
-      });
-  
-      dialogRef.afterClosed().subscribe(construction => {
-        if (construction) {
-          this.formGroup.patchValue({ construction });
+    openDialogConstruction() {
+        const matBottomRef = this.matBottomSheet.open(SheetConstructionsComponent);
+        matBottomRef.instance.onDialogOne.subscribe(() => {
+            const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+                width: '100vw',
+                position: { top: '20px' }
+            });
+
+            dialogRef.afterClosed().subscribe(construction => {
+                if (construction) {
+                    this.formGroup.patchValue({ construction });
+                }
+            });
+        });
+
+        matBottomRef.instance.onDialogTwo.subscribe(() => {
+            const dialogRef = this.matDialog.open(DialogInsuranceConstructionsComponent, {
+                width: '100vw',
+                position: { top: '20px' }
+            });
+
+            dialogRef.afterClosed().subscribe(construction => {
+                if (construction) {
+                    this.formGroup.patchValue({ construction });
+                }
+            });
+        });
+    }
+
+    openDialogBusinesses() {
+        const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(business => {
+            if (business) {
+                this.formGroup.patchValue({ business });
+            }
+        });
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
+        });
+    }
+
+    openDialogFinanciers() {
+        const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(financier => {
+            this.formGroup.patchValue({ financier: financier || {} });
+        });
+    }
+
+    openDialogBeneficiaries() {
+        const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(beneficiary => {
+            this.formGroup.patchValue({ beneficiary: beneficiary || {} });
+        });
+    }
+
+    openDialogPartnerships() {
+        const dialogRef = this.matDialog.open(DialogInsurancePartnershipsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(partnership => {
+            if (partnership) {
+                const { business } = partnership;
+                this.formGroup.patchValue({ business: business || {} });
+                this.formGroup.patchValue({ partnership: partnership || {} });
+            }
+        });
+    }
+
+    onAttachPdfPolicy() {
+        const data: InsurancePdfData = {
+            type: 'POLICY',
+            insuranceId: this.insuranceId,
         }
-      });
-    });
-  }
 
-  openDialogBusinesses() {
-    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(business => {
-      if (business) {
-        this.formGroup.patchValue({ business });
-      }
-    });
-  }
-
-  openDialogBrokers() {
-    const dialogRef = this.matDialog.open(DialogBrokersComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(broker => {
-      this.formGroup.patchValue({ broker: broker || {} });
-    });
-  }
-
-  openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(financier => {
-      this.financier = financier;
-      this.formGroup.patchValue({ financier: financier || {} });
-    });
-  }
-
-  openDialogBeneficiaries() {
-    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(beneficiary => {
-      this.formGroup.patchValue({ beneficiary: beneficiary || {} });
-    });
-  }
-
-  openDialogPartnerships() {
-    const dialogRef = this.matDialog.open(DialogInsurancePartnershipsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-    
-    dialogRef.afterClosed().subscribe(partnership => {
-      if (partnership) {
-        const { business } = partnership;
-        this.formGroup.patchValue({ business: business || {} });
-        this.formGroup.patchValue({ partnership: partnership || {} });
-      }
-    });
-  }
-
-  onAttachPdfPolicy() {
-    const data: InsurancePdfData = {
-      type: 'POLICY',
-      insuranceId: this.insuranceId,
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data,
+        });
     }
 
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
+    onAttachPdfInvoice() {
+        const data: InsurancePdfData = {
+            type: 'INVOICE',
+            insuranceId: this.insuranceId,
+        }
 
-  onAttachPdfInvoice() {
-    const data: InsurancePdfData = {
-      type: 'INVOICE',
-      insuranceId: this.insuranceId,
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data,
+        });
     }
 
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
+    onAttachPdfVoucher() {
+        const data: InsurancePdfData = {
+            type: 'VOUCHER',
+            insuranceId: this.insuranceId,
+        }
 
-  onAttachPdfVoucher() {
-    const data: InsurancePdfData = {
-      type: 'VOUCHER',
-      insuranceId: this.insuranceId,
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data,
+        });
     }
 
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
+    onAttachPdfDocuments() {
+        const data: InsurancePdfData = {
+            type: 'DOCUMENT',
+            insuranceId: this.insuranceId,
+        }
 
-  onAttachPdfDocuments() {
-    const data: InsurancePdfData = {
-      type: 'DOCUMENT',
-      insuranceId: this.insuranceId,
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data,
+        });
     }
 
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data,
-    });
-  }
-
-  onSubmit(): void {
-    if (this.formGroup.valid && this.financier) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const { business, financier, broker, worker, insurance, partnership, construction } = this.formGroup.value;
-      insurance.constructionId = construction._id || null;
-      insurance.onModel = construction.onModel || null;
-      insurance.partnershipId = partnership._id || null,
-      insurance.businessId = business._id;
-      insurance.financierId = financier._id;
-      insurance.brokerId = broker._id;
-      insurance.workerId = worker._id;
-      this.insurancesService.update(insurance, this.financier, this.payments, this.insuranceId).subscribe(res => {
-        this.navigationService.loadBarFinish();
-        console.log(res);
-        this.isLoading = false;
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        console.log(error);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const { business, financier, broker, partnership, construction, ...insurance } = this.formGroup.value;
+            insurance.constructionId = construction._id || null
+            insurance.onModel = construction.onModel || null
+            insurance.partnershipId = partnership._id || null
+            insurance.businessId = business._id
+            insurance.financierId = financier._id
+            insurance.brokerId = broker._id
+            this.insurancesService.update(insurance, this.payments, this.insuranceId).subscribe(res => {
+                this.navigationService.loadBarFinish();
+                this.isLoading = false;
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                console.log(error);
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
     }
-  }
 
 }

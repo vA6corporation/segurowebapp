@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { ModuleModel } from '../privileges/module.model';
 import { AuthModel } from './auth.model';
 import { OfficeModel } from './office.model';
+import { LoginResultModel } from './login-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -129,7 +130,7 @@ export class AuthService {
     }
   }
   
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<LoginResultModel> {
     return this.httpService.post('auth/login', { email, password });
   }
 
@@ -178,6 +179,6 @@ export class AuthService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${accessToken}`
     });
-    return this.httpService.get('profile', { headers });
+    return this.httpService.get('auth/profile', { headers });
   }
 }

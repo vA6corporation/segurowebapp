@@ -23,6 +23,7 @@ export interface InsuranceModel {
     bankId: string
     companyId: string
     workerId: string
+    observations: string
     partnership: InsurancePartnershipModel|null
     construction: ConstructionModel
     payments: PaymentModel[]

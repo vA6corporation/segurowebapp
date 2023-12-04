@@ -3,6 +3,7 @@ import { HttpService } from '../http.service';
 import { Observable } from 'rxjs';
 import { CapitalIncreaseModel } from './capital-increase.model';
 import { PaymentModel } from '../payments/payment.model';
+import { CapitalIncreasePdfModel } from './capital-increase-pdf.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,18 @@ export class CapitalIncreasesService {
   constructor(
     private readonly httpService: HttpService,
   ) { }
+
+  getPdfs(capitalIncreaseId: string, type: string): Observable<CapitalIncreasePdfModel[]> {
+    return this.httpService.get(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`)
+  }
+
+  deletePdf(pdfId: string): Observable<void> {
+    return this.httpService.delete(`capitalIncreasePdfs/${pdfId}`);
+  }
+
+  uploadFile(formData: FormData, capitalIncreaseId: string, type: string): Observable<string> {
+    return this.httpService.postForm(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`, formData);
+  }
 
   getCapitalIncreaseById(
     capitalIncreaseId: string
@@ -37,7 +50,13 @@ export class CapitalIncreasesService {
     payments: PaymentModel[], 
     capitalIncreaseId: string
   ): Observable<void> {
-    return this.httpService.put(`capitalIncrease/${capitalIncreaseId}`, { capitalIncrease, payments });
+    return this.httpService.put(`capitalIncreases/${capitalIncreaseId}`, { capitalIncrease, payments });
+  }
+
+  delete(
+    capitalIncreaseId: string
+  ): Observable<void> {
+    return this.httpService.delete(`capitalIncreases/${capitalIncreaseId}`)
   }
 
 }

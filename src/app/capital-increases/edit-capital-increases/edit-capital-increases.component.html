@@ -1,4 +1,9 @@
 <section class="container py-4">
+  <div class="my-3">
+    <button type="button" (click)="onAttachPdf('DOCUMENT')" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
+    <span class="divider"></span>
+    <button type="button" (click)="onAttachPdf('VOUCHER')" [disabled]="isLoading" mat-raised-button color="primary">VOUCHERS</button>
+  </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
     <div formGroupName="customer">
       <mat-form-field appearance="fill">

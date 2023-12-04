@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { WorkersService } from '../workers.service';
 
@@ -16,7 +16,6 @@ export class EditWorkersComponent implements OnInit {
     private readonly formBuilder: UntypedFormBuilder,
     private readonly workersService: WorkersService,
     private readonly navigationService: NavigationService,
-    private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
   ) { }
     
@@ -27,7 +26,8 @@ export class EditWorkersComponent implements OnInit {
     email: null,
     mobileNumber: null,
     birthDate: null,
-    address: null,    
+    address: null,
+    showTiming: false,
   });
   public isLoading: boolean = false;
   public maxlength: number = 11;

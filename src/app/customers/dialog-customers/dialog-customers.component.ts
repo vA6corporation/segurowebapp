@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { CustomerModel } from '../customer.model';
@@ -18,19 +18,32 @@ export class DialogCustomersComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public customers: CustomerModel[] = [];
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
+  customers: CustomerModel[] = [];
+  formGroup: UntypedFormGroup = this.formBuilder.group({
     key: [ null, Validators.required ],
   });
+  isLoading: boolean = false
+
+  private createCustomer: EventEmitter<void> = new EventEmitter();
 
   ngOnInit(): void { }
+
+  handleCreateCustomer() {
+    return this.createCustomer
+  }
+
+  onCreateCustomer() {
+    this.createCustomer.next()
+  }
 
   onSubmit(): void {
     if (this.formGroup.valid) {
       this.navigationService.loadBarStart();
       const key = this.formGroup.get('key')?.value;
       this.formGroup.reset();
+      this.isLoading = true
       this.customersService.getCustomersByKey(key).subscribe(customers => {
+        this.isLoading = false
         this.navigationService.loadBarFinish();
         this.customers = customers;
       }, (error: HttpErrorResponse) => {

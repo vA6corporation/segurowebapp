@@ -8,6 +8,7 @@ import { EditCustomersComponent } from './edit-customers/edit-customers.componen
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogCustomersComponent } from './dialog-customers/dialog-customers.component';
+import { DialogCreateCustomersComponent } from './dialog-create-customers/dialog-create-customers.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { DialogCustomersComponent } from './dialog-customers/dialog-customers.co
     CustomersComponent,
     CreateCustomersComponent,
     EditCustomersComponent,
-    DialogCustomersComponent
+    DialogCustomersComponent,
+    DialogCreateCustomersComponent
   ],
   imports: [
     CommonModule,

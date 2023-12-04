@@ -5,6 +5,7 @@ import { OperationModel } from './operation.model';
 import { HttpService } from '../http.service';
 import { OperationNodeModel } from './operation-node.model';
 import { CreateOperationNodeModel } from './create-operation-node.model';
+import { UpdateOperationNodeModel } from './update-operation-node.model';
 
 @Injectable({
   providedIn: 'root'
@@ -45,22 +46,20 @@ export class OperationsService {
     return this.httpService.put(`operations/${operationId}`, { operation });
   }
 
-  createOperationNode(
+  uploadFile(
+    formData: any,
+  ) {
+    return this.httpService.postProgress('operationNodes/uploadFile', formData);
+  }
+
+  createNode(
     operationNode: CreateOperationNodeModel
   ): Observable<OperationNodeModel> {
     return this.httpService.post('operationNodes', { operationNode });
   }
 
-  uploadFile(
-    formData: FormData,
-    operationId: string,
-    operationNodeId: string,
-  ): Observable<any> {
-    return this.httpService.postProgress(`operationNodes/uploadFile/${operationId}/${operationNodeId}`, formData);
-  }
-
   updateNode(
-    operationNode: OperationNodeModel, 
+    operationNode: UpdateOperationNodeModel, 
     operationNodeId: string
   ): Observable<void> {
     return this.httpService.put(`operationNodes/${operationNodeId}`, { operationNode });

@@ -1,5 +1,3 @@
-import { formatDate } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,9 +9,8 @@ import { ConstructionModel } from 'src/app/constructions/construction.model';
 import { DialogDetailConstructionsComponent } from 'src/app/constructions/dialog-detail-constructions/dialog-detail-constructions.component';
 import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
-import { buildExcel } from 'src/app/xlsx';
-import { BusinessesService } from '../businesses.service';
 import { BusinessModel } from '../business.model';
+import { BusinessesService } from '../businesses.service';
 
 @Component({
   selector: 'app-without-documentation',

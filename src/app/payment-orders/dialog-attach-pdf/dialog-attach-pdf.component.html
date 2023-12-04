@@ -3,12 +3,6 @@
     <mat-action-list (drop)="onDrop($event)" (dragover)="onDragOver($event)">
       <button mat-list-item (click)="onChangePdf(paymentOrderPdf)" *ngFor="let paymentOrderPdf of paymentOrderPdfs">{{ paymentOrderPdf.filename }}</button>
     </mat-action-list>
-    <!-- <label for="fileInput" style="height: 30rem;">
-      Arrastrar aqui
-    </label> -->
-    <!-- <div id="hola"  style="height: 30rem;" class="bg-success">
-      hola mundo
-    </div> -->
   </mat-tab>
   <mat-tab label="Preview">
     <iframe [src]="url" frameborder="0"></iframe>

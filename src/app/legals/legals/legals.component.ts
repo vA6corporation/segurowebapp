@@ -101,7 +101,7 @@ export class LegalsComponent implements OnInit {
       { id: 'excel_simple', label: 'Exportar Excel', icon: 'file_download', show: false },
     ]);
 
-    this.usersService.getActiveUsers().subscribe(users => {
+    this.usersService.getUsers().subscribe(users => {
       this.users = users;
     });
 

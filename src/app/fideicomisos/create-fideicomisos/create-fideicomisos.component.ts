@@ -18,6 +18,8 @@ import { BankModel } from 'src/app/providers/bank.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { FideicomisosService } from '../fideicomisos.service';
+import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dialog-customers.component';
+import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
   selector: 'app-create-fideicomisos',
@@ -38,30 +40,23 @@ export class CreateFideicomisosComponent implements OnInit {
   ) { }
 
   public formGroup: UntypedFormGroup = this.formBuilder.group({
+    customer: this.formBuilder.group({
+      name: [ null, Validators.required ],
+      partnershipName: '',
+      _id: [ null, Validators.required ],
+    }),
     financier: this.formBuilder.group({
       name: [ null, Validators.required ],
       _id: [ null, Validators.required ],
-    }),
-    business: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    partnership: this.formBuilder.group({
-      _id: null,
-      name: null,
     }),
     worker: this.formBuilder.group({
       _id: [ null, Validators.required ]
     }),
     fideicomiso: this.formBuilder.group({
-      companyId: [ '', Validators.required ],
-      bankId: [ '', Validators.required ],
       days: [ null, Validators. required ],
       emitionAt: [ null, Validators.required ],
-      prima: null,
-      commission: null,
-      currencyCode: 'PEN',
       charge: [ null, Validators.required ],
+      commission: null,
     }),
   });
 
@@ -99,17 +94,30 @@ export class CreateFideicomisosComponent implements OnInit {
     });
   }
 
-  openDialogBusinesses() {
-    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
+  openDialogCustomers() {
+    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
-    });
+    })
 
-    dialogRef.afterClosed().subscribe(business => {
-      if (business) {
-        this.formGroup.patchValue({ business });
+    dialogRef.afterClosed().subscribe(customer => {
+      if (customer) {
+        this.formGroup.patchValue({ customer });
       }
-    });
+    })
+
+    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+        width: '600px',
+        position: { top: '20px' }
+      })
+
+      dialogRef.afterClosed().subscribe(customer => {
+        if (customer) {
+          this.formGroup.patchValue({ customer })
+        }
+      })
+    })
   }
 
   openDialogBrokers() {
@@ -164,13 +172,11 @@ export class CreateFideicomisosComponent implements OnInit {
     if (this.formGroup.valid) {
       this.isLoading = true;
       this.navigationService.loadBarStart();
-      const { business, financier, partnership, worker, fideicomiso } = this.formGroup.value;
-      fideicomiso.businessId = business._id;
+      const { customer, financier, worker, fideicomiso } = this.formGroup.value;
+      fideicomiso.customerId = customer._id;
       fideicomiso.financierId = financier._id;
-      fideicomiso.partnershipId = partnership._id;
       fideicomiso.workerId = worker._id;
-      this.navigationService.loadBarStart();
-      this.fideicomisosService.create(fideicomiso).subscribe(credit => {
+      this.fideicomisosService.create(fideicomiso).subscribe(fideicomiso => {
         this.isLoading = false;
         this.navigationService.loadBarFinish();
         this.navigationService.showMessage('Registrado correctamente');

@@ -95,19 +95,19 @@ export class CapitalIncreasesComponent implements OnInit {
     });
   }
 
-  async onDelete(isoId: string) {
-    // const ok = confirm('Esta seguro de eliminar?...');
-    // if (ok) {
-    //   this.navigationService.loadBarStart();
-    //   this.isosService.delete(isoId).subscribe(() => {
-    //     this.navigationService.loadBarFinish();
-    //     this.navigationService.showMessage('Eliminado correctamente');
-    //     this.dataSource = this.dataSource.filter(e => e._id !== isoId);
-    //   }, (error: HttpErrorResponse) => {
-    //     this.navigationService.loadBarFinish();
-    //     this.navigationService.showMessage(error.error.message);
-    //   });
-    // }
+  async onDelete(capitalIncreaseId: string) {
+    const ok = confirm('Esta seguro de eliminar?...');
+    if (ok) {
+      this.navigationService.loadBarStart();
+      this.capitalIncreassService.delete(capitalIncreaseId).subscribe(() => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage('Eliminado correctamente');
+        this.dataSource = this.dataSource.filter(e => e._id !== capitalIncreaseId);
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish();
+        this.navigationService.showMessage(error.error.message);
+      });
+    }
   }
 
   async fetchData() {

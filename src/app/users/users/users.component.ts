@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDevicesComponent } from 'src/app/devices/dialog-devices/dialog-devices.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-users',
@@ -32,17 +33,31 @@ export class UsersComponent implements OnInit {
   public pageIndex: number = 0;
   private params: Params = { isActive: true };
 
-  private queryParams$: Subscription = new Subscription();
+  private queryParams$: Subscription = new Subscription()
+  private handleSearch$: Subscription = new Subscription()
 
   ngOnDestroy() {
     this.queryParams$.unsubscribe();
+
   }
 
   ngOnInit(): void {
     this.navigationService.setTitle('Usuarios');
+    
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true }
     ]);
+
+    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+      this.navigationService.loadBarStart()
+      this.usersService.getUsersByKey(key).subscribe(users => {
+        this.navigationService.loadBarFinish()
+        this.dataSource = users
+      }, (error: HttpErrorResponse) => {
+        this.navigationService.loadBarFinish()
+        this.navigationService.showMessage(error.error.message)
+      })
+    })
 
     this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
       const { pageIndex, pageSize } = params;

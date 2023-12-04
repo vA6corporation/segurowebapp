@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpService } from '../http.service';
 import { SummaryCommission } from './summary-commission.model';
 import { WorkerModel } from './worker.model';
@@ -17,6 +17,10 @@ export class WorkersService {
 
   getWorkersByPage(pageIndex: number, pageSize: number) {
     return this.httpService.get(`workers/byPage/${pageIndex}/${pageSize}`);
+  }
+
+  getWorkersByKey(key: string): Observable<WorkerModel[]> {
+    return this.httpService.get(`workers/byKey/${key}`);
   }
 
   getCommissions(

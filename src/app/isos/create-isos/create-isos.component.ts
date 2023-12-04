@@ -21,6 +21,7 @@ import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dia
 import { CertifierModel } from 'src/app/certifiers/certifier.model';
 import { CertifiersService } from 'src/app/certifiers/certifiers.service';
 import { IsoType } from '../iso-type.enum';
+import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
   selector: 'app-create-isos',
@@ -114,13 +115,26 @@ export class CreateIsosComponent implements OnInit {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
-    });
+    })
 
     dialogRef.afterClosed().subscribe(customer => {
       if (customer) {
         this.formGroup.patchValue({ customer });
       }
-    });
+    })
+
+    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+        width: '600px',
+        position: { top: '20px' }
+      })
+
+      dialogRef.afterClosed().subscribe(customer => {
+        if (customer) {
+          this.formGroup.patchValue({ customer })
+        }
+      })
+    })
   }
 
   openDialogBrokers() {

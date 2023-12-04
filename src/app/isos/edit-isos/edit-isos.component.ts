@@ -19,6 +19,7 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { IsosService } from '../isos.service';
 import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
   selector: 'app-edit-isos',
@@ -149,13 +150,26 @@ export class EditIsosComponent implements OnInit {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
-    });
+    })
 
     dialogRef.afterClosed().subscribe(customer => {
       if (customer) {
         this.formGroup.patchValue({ customer });
       }
-    });
+    })
+
+    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+        width: '600px',
+        position: { top: '20px' }
+      })
+
+      dialogRef.afterClosed().subscribe(customer => {
+        if (customer) {
+          this.formGroup.patchValue({ customer })
+        }
+      })
+    })
   }
 
   openDialogBrokers() {

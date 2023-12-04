@@ -12,6 +12,11 @@ import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dia
 import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PaymentModel } from 'src/app/payments/payment.model';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
+import { UserModel } from 'src/app/users/user.model';
+import { AuthService } from 'src/app/auth/auth.service';
+import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
   selector: 'app-edit-capital-increases',
@@ -24,6 +29,7 @@ export class EditCapitalIncreasesComponent implements OnInit {
     private readonly formBuilder: UntypedFormBuilder,
     private readonly capitalIncreasesService: CapitalIncreasesService,
     private readonly navigationService: NavigationService,
+    private readonly authService: AuthService,
     private readonly workersService: WorkersService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly matDialog: MatDialog,
@@ -46,6 +52,7 @@ export class EditCapitalIncreasesComponent implements OnInit {
   public workers: WorkerModel[] = [];
   public payments: PaymentModel[] = [];
   public capitalIncreaseId: string = '';
+  public user: UserModel|null = null;
 
   private handleCompanies$: Subscription = new Subscription();
   private handleBanks$: Subscription = new Subscription();
@@ -69,6 +76,10 @@ export class EditCapitalIncreasesComponent implements OnInit {
       this.workers = workers;
     });
 
+    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+      this.user = auth.user;
+    });
+
     this.activatedRoute.params.subscribe(params => {
       this.capitalIncreaseId = params.capitalIncreaseId;
       this.capitalIncreasesService.getCapitalIncreaseById(this.capitalIncreaseId).subscribe(capitalIncrease => {
@@ -85,13 +96,26 @@ export class EditCapitalIncreasesComponent implements OnInit {
     const dialogRef = this.matDialog.open(DialogCustomersComponent, {
       width: '600px',
       position: { top: '20px' }
-    });
+    })
 
     dialogRef.afterClosed().subscribe(customer => {
       if (customer) {
         this.formGroup.patchValue({ customer });
       }
-    });
+    })
+
+    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+        width: '600px',
+        position: { top: '20px' }
+      })
+
+      dialogRef.afterClosed().subscribe(customer => {
+        if (customer) {
+          this.formGroup.patchValue({ customer })
+        }
+      })
+    })
   }
 
   openDialogBrokers() {
@@ -102,6 +126,36 @@ export class EditCapitalIncreasesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(broker => {
       this.formGroup.patchValue({ broker: broker || {} });
+    });
+  }
+
+  onDialogPayments() {
+    const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
+      width: '600px',
+      position: { top: '20px' }
+    });
+
+    dialogRef.afterClosed().subscribe(payment => {
+      if (payment) {
+        this.payments.push(payment);
+      }
+    });
+  }
+
+  onRemovePayment(index: number) {
+    this.payments.splice(index, 1);
+  }
+
+  onAttachPdf(type: string) {
+    const data: DialogAttachPdfData = {
+      capitalIncreaseId: this.capitalIncreaseId,
+      type,
+    } 
+    this.matDialog.open(DialogAttachPdfComponent, {
+      width: '100vw',
+      height: '90vh',
+      position: { top: '20px' },
+      data: data
     });
   }
 

@@ -33,6 +33,7 @@ export class CreateCustomersComponent implements OnInit {
     mobileNumber: [ null, Validators.required ],
     address: [ null, Validators.required ],
     workerId: [ null, Validators.required ],
+    partnershipName: ''
   });
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];

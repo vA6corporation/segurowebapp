@@ -9,7 +9,6 @@ import { DialogBusinessesComponent } from './dialog-businesses/dialog-businesses
 import { DialogConstructionBusinessesComponent } from './dialog-construction-businesses/dialog-construction-businesses.component';
 import { MaterialModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 import { InvestmentsModule } from '../investments/investments.module';
 import { PropertiesModule } from '../properties/properties.module';
 import { MovablePropertiesModule } from '../movable-properties/movable-properties.module';
@@ -28,6 +27,7 @@ import { BusinessesCommercialComponent } from './businesses-commercial/businesse
 import { DeletedBusinessesComponent } from './deleted-businesses/deleted-businesses.component';
 import { DialogBirthdayComponent } from './dialog-birthday/dialog-birthday.component';
 import { WithoutDocumentationComponent } from './without-documentation/without-documentation.component';
+import { DialogNodeBusinessesComponent } from './dialog-node-businesses/dialog-node-businesses.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { WithoutDocumentationComponent } from './without-documentation/without-d
     EditBusinessesComponent, 
     DialogBusinessesComponent, 
     DialogConstructionBusinessesComponent, 
-    DialogAttachPdfComponent, DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent, BusinessesCommercialComponent, DeletedBusinessesComponent, DialogBirthdayComponent, WithoutDocumentationComponent,
+    DialogFacilityCreditsComponent, DialogAddGuarantiesComponent, DialogAddSalesmixComponent, DialogAddMainCustomersComponent, DialogAddMainSuppliersComponent, DialogAddAccountRotationComponent, DialogAddAccessCreditComponent, DialogAddTrialsComponent, BusinessesCommercialComponent, DeletedBusinessesComponent, DialogBirthdayComponent, WithoutDocumentationComponent, DialogNodeBusinessesComponent,
   ],
   imports: [
     CommonModule,

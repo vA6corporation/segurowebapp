@@ -3,7 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { buildFideicomiso } from 'src/app/buildFideicomiso';
 import { FideicomisoModel } from 'src/app/fideicomisos/fideicomiso.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { buildExcel } from 'src/app/xlsx';
@@ -21,7 +20,7 @@ export class FideicomisosComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'business', 'financier', 'partnership', 'emitionAt', 'days', 'prima', 'actions' ];
+  public displayedColumns: string[] = [ 'customer', 'financier', 'partnership', 'emitionAt', 'actions' ];
   public dataSource: FideicomisoModel[] = [];
   public length: number = 0;
   public pageSize: number = 10;
@@ -97,10 +96,10 @@ export class FideicomisosComponent implements OnInit {
     this.navigationService.loadBarStart();
     this.fideicomisosService.getFideicomisoById(fideicomisoId).subscribe(async fideicomiso => {
       this.navigationService.loadBarFinish();
-      if (fideicomiso.company) {
-        const pdf = await buildFideicomiso(fideicomiso, fideicomiso.bank);
-        pdf.save(`ORDEN_DE_SERVICIO_${fideicomiso.partnership ? fideicomiso.partnership.name : fideicomiso.business.name}.pdf`);
-      }
+      // if (fideicomiso.company) {
+      //   const pdf = await buildFideicomiso(fideicomiso, fideicomiso.bank);
+      //   pdf.save(`ORDEN_DE_SERVICIO_${fideicomiso.partnership ? fideicomiso.partnership.name : fideicomiso.business.name}.pdf`);
+      // }
     });
   }
 
@@ -135,6 +134,7 @@ export class FideicomisosComponent implements OnInit {
   async fetchData() {
     this.navigationService.loadBarStart();
     this.fideicomisosService.getFideicomisosByPage(this.pageIndex + 1, this.pageSize).subscribe(fideicomisos => {
+      console.log(fideicomisos);
       this.navigationService.loadBarFinish();
       this.dataSource = fideicomisos;
     }, (error: HttpErrorResponse) => {

@@ -6,8 +6,8 @@ import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateOperationsComponent } from './create-operations/create-operations.component';
 import { EditOperationsComponent } from './edit-operations/edit-operations.component';
-import { DialogAttachFileComponent } from './dialog-attach-file/dialog-attach-file.component';
 import { OperationsComponent } from './operations/operations.component';
+import { DialogNodeOperationsComponent } from './dialog-node-operations/dialog-node-operations.component';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { OperationsComponent } from './operations/operations.component';
     OperationsComponent,
     CreateOperationsComponent,
     EditOperationsComponent,
-    DialogAttachFileComponent
+    DialogNodeOperationsComponent
   ],
   imports: [
     CommonModule,

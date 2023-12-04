@@ -30,6 +30,7 @@ export class EditCustomersComponent implements OnInit {
     mobileNumber: [ null, Validators.required ],
     address: [ null, Validators.required ],
     workerId: [ null, Validators.required ],
+    partnershipName: ''
   });
   public isLoading: boolean = false;
   public workers: WorkerModel[] = [];
@@ -44,7 +45,7 @@ export class EditCustomersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.navigationService.setTitle('Editar cliente ISO');
+    this.navigationService.setTitle('Editar cliente');
     this.navigationService.backTo();
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

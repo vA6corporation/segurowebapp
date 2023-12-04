@@ -7,11 +7,13 @@ import { CreateCapitalIncreasesComponent } from './create-capital-increases/crea
 import { EditCapitalIncreasesComponent } from './edit-capital-increases/edit-capital-increases.component';
 import { MaterialModule } from '../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogAttachPdfComponent } from './dialog-attach-pdf/dialog-attach-pdf.component';
 
 
 @NgModule({
   declarations: [
     CapitalIncreasesComponent,
+    DialogAttachPdfComponent,
     CreateCapitalIncreasesComponent,
     EditCapitalIncreasesComponent
   ],

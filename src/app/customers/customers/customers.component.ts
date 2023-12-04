@@ -25,7 +25,7 @@ export class CustomersComponent implements OnInit {
     private readonly matDialog: MatDialog
   ) { }
 
-  public displayedColumns: string[] = [ 'ruc', 'name', 'email', 'mobileNumber', 'actions' ];
+  public displayedColumns: string[] = [ 'ruc', 'name', 'partnershipName', 'email', 'mobileNumber', 'actions' ];
   public dataSource: CustomerModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;
@@ -39,7 +39,7 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.navigationService.setTitle('Clientes ISOS');
+    this.navigationService.setTitle('Clientes');
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true }
     ]);
