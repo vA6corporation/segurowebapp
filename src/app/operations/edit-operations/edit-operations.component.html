@@ -21,6 +21,10 @@
             </div>
         </ng-container>
     </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <button type="button" class="w-100 mb-4" (click)="onAttachFile()" mat-raised-button color="primary">
+        DOCUMENTOS DE LA OPERACION
+    </button>
     <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
         <mat-form-field appearance="fill">
             <mat-label>Nombre de operacion</mat-label>
