@@ -6,53 +6,60 @@ import { MailModel } from '../mail.model';
 import { MailsService } from '../mails.service';
 
 @Component({
-  selector: 'app-mails',
-  templateUrl: './mails.component.html',
-  styleUrls: ['./mails.component.sass']
+    selector: 'app-mails',
+    templateUrl: './mails.component.html',
+    styleUrls: ['./mails.component.sass']
 })
 export class MailsComponent implements OnInit {
 
-  constructor(
-    private readonly mailsService: MailsService,
-    private readonly navigationService: NavigationService,
-  ) { }
+    constructor(
+        private readonly mailsService: MailsService,
+        private readonly navigationService: NavigationService,
+    ) { }
+    
+    displayedColumns: string[] = ['date', 'user', 'to', 'policyNumber', 'business', 'actions'];
+    dataSource: MailModel[] = [];
+    length: number = 100;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    
+    private handleSearch$: Subscription = new Subscription();
 
-  private handleSearch$: Subscription = new Subscription();
+    ngOnInit(): void {
+        this.navigationService.setTitle('Emails enviados');
+        this.navigationService.setMenu([
+            { id: 'search', label: 'search', icon: 'search', show: true }
+        ])
 
-  public displayedColumns: string[] = [ 'date', 'user', 'to', 'policyNumber', 'business', 'actions' ];
-  public dataSource: MailModel[] = [];
-  public length: number = 100;
-  public pageSize: number = 10;
-  public pageSizeOptions: number[] = [10, 30, 50];
-  public pageIndex: number = 0;
-  
-  ngOnInit(): void {
-    this.navigationService.setTitle('Emails enviados');
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true }
-    ]);
+        this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+            this.navigationService.loadBarStart();
+            this.mailsService.getManyByKey(key).subscribe(mails => {
+                this.dataSource = mails
+                this.navigationService.loadBarFinish()
+            })
+        })
 
-    this.fetchData();
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe(async (key: string) => {
-      this.navigationService.loadBarStart();
-      const mails = await this.mailsService.getManyByKey(key).toPromise();
-      this.dataSource = mails;
-      this.navigationService.loadBarFinish();
-    });
-  }
+        this.fetchData()
+    }
 
-  ngOnDestroy() {
-    this.handleSearch$.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.handleSearch$.unsubscribe()
+    }
 
-  handlePageEvent(event: PageEvent): void {
-    this.mailsService.getManyByPage(event.pageIndex + 1, event.pageSize).subscribe(compliances => {
-      this.dataSource = compliances;
-    });
-  }
+    handlePageEvent(event: PageEvent): void {
+        this.mailsService.getManyByPage(event.pageIndex + 1, event.pageSize).subscribe(compliances => {
+            this.dataSource = compliances;
+        });
+    }
 
-  async fetchData() {
-    this.dataSource = await this.mailsService.getManyByPage(this.pageIndex + 1, this.pageSize).toPromise();
-    this.length = await this.mailsService.getCount().toPromise();
-  }
+    fetchData() {
+        this.mailsService.getCount().subscribe(count => {
+            this.length = count
+        })
+
+        this.mailsService.getManyByPage(this.pageIndex + 1, this.pageSize).subscribe(mails => {
+            this.dataSource = mails
+        })
+    }
 }

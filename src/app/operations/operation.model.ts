@@ -7,4 +7,5 @@ export interface OperationModel {
   business: BusinessModel
   businessId: string
   partnershipId: string
+  nodeIncludes: string[]
 }

@@ -12,6 +12,7 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 import { DialogNodeOperationsComponent } from '../dialog-node-operations/dialog-node-operations.component';
 import { BusinessNodeType, DialogBusinessNodeData, DialogNodeBusinessesComponent } from 'src/app/businesses/dialog-node-businesses/dialog-node-businesses.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-edit-operations',
@@ -42,6 +43,7 @@ export class EditOperationsComponent implements OnInit {
     isLoading: boolean = false;
     hide: boolean = true;
     businesses: BusinessModel[] = [];
+    nodeIncludes: string[] = []
     private operationId: string = '';
     private params$: Subscription = new Subscription();
 
@@ -56,14 +58,26 @@ export class EditOperationsComponent implements OnInit {
         this.params$ = this.activatedRoute.params.subscribe(params => {
             this.operationId = params['operationId'];
             this.operationsService.getOperationById(this.operationId).subscribe(operation => {
+                console.log(operation);
                 if (operation.partnership) {
-                    this.businesses = operation.partnership.partnershipItems.map(e => e.business);
+                    this.businesses = operation.partnership.partnershipItems.map(e => e.business)
                 } else {
-                    this.businesses = [operation.business];
+                    this.businesses = [operation.business]
                 }
-                this.formGroup.patchValue(operation);
+                this.formGroup.patchValue(operation)
+                this.nodeIncludes = operation.nodeIncludes
             });
         });
+    }
+
+    downloadURI(uri: string, name: string) {
+        const link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        console.log(uri);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     onAttachFile() {
@@ -75,10 +89,26 @@ export class EditOperationsComponent implements OnInit {
         });
     }
 
+    onDownloadBusinessFiles(business: BusinessModel) {
+        this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}/${business.name}`, business.name + '.zip');
+        // this.downloadURI(`${environment.baseUrl}operationNodes/downloadFiles/${this.operationId}`, '');
+        // for (const business of this.businesses) {
+        //     this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}`, '');
+        // }
+    }
+
+    onDownloadFiles() {
+        this.downloadURI(`${environment.baseUrl}operationNodes/downloadFiles/${this.operationId}`, '');
+        // for (const business of this.businesses) {
+        //     this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}`, '');
+        // }
+    }
+
     onDialogAttachPdfDocuments(businessId: string) {
         const data: DialogBusinessNodeData = {
             businessId,
             type: BusinessNodeType.DOCUMENT,
+            nodeIncludes: this.nodeIncludes
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
@@ -93,6 +123,7 @@ export class EditOperationsComponent implements OnInit {
         const data: DialogBusinessNodeData = {
             businessId: businessId,
             type: BusinessNodeType.EXPERIENCE,
+            nodeIncludes: this.nodeIncludes
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
@@ -107,6 +138,7 @@ export class EditOperationsComponent implements OnInit {
         const data: DialogBusinessNodeData = {
             businessId: businessId,
             type: BusinessNodeType.FINANCIAL,
+            nodeIncludes: this.nodeIncludes
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
@@ -150,20 +182,23 @@ export class EditOperationsComponent implements OnInit {
 
     onSubmit(): void {
         if (this.formGroup.valid) {
-            this.isLoading = true;
-            this.navigationService.loadBarStart();
-            const { business, partnership, ...operation } = this.formGroup.value;
-            operation.businessId = business._id;
-            operation.partnershipId = partnership._id;
-            this.operationsService.update(operation, this.operationId).subscribe(() => {
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage('Se han guardado los cambios');
-            }, (error: HttpErrorResponse) => {
-                console.log(error);
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
+            this.isLoading = true
+            this.navigationService.loadBarStart()
+            const { business, partnership, ...operation } = this.formGroup.value
+            operation.businessId = business._id
+            operation.partnershipId = partnership._id
+            operation.nodeIncludes = this.nodeIncludes
+            this.operationsService.update(operation, this.operationId).subscribe({
+                next: () => {
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage('Se han guardado los cambios');
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
+                }
             });
         }
     }

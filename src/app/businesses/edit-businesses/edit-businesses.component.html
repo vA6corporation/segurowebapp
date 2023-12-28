@@ -1,14 +1,17 @@
 <section class="container py-4">
     <div class="mb-3">
-        <button type="button" (click)="onDialogAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button color="primary">
+        <button type="button" (click)="onDialogAttachPdfDocuments()" [disabled]="isLoading" mat-raised-button
+            color="primary">
             DOCUMENTOS
         </button>
         <span class="divider"></span>
-        <button type="button" (click)="onDialogAttachPdfExperiences()" [disabled]="isLoading" mat-raised-button color="primary">
+        <button type="button" (click)="onDialogAttachPdfExperiences()" [disabled]="isLoading" mat-raised-button
+            color="primary">
             EXPERIENCIA
         </button>
         <span class="divider"></span>
-        <button type="button" (click)="onDialogAttachPdfFinancials()" [disabled]="isLoading" mat-raised-button color="primary">
+        <button type="button" (click)="onDialogAttachPdfFinancials()" [disabled]="isLoading" mat-raised-button
+            color="primary">
             D. FINANCIEROS
         </button>
     </div>
@@ -16,6 +19,13 @@
         <div class="mb-3">
             <mat-slide-toggle formControlName="isOnlyPartnership">Solo es un consorciado</mat-slide-toggle>
         </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Personal a cargo</mat-label>
+            <mat-select formControlName="workerId" [disabled]="!user?.allowChangeWorkerOnBusiness">
+                <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase
+                    }}</mat-option>
+            </mat-select>
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Tipo de Documento</mat-label>
             <mat-select formControlName="documentType">
@@ -27,6 +37,18 @@
         <mat-form-field appearance="fill">
             <mat-label>N° de Documento</mat-label>
             <input type="text" matInput formControlName="document" [maxlength]="maxlength" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Nombres/Razon Social</mat-label>
+            <input type="text" matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Email 1</mat-label>
+            <input type="email" matInput formControlName="email" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Email 2</mat-label>
+            <input type="email" matInput formControlName="emailTwo" />
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Observaciones</mat-label>
@@ -45,18 +67,6 @@
             <input type="text" matInput formControlName="publicDeed" />
         </mat-form-field>
         <mat-form-field appearance="fill">
-            <mat-label>Nombres/Razon Social</mat-label>
-            <input type="text" matInput formControlName="name" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Email 1</mat-label>
-            <input type="email" matInput formControlName="email" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Email 2</mat-label>
-            <input type="email" matInput formControlName="emailTwo" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
             <mat-label>Celular</mat-label>
             <input type="text" matInput formControlName="mobileNumber" />
         </mat-form-field>
@@ -67,13 +77,6 @@
         <mat-form-field appearance="fill">
             <mat-label>Anexo</mat-label>
             <input type="text" matInput formControlName="annexed" />
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Personal a cargo</mat-label>
-            <mat-select formControlName="workerId" [disabled]="!user?.allowChangeWorkerOnBusiness">
-                <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase
-                    }}</mat-option>
-            </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>País de Origen</mat-label>
@@ -531,15 +534,13 @@
         <mat-list class="mb-5">
             <div mat-subheader>Agregar miembros del directorio</div>
             <mat-list-item *ngFor="let boardMember of boardMembers; let i = index">
-                <div>
-                    {{ boardMember.name | uppercase }}
-                    <br>
-                    <span class="text-muted">{{ boardMember.typeDocument }}: {{ boardMember.document }}</span>
+                <span matListItemTitle>{{ boardMember.name | uppercase }}</span>
+                <span matListItemLine>{{ boardMember.typeDocument }}: {{ boardMember.document }}</span>
+                <div matListItemMeta>
+                    <button type="button" mat-icon-button (click)="onRemoveBoardMembers(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </div>
-                <span class="spacer"></span>
-                <button type="button" mat-icon-button (click)="onRemoveBoardMembers(i)">
-                    <mat-icon>delete</mat-icon>
-                </button>
             </mat-list-item>
         </mat-list>
         <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
@@ -569,17 +570,13 @@
         <mat-list class="mb-5">
             <div mat-subheader>Accionistas</div>
             <mat-list-item *ngFor="let shareholder of shareholders; let i = index">
-                <div>
-                    {{ shareholder.name | uppercase }}
-                    <br />
-                    <span class="text-muted">
-                        {{ shareholder.documentType }}: {{ shareholder.document }}
-                    </span>
+                <span matListItemTitle>{{ shareholder.name | uppercase }}</span>
+                <span matListItemLine>{{ shareholder.documentType }}: {{ shareholder.document }}</span>
+                <div matListItemMeta>
+                    <button type="button" mat-icon-button (click)="onRemoveShareholder(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </div>
-                <span class="spacer"></span>
-                <button type="button" mat-icon-button (click)="onRemoveShareholder(i)">
-                    <mat-icon>delete</mat-icon>
-                </button>
             </mat-list-item>
         </mat-list>
         <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
@@ -652,15 +649,11 @@
 
         <mat-list class="mb-5">
             <div mat-subheader>Experiencias</div>
-            <mat-list-item *ngFor="let experience of experiences; let i = index">
-                <div>
-                    {{ experience.tenderObjectContract }}
-                    <br>
-                    <span class="text-muted">{{ experience.contractor }} {{experience.nameConsortium}}
-                        {{experience.participationConsortium}}</span>
-                </div>
-                <span class="spacer"></span>
-                <div style="min-width: 6rem;">
+            <mat-list-item *ngFor="let experience of experiences; let i = index" lines="3">
+                <span matListItemTitle>{{ experience.tenderObjectContract }}</span>
+                <span matListItemLine>{{ experience.contractor }}</span>
+                <span>{{ experience.nameConsortium }}</span>
+                <div matListItemMeta>
                     <button type="button" mat-icon-button (click)="onDialogEditExperience(i)">
                         <mat-icon>edit</mat-icon>
                     </button>

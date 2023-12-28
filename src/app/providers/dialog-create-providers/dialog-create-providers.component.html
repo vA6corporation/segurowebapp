@@ -1,7 +1,7 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
   <h2 mat-dialog-title>Nuevo Proveedor</h2>
   <div mat-dialog-content>
-    <mat-form-field appearance="standard">
+    <mat-form-field>
       <mat-label>Tipo de Documento</mat-label>
       <mat-select formControlName="documentType" tabindex="-1">
         <mat-option *ngFor="let element of documentTypes" [value]="element">{{ element }}</mat-option>
@@ -29,7 +29,7 @@
     </mat-form-field>
     <ng-container formArrayName="banks" *ngFor="let item of formArray.controls; let i = index;">
       <div class="d-flex" [formGroupName]="i">
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <mat-select formControlName="bankName">
             <mat-option value="BCP">BCP</mat-option>
             <mat-option value="BBVA">BBVA</mat-option>
@@ -37,7 +37,7 @@
             <mat-option value="SCOTIABANK">SCOTIABANK</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="standard">
+        <mat-form-field>
           <input type="text" matInput formControlName="accountNumber">
           <button type="button" mat-icon-button matSuffix (click)="onRemoveAccount(i)">
             <mat-icon>delete</mat-icon>

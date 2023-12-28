@@ -1,161 +1,172 @@
 <section class="container py-4">
-  <div class="my-3">
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.DOCUMENT)" [disabled]="isLoading" mat-raised-button color="primary">DOCUMENTOS</button>
-    <span class="divider"></span>
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.COMPLETION)" [disabled]="isLoading" mat-raised-button color="primary">AVANCE DE OBRA</button>
-    <span class="divider"></span>
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.PARTNERSHIP)" [disabled]="isLoading" mat-raised-button color="primary">CONTRATO DE CONSORCIO</button>
-    <span class="divider"></span>
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.CONSTRUCTION)" [disabled]="isLoading" mat-raised-button color="primary">CONTRATO DE OBRA</button>
-    <span class="divider"></span>
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.LEGAL)" [disabled]="isLoading" mat-raised-button color="primary">DOC. LEGAL</button>
-    <span class="divider"></span>
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.PRO)" [disabled]="isLoading" mat-raised-button color="primary">BUENA PRO</button>
-    <span class="divider"></span>
+    <div class="my-3">
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.DOCUMENT)" [disabled]="isLoading"
+            mat-raised-button color="primary">DOCUMENTOS</button>
+        <span class="divider"></span>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.COMPLETION)" [disabled]="isLoading"
+            mat-raised-button color="primary">AVANCE DE OBRA</button>
+        <span class="divider"></span>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.PARTNERSHIP)" [disabled]="isLoading"
+            mat-raised-button color="primary">CONTRATO DE CONSORCIO</button>
+        <span class="divider"></span>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.CONSTRUCTION)" [disabled]="isLoading"
+            mat-raised-button color="primary">CONTRATO DE OBRA</button>
+        <span class="divider"></span>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.LEGAL)" [disabled]="isLoading" mat-raised-button
+            color="primary">DOC. LEGAL</button>
+        <span class="divider"></span>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.PRO)" [disabled]="isLoading" mat-raised-button
+            color="primary">BUENA PRO</button>
+        <span class="divider"></span>
 
-    <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.VOUCHER)" [disabled]="isLoading" mat-raised-button color="primary" *ngIf="user?.isAdmin">VOUCHER DE PAGO</button>
-  </div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="fill" *ngIf="user?.isAdmin">
-      <mat-label>Razon social</mat-label>
-      <mat-select formControlName="companyId">
-        <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Objeto</mat-label>
-      <input type="text" matInput formControlName="object">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Monto adjudicado</mat-label>
-      <input type="number" matInput formControlName="awardedAmount">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Observaciones</mat-label>
-      <input type="text" matInput formControlName="observations">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de emision</mat-label>
-      <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
-      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de inicio de obra</mat-label>
-      <input matInput [matDatepicker]="constructionStartDatePicker" formControlName="startAt">
-      <mat-datepicker-toggle matSuffix [for]="constructionStartDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #constructionStartDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Plazo de obra (en dias)</mat-label>
-      <input type="number" matInput formControlName="dayLimit">
-    </mat-form-field>
-    <div formGroupName="partnership">
-      <mat-form-field appearance="fill">
-        <mat-label>Consorcio</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
-      </mat-form-field>
+        <button type="button" (click)="onAttachPdf(ConstructionPdfTypes.VOUCHER)" [disabled]="isLoading"
+            mat-raised-button color="primary" *ngIf="user?.isAdmin">VOUCHER DE PAGO</button>
     </div>
-    <div formGroupName="business">
-      <mat-form-field appearance="fill">
-        <mat-label>Empresa</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
-      </mat-form-field>
-    </div>
-    <div formGroupName="beneficiary">
-      <mat-form-field appearance="fill">
-        <mat-label>Beneficiario</mat-label>
-        <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
-      </mat-form-field>
-    </div>
-    <mat-form-field appearance="fill">
-      <mat-label>Estado de tramite</mat-label>
-      <mat-select formControlName="processStatusCode">
-        <mat-option value="01">REDACCION</mat-option>
-        <mat-option value="02">LEGALIZACION</mat-option>
-        <mat-option value="03">CONFORMIDAD</mat-option>
-        <mat-option value="04">CONSTITUIDO</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Estado de obra</mat-label>
-      <mat-select formControlName="constructionCode" [disabled]="!user?.allowChangeConstructionCode">
-        <mat-option value="01">EJECUCION</mat-option>
-        <mat-option value="02">POR TERMINAR</mat-option>
-        <mat-option value="03">PARALIZADA</mat-option>
-        <mat-option value="04">EN ARBITRAJE</mat-option>
-        <mat-option value="05">ANULADA</mat-option>
-        <mat-option value="06">FINALIZADA</mat-option>
-        <mat-option value="07">AMORTIZADO</mat-option>
-        <mat-option value="08">FIANZA EJECUTADA</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Personal a cargo</mat-label>
-      <mat-select formControlName="workerId">
-        <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isService">Es bien/servicio</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isHousingFund">Es fondo mi vivienda</mat-slide-toggle>
-    </div>
-    
-    <ng-container *ngIf="user?.isAdmin">
-      <mat-form-field appearance="fill">
-        <mat-label>Honorarios</mat-label>
-        <input type="number" matInput formControlName="commission">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Observaciones de pagos</mat-label>
-        <input type="text" matInput formControlName="observationsPayment">
-      </mat-form-field>
-      <div class="mb-3">
-        <mat-slide-toggle formControlName="isExonerated">Exonerado de pago</mat-slide-toggle>
-      </div>
-      <mat-list class="mb-3">
-        <div mat-subheader>Pagos</div>
-        <mat-list-item *ngFor="let payment of payments; let i = index">
-          <div>
-            {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
-            <br />
-            <span class="text-muted">
-              {{ payment.paymentAt | date: 'dd/MM/yyyy' }}
-            </span>
-          </div>
-          <span class="spacer"></span>
-          <button type="button" mat-icon-button (click)="onRemovePayment(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-list>
-      <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogPayments()">AGREGAR PAGO</button>
-    </ng-container>
-    <mat-list class="mb-3">
-      <div mat-subheader>Porcentaje de avance</div>
-      <mat-list-item *ngFor="let percentCompletion of percentCompletions; let i = index">
-        <div>
-          P/E: {{ percentCompletion.percentProgrammated }} % - {{ percentCompletion.percentCompletion }} %
-          <br />
-          <span class="text-muted">
-            {{ months[percentCompletion.month] }} {{ percentCompletion.year }}
-          </span>
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <mat-form-field appearance="fill" *ngIf="user?.isAdmin">
+            <mat-label>Razon social</mat-label>
+            <mat-select formControlName="companyId">
+                <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Objeto</mat-label>
+            <input type="text" matInput formControlName="object">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Monto adjudicado</mat-label>
+            <input type="number" matInput formControlName="awardedAmount">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Observaciones</mat-label>
+            <input type="text" matInput formControlName="observations">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha de emision</mat-label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="emitionAt">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha de inicio de obra</mat-label>
+            <input matInput [matDatepicker]="constructionStartDatePicker" formControlName="startAt">
+            <mat-datepicker-toggle matSuffix [for]="constructionStartDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #constructionStartDatePicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Plazo de obra (en dias)</mat-label>
+            <input type="number" matInput formControlName="dayLimit">
+        </mat-form-field>
+        <div formGroupName="partnership">
+            <mat-form-field appearance="fill">
+                <mat-label>Consorcio</mat-label>
+                <input type="text" matInput formControlName="name" (click)="openDialogPartnerships()" readonly>
+            </mat-form-field>
         </div>
-        <span class="spacer"></span>
-        <button type="button" mat-icon-button (click)="onRemovePercentCompletion(i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
-    <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading" (click)="onDialogPercentCompletions()">AGREGAR AVANCE</button>
-    <div class="d-flex">
-      <span class="spacer"></span>
-      <button type="button" mat-stroked-button color="primary" routerLink="/constructions" class="mr-2">CANCELAR</button>
-      <div class="divider"></div>
-      <button type="submit" mat-raised-button color="primary" [disabled]="isLoading">GUARDAR</button>
-    </div>
-  </form>
+        <div formGroupName="business">
+            <mat-form-field appearance="fill">
+                <mat-label>Empresa</mat-label>
+                <input type="text" matInput formControlName="name" (click)="openDialogBusinesses()" readonly>
+            </mat-form-field>
+        </div>
+        <div formGroupName="beneficiary">
+            <mat-form-field appearance="fill">
+                <mat-label>Beneficiario</mat-label>
+                <input type="text" matInput formControlName="name" (click)="openDialogBeneficiaries()" readonly>
+            </mat-form-field>
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Estado de tramite</mat-label>
+            <mat-select formControlName="processStatusCode">
+                <mat-option value="01">REDACCION</mat-option>
+                <mat-option value="02">LEGALIZACION</mat-option>
+                <mat-option value="03">CONFORMIDAD</mat-option>
+                <mat-option value="04">CONSTITUIDO</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Estado de obra</mat-label>
+            <mat-select formControlName="constructionCode" [disabled]="!user?.allowChangeConstructionCode">
+                <mat-option value="01">EJECUCION</mat-option>
+                <mat-option value="02">POR TERMINAR</mat-option>
+                <mat-option value="03">PARALIZADA</mat-option>
+                <mat-option value="04">EN ARBITRAJE</mat-option>
+                <mat-option value="05">ANULADA</mat-option>
+                <mat-option value="06">FINALIZADA</mat-option>
+                <mat-option value="07">AMORTIZADO</mat-option>
+                <mat-option value="08">FIANZA EJECUTADA</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Personal a cargo</mat-label>
+            <mat-select formControlName="workerId">
+                <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase
+                    }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isService">Es bien/servicio</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isHousingFund">Es fondo mi vivienda</mat-slide-toggle>
+        </div>
+
+        <ng-container *ngIf="user?.isAdmin">
+            <mat-form-field appearance="fill">
+                <mat-label>Honorarios</mat-label>
+                <input type="number" matInput formControlName="commission">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Observaciones de pagos</mat-label>
+                <input type="text" matInput formControlName="observationsPayment">
+            </mat-form-field>
+            <div class="mb-3">
+                <mat-slide-toggle formControlName="isExonerated">Exonerado de pago</mat-slide-toggle>
+            </div>
+            <mat-list class="mb-3">
+                <div mat-subheader>Pagos</div>
+                <mat-list-item *ngFor="let payment of payments; let i = index">
+                    <span matListItemTitle>
+                        {{ payment.charge.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                    </span>
+                    <span class="text-muted">
+                        {{ payment.paymentAt | date: 'dd/MM/yyyy' }}
+                    </span>
+                    <div matListItemMeta>
+                        <button type="button" mat-icon-button (click)="onRemovePayment(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+            <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+                (click)="onDialogPayments()">AGREGAR PAGO</button>
+        </ng-container>
+        <mat-list class="mb-3">
+            <div mat-subheader>Porcentaje de avance</div>
+            <mat-list-item *ngFor="let percentCompletion of percentCompletions; let i = index">
+                <span matListItemTitle>
+                    P/E: {{ percentCompletion.percentProgrammated }} % - {{ percentCompletion.percentCompletion }} %
+                </span>
+                <span matListItemLine>
+                    {{ months[percentCompletion.month] }} {{ percentCompletion.year }}
+                </span>
+                <div matListItemMeta>
+                    <button type="button" mat-icon-button (click)="onRemovePercentCompletion(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </mat-list-item>
+        </mat-list>
+        <button type="button" mat-raised-button color="primary" class="w-100 mb-3" [disabled]="isLoading"
+            (click)="onDialogPercentCompletions()">AGREGAR AVANCE</button>
+        <div class="d-flex">
+            <span class="spacer"></span>
+            <button type="button" mat-stroked-button color="primary" routerLink="/constructions"
+                class="mr-2">CANCELAR</button>
+            <div class="divider"></div>
+            <button type="submit" mat-raised-button color="primary" [disabled]="isLoading">GUARDAR</button>
+        </div>
+    </form>
 </section>

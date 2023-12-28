@@ -31,7 +31,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles/index.sass"
             ],
             "scripts": []
@@ -69,18 +69,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "seguroapp:build"
+            "buildTarget": "seguroapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "seguroapp:build:production"
+              "buildTarget": "seguroapp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "seguroapp:build"
+            "buildTarget": "seguroapp:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles/index.sass"
             ],
             "scripts": []

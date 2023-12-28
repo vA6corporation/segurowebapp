@@ -4,302 +4,303 @@
     <span class="m-0 text-capitalize text-truncate">{{ office?.name }}</span>
   </div>
   <a href="#" #search mat-list-item routerLink="/surveys" (click)="onClose()" *ngIf="privileges.surveys">
-    <mat-icon class="mr-2">support_agent</mat-icon>
-    <span>Encuestas</span>
+    <mat-icon matListItemIcon class="m-3 color-black">support_agent</mat-icon>
+    <span matListItemTitle>Encuestas</span>
+    <!-- <span matListItemTitle>Encuestas</span> -->
   </a>
   <a href="#" #search mat-list-item routerLink="/operations" (click)="onClose()" *ngIf="privileges.operations">
-    <mat-icon class="mr-2">rocket_launch</mat-icon>
-    <span>Operaciones</span>
+    <mat-icon matListItemIcon class="m-3 color-black">rocket_launch</mat-icon>
+    <span matListItemTitle>Operaciones</span>
   </a>
   <a href="#" #search mat-list-item routerLink="/seace/seaceInbox" (click)="onClose()" *ngIf="privileges.seaceInbox">
-    <mat-icon class="mr-2">inbox</mat-icon>
-    <span>Buzon Seace</span>
+    <mat-icon matListItemIcon class="m-3 color-black">inbox</mat-icon>
+    <span matListItemTitle>Buzon Seace</span>
   </a>
   <a href="#" #search mat-list-item routerLink="/seace" (click)="onClose()" *ngIf="privileges.seace">
-    <mat-icon class="mr-2">travel_explore</mat-icon>
-    <span>Seace</span>
+    <mat-icon matListItemIcon class="m-3 color-black">travel_explore</mat-icon>
+    <span matListItemTitle>Seace</span>
   </a>
   <a href="#" #search mat-list-item routerLink="/notifications" (click)="onClose()" *ngIf="privileges.notifications">
-    <mat-icon class="mr-2">travel_explore</mat-icon>
-    <span>Notificaciones Seace</span>
+    <mat-icon matListItemIcon class="m-3 color-black">travel_explore</mat-icon>
+    <span matListItemTitle>Notificaciones Seace</span>
   </a>
   <a href="#" #search mat-list-item routerLink="/search" (click)="onClose()" *ngIf="privileges.search">
-    <mat-icon class="mr-2">search</mat-icon>
-    <span>Buscar Admin</span>
+    <mat-icon matListItemIcon class="m-3 color-black">search</mat-icon>
+    <span matListItemTitle>Buscar Admin</span>
   </a>
   <a href="#" #search mat-list-item routerLink="/search/commercial" (click)="onClose()" *ngIf="privileges.searchCommercial">
-    <mat-icon class="mr-2">search</mat-icon>
-    <span>Buscar</span>
+    <mat-icon matListItemIcon class="m-3 color-black">search</mat-icon>
+    <span matListItemTitle>Buscar</span>
   </a>
   <a href="#" #constructions mat-list-item routerLink="/constructions" (click)="onClose()" *ngIf="privileges.constructions">
-    <mat-icon class="mr-2">construction</mat-icon>
-    <span>Obras Admin</span>
+    <mat-icon matListItemIcon class="m-3 color-black">construction</mat-icon>
+    <span matListItemTitle>Obras Admin</span>
   </a>
   <a href="#" #constructions mat-list-item routerLink="/constructions/commercial" (click)="onClose()" *ngIf="privileges.constructionsCommercial">
-    <mat-icon class="mr-2">construction</mat-icon>
-    <span>Obras</span>
+    <mat-icon matListItemIcon class="m-3 color-black">construction</mat-icon>
+    <span matListItemTitle>Obras</span>
   </a>
   <a href="#" #partnerships mat-list-item routerLink="/partnerships" (click)="onClose()" *ngIf="privileges.partnerships">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Consorcios Admin</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Consorcios Admin</span>
   </a>
   <a href="#" #partnerships mat-list-item routerLink="/partnerships/commercial" (click)="onClose()" *ngIf="privileges.partnershipsCommercial">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Consorcios</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Consorcios</span>
   </a>
   <a href="#" #businesses mat-list-item routerLink="/businesses" (click)="onClose()" *ngIf="privileges.businesses">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Empresas Admin</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Empresas Admin</span>
   </a>
   <a href="#" #businesses mat-list-item routerLink="/businesses/commercial" (click)="onClose()" *ngIf="privileges.businessesCommercial">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Empresas</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Empresas</span>
   </a>
   <a href="#" #beneficiaries mat-list-item routerLink="/beneficiaries" (click)="onClose()" *ngIf="privileges.beneficiaries">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Beneficiarios</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Beneficiarios</span>
   </a>
   <a href="#" #financiers mat-list-item routerLink="/financiers" (click)="onClose()" *ngIf="privileges.financiers">
-    <mat-icon class="mr-2">account_balance</mat-icon>
-    <span>Financieras</span>
+    <mat-icon matListItemIcon class="m-3 color-black">account_balance</mat-icon>
+    <span matListItemTitle>Financieras</span>
   </a>
   <a href="#" #users mat-list-item routerLink="/users" (click)="onClose()" *ngIf="privileges.users">
-    <mat-icon class="mr-2">face</mat-icon>
-    <span>Usuarios</span>
+    <mat-icon matListItemIcon class="m-3 color-black">face</mat-icon>
+    <span matListItemTitle>Usuarios</span>
   </a>
   <a href="#" #workers mat-list-item routerLink="/workers" (click)="onClose()" *ngIf="privileges.workers">
-    <mat-icon class="mr-2">face</mat-icon>
-    <span>Personal</span>
+    <mat-icon matListItemIcon class="m-3 color-black">face</mat-icon>
+    <span matListItemTitle>Personal</span>
   </a>
   <a href="#" #cheques mat-list-item routerLink="/cheques" (click)="onClose()" *ngIf="privileges.cheques">
-    <mat-icon class="mr-2">replay</mat-icon>
-    <span>Garantias Admin</span>
+    <mat-icon matListItemIcon class="m-3 color-black">replay</mat-icon>
+    <span matListItemTitle>Garantias Admin</span>
   </a>
   <a href="#" #cheques mat-list-item routerLink="/cheques/commercial" (click)="onClose()" *ngIf="privileges.chequesCommercial">
-    <mat-icon class="mr-2">replay</mat-icon>
-    <span>Garantias</span>
+    <mat-icon matListItemIcon class="m-3 color-black">replay</mat-icon>
+    <span matListItemTitle>Garantias</span>
   </a>
   <a href="#" #credits mat-list-item routerLink="/credits" (click)="onClose()" *ngIf="privileges.credits">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Lineas de credito</span>
+    <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
+    <span matListItemTitle>Lineas de credito</span>
   </a>
   <a href="#" #credits mat-list-item routerLink="/fideicomisos" (click)="onClose()" *ngIf="privileges.fideicomisos">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Fideicomisos</span>
+    <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
+    <span matListItemTitle>Fideicomisos</span>
   </a>
   <a href="#" #credits mat-list-item routerLink="/isos" (click)="onClose()" *ngIf="privileges.isos">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>ISOS</span>
+    <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
+    <span matListItemTitle>ISOS</span>
   </a>
   <a href="#" #credits mat-list-item routerLink="/capitalIncreases" (click)="onClose()" *ngIf="privileges.capitalIncreases">
-    <mat-icon class="mr-2">text_snippet</mat-icon>
-    <span>Incremento de Capital</span>
+    <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
+    <span matListItemTitle>Incremento de Capital</span>
   </a>
   <a href="#" #businesses mat-list-item routerLink="/customers" (click)="onClose()" *ngIf="privileges.customers">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Clientes</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Clientes</span>
   </a>
   <a href="#" #businesses mat-list-item routerLink="/certifiers" (click)="onClose()" *ngIf="privileges.certifiers">
-    <mat-icon class="mr-2">people</mat-icon>
-    <span>Certificadoras</span>
+    <mat-icon matListItemIcon class="m-3 color-black">people</mat-icon>
+    <span matListItemTitle>Certificadoras</span>
   </a>
   <mat-expansion-panel class="mat-elevation-z0">
     <mat-expansion-panel-header #guaranties *ngIf="privileges.guaranties">
       <mat-panel-title>
-        <mat-icon class="mr-2">text_snippet</mat-icon>
+        <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
         Fianzas
       </mat-panel-title>
     </mat-expansion-panel-header>
     <a href="#" mat-list-item routerLink="/materials" (click)="onClose()">
-      <span>A. de Materiales</span>
+      <span matListItemTitle>A. de Materiales</span>
     </a>
     <a href="#" mat-list-item routerLink="/directs" (click)="onClose()">
-      <span>A. Directo</span>
+      <span matListItemTitle>A. Directo</span>
     </a>
     <a href="#" mat-list-item routerLink="/compliances" (click)="onClose()">
-      <span>F. Cumplimiento</span>
+      <span matListItemTitle>F. Cumplimiento</span>
     </a>
     <a href="#" mat-list-item routerLink="/guaranties" (click)="onClose()">
-      <span>Renovaciones Fianzas</span>
+      <span matListItemTitle>Renovaciones Fianzas</span>
     </a>
     <a href="#" mat-list-item routerLink="/mails" (click)="onClose()">
-      <span>Mails enviados</span>
+      <span matListItemTitle>Mails enviados</span>
     </a>
   </mat-expansion-panel>
   <mat-expansion-panel class="mat-elevation-z0">
     <mat-expansion-panel-header #insurances *ngIf="privileges.insurances">
       <mat-panel-title>
-        <mat-icon class="mr-2">text_snippet</mat-icon>
+        <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
         Seguros
       </mat-panel-title>
     </mat-expansion-panel-header>
     <a href="#" mat-list-item routerLink="/insurances/SCTR" (click)="onClose()">
-      <span>SCTR</span>
+      <span matListItemTitle>SCTR</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/SOAT" (click)="onClose()">
-      <span>SOAT</span>
+      <span matListItemTitle>SOAT</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/VIDALEY" (click)="onClose()">
-      <span>VIDA LEY</span>
+      <span matListItemTitle>VIDA LEY</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/POLIZACAR" (click)="onClose()">
-      <span>POLIZA CAR</span>
+      <span matListItemTitle>POLIZA CAR</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/POLIZATREC" (click)="onClose()">
-      <span>POLIZA TREC</span>
+      <span matListItemTitle>POLIZA TREC</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/POLIZAEAR" (click)="onClose()">
-      <span>POLIZA EAR</span>
+      <span matListItemTitle>POLIZA EAR</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/MULTIRRIESGOS" (click)="onClose()">
-      <span>POLIZA MULTIRRIESGOS</span>
+      <span matListItemTitle>POLIZA MULTIRRIESGOS</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/RCIVIL" (click)="onClose()">
-      <span>RES. CIVIL</span>
+      <span matListItemTitle>RES. CIVIL</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/VEHICULAR" (click)="onClose()">
-      <span>VEHICULAR</span>
+      <span matListItemTitle>VEHICULAR</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/VIDA" (click)="onClose()">
-      <span>VIDA</span>
+      <span matListItemTitle>VIDA</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/EPS" (click)="onClose()">
-      <span>EPS</span>
+      <span matListItemTitle>EPS</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/SALUD" (click)="onClose()">
-      <span>SALUD</span>
+      <span matListItemTitle>SALUD</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/ACCIDENTES" (click)="onClose()">
-      <span>ACCIDENTES P.</span>
+      <span matListItemTitle>ACCIDENTES P.</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/FOLA" (click)="onClose()">
-      <span>FOLA</span>
+      <span matListItemTitle>FOLA</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/VIAJES" (click)="onClose()">
-      <span>VIAJES</span>
+      <span matListItemTitle>VIAJES</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/PEMPRESARIAL" (click)="onClose()">
-      <span>P. EMPRESARIAL</span>
+      <span matListItemTitle>P. EMPRESARIAL</span>
     </a>
     <mat-divider></mat-divider>
     <a href="#" mat-list-item routerLink="/insuranceBusinesses" (click)="onClose()">
-      <span>Empresas</span>
+      <span matListItemTitle>Empresas</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurancePartnerships" (click)="onClose()">
-      <span>Consorcios</span>
+      <span matListItemTitle>Consorcios</span>
     </a>
     <a href="#" mat-list-item routerLink="/brokers" (click)="onClose()">
-      <span>Brokers</span>
+      <span matListItemTitle>Brokers</span>
     </a>
     <a href="#" mat-list-item routerLink="/insuranceConstructions" (click)="onClose()">
-      <span>Obras</span>
+      <span matListItemTitle>Obras</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/renew" (click)="onClose()">
-      <span>Renovaciones Seguros</span>
+      <span matListItemTitle>Renovaciones Seguros</span>
     </a>
     <a href="#" mat-list-item routerLink="/insurances/report/reportPie" (click)="onClose()">
-      <span>Reporte</span>
+      <span matListItemTitle>Reporte</span>
     </a>
   </mat-expansion-panel>
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.templates">
         <mat-panel-title>
-          <mat-icon class="mr-2">task</mat-icon>
+          <mat-icon matListItemIcon class="m-3 color-black">task</mat-icon>
           Formatos
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" #search mat-list-item routerLink="/templates" (click)="onClose()">
-        <span>Formatos</span>
+        <span matListItemTitle>Formatos</span>
       </a>
       <a href="#" #shareholders mat-list-item routerLink="/shareholders" (click)="onClose()">
-        <span>Accionistas</span>
+        <span matListItemTitle>Accionistas</span>
       </a>
       <a href="#" #shareholders mat-list-item routerLink="/templatePartnerships" (click)="onClose()">
-        <span>Consorcios</span>
+        <span matListItemTitle>Consorcios</span>
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #expenses *ngIf="privileges.expenses">
         <mat-panel-title>
-          <mat-icon class="mr-2">local_atm</mat-icon>
+          <mat-icon matListItemIcon class="m-3 color-black">local_atm</mat-icon>
           Contabilidad
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" #providers mat-list-item routerLink="/providers" (click)="onClose()">
-        <span>Proveedores</span>
+        <span matListItemTitle>Proveedores</span>
       </a>
       <a href="#" #paymentOrders mat-list-item routerLink="/paymentOrders" (click)="onClose()">
-        <span>Ordenes de pago</span>
+        <span matListItemTitle>Ordenes de pago</span>
       </a>
       <a href="#" #paymentOrders mat-list-item routerLink="/payments" (click)="onClose()">
-        <span>Ingresos</span>
+        <span matListItemTitle>Ingresos</span>
       </a>
       <a href="#" #banks mat-list-item routerLink="/banks" (click)="onClose()">
-        <span>Cuentas bancarias</span>
+        <span matListItemTitle>Cuentas bancarias</span>
       </a>
       <a href="#" mat-list-item routerLink="/constructions/debtors" (click)="onClose()">
-        <span>Recaudacion</span>
+        <span matListItemTitle>Recaudacion</span>
       </a>
       <a href="#" #banks mat-list-item routerLink="/paymentOrders/report" (click)="onClose()">
-        <span>Resumen</span>
+        <span matListItemTitle>Resumen</span>
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
       <mat-expansion-panel-header #reports *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8  || privileges.r9 || privileges.r10 || privileges.r11 || privileges.r12 || privileges.r13">
         <mat-panel-title>
-          <mat-icon class="mr-2">poll</mat-icon>
+          <mat-icon matListItemIcon class="m-3 color-black">poll</mat-icon>
           Reportes
         </mat-panel-title>
       </mat-expansion-panel-header>
       <a href="#" mat-list-item routerLink="/collections" (click)="onClose()" *ngIf="privileges.r1">
-        <span>Suma asegurada</span>
+        <span matListItemTitle>Suma asegurada</span>
       </a>
       <a href="#" mat-list-item routerLink="/primas" (click)="onClose()" *ngIf="privileges.r2">
-        <span>Primas</span>
+        <span matListItemTitle>Primas</span>
       </a>
       <a href="#" mat-list-item routerLink="/legals" (click)="onClose()" *ngIf="privileges.r3">
-        <span>Documentacion legal</span>
+        <span matListItemTitle>Documentacion legal</span>
       </a>
       <a href="#" mat-list-item routerLink="/documentation" (click)="onClose()" *ngIf="privileges.r4">
-        <span>Fianzas sin documentacion</span>
+        <span matListItemTitle>Fianzas sin documentacion</span>
       </a>
       <a href="#" mat-list-item routerLink="/constructions/withoutDocumentation" (click)="onClose()" *ngIf="privileges.r5">
-        <span>Obras sin documentacion</span>
+        <span matListItemTitle>Obras sin documentacion</span>
       </a>
       <a href="#" mat-list-item routerLink="/businesses/withoutDocumentation" (click)="onClose()" *ngIf="privileges.r6">
-        <span>Empresas sin documentacion</span>
+        <span matListItemTitle>Empresas sin documentacion</span>
       </a>
       <a href="#" mat-list-item routerLink="/insurances/report/report" (click)="onClose()" *ngIf="privileges.r7">
-        <span>Seguros 1</span>
+        <span matListItemTitle>Seguros 1</span>
       </a>
       <a href="#" mat-list-item routerLink="/insurances/report/reportPie" (click)="onClose()" *ngIf="privileges.r8">
-        <span>Seguros 2</span>
+        <span matListItemTitle>Seguros 2</span>
       </a>
       <a href="#" mat-list-item routerLink="/credits/report" (click)="onClose()" *ngIf="privileges.r9">
-        <span>Lineas de credito</span>
+        <span matListItemTitle>Lineas de credito</span>
       </a>
       <a href="#" mat-list-item routerLink="/constructions/percentCompletions" (click)="onClose()" *ngIf="privileges.r10">
-        <span>Avance de obras</span>
+        <span matListItemTitle>Avance de obras</span>
       </a>
       <a href="#" mat-list-item routerLink="/constructions/updatePercentCompletions" (click)="onClose()" *ngIf="privileges.r11">
-        <span>Actualizacion de avanze de obras</span>
+        <span matListItemTitle>Actualizacion de avanze de obras</span>
       </a>
       <a href="#" mat-list-item routerLink="/workers/commissions" (click)="onClose()" *ngIf="privileges.r12">
-        <span>Comisiones</span>
+        <span matListItemTitle>Comisiones</span>
       </a>
       <a href="#" mat-list-item routerLink="/workers/timing" (click)="onClose()" *ngIf="privileges.r13">
-        <span>Timing</span>
+        <span matListItemTitle>Timing</span>
       </a>
     </mat-expansion-panel>
   </mat-accordion>
   <mat-divider></mat-divider>
   <a href="#" mat-list-item routerLink="/settings" (click)="onClose()" *ngIf="user?.isAdmin">
-    <mat-icon class="mr-2">build</mat-icon>
-    <span>Ajustes</span>
+    <mat-icon matListItemIcon class="m-3 color-black">build</mat-icon>
+    <span matListItemTitle>Ajustes</span>
   </a>
   <a href="#" mat-list-item routerLink="/logout" (click)="onClose()">
-    <mat-icon class="mr-2">logout</mat-icon>
-    <span>Cerrar sesion</span>
+    <mat-icon matListItemIcon class="m-3 color-black">logout</mat-icon>
+    <span matListItemTitle>Cerrar sesion</span>
   </a>
 </mat-nav-list>

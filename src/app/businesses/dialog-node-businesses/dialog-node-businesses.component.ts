@@ -1,14 +1,14 @@
-import { Component, Inject, NgZone, OnInit } from '@angular/core';
-import { BusinessNodeModel } from '../business-node.model';
 import { CollectionViewer, DataSource, SelectionChange } from '@angular/cdk/collections';
-import { BehaviorSubject, Observable, merge } from 'rxjs';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { catchError, last, map, tap } from 'rxjs/operators';
 import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Component, Inject, NgZone, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BusinessesService } from '../businesses.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom, merge } from 'rxjs';
+import { catchError, last, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { BusinessNodeModel } from '../business-node.model';
+import { BusinessesService } from '../businesses.service';
 
 export interface UploadFileModel {
     name: string
@@ -25,6 +25,7 @@ export enum BusinessNodeType {
 export interface DialogBusinessNodeData {
     businessId: string
     type: BusinessNodeType
+    nodeIncludes?: string[]
 }
 
 export class FlatNode {
@@ -34,9 +35,8 @@ export class FlatNode {
         public level = 1,
         public expandable = false,
         public contentType = '',
-        public fileId: string|null = null,
-        public isLoading = false,
-        public percentDone = 0
+        public parentNodeId: string | null = null,
+        public fileId: string | null = null,
     ) { }
 }
 
@@ -45,7 +45,7 @@ export class DynamicDatabase {
     constructor(
         private readonly operations: BusinessNodeModel[]
     ) {
-        const dataMap = new Map<string, BusinessNodeModel[]>();
+        const dataMap = new Map<string, BusinessNodeModel[]>()
         for (const operation of operations) {
             let groupOperationNodes: BusinessNodeModel[] = []
             for (const subOperation of operations) {
@@ -134,8 +134,8 @@ export class DynamicDataSource implements DataSource<FlatNode> {
     }
 
     removeNode(node: FlatNode) {
-        const nodeIndex = this.data.indexOf(node);
-        this.data.splice(nodeIndex, 1);
+        const nodeIndex = this.data.indexOf(node)
+        this.data.splice(nodeIndex, 1)
         this.dataChange.next(this.data);
     }
 
@@ -152,21 +152,19 @@ export class DynamicDataSource implements DataSource<FlatNode> {
     }
 
     updateNode(node: FlatNode) {
-        const nodeIndex = this.data.indexOf(node);
-        this.data.splice(nodeIndex, 1, node);
-        this.dataChange.next(this.data);
+        const nodeIndex = this.data.indexOf(node)
+        this.data.splice(nodeIndex, 1, node)
+        this.dataChange.next(this.data)
     }
 
     toggleNode(node: FlatNode, expand: boolean) {
-        console.log('Togleando node');
-        const children = this._database.getChildren(node._id);
-        const index = this.data.indexOf(node);
+        console.log('Togleando node')
+        const children = this._database.getChildren(node._id)
+        const index = this.data.indexOf(node)
 
         if (!children || index < 0) {
-            return;
+            return
         }
-
-        node.isLoading = true;
 
         if (expand) {
             const nodes = children.map(
@@ -175,10 +173,11 @@ export class DynamicDataSource implements DataSource<FlatNode> {
                     businessNode.name, node.level + 1,
                     !businessNode.fileId,
                     businessNode.contentType || '',
+                    businessNode.businessNodeId,
                     businessNode.fileId || null,
                 )
-            );
-            this.data.splice(index + 1, 0, ...nodes);
+            )
+            this.data.splice(index + 1, 0, ...nodes)
         } else {
             let count = 0;
             for (
@@ -186,18 +185,17 @@ export class DynamicDataSource implements DataSource<FlatNode> {
                 i < this.data.length && this.data[i].level > node.level;
                 i++, count++
             ) { }
-            this.data.splice(index + 1, count);
+            this.data.splice(index + 1, count)
         }
 
-        this.dataChange.next(this.data);
-        node.isLoading = false;
+        this.dataChange.next(this.data)
     }
 }
 
 @Component({
-  selector: 'app-dialog-node-businesses',
-  templateUrl: './dialog-node-businesses.component.html',
-  styleUrls: ['./dialog-node-businesses.component.sass']
+    selector: 'app-dialog-node-businesses',
+    templateUrl: './dialog-node-businesses.component.html',
+    styleUrls: ['./dialog-node-businesses.component.sass']
 })
 export class DialogNodeBusinessesComponent implements OnInit {
 
@@ -214,6 +212,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     treeControl: FlatTreeControl<FlatNode>
     dataSource!: DynamicDataSource
     dataBase!: DynamicDatabase
+    nodeIncludes = this.data.nodeIncludes
 
     url: SafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('')
     accept: string = ''
@@ -243,7 +242,6 @@ export class DialogNodeBusinessesComponent implements OnInit {
 
     fetchData() {
         this.businessesService.getBusinessNodesByTypeBusiness(this.data.type, this.data.businessId).subscribe(businessNodes => {
-            console.log(businessNodes)
             this.dataBase.setBusinessNodes(businessNodes)
         })
     }
@@ -271,6 +269,85 @@ export class DialogNodeBusinessesComponent implements OnInit {
         }
     }
 
+    isCheckNode(node: FlatNode) {
+        if (this.nodeIncludes) {
+            return !!this.nodeIncludes.find(e => e === node._id)
+        } else {
+            return false
+        }
+    }
+
+    onToggleParent(childNodeId: string) {
+        let parentNodeId = ''
+        this.dataBase.dataMap.forEach((value, key, map) => {
+            if (value.find(e => e._id === childNodeId)) {
+                parentNodeId = key
+            }
+        })
+        if (this.nodeIncludes && parentNodeId) {
+            const foundIndex = this.nodeIncludes.findIndex(e => e === parentNodeId)
+            if (foundIndex > -1 && parentNodeId) {
+                const childrens = this.dataBase.getChildren(parentNodeId)
+                let countChildre = 0
+                if (childrens) {
+                    for (const node of childrens) {
+                        const includes = this.nodeIncludes.includes(node._id)
+                        if (includes) {
+                            countChildre++
+                        }
+                    }
+                    if (!countChildre) {
+                        console.log('node INDEX: ' + foundIndex);
+                        this.nodeIncludes.splice(foundIndex, 1)
+                    }
+                }
+            } else if (foundIndex < 0 && parentNodeId) {
+                this.nodeIncludes.push(parentNodeId)
+            }
+            this.onToggleParent(parentNodeId)
+        }
+    }
+
+    onToggleChildren(checked: boolean, parentNodeId: string) {
+        const childrens = this.dataBase.getChildren(parentNodeId)
+        if (this.nodeIncludes && childrens) {
+            if (checked) {
+                for (const children of childrens) {
+                    const indexNode = this.nodeIncludes.findIndex(e => e === children._id)
+                    if (indexNode > -1) {
+                        this.nodeIncludes.splice(indexNode, 1)
+                    }
+                }
+                for (const children of childrens) {
+                    this.nodeIncludes.push(children._id)
+                    this.onToggleChildren(checked, children._id)
+                }
+            } else {
+                for (const children of childrens) {
+                    const indexNode = this.nodeIncludes.findIndex(e => e === children._id)
+                    if (indexNode > -1) {
+                        this.nodeIncludes.splice(indexNode, 1)
+                    }
+                    this.onToggleChildren(checked, children._id)
+                }
+            }
+        }
+    }
+
+    onCheckNode(checked: boolean, node: FlatNode) {
+        if (this.nodeIncludes) {
+            if (checked) {
+                this.nodeIncludes.push(node._id)
+                this.onToggleChildren(checked, node._id)
+            } else {
+                const indexNode = this.nodeIncludes.findIndex(e => e === node._id)
+                this.nodeIncludes.splice(indexNode, 1)
+                this.onToggleChildren(checked, node._id)
+            }
+            this.onToggleParent(node._id)
+        }
+    }
+
     onUpdateNode(businessNode: BusinessNodeModel) {
         const name = prompt('Cambiar nombre de carpeta');
         if (name) {
@@ -285,11 +362,11 @@ export class DialogNodeBusinessesComponent implements OnInit {
         const businessNodeId = parentNode ? parentNode._id : null;
         const name = prompt('Nueva carpeta');
         if (name) {
-            const businessNode = { 
-                name, 
-                type: this.data.type, 
-                businessId: this.data.businessId, 
-                businessNodeId 
+            const businessNode = {
+                name,
+                type: this.data.type,
+                businessId: this.data.businessId,
+                businessNodeId
             }
             this.businessesService.createNode(businessNode).subscribe({
                 next: async createdBusinessNode => {
@@ -299,6 +376,8 @@ export class DialogNodeBusinessesComponent implements OnInit {
                         createdBusinessNode.name,
                         level,
                         true,
+                        '',
+                        parentNode ? parentNode._id : null,
                     )
                     this.fetchData()
                     let isExpanded = false
@@ -370,7 +449,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                 this.isUploading = true
                 this.uploadingFiles.push(uploadFile)
                 this.tabIndex = 2
-                const promise = this.businessesService.uploadFile(formData).pipe(
+                const promise = lastValueFrom(this.businessesService.uploadFile(formData).pipe(
                     map(event => this.getEventMessage(event)),
                     tap(progressPercent => {
                         uploadFile.progressPercent = progressPercent
@@ -379,7 +458,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     catchError(err => {
                         throw err
                     })
-                ).toPromise().then(createdBusinessNode => {
+                )).then(createdBusinessNode => {
                     createdBusinessNodes.push(createdBusinessNode)
                     const subIndex = this.uploadingFiles.indexOf(uploadFile)
                     this.uploadingFiles.splice(subIndex, 1)
@@ -401,6 +480,8 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     createdBusinessNode.name,
                     level,
                     false,
+                    '',
+                    parentNode._id
                 )
                 const isExpanded = this.treeControl.isExpanded(parentNode);
                 if (!isExpanded) {
@@ -440,7 +521,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                         this.uploadingFiles.push(uploadFile)
                     })
                     this.tabIndex = 2
-                    this.businessesService.uploadFile(formData).pipe(
+                    lastValueFrom(this.businessesService.uploadFile(formData).pipe(
                         map(event => this.getEventMessage(event)),
                         tap(progressPercent => {
                             this.ngZone.run(() => {
@@ -451,7 +532,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                         catchError(err => {
                             throw err
                         })
-                    ).toPromise().then(() => {
+                    )).then(() => {
                         resolve()
                     }).catch((error: HttpErrorResponse) => {
                         console.log(error);
@@ -462,7 +543,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                 // Get folder contents
                 var dirReader = item.createReader();
                 const businessNode = { name: item.name, type: this.data.type, businessId: this.data.businessId, businessNodeId }
-                const createdOperationNode = await this.businessesService.createNode(businessNode).toPromise()
+                const createdOperationNode = await firstValueFrom(this.businessesService.createNode(businessNode))
                 dirReader.readEntries(async (entries: any) => {
                     for (let i = 0; i < entries.length; i++) {
                         await this.traverseFileTree(entries[i], createdOperationNode._id)

@@ -9,6 +9,7 @@
         <div [hidden]="isDragOver">
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" (dragover)="onDragOver($event)">
                 <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+                    <mat-checkbox class="example-margin" (change)="onCheckNode($event.checked, node)" [checked]="isCheckNode(node)" *ngIf="nodeIncludes"></mat-checkbox>
                     <button mat-icon-button disabled></button>
                     <button mat-raised-button (click)="onSelectFile(node)" color="primary">{{ node.name }}</button>
                     <button mat-icon-button (click)="onDeleteNode(node)" class="text-muted">
@@ -16,6 +17,7 @@
                     </button>
                 </mat-tree-node>
                 <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                    <mat-checkbox class="example-margin" (change)="onCheckNode($event.checked, node)" [checked]="isCheckNode(node)" *ngIf="nodeIncludes"></mat-checkbox>
                     <button mat-icon-button [attr.aria-label]="'Toggle ' + node.name" matTreeNodeToggle>
                         <mat-icon class="mat-icon-rtl-mirror">
                             {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}

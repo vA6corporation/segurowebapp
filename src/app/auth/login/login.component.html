@@ -6,10 +6,9 @@
                 <mat-action-list>
                     <button type="button" mat-list-item *ngFor="let user of rememberUsers"
                         (click)="onUserSelected(user)">
-                        {{ user.name }}
-                        <span class="spacer"></span>
-                        <div>
-                            {{ user.email }}
+                        <span matListItemTitle>{{ user.name }}</span>
+                        <span matListItemLine>{{ user.email }}</span>
+                        <div matListItemMeta class="my-2">
                             <button mat-icon-button aria-label="trash" (click)="onDeleteUser(user._id, $event)">
                                 <mat-icon>delete</mat-icon>
                             </button>

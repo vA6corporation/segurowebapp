@@ -1,23 +1,14 @@
-<div mat-dialog-content class="mx-0 px-0" style="height: calc(100% - 44px)">
-  <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event" style="overflow: hidden;">
+<mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event" style="overflow: hidden;">
     <mat-tab label="Documentos">
-      <mat-action-list>
-        <button mat-list-item *ngFor="let businessBasePdf of businessBasePdfs" (click)="onBusinessBaseSelect(businessBasePdf)">
-          <div>
-            {{ businessBasePdf.realfilename }}
-            <!-- <br>
-            <span class="text-muted">
-              {{ businessOfferPdf.businessOffer.ruc }}
-            </span> -->
-          </div>
-          <!-- <span class="spacer"></span>
-          <span>{{ businessOfferPdf.filename }}</span> -->
-        </button>
-      </mat-action-list>
+        <mat-action-list>
+            <button mat-list-item *ngFor="let businessBasePdf of businessBasePdfs"
+                (click)="onBusinessBaseSelect(businessBasePdf)">
+                <span matListItemTitle>{{ businessBasePdf.realfilename }}</span>
+            </button>
+        </mat-action-list>
     </mat-tab>
-  </mat-tab-group>
-</div>
+</mat-tab-group>
 <mat-dialog-actions>
-  <span class="spacer"></span>
-  <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
 </mat-dialog-actions>

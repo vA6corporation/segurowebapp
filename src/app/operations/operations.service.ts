@@ -19,6 +19,10 @@ export class OperationsService {
   getOperationById(operationId: string): Observable<OperationModel> {
     return this.httpService.get(`operations/byId/${operationId}`);
   }
+
+  getOperationDownloadFiles(operationId: string): Observable<any> {
+    return this.httpService.get(`operations/downloadFilesById/${operationId}`);
+  }
   
   getCountOperations(): Observable<number> {
     return this.httpService.get('operations/count');

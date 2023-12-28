@@ -4,7 +4,7 @@ import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/htt
 import { Component, Inject, NgZone, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { BehaviorSubject, Observable, merge } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, merge } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { OperationNodeModel } from '../operation-node.model';
@@ -24,8 +24,6 @@ export class FlatNode {
         public expandable = false,
         public contentType: string | null = null,
         public fileId: string | null = null,
-        public isLoading = false,
-        public percentDone = 0
     ) { }
 }
 
@@ -152,8 +150,6 @@ export class DynamicDataSource implements DataSource<FlatNode> {
             return;
         }
 
-        node.isLoading = true;
-
         if (expand) {
             const nodes = children.map(
                 operationNode => new FlatNode(
@@ -176,7 +172,6 @@ export class DynamicDataSource implements DataSource<FlatNode> {
         }
 
         this.dataChange.next(this.data)
-        node.isLoading = false
     }
 }
 
@@ -441,7 +436,7 @@ export class DialogNodeOperationsComponent implements OnInit {
                 // Get folder contents
                 var dirReader = item.createReader();
                 const operationNode = { name: item.name, operationId: this.operationId, operationNodeId }
-                const createdOperationNode = await this.operationsService.createNode(operationNode).toPromise()
+                const createdOperationNode = await lastValueFrom(this.operationsService.createNode(operationNode))
                 dirReader.readEntries(async (entries: any) => {
                     for (let i = 0; i < entries.length; i++) {
                         await this.traverseFileTree(entries[i], createdOperationNode._id)

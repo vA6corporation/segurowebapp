@@ -6,67 +6,65 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { BeneficiariesService } from '../beneficiaries.service';
 
 @Component({
-  selector: 'app-edit-beneficiaries',
-  templateUrl: './edit-beneficiaries.component.html',
-  styleUrls: ['./edit-beneficiaries.component.sass']
+    selector: 'app-edit-beneficiaries',
+    templateUrl: './edit-beneficiaries.component.html',
+    styleUrls: ['./edit-beneficiaries.component.sass']
 })
 export class EditBeneficiariesComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly beneficiariesService: BeneficiariesService,
-    private readonly navigationService: NavigationService,
-    private readonly activatedRoute: ActivatedRoute,
-  ) { }
-    
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    _id: [ null ],
-    document: [ null, Validators.required ],
-    name: [ null, Validators.required ],
-    email: [ null, Validators.email ],
-    mobileNumber: null,
-    phoneNumber: null,
-    annexed: null,
-    address: null,
-    legalRepresentative: null,
-    positionLegalRepresentative: null,
-    contactPerson: null,
-    positioncontactPerson: null,
-    economicActivity: null,
-  });
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly beneficiariesService: BeneficiariesService,
+        private readonly navigationService: NavigationService,
+        private readonly activatedRoute: ActivatedRoute,
+    ) { }
 
-  public isLoading: boolean = false;
-  public maxlength: number = 11;
-  private beneficiaryId: string = '';
-  
-  ngOnInit(): void { 
-    this.navigationService.setTitle('Editar beneficiario');
-    this.navigationService.backTo();
-
-    this.activatedRoute.params.subscribe(params => {
-      this.beneficiaryId = params.beneficiaryId;
-      this.beneficiariesService.getBeneficiaryById(this.beneficiaryId).subscribe(beneficiary => {
-        console.log(beneficiary);
-        this.formGroup.patchValue(beneficiary);
-      });
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        document: ['', Validators.required],
+        name: ['', Validators.required],
+        email: ['', Validators.email],
+        mobileNumber: '',
+        phoneNumber: '',
+        annexed: '',
+        address: '',
+        legalRepresentative: '',
+        positionLegalRepresentative: '',
+        contactPerson: '',
+        positioncontactPerson: '',
+        economicActivity: '',
     });
-  }
 
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      this.beneficiariesService.update(this.formGroup.value, this.beneficiaryId).subscribe(res => {
-        console.log(res);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    isLoading: boolean = false;
+    maxlength: number = 11;
+    private beneficiaryId: string = '';
+
+    ngOnInit(): void {
+        this.navigationService.setTitle('Editar beneficiario');
+        this.navigationService.backTo();
+
+        this.activatedRoute.params.subscribe(params => {
+            this.beneficiaryId = params.beneficiaryId;
+            this.beneficiariesService.getBeneficiaryById(this.beneficiaryId).subscribe(beneficiary => {
+                this.formGroup.patchValue(beneficiary);
+            });
+        });
     }
-  }
-  
+
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            this.beneficiariesService.update(this.formGroup.value, this.beneficiaryId).subscribe(res => {
+                console.log(res);
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
+
 }

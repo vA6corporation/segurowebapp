@@ -93,7 +93,11 @@ export class ToolbarComponent implements OnInit {
   }
 
   onBack() {
-    history.go(-1);
+    if(history.length > 1) {
+        history.go(-1);
+    } else {
+        this.router.navigate(['/'])
+    }
   }
 
   onSubmit() {

@@ -16,273 +16,273 @@ import { PaymentOrderModel } from '../payment-order.model';
 import { PaymentOrdersService } from '../payment-orders.service';
 
 @Component({
-  selector: 'app-payment-orders',
-  templateUrl: './payment-orders.component.html',
-  styleUrls: ['./payment-orders.component.sass']
+    selector: 'app-payment-orders',
+    templateUrl: './payment-orders.component.html',
+    styleUrls: ['./payment-orders.component.sass']
 })
 export class PaymentOrdersComponent implements OnInit {
 
-  constructor(
-    private readonly paymentOrdersService: PaymentOrdersService,
-    private readonly navigationService: NavigationService,
-    private readonly companiesService: CompaniesService,
-    private readonly matDialog: MatDialog,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: UntypedFormBuilder,
-  ) { }
-    
-  public displayedColumns: string[] = [ 'provider', 'company', 'concept', 'charge', 'paymentAt', 'actions' ];
-  public dataSource: PaymentOrderModel[] = [];
-  public length: number = 0;
-  public pageSize: number = 10;
-  public pageSizeOptions: number[] = [10, 30, 50];
-  public pageIndex: number = 0;
-  public companies: CompanyModel[] = [];
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    startDate: [ null, Validators.required ],
-    endDate: [ null, Validators.required ],
-    companyId: '',
-  });
-  private params: Params = {};
-  private key: string = '';
+    constructor(
+        private readonly paymentOrdersService: PaymentOrdersService,
+        private readonly navigationService: NavigationService,
+        private readonly companiesService: CompaniesService,
+        private readonly matDialog: MatDialog,
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly formBuilder: UntypedFormBuilder,
+    ) { }
 
-  private handleCompanies$: Subscription = new Subscription();
-  private handleSearch$: Subscription = new Subscription();
-  private handleClickMenu$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleCompanies$.unsubscribe();
-    this.handleSearch$.unsubscribe();
-    this.handleClickMenu$.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.navigationService.setTitle('Ordenes de pago');
-
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
+    public displayedColumns: string[] = ['provider', 'company', 'concept', 'charge', 'paymentAt', 'actions'];
+    public dataSource: PaymentOrderModel[] = [];
+    public length: number = 0;
+    public pageSize: number = 10;
+    public pageSizeOptions: number[] = [10, 30, 50];
+    public pageIndex: number = 0;
+    public companies: CompanyModel[] = [];
+    public formGroup: UntypedFormGroup = this.formBuilder.group({
+        startDate: [null, Validators.required],
+        endDate: [null, Validators.required],
+        companyId: '',
     });
+    private params: Params = {};
+    private key: string = '';
 
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
-      this.pageIndex = 0;
-      this.key = key;
+    private handleCompanies$: Subscription = new Subscription();
+    private handleSearch$: Subscription = new Subscription();
+    private handleClickMenu$: Subscription = new Subscription();
 
-      const queryParams: Params = { key, pageIndex: this.pageIndex };
+    ngOnDestroy() {
+        this.handleCompanies$.unsubscribe();
+        this.handleSearch$.unsubscribe();
+        this.handleClickMenu$.unsubscribe();
+    }
 
-      Object.assign(this.params, queryParams);
+    ngOnInit(): void {
+        this.navigationService.setTitle('Ordenes de pago');
 
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParams, 
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      });
+        this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+            this.companies = companies;
+        });
 
-      this.fetchCount();
-      this.fetchData();
-    });
+        this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+            this.pageIndex = 0;
+            this.key = key;
 
-    this.navigationService.setMenu([
-      { id: 'search', label: 'Buscar', icon: 'search', show: true },
-      { id: 'export_excel', label: 'Exportar excel', icon: 'file_download', show: false },
-      { id: 'import_excel', label: 'Importar Excel', icon: 'file_upload', show: false },
-    ]);
+            const queryParams: Params = { key, pageIndex: this.pageIndex };
 
-    this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-      const { pageIndex, pageSize, startDate, endDate, key, companyId } = params;
-      this.pageIndex = Number(pageIndex || 0);
-      this.pageSize = Number(pageSize || 10);
-      this.key = key || '';
-      this.formGroup.patchValue({ companyId: companyId || '' });
-      Object.assign(this.params, { companyId: companyId || '' });
-      if (startDate && endDate) {
-        this.formGroup.patchValue({ startDate: new Date(startDate), endDate: new Date(endDate) });
-        Object.assign(this.params, { startDate: new Date(startDate), endDate: new Date(endDate) });
-      }
-      this.fetchCount();
-      this.fetchData();
-    });
+            Object.assign(this.params, queryParams);
 
-    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      switch (id) {
-        case 'export_excel':
-          this.navigationService.loadBarStart();
-          if (this.formGroup.valid) {
-            const params = this.formGroup.value;
-            this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
-              this.navigationService.loadBarFinish();
-              const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-              let body = [];
-              body.push([
-                'F. DE PAGO',
-                'PROVEEDOR',
-                'CONCEPTO',
-                'IMPORTE',
-                'RAZON SOCIAL',
-                'N° DE CUENTA',
-                'BANCO'
-              ]);
-              for (const paymentOrder of paymentOrders) {
-                body.push([
-                  formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
-                  paymentOrder.provider.name,
-                  paymentOrder.concept,
-                  paymentOrder.charge.toFixed(2),
-                  paymentOrder.company?.name,
-                  paymentOrder.bank?.accountNumber,
-                  paymentOrder.bank?.bankName,
-                ]);
-              }
-              const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-              buildExcel(body, name, wscols, [], []);
+            this.router.navigate([], {
+                relativeTo: this.activatedRoute,
+                queryParams: queryParams,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
             });
-          } else {
-            const { companyId } = this.formGroup.value;
-            const params = { companyId };
-            this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
-              this.navigationService.loadBarFinish();
-              const wscols = [ 40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-              let body = [];
-              body.push([
-                'F. DE PAGO',
-                'PROVEEDOR',
-                'CONCEPTO',
-                'IMPORTE',
-                'RAZON SOCIAL',
-                'N° DE CUENTA',
-                'BANCO'
-              ]);
-              for (const paymentOrder of paymentOrders) {
-                body.push([
-                  formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
-                  paymentOrder.provider.name,
-                  paymentOrder.concept,
-                  paymentOrder.charge.toFixed(2),
-                  paymentOrder.company?.name,
-                  paymentOrder.bank?.accountNumber,
-                  paymentOrder.bank?.bankName,
-                ]);
-              }
-              const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-              buildExcel(body, name, wscols, [], []);
+
+            this.fetchCount();
+            this.fetchData();
+        });
+
+        this.navigationService.setMenu([
+            { id: 'search', label: 'Buscar', icon: 'search', show: true },
+            { id: 'export_excel', label: 'Exportar excel', icon: 'file_download', show: false },
+            { id: 'import_excel', label: 'Importar Excel', icon: 'file_upload', show: false },
+        ]);
+
+        this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+            const { pageIndex, pageSize, startDate, endDate, key, companyId } = params;
+            this.pageIndex = Number(pageIndex || 0);
+            this.pageSize = Number(pageSize || 10);
+            this.key = key || '';
+            this.formGroup.patchValue({ companyId: companyId || '' });
+            Object.assign(this.params, { companyId: companyId || '' });
+            if (startDate && endDate) {
+                this.formGroup.patchValue({ startDate: new Date(startDate), endDate: new Date(endDate) });
+                Object.assign(this.params, { startDate: new Date(startDate), endDate: new Date(endDate) });
+            }
+            this.fetchCount();
+            this.fetchData();
+        });
+
+        this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+            switch (id) {
+                case 'export_excel':
+                    this.navigationService.loadBarStart();
+                    if (this.formGroup.valid) {
+                        const params = this.formGroup.value;
+                        this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
+                            this.navigationService.loadBarFinish();
+                            const wscols = [40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+                            let body = [];
+                            body.push([
+                                'F. DE PAGO',
+                                'PROVEEDOR',
+                                'CONCEPTO',
+                                'IMPORTE',
+                                'RAZON SOCIAL',
+                                'N° DE CUENTA',
+                                'BANCO'
+                            ]);
+                            for (const paymentOrder of paymentOrders) {
+                                body.push([
+                                    formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
+                                    paymentOrder.provider.name,
+                                    paymentOrder.concept,
+                                    paymentOrder.charge.toFixed(2),
+                                    paymentOrder.company?.name,
+                                    paymentOrder.bank?.accountNumber,
+                                    paymentOrder.bank?.bankName,
+                                ]);
+                            }
+                            const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+                            buildExcel(body, name, wscols, [], []);
+                        });
+                    } else {
+                        const { companyId } = this.formGroup.value;
+                        const params = { companyId };
+                        this.paymentOrdersService.getPaymentOrdersByRangeDateCompany(params).subscribe(paymentOrders => {
+                            this.navigationService.loadBarFinish();
+                            const wscols = [40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+                            let body = [];
+                            body.push([
+                                'F. DE PAGO',
+                                'PROVEEDOR',
+                                'CONCEPTO',
+                                'IMPORTE',
+                                'RAZON SOCIAL',
+                                'N° DE CUENTA',
+                                'BANCO'
+                            ]);
+                            for (const paymentOrder of paymentOrders) {
+                                body.push([
+                                    formatDate(new Date(paymentOrder.paymentAt), 'dd/MM/yyyy', 'en-US'),
+                                    paymentOrder.provider.name,
+                                    paymentOrder.concept,
+                                    paymentOrder.charge.toFixed(2),
+                                    paymentOrder.company?.name,
+                                    paymentOrder.bank?.accountNumber,
+                                    paymentOrder.bank?.bankName,
+                                ]);
+                            }
+                            const name = `ORDENES_DE_PAGO_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+                            buildExcel(body, name, wscols, [], []);
+                        });
+                    }
+
+                    break;
+
+                case 'import_excel':
+                    this.router.navigate(['/tools/paymentOrders']);
+                    break;
+            }
+
+        });
+    }
+
+    fetchData() {
+        if (this.key) {
+            this.navigationService.loadBarStart();
+            this.paymentOrdersService.getPaymentOrdersByPageKey(this.pageIndex + 1, this.pageSize, this.key).subscribe(paymentOrders => {
+                this.navigationService.loadBarFinish();
+                this.dataSource = paymentOrders;
+            }, (error: HttpErrorResponse) => {
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
             });
-          }    
-
-          break;
-      
-        case 'import_excel':
-          this.router.navigate(['/tools/paymentOrders']);
-          break;
-      }
-      
-    });
-  }
-
-  fetchData() {
-    if (this.key) {
-      this.navigationService.loadBarStart();
-      this.paymentOrdersService.getPaymentOrdersByPageKey(this.pageIndex + 1, this.pageSize, this.key).subscribe(paymentOrders => {
-        this.navigationService.loadBarFinish();
-        this.dataSource = paymentOrders;
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
-    } else {
-      this.navigationService.loadBarStart();
-      this.paymentOrdersService.getPaymentOrdersByRangeDateCompanyPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(paymentOrders => {
-        this.navigationService.loadBarFinish();
-        this.dataSource = paymentOrders;
-      });
+        } else {
+            this.navigationService.loadBarStart();
+            this.paymentOrdersService.getPaymentOrdersByRangeDateCompanyPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(paymentOrders => {
+                this.navigationService.loadBarFinish();
+                this.dataSource = paymentOrders;
+            });
+        }
     }
-  }
 
-  fetchCount() {
-    if (this.key) {
-      this.paymentOrdersService.getCountPaymentOrdersByKey(this.key).subscribe(count => {
-        this.length = count;
-      });
-    } else {
-      this.paymentOrdersService.getCountPaymentOrdersByRangeDateCompany(this.params).subscribe(count => {
-        this.length = count;
-      });
+    fetchCount() {
+        if (this.key) {
+            this.paymentOrdersService.getCountPaymentOrdersByKey(this.key).subscribe(count => {
+                this.length = count;
+            });
+        } else {
+            this.paymentOrdersService.getCountPaymentOrdersByRangeDateCompany(this.params).subscribe(count => {
+                this.length = count;
+            });
+        }
     }
-  }
 
-  handlePageEvent(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
+    handlePageEvent(event: PageEvent): void {
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
 
-    const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
+        const queryParams: Params = { pageIndex: this.pageIndex, pageSize: this.pageSize };
 
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParams, 
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: queryParams,
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
 
-    this.fetchData();
-  }
-
-  onRangeChange() {
-    if (this.formGroup.valid) {
-      this.pageIndex = 0;
-      this.key = '';
-      const { startDate, endDate } = this.formGroup.value;
-      const queryParams: Params = { startDate, endDate, pageIndex: this.pageIndex, key: null };
-      Object.assign(this.params, queryParams);
-
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParams, 
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      });
-
-      this.fetchCount();
-      this.fetchData();
-    }
-  }
-
-  onCompanyChange() {
-    this.pageIndex = 0;
-    this.key = '';
-    const { companyId } = this.formGroup.value;
-    const queryParams: Params = { companyId, pageIndex: this.pageIndex, key: null };
-    Object.assign(this.params, queryParams);
-
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParams, 
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
-
-    this.fetchCount();
-    this.fetchData();
-  }
-
-  onDelete(providerId: string) {
-    const ok = confirm('Esta seguro de eliminar?...');
-    if (ok) {
-      this.paymentOrdersService.delete(providerId).subscribe(() => {
-        this.navigationService.showMessage('Eliminado correctamente');
         this.fetchData();
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.showMessage(error.error.message);
-      });
     }
-  }
 
-  onShowPdf(paymentOrder: PaymentOrderModel) {
-    const dialogRef = this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data: paymentOrder._id
-    });
+    onRangeChange() {
+        if (this.formGroup.valid) {
+            this.pageIndex = 0;
+            this.key = '';
+            const { startDate, endDate } = this.formGroup.value;
+            const queryParams: Params = { startDate, endDate, pageIndex: this.pageIndex, key: null };
+            Object.assign(this.params, queryParams);
 
-    dialogRef.componentInstance.handleChangePdf().subscribe(() => {
-      this.fetchData();
-    });
-  }
+            this.router.navigate([], {
+                relativeTo: this.activatedRoute,
+                queryParams: queryParams,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
+            });
+
+            this.fetchCount();
+            this.fetchData();
+        }
+    }
+
+    onCompanyChange() {
+        this.pageIndex = 0;
+        this.key = '';
+        const { companyId } = this.formGroup.value;
+        const queryParams: Params = { companyId, pageIndex: this.pageIndex, key: null };
+        Object.assign(this.params, queryParams);
+
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: queryParams,
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
+
+        this.fetchCount();
+        this.fetchData();
+    }
+
+    onDelete(providerId: string) {
+        const ok = confirm('Esta seguro de eliminar?...');
+        if (ok) {
+            this.paymentOrdersService.delete(providerId).subscribe(() => {
+                this.navigationService.showMessage('Eliminado correctamente');
+                this.fetchData();
+            }, (error: HttpErrorResponse) => {
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
+
+    onShowPdf(paymentOrder: PaymentOrderModel) {
+        const dialogRef = this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data: paymentOrder._id
+        });
+
+        dialogRef.componentInstance.handleChangePdf().subscribe(() => {
+            this.fetchData();
+        });
+    }
 
 }

@@ -1,274 +1,300 @@
 <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
-  <mat-tab label="F. Cumplimiento">
-    <section class="container py-4">
-      <div class="mat-elevation-z2">
-        <table mat-table [dataSource]="dataSourceCompliances" class="w-100">
-          <ng-container matColumnDef="partnership">
-            <th mat-header-cell *matHeaderCellDef>Consorcio</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="business">
-            <th mat-header-cell *matHeaderCellDef>Empresa</th>
-            <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name | uppercase }}</td>
-          </ng-container>
-          <ng-container matColumnDef="policyNumber">
-            <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
-            <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
-          </ng-container>
-          <ng-container matColumnDef="startDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
-            <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="endDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
-            <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
-            <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button type="button" *ngIf="element.isEmition" mat-icon-button>
-                <mat-icon>looks_one</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
-                  <mat-icon>info</mat-icon>
-                  <span>Detalles</span>
-                </button>
-                <a *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-              </mat-menu>
-            </td>
-          </ng-container>
-      
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
-        </table>
-      
-        <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator> -->
-      </div>
-    </section>
-  </mat-tab>
-  <mat-tab label="A. Directo">
-    <section class="container py-4">
-      <div class="mat-elevation-z2">
-        <table mat-table [dataSource]="dataSourceDirects" class="w-100">
-          <ng-container matColumnDef="partnership">
-            <th mat-header-cell *matHeaderCellDef>Consorcio</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="business">
-            <th mat-header-cell *matHeaderCellDef>Empresa</th>
-            <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name | uppercase }}</td>
-          </ng-container>
-          <ng-container matColumnDef="policyNumber">
-            <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
-            <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
-          </ng-container>
-          <ng-container matColumnDef="startDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
-            <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="endDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
-            <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
-            <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button type="button" *ngIf="element.isEmition" mat-icon-button>
-                <mat-icon>looks_one</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
-                  <mat-icon>info</mat-icon>
-                  <span>Detalles</span>
-                </button>
-                <a *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-              </mat-menu>
-            </td>
-          </ng-container>
-      
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
-        </table>
-      
-        <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator> -->
-      </div>
-    </section>
-  </mat-tab>
-  <mat-tab label="A. Materiales">
-    <section class="container py-4">
-      <div class="mat-elevation-z2">
-        <table mat-table [dataSource]="dataSourceMaterials" class="w-100">
-          <ng-container matColumnDef="partnership">
-            <th mat-header-cell *matHeaderCellDef>Consorcio</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="business">
-            <th mat-header-cell *matHeaderCellDef>Empresa</th>
-            <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name | uppercase }}</td>
-          </ng-container>
-          <ng-container matColumnDef="policyNumber">
-            <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
-            <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
-          </ng-container>
-          <ng-container matColumnDef="startDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
-            <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="endDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
-            <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
-            <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button type="button" *ngIf="element.isEmition" mat-icon-button>
-                <mat-icon>looks_one</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
-                  <mat-icon>info</mat-icon>
-                  <span>Detalles</span>
-                </button>
-                <a *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-              </mat-menu>
-            </td>
-          </ng-container>
-      
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
-        </table>
-      
-        <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [pageIndex]="pageIndex" [length]="length" (page)="handlePageEvent($event)" showFirstLastButtons></mat-paginator> -->
-      </div>
-    </section>
-  </mat-tab>
-  <mat-tab label="Busqueda">
-    <section class="container py-4">
-      <div class="mat-elevation-z2">
-        <table mat-table [dataSource]="dataSource" class="w-100">
-          <ng-container matColumnDef="guaranteeType">
-            <th mat-header-cell *matHeaderCellDef>Garantia</th>
-            <td mat-cell *matCellDef="let element">{{ element.guaranteeType }}</td>
-          </ng-container>
-          <ng-container matColumnDef="partnership">
-            <th mat-header-cell *matHeaderCellDef>Consorcio</th>
-            <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{ element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="business">
-            <th mat-header-cell *matHeaderCellDef>Empresa</th>
-            <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name | uppercase }}</td>
-          </ng-container>
-          <ng-container matColumnDef="policyNumber">
-            <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
-            <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
-          </ng-container>
-          <ng-container matColumnDef="endDate">
-            <th mat-header-cell *matHeaderCellDef>Fecha de cumplimiento</th>
-            <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
-          </ng-container>
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
-            <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
-          </ng-container>
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Estado de T.</th>
-            <td mat-cell *matCellDef="let element">{{ element.processStatus }}</td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
-              <button type="button" *ngIf="element.mails" mat-icon-button>
-                <mat-icon>mail</mat-icon>
-              </button>
-              <button type="button" *ngIf="!element.mails" mat-icon-button>
-              </button>
-              <button type="button" *ngIf="element.isEmition" mat-icon-button>
-                <mat-icon>looks_one</mat-icon>
-              </button>
-              <button type="button" *ngIf="!element.isEmition" mat-icon-button>
-              </button>
-              <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
-                  <mat-icon>info</mat-icon>
-                  <span>Detalles</span>
-                </button>
-                <a *ngIf="element.guaranteeType == 'GFCF'" [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GAMF'" [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-                <a *ngIf="element.guaranteeType == 'GADF'" [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
-                  <mat-icon>edit</mat-icon>
-                  <span>Editar</span>
-                </a>
-              </mat-menu>
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
-        </table>
-      </div>
-    </section>
-  </mat-tab>
+    <mat-tab label="F. Cumplimiento">
+        <section class="container py-4">
+            <div class="mat-elevation-z2">
+                <table mat-table [dataSource]="dataSourceCompliances" class="w-100">
+                    <ng-container matColumnDef="partnership">
+                        <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{
+                            element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="business">
+                        <th mat-header-cell *matHeaderCellDef>Empresa</th>
+                        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name |
+                            uppercase }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="policyNumber">
+                        <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+                        <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+                        <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
+                        <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+                        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                            <button type="button" *ngIf="element.isEmition" mat-icon-button>
+                                <mat-icon>looks_one</mat-icon>
+                            </button>
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
+                                    <mat-icon>info</mat-icon>
+                                    <span>Detalles</span>
+                                </button>
+                                <a *ngIf="element.guaranteeType == 'GFCF'"
+                                    [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GAMF'"
+                                    [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GADF'"
+                                    [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;"
+                        [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-info': row.status === '05', 'bg-danger': row.status === '04' }">
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </mat-tab>
+    <mat-tab label="A. Directo">
+        <section class="container py-4">
+            <div class="mat-elevation-z2">
+                <table mat-table [dataSource]="dataSourceDirects" class="w-100">
+                    <ng-container matColumnDef="partnership">
+                        <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{
+                            element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="business">
+                        <th mat-header-cell *matHeaderCellDef>Empresa</th>
+                        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name |
+                            uppercase }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="policyNumber">
+                        <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+                        <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+                        <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
+                        <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+                        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                            <button type="button" *ngIf="element.isEmition" mat-icon-button>
+                                <mat-icon>looks_one</mat-icon>
+                            </button>
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
+                                    <mat-icon>info</mat-icon>
+                                    <span>Detalles</span>
+                                </button>
+                                <a *ngIf="element.guaranteeType == 'GFCF'"
+                                    [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GAMF'"
+                                    [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GADF'"
+                                    [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;"
+                        [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-info': row.status === '05', 'bg-danger': row.status === '04' }">
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </mat-tab>
+    <mat-tab label="A. Materiales">
+        <section class="container py-4">
+            <div class="mat-elevation-z2">
+                <table mat-table [dataSource]="dataSourceMaterials" class="w-100">
+                    <ng-container matColumnDef="partnership">
+                        <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{
+                            element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="business">
+                        <th mat-header-cell *matHeaderCellDef>Empresa</th>
+                        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name |
+                            uppercase }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="policyNumber">
+                        <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+                        <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+                        <td mat-cell *matCellDef="let element">{{ element.startDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de cuplimiento</th>
+                        <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+                        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                            <button type="button" *ngIf="element.isEmition" mat-icon-button>
+                                <mat-icon>looks_one</mat-icon>
+                            </button>
+                            <button mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
+                                    <mat-icon>info</mat-icon>
+                                    <span>Detalles</span>
+                                </button>
+                                <a *ngIf="element.guaranteeType == 'GFCF'"
+                                    [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GAMF'"
+                                    [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GADF'"
+                                    [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsGuarantee"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsGuarantee;"
+                        [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-info': row.status === '05', 'bg-danger': row.status === '04' }">
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </mat-tab>
+    <mat-tab label="Busqueda">
+        <section class="container py-4">
+            <div class="mat-elevation-z2">
+                <table mat-table [dataSource]="dataSource" class="w-100">
+                    <ng-container matColumnDef="guaranteeType">
+                        <th mat-header-cell *matHeaderCellDef>Garantia</th>
+                        <td mat-cell *matCellDef="let element">{{ element.guaranteeType }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="partnership">
+                        <th mat-header-cell *matHeaderCellDef>Consorcio</th>
+                        <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }">{{
+                            element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="business">
+                        <th mat-header-cell *matHeaderCellDef>Empresa</th>
+                        <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.business.name |
+                            uppercase }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="policyNumber">
+                        <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+                        <td mat-cell *matCellDef="let element">{{ element.policyNumber }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de cumplimiento</th>
+                        <td mat-cell *matCellDef="let element">{{ element.endDate | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef>Suma asegurada</th>
+                        <td mat-cell *matCellDef="let element">{{ element.price.toFixed(2) }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Estado de T.</th>
+                        <td mat-cell *matCellDef="let element">{{ element.processStatus }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                            <button type="button" *ngIf="element.mails" mat-icon-button>
+                                <mat-icon>mail</mat-icon>
+                            </button>
+                            <button type="button" *ngIf="!element.mails" mat-icon-button>
+                            </button>
+                            <button type="button" *ngIf="element.isEmition" mat-icon-button>
+                                <mat-icon>looks_one</mat-icon>
+                            </button>
+                            <button type="button" *ngIf="!element.isEmition" mat-icon-button>
+                            </button>
+                            <button type="button" mat-icon-button [matMenuTriggerFor]="menu"
+                                aria-label="Example icon-button with a menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu" xPosition="before">
+                                <button type="button" (click)="onShowDetails(element)" mat-menu-item>
+                                    <mat-icon>info</mat-icon>
+                                    <span>Detalles</span>
+                                </button>
+                                <a *ngIf="element.guaranteeType == 'GFCF'"
+                                    [routerLink]="['/compliances', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GAMF'"
+                                    [routerLink]="['/materials', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                                <a *ngIf="element.guaranteeType == 'GADF'"
+                                    [routerLink]="['/directs', element._id, 'editCommercial']" mat-menu-item>
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Editar</span>
+                                </a>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-info': row.status === '05', 'bg-danger': row.status === '04' }">
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </mat-tab>
 </mat-tab-group>

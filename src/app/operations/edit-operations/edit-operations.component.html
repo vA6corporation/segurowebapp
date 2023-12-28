@@ -3,6 +3,9 @@
         <button type="button" class="w-100 mb-4" (click)="onAttachFile()" mat-raised-button color="primary">
             DOCUMENTOS DE LA OPERACION
         </button>
+        <button type="button" color="accent" class="w-100 mb-4" (click)="onDownloadFiles()" mat-raised-button>
+            DESCARGAR DOCUMENTOS DE LA OPERACION
+        </button>
         <ng-container *ngFor="let business of businesses">
             <mat-divider class="mb-4"></mat-divider>
             <div class="w-100 mb-4">
@@ -14,17 +17,20 @@
                     [disabled]="isLoading" mat-raised-button color="primary">
                     EXPERIENCIA {{ business.name }}
                 </button>
-                <button type="button" class="w-100" (click)="onDialogAttachPdfFinancials(business._id)"
+                <button type="button" class="w-100 mb-3" (click)="onDialogAttachPdfFinancials(business._id)"
                     [disabled]="isLoading" mat-raised-button color="primary">
                     D. FINANCIEROS {{ business.name }}
+                </button>
+                <button type="button" color="accent" class="w-100" (click)="onDownloadBusinessFiles(business)" mat-raised-button>
+                    DESCARGAR DOCUMENTOS SELECCIONADOS
                 </button>
             </div>
         </ng-container>
     </div>
     <mat-divider class="mb-4"></mat-divider>
-    <button type="button" class="w-100 mb-4" (click)="onAttachFile()" mat-raised-button color="primary">
-        DOCUMENTOS DE LA OPERACION
-    </button>
+    <!-- <button type="button" class="w-100 mb-4" (click)="onDownloadFiles()" mat-raised-button color="primary">
+        DESCARGAR DOCUMENTOS SELECCIONADOS
+    </button> -->
     <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
         <mat-form-field appearance="fill">
             <mat-label>Nombre de operacion</mat-label>

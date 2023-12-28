@@ -29,6 +29,7 @@ import { UserModel } from 'src/app/users/user.model';
 import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
 import { PaymentModel } from 'src/app/payments/payment.model';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
 
 @Component({
   selector: 'app-edit-materials',
@@ -124,7 +125,7 @@ export class EditMaterialsComponent implements OnInit {
   }
 
   onDialogPayments() {
-    const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+    const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
       width: '600px',
       position: { top: '20px' }
     });
