@@ -23,7 +23,7 @@ export class ShareholdersService {
 
   getShareholdersByKey(key: string): Observable<ShareholderModel[]> {
     const params: Params = { key };
-    return this.httpService.get(`shareholders/byKey`, { params });
+    return this.httpService.get(`shareholders/byKey`, params);
   }
 
   getShareholdersCount(): Observable<number> {

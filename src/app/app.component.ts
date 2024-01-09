@@ -84,8 +84,9 @@ export class AppComponent {
         }
 
         const accessToken = localStorage.getItem('accessToken');
+        this.authService.setAccessToken(accessToken);
         this.authService.getSession(accessToken).subscribe(auth => {
-            this.authService.setAccessToken(accessToken);
+            // this.authService.setAccessToken(accessToken);
             this.authService.setAuth(auth);
             if (auth.user.devices.find(e => e.deviceId === deviceId)) {
                 this.navigationService.loadSpinnerFinish();

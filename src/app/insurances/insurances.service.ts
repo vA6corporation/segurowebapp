@@ -21,7 +21,7 @@ export class InsurancesService {
     }
 
     getInsurancesByPageType(pageIndex: number, pageSize: number, type: string, params: Params): Observable<InsuranceModel[]> {
-        return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`, { params });
+        return this.httpService.get(`insurances/byPageType/${pageIndex}/${pageSize}/${type}`, params);
     }
 
     getInsurancesByInsuranceGroup(insuranceGroupId: string): Observable<InsuranceModel[]> {
@@ -33,15 +33,15 @@ export class InsurancesService {
     }
 
     getCountInsurancesByType(type: string, params: Params): Observable<number> {
-        return this.httpService.get(`insurances/countInsurancesByType/${type}`, { params });
+        return this.httpService.get(`insurances/countInsurancesByType/${type}`, params);
     }
 
     getInsurancesByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<InsuranceModel[]> {
-        return this.httpService.get(`insurances/byRangeDate/${startDate}/${endDate}`, { params });
+        return this.httpService.get(`insurances/byRangeDate/${startDate}/${endDate}`, params);
     }
 
     getInsurancesRenewByTypeWorker(params: Params): Observable<InsuranceModel[]> {
-        return this.httpService.get(`insurances/renewByTypeWorker`, { params });
+        return this.httpService.get(`insurances/renewByTypeWorker`, params);
     }
 
     getPdfs(insuranceId: string, type: string): Observable<InsurancePdfModel[]> {
@@ -85,11 +85,11 @@ export class InsurancesService {
     }
 
     getSummary(year: number, type: string, params: Params): Observable<any[]> {
-        return this.httpService.get(`insurances/summaryByYearType/${year}/${type}`, { params });
+        return this.httpService.get(`insurances/summaryByYearType/${year}/${type}`, params);
     }
 
     getSummaryByRangeDateTypeWorker(startDate: Date, endDate: Date, params: Params): Observable<any[]> {
-        return this.httpService.get(`insurances/summaryByRangeDateTypeWorker/${startDate}/${endDate}`, { params });
+        return this.httpService.get(`insurances/summaryByRangeDateTypeWorker/${startDate}/${endDate}`, params);
     }
 
 }

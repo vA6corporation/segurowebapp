@@ -16,7 +16,7 @@ export class SeaceService {
 
   getSeaceDatasByKey(key: string, params: Params): Observable<SeaceDataModel[]> {
     Object.assign(params, { key });
-    return this.httpService.get(`seace/byKey`, { params });
+    return this.httpService.get(`seace/byKey`, params);
   }
 
   getBusinessOfferPdfsBySeaceData(seaceDataId: string): Observable<any[]> {
@@ -28,11 +28,11 @@ export class SeaceService {
   }
 
   getSeaceDatasByPage(pageIndex: number, pageSize: number, params: Params): Observable<any[]> {
-    return this.httpService.get(`seace/seaceDatasByPage/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`seace/seaceDatasByPage/${pageIndex}/${pageSize}`, params);
   }
 
   getCountSeaceDatas(params: Params): Observable<number> {
-    return this.httpService.get(`seace/countSeaceDatas`, { params });
+    return this.httpService.get(`seace/countSeaceDatas`, params);
   }
 
   getSeaceErrosByPage(pageIndex: number, pageSize: number): Observable<SeaceErrorModel[]> {

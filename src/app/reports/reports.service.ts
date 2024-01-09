@@ -17,7 +17,7 @@ export class ReportsService {
   }
 
   getGuarantiesByKey(params: Params): Observable<any[]> {
-    return this.httpService.get(`reports/byKey`, { params });
+    return this.httpService.get(`reports/byKey`, params);
   }
 
   getGuarantiesByCommercialKey(workerId: string, key: string): Observable<any[]> {
@@ -29,7 +29,7 @@ export class ReportsService {
   }
 
   getGuarantiesByFinancierWorkerStatus(params: Params): Observable<any[]> {
-    return this.httpService.get(`reports/byFinancierWorkerStatus`, { params });
+    return this.httpService.get(`reports/byFinancierWorkerStatus`, params);
   }
 
   getGuarantiesByStatus(processStatusCode: string, status: string): Observable<any[]> {
@@ -37,23 +37,23 @@ export class ReportsService {
       processStatusCode,
       status,
     };
-    return this.httpService.get(`reports/byStatus`, { params });
+    return this.httpService.get(`reports/byStatus`, params);
   }
 
   getCollectionGuarantiesByRangeDateWorker(params: Params): Observable<any> {
-    return this.httpService.get('reports/collectionGuarantiesByRangeDateWorker', { params });
+    return this.httpService.get('reports/collectionGuarantiesByRangeDateWorker', params);
   }
 
   getSummaryPrimasByRangeDateWorker(params: Params): Observable<any> {
-    return this.httpService.get('reports/summaryPrimasByRangeDateWorker', { params });
+    return this.httpService.get('reports/summaryPrimasByRangeDateWorker', params);
   }
 
   getPrimasByRangeDateWorker(params: Params): Observable<any> {
-    return this.httpService.get('reports/primasByRangeDateWorker', { params });
+    return this.httpService.get('reports/primasByRangeDateWorker', params);
   }
 
   getCommissionsByYear(year: number, params: Params): Observable<any[]> {
-    return this.httpService.get(`reports/commissionsByYear/${year}`, { params });
+    return this.httpService.get(`reports/commissionsByYear/${year}`, params);
   }
 
 }

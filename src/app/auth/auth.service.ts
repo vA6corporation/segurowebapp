@@ -175,10 +175,10 @@ export class AuthService {
   }
 
   getSession(accessToken: string|null): Observable<AuthModel> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    });
-    return this.httpService.get('auth/profile', { headers });
+    // const headers = new HttpHeaders({
+    //   'Content-Type': 'application/json',
+    //   'Authorization': `Bearer ${accessToken}`
+    // });
+    return this.httpService.get('auth/profile');
   }
 }

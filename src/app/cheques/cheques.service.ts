@@ -26,11 +26,11 @@ export class ChequesService {
   }
 
   getChequesByRangeDate(startDate: Date, endDate: Date, params: Params): Observable<ChequeModel[]> {
-    return this.httpService.get(`cheques/byRangeDate/${startDate}/${endDate}`, { params });
+    return this.httpService.get(`cheques/byRangeDate/${startDate}/${endDate}`, params);
   }
 
   getChequesByCommercialPage(startDate: Date, endDate: Date, workerId: string, pageIndex: number, pageSize: number, params: Params): Observable<ChequeModel[]> {
-    return this.httpService.get(`cheques/byCommercialPageRangeDate/${startDate}/${endDate}/${workerId}/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`cheques/byCommercialPageRangeDate/${startDate}/${endDate}/${workerId}/${pageIndex}/${pageSize}`, params);
   }
 
   getByRangeDatePage(startDate: Date, endDate: Date, pageIndex: number, pageSize: number): Observable<ChequeModel[]> {

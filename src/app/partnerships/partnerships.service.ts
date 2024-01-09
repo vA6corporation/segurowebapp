@@ -27,7 +27,7 @@ export class PartnershipsService {
   }
 
   getPartnershipsByPage(pageIndex: number, pageSize: number, params: Params): Observable<PartnershipModel[]> {
-    return this.httpService.get(`partnerships/byPage/${pageIndex}/${pageSize}`, { params }); 
+    return this.httpService.get(`partnerships/byPage/${pageIndex}/${pageSize}`, params); 
   }
 
   getTemplatePartnershipsByPage(pageIndex: number, pageSize: number): Observable<PartnershipModel[]> {
@@ -35,7 +35,7 @@ export class PartnershipsService {
   }
 
   getPartnershipsCount(params: Params): Observable<number> {
-    return this.httpService.get('partnerships/countPartnerships', { params });
+    return this.httpService.get('partnerships/countPartnerships', params);
   }
 
   getTemplatePartnershipsCount(): Observable<number> {

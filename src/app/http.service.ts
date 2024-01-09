@@ -21,17 +21,13 @@ export class HttpService {
     private baseUrl: string = environment.baseUrl;
     public accessToken: string | null = null;
 
-    get(url: string, options?: Options): Observable<any> {
-        let headers = options?.headers;
-        const params = options?.params;
-        if (!headers) {
-            headers = new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.accessToken}`
-            });
-        }
+    get(url: string, params?: Params): Observable<any> {
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.accessToken}`
+        });
         return this.http.get(`${this.baseUrl}${url}`, { headers, params });
-    }
+      }
 
     post(url: string, body: any): Observable<any> {
         const headers = new HttpHeaders({

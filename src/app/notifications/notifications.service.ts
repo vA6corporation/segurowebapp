@@ -18,12 +18,12 @@ export class NotificationsService {
     endDate: string,
     params: Params
   ): Observable<number> {
-    return this.httpService.get(`notifications/countNotificationsByRangeDate/${startDate}/${endDate}`, { params });
+    return this.httpService.get(`notifications/countNotificationsByRangeDate/${startDate}/${endDate}`, params);
   }
 
   getNotificationsByKey(key: string): Observable<NotificationModel[]> {
     const params = { key };
-    return this.httpService.get(`notifications/byKey`, { params });
+    return this.httpService.get(`notifications/byKey`, params);
   }
 
   getNotificationsByPage(
@@ -33,7 +33,7 @@ export class NotificationsService {
     pageSize: number,
     params: Params
   ): Observable<NotificationModel[]> {
-    return this.httpService.get(`notifications/byRangeDatePage/${startDate}/${endDate}/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`notifications/byRangeDatePage/${startDate}/${endDate}/${pageIndex}/${pageSize}`, params);
   }
 
   getActiveNotifications(): Observable<NotificationModel[]> {

@@ -22,11 +22,11 @@ export class UsersService {
   }
 
   getUsersByPage(pageIndex: number, pageSize: number, params: Params): Observable<UserModel[]> {
-    return this.httpService.get(`users/byPage/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`users/byPage/${pageIndex}/${pageSize}`, params);
   }
 
   getCountUsers(params: Params): Observable<number> {
-    return this.httpService.get('users/countUsers', { params });
+    return this.httpService.get('users/countUsers', params);
   }
 
   getUserById(userId: string): Observable<UserModel> {

@@ -19,7 +19,7 @@ export class InvestmentsService {
 
   getInvestmentsByKey(key: string): Observable<InvestmentModel[]> {
     const params: Params = { key };
-    return this.httpService.get('investments/byKey', { params });
+    return this.httpService.get('investments/byKey', params);
   }
 
   getInvestmentsByPage(pageIndex: number, pageSize: number): Observable<InvestmentModel[]> {

@@ -16,11 +16,11 @@ export class CreditsService {
   ) { }
 
   getSummary(startDate: string, endDate: string, params: Params): Observable<any> {
-    return this.httpService.get(`credits/summaryByDate/${startDate}/${endDate}`, { params });
+    return this.httpService.get(`credits/summaryByDate/${startDate}/${endDate}`, params);
   }
 
   getSummaryByYear(year: string, params: Params): Observable<any[]> {
-    return this.httpService.get(`credits/summaryByYear/${year}`, { params });
+    return this.httpService.get(`credits/summaryByYear/${year}`, params);
   }
 
   getSummaryMonthsByYear(year: string): Observable<any[]> {

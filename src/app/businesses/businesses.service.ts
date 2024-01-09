@@ -21,7 +21,7 @@ export class BusinessesService {
     ) { }
 
     getBusinessesWithoutDocumentation(params: Params): Observable<BusinessModel[]> {
-        return this.httpService.get('businesses/withoutDocumentation', { params });
+        return this.httpService.get('businesses/withoutDocumentation', params);
     }
 
     getBusinessesByIds(businessIds: string[]): Observable<BusinessModel[]> {
@@ -61,7 +61,7 @@ export class BusinessesService {
     }
 
     getBusinessesByPage(pageIndex: number, pageSize: number, params: Params): Observable<BusinessModel[]> {
-        return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`, { params });
+        return this.httpService.get(`businesses/byPage/${pageIndex}/${pageSize}`, params);
     }
 
     getBusinessesByWorkerPage(workerId: string, pageIndex: number, pageSize: number): Observable<BusinessModel[]> {
@@ -69,7 +69,7 @@ export class BusinessesService {
     }
 
     getCountBusinesses(params: Params): Observable<number> {
-        return this.httpService.get('businesses/countBusinesses', { params });
+        return this.httpService.get('businesses/countBusinesses', params);
     }
 
     getCountBusinessesByWorker(workerId: string): Observable<number> {

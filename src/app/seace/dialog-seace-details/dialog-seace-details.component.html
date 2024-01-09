@@ -3,10 +3,6 @@
     <table>
         <tbody>
             <tr>
-                <td style="width: 10rem">Ultima act.:</td>
-                <td>{{ seaceData.updatedAt | date: 'MMM M, y hh:mm a' }}</td>
-            </tr>
-            <tr>
                 <td style="width: 10rem">Comvocatoria ID:</td>
                 <td>{{ seaceData.convocatoriaId }}</td>
             </tr>
@@ -25,6 +21,10 @@
             <tr>
                 <td style="width: 10rem">F. Buena pro:</td>
                 <td>{{ seaceData.buenaProDate | date }}</td>
+            </tr>
+            <tr>
+                <td style="width: 10rem">F. actualizacion:</td>
+                <td>{{ seaceData.updatedAt | date: 'MMM M, y hh:mm a' }}</td>
             </tr>
             <tr>
                 <td style="width: 10rem">E. de gestion:</td>

@@ -6,7 +6,6 @@
   <a href="#" #search mat-list-item routerLink="/surveys" (click)="onClose()" *ngIf="privileges.surveys">
     <mat-icon matListItemIcon class="m-3 color-black">support_agent</mat-icon>
     <span matListItemTitle>Encuestas</span>
-    <!-- <span matListItemTitle>Encuestas</span> -->
   </a>
   <a href="#" #search mat-list-item routerLink="/operations" (click)="onClose()" *ngIf="privileges.operations">
     <mat-icon matListItemIcon class="m-3 color-black">rocket_launch</mat-icon>
@@ -105,7 +104,7 @@
     <span matListItemTitle>Certificadoras</span>
   </a>
   <mat-expansion-panel class="mat-elevation-z0">
-    <mat-expansion-panel-header #guaranties *ngIf="privileges.guaranties">
+    <mat-expansion-panel-header #guaranties class="pl-0" *ngIf="privileges.guaranties">
       <mat-panel-title>
         <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
         Fianzas
@@ -128,7 +127,7 @@
     </a>
   </mat-expansion-panel>
   <mat-expansion-panel class="mat-elevation-z0">
-    <mat-expansion-panel-header #insurances *ngIf="privileges.insurances">
+    <mat-expansion-panel-header #insurances class="pl-0" *ngIf="privileges.insurances">
       <mat-panel-title>
         <mat-icon matListItemIcon class="m-3 color-black">text_snippet</mat-icon>
         Seguros
@@ -204,7 +203,7 @@
   </mat-expansion-panel>
   <mat-accordion>
     <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #expenses *ngIf="privileges.templates">
+      <mat-expansion-panel-header #expenses class="pl-0" *ngIf="privileges.templates">
         <mat-panel-title>
           <mat-icon matListItemIcon class="m-3 color-black">task</mat-icon>
           Formatos
@@ -221,7 +220,7 @@
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #expenses *ngIf="privileges.expenses">
+      <mat-expansion-panel-header #expenses class="pl-0" *ngIf="privileges.expenses">
         <mat-panel-title>
           <mat-icon matListItemIcon class="m-3 color-black">local_atm</mat-icon>
           Contabilidad
@@ -239,7 +238,7 @@
       <a href="#" #banks mat-list-item routerLink="/banks" (click)="onClose()">
         <span matListItemTitle>Cuentas bancarias</span>
       </a>
-      <a href="#" mat-list-item routerLink="/constructions/debtors" (click)="onClose()">
+      <a href="#" mat-list-item routerLink="/constructions/collection" (click)="onClose()">
         <span matListItemTitle>Recaudacion</span>
       </a>
       <a href="#" #banks mat-list-item routerLink="/paymentOrders/report" (click)="onClose()">
@@ -247,7 +246,7 @@
       </a>
     </mat-expansion-panel>
     <mat-expansion-panel class="mat-elevation-z0">
-      <mat-expansion-panel-header #reports *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8  || privileges.r9 || privileges.r10 || privileges.r11 || privileges.r12 || privileges.r13">
+      <mat-expansion-panel-header #reports class="pl-0" *ngIf="privileges.r1 || privileges.r2 || privileges.r3 || privileges.r4 || privileges.r5 || privileges.r6 || privileges.r7 || privileges.r8  || privileges.r9 || privileges.r10 || privileges.r11 || privileges.r12 || privileges.r13">
         <mat-panel-title>
           <mat-icon matListItemIcon class="m-3 color-black">poll</mat-icon>
           Reportes

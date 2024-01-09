@@ -1,25 +1,24 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { Params } from '@angular/router';
+import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Subscription } from 'rxjs';
+import { BanksService } from 'src/app/banks/banks.service';
 import { NavigationService } from 'src/app/navigation/navigation.service';
+import { BankModel } from 'src/app/providers/bank.model';
+import { buildExcel } from 'src/app/xlsx';
 import { ConstructionModel } from '../construction.model';
 import { ConstructionsService } from '../constructions.service';
-import { Chart, ChartOptions, ChartType, registerables } from 'chart.js';
-import { Subscription } from 'rxjs';
-import { formatDate } from '@angular/common';
-import { buildExcel } from 'src/app/xlsx';
-import { BankModel } from 'src/app/providers/bank.model';
-import { BanksService } from 'src/app/banks/banks.service';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Params } from '@angular/router';
 Chart.register(...registerables);
 
 @Component({
-    selector: 'app-debtors',
-    templateUrl: './debtors.component.html',
-    styleUrls: ['./debtors.component.sass']
+    selector: 'app-collection',
+    templateUrl: './collection.component.html',
+    styleUrl: './collection.component.sass'
 })
-export class DebtorsComponent implements OnInit {
+export class CollectionComponent {
 
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
@@ -30,8 +29,8 @@ export class DebtorsComponent implements OnInit {
 
     @ViewChild('chartDebtor')
     private chartDebtorViewChild!: ElementRef<HTMLCanvasElement>;
+    private params: Params = { statusPayment: '03' };
     chartDebtor: Chart | null = null;
-    private params: Params = {};
 
     displayedColumns: string[] = [
         'emitionAt',
@@ -44,7 +43,7 @@ export class DebtorsComponent implements OnInit {
         'actions'
     ];
     formGroup = this.formBuilder.group({
-        bankId: '',
+        statusPayment: '03',
         startDate: [null, Validators.required],
         endDate: [null, Validators.required],
     });
@@ -91,6 +90,9 @@ export class DebtorsComponent implements OnInit {
                 'HONORARIOS',
                 'PENDIENTE',
                 'OBSERVACIONES',
+                'HONORARIOS',
+                'IMPORTE PAGADO',
+                'DEUDA',
                 'OBJETO',
             ]);
             for (const construction of this.dataSource) {
@@ -104,6 +106,9 @@ export class DebtorsComponent implements OnInit {
                     construction.commission,
                     construction.debt,
                     construction.observationsPayment,
+                    Number((construction.commission || 0).toFixed(2)),
+                    Number(construction.payments.map(e => e.charge).reduce((a, b) => a + b, 0).toFixed(2)),
+                    Number(construction.debt.toFixed(2)),
                     construction.object,
                 ]);
             }
@@ -126,15 +131,15 @@ export class DebtorsComponent implements OnInit {
         }
     }
 
-    onChangeBank() {
-        const { bankId } = this.formGroup.value;
-        Object.assign(this.params, { bankId });
+    onChangeStatusPayment() {
+        const { statusPayment } = this.formGroup.value;
+        Object.assign(this.params, { statusPayment });
         this.fetchData();
     }
 
     fetchData() {
         this.navigationService.loadBarStart();
-        this.constructionsService.getDebtorConstructions(this.params).subscribe(constructions => {
+        this.constructionsService.getConstructions(this.params).subscribe(constructions => {
             this.dataSource = constructions;
             this.navigationService.loadBarFinish();
             let totalPaid = 0;
@@ -196,10 +201,6 @@ export class DebtorsComponent implements OnInit {
             };
             const canvasPrima = this.chartDebtorViewChild.nativeElement;
             this.chartDebtor = new Chart(canvasPrima, configPrima);
-        }, (error: HttpErrorResponse) => {
-            this.navigationService.showMessage(error.error.message);
-            this.navigationService.loadBarFinish();
         });
     }
-
 }

@@ -26,7 +26,7 @@ export class PaymentOrdersService {
   getCountPaymentOrdersByRangeDateCompany(
     params: Params
   ): Observable<number> {
-    return this.httpService.get('paymentOrders/countPaymentOrdersByRangeDateCompany', { params });
+    return this.httpService.get('paymentOrders/countPaymentOrdersByRangeDateCompany', params);
   }
 
   getPaymentOrderById(paymentOrderId: string) {
@@ -43,7 +43,7 @@ export class PaymentOrdersService {
 
   getPaymentOrdersByPageKey(pageIndex: number, pageSize: number, key: string): Observable<PaymentOrderModel[]> {
     const params = { key };
-    return this.httpService.get(`paymentOrders/byPageKey/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`paymentOrders/byPageKey/${pageIndex}/${pageSize}`, params);
   }
 
   getPaymentOrdersByRangeDateCompanyPage(
@@ -51,17 +51,17 @@ export class PaymentOrdersService {
     pageSize: number,
     params: Params
   ): Observable<PaymentOrderModel[]> {
-    return this.httpService.get(`paymentOrders/byRangeDateCompanyPage/${pageIndex}/${pageSize}`, { params });
+    return this.httpService.get(`paymentOrders/byRangeDateCompanyPage/${pageIndex}/${pageSize}`, params);
   }
 
   getPaymentOrdersByRangeDateCompany(
     params: Params
   ): Observable<PaymentOrderModel[]> {
-    return this.httpService.get(`paymentOrders/byRangeDateCompany`, { params });
+    return this.httpService.get(`paymentOrders/byRangeDateCompany`, params);
   }
 
   getSummaryByYear(year: number, params: Params): Observable<PaymentOrderModel[]> {
-    return this.httpService.get(`paymentOrders/summaryByYear/${year}`, { params });
+    return this.httpService.get(`paymentOrders/summaryByYear/${year}`, params);
   }
 
   create(paymentOrder: CreatePaymentOrderModel): Observable<PaymentOrderModel> {

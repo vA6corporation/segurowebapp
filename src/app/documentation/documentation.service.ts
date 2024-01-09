@@ -13,6 +13,6 @@ export class DocumentationService {
   ) { }
 
   getGuaranties(params: Params): Observable<any> {
-    return this.httpService.get('reports/documentation', { params });
+    return this.httpService.get('reports/documentation', params);
   }
 }
