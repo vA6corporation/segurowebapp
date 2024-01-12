@@ -34,7 +34,7 @@ export class MailsComponent implements OnInit {
 
         this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
             this.navigationService.loadBarStart();
-            this.mailsService.getManyByKey(key).subscribe(mails => {
+            this.mailsService.getMailsByKey(key).subscribe(mails => {
                 this.dataSource = mails
                 this.navigationService.loadBarFinish()
             })
@@ -48,8 +48,8 @@ export class MailsComponent implements OnInit {
     }
 
     handlePageEvent(event: PageEvent): void {
-        this.mailsService.getManyByPage(event.pageIndex + 1, event.pageSize).subscribe(compliances => {
-            this.dataSource = compliances;
+        this.mailsService.getMailsByPage(event.pageIndex + 1, event.pageSize).subscribe(mails => {
+            this.dataSource = mails;
         });
     }
 
@@ -58,7 +58,8 @@ export class MailsComponent implements OnInit {
             this.length = count
         })
 
-        this.mailsService.getManyByPage(this.pageIndex + 1, this.pageSize).subscribe(mails => {
+        this.mailsService.getMailsByPage(this.pageIndex + 1, this.pageSize).subscribe(mails => {
+            console.log(mails);
             this.dataSource = mails
         })
     }

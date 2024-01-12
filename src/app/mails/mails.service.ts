@@ -16,11 +16,11 @@ export class MailsService {
     return this.httpService.get('mails/count');
   }
 
-  getManyByPage(pageIndex: number, pageSize: number): Observable<MailModel[]> {
-    return this.httpService.get(`mails/${pageIndex}/${pageSize}`);
+  getMailsByPage(pageIndex: number, pageSize: number): Observable<MailModel[]> {
+    return this.httpService.get(`mails/byPage/${pageIndex}/${pageSize}`);
   }
 
-  getManyByKey(key: string): Observable<MailModel[]> {
+  getMailsByKey(key: string): Observable<MailModel[]> {
     return this.httpService.get(`mails/byKey/${key}`);
   }
 }
