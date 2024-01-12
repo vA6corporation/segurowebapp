@@ -76,6 +76,70 @@ const routes: Routes = [
     loadChildren: () => import('./insurances/insurances.module').then(m => m.InsurancesModule)
   },
   {
+    path: 'insurancesSctr',
+    loadChildren: () => import('./insurances-sctr/insurances-sctr.module').then(m => m.InsurancesSctrModule)
+  },
+  {
+    path: 'insurancesSoat',
+    loadChildren: () => import('./insurances-soat/insurances-soat.module').then(m => m.InsurancesSoatModule)
+  },
+  {
+    path: 'insurancesVidaley',
+    loadChildren: () => import('./insurances-vidaley/insurances-vidaley.module').then(m => m.InsurancesVidaleyModule)
+  },
+  {
+    path: 'insurancesPolizacar',
+    loadChildren: () => import('./insurances-polizacar/insurances-polizacar.module').then(m => m.InsurancesPolizacarModule)
+  },
+  {
+    path: 'insurancesPolizaear',
+    loadChildren: () => import('./insurances-polizaear/insurances-polizaear.module').then(m => m.InsurancesPolizaearModule)
+  },
+  {
+    path: 'insurancesPolizatrec',
+    loadChildren: () => import('./insurances-polizatrec/insurances-polizatrec.module').then(m => m.InsurancesPolizatrecModule)
+  },
+  {
+    path: 'insurancesMultirriesgos',
+    loadChildren: () => import('./insurances-multirriesgos/insurances-multirriesgos.module').then(m => m.InsurancesMultirriesgosModule)
+  },
+  {
+    path: 'insurancesRcivil',
+    loadChildren: () => import('./insurances-rcivil/insurances-rcivil.module').then(m => m.InsurancesRcivilModule)
+  },
+  {
+    path: 'insurancesVehicular',
+    loadChildren: () => import('./insurances-vehicular/insurances-vehicular.module').then(m => m.InsurancesVehicularModule)
+  },
+  {
+    path: 'insurancesVida',
+    loadChildren: () => import('./insurances-vida/insurances-vida.module').then(m => m.InsurancesVidaModule)
+  },
+  {
+    path: 'insurancesEps',
+    loadChildren: () => import('./insurances-eps/insurances-eps.module').then(m => m.InsurancesEpsModule)
+  },
+  {
+    path: 'insurancesSalud',
+    loadChildren: () => import('./insurances-salud/insurances-salud.module').then(m => m.InsurancesSaludModule)
+  },
+  {
+    path: 'insurancesAccidentes',
+    loadChildren: () => import('./insurances-accidentes/insurances-accidentes.module').then(m => m.InsurancesAccidentesModule)
+  },
+  {
+    path: 'insurancesFola',
+    loadChildren: () => import('./insurances-fola/insurances-fola.module').then(m => m.InsurancesFolaModule)
+  },
+  {
+    path: 'insurancesViaje',
+    loadChildren: () => import('./insurances-viaje/insurances-viaje.module').then(m => m.InsurancesViajeModule)
+  },
+  {
+    path: 'insurancesPempresarial',
+    loadChildren: () => import('./insurances-pempresarial/insurances-pempresarial.module').then(m => m.InsurancesPempresarialModule)
+  },
+  {
     path: 'brokers',
     loadChildren: () => import('./brokers/brokers.module').then(m => m.BrokersModule)
   },

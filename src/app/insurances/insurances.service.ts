@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { FinancierModel } from '../financiers/financier.model';
 import { HttpService } from '../http.service';
 import { PaymentModel } from '../payments/payment.model';
 import { InsurancePdfModel } from './insurance-pdf.model';
@@ -52,8 +51,8 @@ export class InsurancesService {
         return this.httpService.postForm(`insurances/uploadPdf/${insuranceId}/${type}`, formData);
     }
 
-    create(insurance: any, financier: FinancierModel, insuranceGroupId: string): Observable<InsuranceModel> {
-        return this.httpService.post(`insurances/${insuranceGroupId}`, { insurance, financier });
+    create(insurance: any, insuranceGroupId: string): Observable<InsuranceModel> {
+        return this.httpService.post(`insurances/${insuranceGroupId}`, { insurance });
     }
 
     update(

@@ -331,7 +331,7 @@ export class CreateInsurancesComponent implements OnInit {
     }
 
     onSubmit(): void {
-        if (this.formGroup.valid && this.financier) {
+        if (this.formGroup.valid) {
             this.isLoading = true;
             this.navigationService.loadBarStart();
             const { business, financier, broker, worker, partnership, construction, ...insurance } = this.formGroup.value;
@@ -343,7 +343,7 @@ export class CreateInsurancesComponent implements OnInit {
             insurance.brokerId = broker._id;
             insurance.workerId = worker._id;
             insurance.type = this.type;
-            this.insurancesService.create(insurance, this.financier, this.insuranceGroupId).subscribe(insurance => {
+            this.insurancesService.create(insurance, this.insuranceGroupId).subscribe(insurance => {
 
                 for (const pdf of this.pdfPolicy) {
                     this.uploadFile(pdf.file, insurance._id, 'POLICY');
