@@ -9,18 +9,18 @@ import { ReportPieComponent } from './report-pie/report-pie.component';
 import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
-  { path: 'renew', component: RenewComponent },
-  { path: 'create/:type/:insuranceGroupId', component: CreateInsurancesComponent },
-  { path: 'createWithInsuranceGroup/:type', component: CreateInsurancesWithInsuranceGroupComponent },
-  { path: ':type', component: InsurancesComponent },
-  { path: ':type/createWithGroup', component: CreateInsurancesComponent },
-  { path: ':insuranceId/edit', component: EditInsurancesComponent },
-  { path: 'report/report', component: ReportComponent },
-  { path: 'report/reportPie', component: ReportPieComponent }
+    { path: 'renew', component: RenewComponent },
+    { path: 'create/:type/:insuranceGroupId', component: CreateInsurancesComponent },
+    { path: 'createWithInsuranceGroup/:type', component: CreateInsurancesWithInsuranceGroupComponent },
+    { path: ':type', component: InsurancesComponent },
+    { path: ':type/createWithGroup', component: CreateInsurancesComponent },
+    { path: ':insuranceId/edit', component: EditInsurancesComponent },
+    { path: 'report/report', component: ReportComponent },
+    { path: 'report/reportPie', component: ReportPieComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class InsurancesRoutingModule { }

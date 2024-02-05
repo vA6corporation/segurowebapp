@@ -60,20 +60,6 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <!-- <div formGroupName="insurance">
-    </div> -->
-    <mat-form-field appearance="fill">
-      <mat-label>Razon social</mat-label>
-      <mat-select formControlName="companyId">
-        <mat-option *ngFor="let company of companies" [value]="company._id">{{ company.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Cuenta de la empresa</mat-label>
-      <mat-select formControlName="bankId">
-        <mat-option *ngFor="let element of banks" [value]="element._id">{{ element.providerName }} - {{ element.bankName }} {{ element.accountNumber }}</mat-option>
-      </mat-select>
-    </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>N° de poliza</mat-label>
       <input type="text" matInput formControlName="policyNumber">

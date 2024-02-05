@@ -20,8 +20,6 @@ import { InsuranceModel } from '../insurance.model';
 import { InsurancesService } from '../insurances.service';
 import { Location } from '@angular/common'
 import { FinancierModel } from 'src/app/financiers/financier.model';
-import { BanksService } from 'src/app/banks/banks.service';
-import { CompaniesService } from 'src/app/companies/companies.service';
 import { BankModel } from 'src/app/providers/bank.model';
 import { CompanyModel } from 'src/app/companies/company.model';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -43,8 +41,6 @@ export class CreateInsurancesWithInsuranceGroupComponent implements OnInit {
         private readonly activatedRoute: ActivatedRoute,
         private readonly matDialog: MatDialog,
         private readonly location: Location,
-        private readonly banksService: BanksService,
-        private readonly companiesService: CompaniesService,
         private readonly matBottomSheet: MatBottomSheet,
     ) { }
 
@@ -82,8 +78,6 @@ export class CreateInsurancesWithInsuranceGroupComponent implements OnInit {
         currencyCode: 'PEN',
         isPaid: false,
         isEmition: false,
-        companyId: ['', Validators.required],
-        bankId: ['', Validators.required],
     });
 
     construction: ConstructionModel | null = null;
@@ -99,13 +93,9 @@ export class CreateInsurancesWithInsuranceGroupComponent implements OnInit {
     private pdfVoucher: DialogSelectPdfData[] = [];
     private pdfDocument: DialogSelectPdfData[] = [];
 
-    private handleCompanies$: Subscription = new Subscription();
-    private handleBanks$: Subscription = new Subscription();
     private handleWorkers$: Subscription = new Subscription();
 
     ngOnDestroy() {
-        this.handleCompanies$.unsubscribe();
-        this.handleBanks$.unsubscribe();
         this.handleWorkers$.unsubscribe();
     }
 
@@ -119,14 +109,6 @@ export class CreateInsurancesWithInsuranceGroupComponent implements OnInit {
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
-        });
-
-        this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-            this.banks = banks;
-        });
-
-        this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-            this.companies = companies;
         });
     }
 
