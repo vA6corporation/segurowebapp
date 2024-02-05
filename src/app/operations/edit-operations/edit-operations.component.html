@@ -1,10 +1,12 @@
 <section class="container py-4">
     <div class="mb-3">
-        <button type="button" class="w-100 mb-4" (click)="onAttachFile()" mat-raised-button color="primary">
+        <button type="button" class="w-100 mb-4" (click)="onAttachFile()" mat-raised-button color="primary"
+            [disabled]="isLoading">
             DOCUMENTOS DE LA OPERACION
         </button>
-        <button type="button" color="accent" class="w-100 mb-4" (click)="onDownloadFiles()" mat-raised-button>
-            DESCARGAR DOCUMENTOS DE LA OPERACION
+        <button type="button" color="accent" class="w-100 mb-4" (click)="onDownloadFiles()" mat-raised-button
+            [disabled]="isLoading">
+            DESCARGAR DOCUMENTOS SELECCIONADOS
         </button>
         <ng-container *ngFor="let business of businesses">
             <mat-divider class="mb-4"></mat-divider>
@@ -21,9 +23,9 @@
                     [disabled]="isLoading" mat-raised-button color="primary">
                     D. FINANCIEROS {{ business.name }}
                 </button>
-                <button type="button" color="accent" class="w-100" (click)="onDownloadBusinessFiles(business)" mat-raised-button>
+                <!-- <button type="button" color="accent" class="w-100" (click)="onDownloadBusinessFiles(business)" mat-raised-button>
                     DESCARGAR DOCUMENTOS SELECCIONADOS
-                </button>
+                </button> -->
             </div>
         </ng-container>
     </div>
@@ -32,6 +34,25 @@
         DESCARGAR DOCUMENTOS SELECCIONADOS
     </button> -->
     <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="sendAt" (change)="onChangeSendAt()">
+                Enviar a operaciones
+            </mat-slide-toggle>
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Observaciones</mat-label>
+            <input type="text" matInput formControlName="observations">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Estado de operacion</mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="01">PENDIENTE</mat-option>
+                <mat-option value="02">ENVIADO</mat-option>
+                <mat-option value="03">OBSERVADO</mat-option>
+                <mat-option value="04">DESESTIMADO</mat-option>
+                <mat-option value="05">RECHAZADO</mat-option>
+            </mat-select>
+        </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Nombre de operacion</mat-label>
             <input type="text" matInput formControlName="name">

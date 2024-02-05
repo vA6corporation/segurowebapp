@@ -16,7 +16,7 @@ export class OperationsComponent implements OnInit {
     private readonly navigationService: NavigationService,
   ) { }
 
-  public displayedColumns: string[] = [ 'name', 'business', 'partnership', 'user', 'actions' ];
+  public displayedColumns: string[] = [ 'sendAt', 'name', 'business', 'partnership', 'user', 'actions' ];
   public dataSource: OperationModel[] = [];
   public length: number = 100;
   public pageSize: number = 10;

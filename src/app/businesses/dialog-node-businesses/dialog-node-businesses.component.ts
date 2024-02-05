@@ -34,8 +34,8 @@ export class FlatNode {
         public name: string,
         public level = 1,
         public expandable = false,
-        public contentType = '',
-        public parentNodeId: string | null = null,
+        public contentType: string | null = null,
+        // public parentNodeId: string | null = null,
         public fileId: string | null = null,
     ) { }
 }
@@ -63,7 +63,7 @@ export class DynamicDatabase {
     rootLevelNodes: BusinessNodeModel[] = [];
 
     initialData(): FlatNode[] {
-        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, true));
+        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.fileId, e.contentType, e.fileId));
     }
 
     setBusinessNodes(operations: BusinessNodeModel[]): void {
@@ -173,7 +173,7 @@ export class DynamicDataSource implements DataSource<FlatNode> {
                     businessNode.name, node.level + 1,
                     !businessNode.fileId,
                     businessNode.contentType || '',
-                    businessNode.businessNodeId,
+                    // businessNode.businessNodeId,
                     businessNode.fileId || null,
                 )
             )
@@ -397,6 +397,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     }
 
     onSelectFile(businessNode: FlatNode) {
+        console.log(businessNode);
         this.fileId = businessNode.fileId || '';
         if (
             businessNode.contentType &&

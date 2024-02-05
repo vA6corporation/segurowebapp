@@ -8,71 +8,75 @@ import { CreateOperationNodeModel } from './create-operation-node.model';
 import { UpdateOperationNodeModel } from './update-operation-node.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class OperationsService {
 
-  constructor(
-    private readonly httpService: HttpService,
-  ) { }
+    constructor(
+        private readonly httpService: HttpService,
+    ) { }
 
-  getOperationById(operationId: string): Observable<OperationModel> {
-    return this.httpService.get(`operations/byId/${operationId}`);
-  }
+    getBuildFile(operationId: string): Observable<any> {
+        return this.httpService.get(`operations/downloadFiles/${operationId}`)
+    }
 
-  getOperationDownloadFiles(operationId: string): Observable<any> {
-    return this.httpService.get(`operations/downloadFilesById/${operationId}`);
-  }
-  
-  getCountOperations(): Observable<number> {
-    return this.httpService.get('operations/count');
-  }
+    getOperationById(operationId: string): Observable<OperationModel> {
+        return this.httpService.get(`operations/byId/${operationId}`);
+    }
 
-  getOpeartionsByPage(
-    pageIndex: number,
-    pageSize: number
-  ): Observable<OperationModel[]> {
-    return this.httpService.get(`operations/byPage/${pageIndex}/${pageSize}`);
-  }
+    getOperationDownloadFiles(operationId: string): Observable<any> {
+        return this.httpService.get(`operations/downloadFilesById/${operationId}`);
+    }
 
-  getOperationNodes(operationId: string): Observable<OperationNodeModel[]> {
-    return this.httpService.get(`operationNodes/${operationId}`);
-  }
+    getCountOperations(): Observable<number> {
+        return this.httpService.get('operations/count');
+    }
 
-  create(operation: CreateOperationModel): Observable<OperationModel> {
-    return this.httpService.post('operations', { operation });
-  }
+    getOpeartionsByPage(
+        pageIndex: number,
+        pageSize: number
+    ): Observable<OperationModel[]> {
+        return this.httpService.get(`operations/byPage/${pageIndex}/${pageSize}`);
+    }
 
-  update(
-    operation: CreateOperationModel, 
-    operationId: string
-  ): Observable<OperationModel> {
-    return this.httpService.put(`operations/${operationId}`, { operation });
-  }
+    getOperationNodes(operationId: string): Observable<OperationNodeModel[]> {
+        return this.httpService.get(`operationNodes/${operationId}`);
+    }
 
-  uploadFile(
-    formData: any,
-  ) {
-    return this.httpService.postProgress('operationNodes/uploadFile', formData);
-  }
+    create(operation: CreateOperationModel): Observable<OperationModel> {
+        return this.httpService.post('operations', { operation });
+    }
 
-  createNode(
-    operationNode: CreateOperationNodeModel
-  ): Observable<OperationNodeModel> {
-    return this.httpService.post('operationNodes', { operationNode });
-  }
+    update(
+        operation: CreateOperationModel,
+        operationId: string
+    ): Observable<OperationModel> {
+        return this.httpService.put(`operations/${operationId}`, { operation });
+    }
 
-  updateNode(
-    operationNode: UpdateOperationNodeModel, 
-    operationNodeId: string
-  ): Observable<void> {
-    return this.httpService.put(`operationNodes/${operationNodeId}`, { operationNode });
-  }
+    uploadFile(
+        formData: any,
+    ) {
+        return this.httpService.postProgress('operationNodes/uploadFile', formData);
+    }
 
-  deleteNode(
-    operationNodeId: string
-  ): Observable<void> {
-    return this.httpService.delete(`operationNodes/${operationNodeId}`);
-  }
+    createNode(
+        operationNode: CreateOperationNodeModel
+    ): Observable<OperationNodeModel> {
+        return this.httpService.post('operationNodes', { operationNode });
+    }
+
+    updateNode(
+        operationNode: UpdateOperationNodeModel,
+        operationNodeId: string
+    ): Observable<void> {
+        return this.httpService.put(`operationNodes/${operationNodeId}`, { operationNode });
+    }
+
+    deleteNode(
+        operationNodeId: string
+    ): Observable<void> {
+        return this.httpService.delete(`operationNodes/${operationNodeId}`);
+    }
 
 }

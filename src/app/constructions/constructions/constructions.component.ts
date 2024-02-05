@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { OfficeModel } from 'src/app/auth/office.model';
-import { BanksService } from 'src/app/banks/banks.service';
 import { buildServiceOrder } from 'src/app/buildServiceOrder';
 import { ComplianceModel } from 'src/app/compliances/compliance.model';
 import { DirectModel } from 'src/app/directs/direct.model';
@@ -17,7 +16,6 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { MaterialModel } from 'src/app/materials/material.model';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
-import { BankModel } from 'src/app/providers/bank.model';
 import { UserModel } from 'src/app/users/user.model';
 import { buildExcel } from 'src/app/xlsx';
 import { ConstructionModel } from '../construction.model';
@@ -41,10 +39,9 @@ export class ConstructionsComponent implements OnInit {
         private readonly authService: AuthService,
         private readonly router: Router,
         private readonly activatedRoute: ActivatedRoute,
-        private readonly banksService: BanksService,
     ) { }
 
-    public displayedColumns: string[] = [
+    displayedColumns: string[] = [
         'emitionAt',
         'code',
         'object',
@@ -54,12 +51,12 @@ export class ConstructionsComponent implements OnInit {
         'partnership',
         'actions'
     ];
-    public dataSource: ConstructionModel[] = [];
-    public length: number = 0;
-    public pageSize: number = 10;
-    public pageSizeOptions: number[] = [10, 30, 50];
-    public pageIndex: number = 0;
-    public formGroup: UntypedFormGroup = this.formBuilder.group({
+    dataSource: ConstructionModel[] = [];
+    length: number = 0;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    formGroup: UntypedFormGroup = this.formBuilder.group({
         officeId: '',
         startDate: [null, Validators.required],
         endDate: [null, Validators.required],
@@ -68,11 +65,10 @@ export class ConstructionsComponent implements OnInit {
             _id: ''
         }),
     });
-    public offices: OfficeModel[] = [];
+    offices: OfficeModel[] = [];
     private user: UserModel | null = null;
-    private banks: BankModel[] = [];
     private key: string | null = null;
-    public months: any[] = [
+    months: any[] = [
         'ENERO',
         'FEBRERO',
         'MARZO',
@@ -109,10 +105,6 @@ export class ConstructionsComponent implements OnInit {
 
         this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
             this.user = auth.user;
-        });
-
-        this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-            this.banks = banks;
         });
 
         this.navigationService.setMenu([
@@ -179,13 +171,18 @@ export class ConstructionsComponent implements OnInit {
 
                     Promise.all(promises).then(values => {
                         this.navigationService.loadBarFinish();
-                        const constructions = values.flat();
+                        const constructions = values.flat()
                         const wscols = [40, 40, 40, 40, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
                         let body = [];
                         if (this.user?.isAdmin) {
                             body.push([
+                                'MONTO ADJUDICADO',
                                 'ESTADO DE O.',
-                                'CLIENTE',
+                                'CLIENTE1',
+                                'CLIENTE2',
+                                'CLIENTE3',
+                                'CLIENTE4',
+                                'CLIENTE5',
                                 'CONSORCIO',
                                 'PERSONAL',
                                 'A. PROGRAMADO',
@@ -209,39 +206,92 @@ export class ConstructionsComponent implements OnInit {
                             ]);
                             for (const construction of constructions) {
                                 const payed = construction.payments.map((e: any) => e.charge).reduce((a: any, b: any) => a + b, 0);
-                                body.push([
-                                    construction.constructionCodeType,
-                                    construction.business.name,
-                                    construction.partnership?.name,
-                                    construction.worker?.name,
-                                    construction.percentCompletion?.percentProgrammated,
-                                    construction.percentCompletion?.percentCompletion,
-                                    construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-                                    construction.percentCompletion?.year,
-                                    construction.emitionMaterial?.price,
-                                    construction.emitionDirect?.price,
-                                    construction.emitionCompliance?.price,
-                                    construction.isExonerated ? 'SI' : 'NO',
-                                    construction.commission,
-                                    payed,
-                                    construction.commission - payed,
-                                    construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
-                                    construction.dayLimit,
-                                    construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
-                                    construction.observationsPayment,
-                                    construction.observations,
-                                    [
-                                        ...construction.materials.map((e: MaterialModel) => e.financier.name),
-                                        ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
-                                        ...construction.materials.map((e: DirectModel) => e.financier.name),
-                                    ],
-                                    construction.object,
-                                ]);
+                                if (construction.partnership) {
+                                    const partnershipItems = construction.partnership.partnershipItems
+                                    const partnershipNames = []
+                                    for (let index = 0; index < 5; index++) {
+                                        const partnership = partnershipItems[index];
+                                        if (partnership) {
+                                            partnershipNames.push(partnership.business?.name)
+                                        } else {
+                                            partnershipNames.push('')
+                                        }
+                                    }
+                                    body.push([
+                                        construction.awardedAmount,
+                                        construction.constructionCodeType,
+                                        // construction.business.name,
+                                        ...partnershipNames,
+                                        construction.partnership?.name,
+                                        construction.worker?.name,
+                                        construction.percentCompletion?.percentProgrammated,
+                                        construction.percentCompletion?.percentCompletion,
+                                        construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                                        construction.percentCompletion?.year,
+                                        construction.emitionMaterial?.price,
+                                        construction.emitionDirect?.price,
+                                        construction.emitionCompliance?.price,
+                                        construction.isExonerated ? 'SI' : 'NO',
+                                        construction.commission,
+                                        payed,
+                                        construction.commission - payed,
+                                        construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.dayLimit,
+                                        construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.observationsPayment,
+                                        construction.observations,
+                                        [
+                                            ...construction.materials.map((e: MaterialModel) => e.financier.name),
+                                            ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                                            ...construction.materials.map((e: DirectModel) => e.financier.name),
+                                        ],
+                                        construction.object,
+                                    ]);
+                                } else {
+                                    body.push([
+                                        construction.awardedAmount,
+                                        construction.constructionCodeType,
+                                        construction.business.name,
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        construction.partnership?.name,
+                                        construction.worker?.name,
+                                        construction.percentCompletion?.percentProgrammated,
+                                        construction.percentCompletion?.percentCompletion,
+                                        construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                                        construction.percentCompletion?.year,
+                                        construction.emitionMaterial?.price,
+                                        construction.emitionDirect?.price,
+                                        construction.emitionCompliance?.price,
+                                        construction.isExonerated ? 'SI' : 'NO',
+                                        construction.commission,
+                                        payed,
+                                        construction.commission - payed,
+                                        construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.dayLimit,
+                                        construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.observationsPayment,
+                                        construction.observations,
+                                        [
+                                            ...construction.materials.map((e: MaterialModel) => e.financier.name),
+                                            ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                                            ...construction.materials.map((e: DirectModel) => e.financier.name),
+                                        ],
+                                        construction.object,
+                                    ]);
+                                }
                             }
                         } else {
                             body.push([
+                                'MONTO ADJUDICADO',
                                 'ESTADO DE O.',
-                                'CLIENTE',
+                                'CLIENTE1',
+                                'CLIENTE2',
+                                'CLIENTE3',
+                                'CLIENTE4',
+                                'CLIENTE5',
                                 'CONSORCIO',
                                 'PERSONAL',
                                 'A. PROGRAMADO',
@@ -259,30 +309,71 @@ export class ConstructionsComponent implements OnInit {
                                 'OBJETO',
                             ]);
                             for (const construction of constructions) {
-                                const payed = construction.payments.map((e: any) => e.charge).reduce((a: any, b: any) => a + b, 0);
-                                body.push([
-                                    construction.constructionCodeType,
-                                    construction.business.name,
-                                    construction.partnership?.name,
-                                    construction.worker?.name,
-                                    construction.percentCompletion?.percentProgrammated,
-                                    construction.percentCompletion?.percentCompletion,
-                                    construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
-                                    construction.percentCompletion?.year,
-                                    construction.emitionMaterial?.price,
-                                    construction.emitionDirect?.price,
-                                    construction.emitionCompliance?.price,
-                                    construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
-                                    construction.dayLimit,
-                                    construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
-                                    construction.observations,
-                                    [
-                                        ...construction.materials.map((e: MaterialModel) => e.financier.name),
-                                        ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
-                                        ...construction.materials.map((e: DirectModel) => e.financier.name),
-                                    ],
-                                    construction.object,
-                                ]);
+                                if (construction.partnership) {
+                                    const partnershipItems = construction.partnership.partnershipItems
+                                    const partnershipNames = []
+                                    for (let index = 0; index < 5; index++) {
+                                        const partnership = partnershipItems[index];
+                                        if (partnership) {
+                                            partnershipNames.push(partnership.business?.name)
+                                        } else {
+                                            partnershipNames.push('')
+                                        }
+                                    }
+                                    body.push([
+                                        construction.awardedAmount,
+                                        construction.constructionCodeType,
+                                        ...partnershipNames,
+                                        construction.partnership?.name,
+                                        construction.worker?.name,
+                                        construction.percentCompletion?.percentProgrammated,
+                                        construction.percentCompletion?.percentCompletion,
+                                        construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                                        construction.percentCompletion?.year,
+                                        construction.emitionMaterial?.price,
+                                        construction.emitionDirect?.price,
+                                        construction.emitionCompliance?.price,
+                                        construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.dayLimit,
+                                        construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.observations,
+                                        [
+                                            ...construction.materials.map((e: MaterialModel) => e.financier.name),
+                                            ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                                            ...construction.materials.map((e: DirectModel) => e.financier.name),
+                                        ],
+                                        construction.object,
+                                    ]);
+                                } else {
+                                    body.push([
+                                        construction.awardedAmount,
+                                        construction.constructionCodeType,
+                                        construction.business.name,
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        construction.partnership?.name,
+                                        construction.worker?.name,
+                                        construction.percentCompletion?.percentProgrammated,
+                                        construction.percentCompletion?.percentCompletion,
+                                        construction.percentCompletion?.month ? this.months[construction.percentCompletion?.month] : '',
+                                        construction.percentCompletion?.year,
+                                        construction.emitionMaterial?.price,
+                                        construction.emitionDirect?.price,
+                                        construction.emitionCompliance?.price,
+                                        construction.startAt ? formatDate(new Date(construction.startAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.dayLimit,
+                                        construction.endAt ? formatDate(new Date(construction.endAt), 'dd/MM/yyyy', 'en-US') : null,
+                                        construction.observations,
+                                        [
+                                            ...construction.materials.map((e: MaterialModel) => e.financier.name),
+                                            ...construction.compliances.map((e: ComplianceModel) => e.financier.name),
+                                            ...construction.materials.map((e: DirectModel) => e.financier.name),
+                                        ],
+                                        construction.object,
+                                    ]);
+                                }
                             }
                         }
 

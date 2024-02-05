@@ -12,7 +12,6 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 import { DialogNodeOperationsComponent } from '../dialog-node-operations/dialog-node-operations.component';
 import { BusinessNodeType, DialogBusinessNodeData, DialogNodeBusinessesComponent } from 'src/app/businesses/dialog-node-businesses/dialog-node-businesses.component';
-import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-edit-operations',
@@ -39,6 +38,9 @@ export class EditOperationsComponent implements OnInit {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        sendAt: null,
+        status: '01',
+        observations: ''
     });
     isLoading: boolean = false;
     hide: boolean = true;
@@ -70,6 +72,15 @@ export class EditOperationsComponent implements OnInit {
         });
     }
 
+    onChangeSendAt() {
+        const sendAt = this.formGroup.value.sendAt
+        if (sendAt) {
+            this.formGroup.patchValue({ sendAt: new Date() })
+        } else {
+            this.formGroup.patchValue({ sendAt: null })
+        }
+    }
+
     downloadURI(uri: string, name: string) {
         const link = document.createElement("a");
         link.download = name;
@@ -89,19 +100,14 @@ export class EditOperationsComponent implements OnInit {
         });
     }
 
-    onDownloadBusinessFiles(business: BusinessModel) {
-        this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}/${business.name}`, business.name + '.zip');
-        // this.downloadURI(`${environment.baseUrl}operationNodes/downloadFiles/${this.operationId}`, '');
-        // for (const business of this.businesses) {
-        //     this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}`, '');
-        // }
-    }
-
     onDownloadFiles() {
-        this.downloadURI(`${environment.baseUrl}operationNodes/downloadFiles/${this.operationId}`, '');
-        // for (const business of this.businesses) {
-        //     this.downloadURI(`${environment.baseUrl}businessNodes/downloadFiles/${this.operationId}/${business._id}`, '');
-        // }
+        this.navigationService.loadBarStart()
+        this.isLoading = true
+        this.operationsService.getBuildFile(this.operationId).subscribe(res => {
+            this.isLoading = false
+            this.navigationService.loadBarFinish()
+            this.downloadURI(decodeURIComponent(res.url), '');
+        })
     }
 
     onDialogAttachPdfDocuments(businessId: string) {

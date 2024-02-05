@@ -1,163 +1,166 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-  <h2 mat-dialog-title>Agregar expericia</h2>
-  <div mat-dialog-content>
-    <mat-form-field appearance="fill">
-      <mat-label>Entidad contratante</mat-label>
-      <input type="text" matInput formControlName="contractor" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>N° de Licitación y Objeto del Contrato</mat-label>
-      <input type="text" matInput formControlName="tenderObjectContract" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha Firma de Contrato</mat-label>
-      <input matInput [matDatepicker]="signaturetAt" formControlName="signaturetAt" />
-      <mat-datepicker-toggle matSuffix [for]="signaturetAt"></mat-datepicker-toggle>
-      <mat-datepicker #signaturetAt></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de inicio de obra</mat-label>
-      <input matInput [matDatepicker]="startAt" formControlName="startAt" />
-      <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>
-      <mat-datepicker #startAt></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de Fin</mat-label>
-      <input matInput [matDatepicker]="endingDate" formControlName="endingDate" />
-      <mat-datepicker-toggle matSuffix [for]="endingDate"></mat-datepicker-toggle>
-      <mat-datepicker #endingDate></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Ubicacion geografica de la obra</mat-label>
-      <input type="text" matInput formControlName="location" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Precio</mat-label>
-      <input type="number" matInput formControlName="price" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Plazo de la obra en dias</mat-label>
-      <input type="number" matInput formControlName="timeLimit" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Avance a la fecha</mat-label>
-      <input type="number" matInput formControlName="advancePercent" />
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Tipo de obra / servicio</mat-label>
-      <input type="text" matInput formControlName="typeWork" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fiel Cumplimiento</mat-label>
-      <input type="text" matInput formControlName="faithfulCompliance" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Adelanto Directo</mat-label>
-      <input type="text" matInput formControlName="directAdvance" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Adelanto Materiales</mat-label>
-      <input type="text" matInput formControlName="advanceMaterials" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Entidad Afianzadora</mat-label>
-      <input type="text" matInput formControlName="bondingEntity" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Nombre de Entidades Afianzadoras </mat-label>
-      <input type="text" matInput formControlName="nameSuretyEntities" />
-    </mat-form-field>
-    <h2>Ingresos pasados, vigentes y proyectados (S/)</h2>
-    <mat-form-field appearance="fill">
-      <mat-label>Año</mat-label>
-      <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>monto</mat-label>
-      <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
-    </mat-form-field>
-    <mat-list class="mb-3">
-      <div mat-subheader>Experiencia</div>
-      <mat-list-item *ngFor="let income of incomes; let i = index">
-        <div>
-          Año: {{ income.year }}, Monto {{ income.amount }}
-        </div>
-        <span class="spacer"></span>
-        <button type="button" mat-icon-button (click)="removeIncomes(i)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
-    <div class="mb-3">
-      <button mat-raised-button color="primary" type="button" mat-button (click)="addIncomes()" class="w-100">AGREGAR INGRESOS</button>
-    </div>
-
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isArbitration">Arbitraje</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle formControlName="isCommonRepresentative">Representante comun</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="isCheckedConsortium" formControlName="isConsorcio">Consorcio</mat-slide-toggle>
-    </div>
-    <div class="mb-3">
-      <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados
-      </mat-slide-toggle>
-    </div>
-    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
-      <mat-label>Nombre</mat-label>
-      <input type="text" matInput formControlName="nameConsortium" />
-    </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
-      <mat-label>Afianzados</mat-label>
-      <input type="text" matInput formControlName="bondedConsortium" />
-    </mat-form-field>
-    <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
-      <mat-label>% Participación</mat-label>
-      <input type="text" matInput formControlName="participationConsortium" />
-    </mat-form-field>
-    <mat-card *ngIf="isCheckedOthersConsortium">
-      <mat-card-subtitle>Otros Consorciados</mat-card-subtitle>
-      <mat-card-content>
-        <div>
-          <mat-form-field appearance="fill">
-            <mat-label>Nombre</mat-label>
-            <input type="text" matInput [(ngModel)]="nameOtherConsortium" [ngModelOptions]="{ standalone: true }"/>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>% Participación</mat-label>
-            <input type="text" matInput [(ngModel)]="participationOtherConsortium" [ngModelOptions]="{ standalone: true }"/>
-          </mat-form-field>
-        </div>
+    <h2 mat-dialog-title>Agregar expericia</h2>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Entidad contratante</mat-label>
+            <input type="text" matInput formControlName="contractor" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>N° de Licitación y Objeto del Contrato</mat-label>
+            <input type="text" matInput formControlName="tenderObjectContract" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha Firma de Contrato</mat-label>
+            <input matInput [matDatepicker]="signaturetAt" formControlName="signaturetAt" />
+            <mat-datepicker-toggle matSuffix [for]="signaturetAt"></mat-datepicker-toggle>
+            <mat-datepicker #signaturetAt></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha de inicio de obra</mat-label>
+            <input matInput [matDatepicker]="startAt" formControlName="startAt" />
+            <mat-datepicker-toggle matSuffix [for]="startAt"></mat-datepicker-toggle>
+            <mat-datepicker #startAt></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha de Fin</mat-label>
+            <input matInput [matDatepicker]="endingDate" formControlName="endingDate" />
+            <mat-datepicker-toggle matSuffix [for]="endingDate"></mat-datepicker-toggle>
+            <mat-datepicker #endingDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Ubicacion geografica de la obra</mat-label>
+            <input type="text" matInput formControlName="location" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Precio</mat-label>
+            <input type="number" matInput formControlName="price" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Plazo de la obra en dias</mat-label>
+            <input type="number" matInput formControlName="timeLimit" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Avance a la fecha</mat-label>
+            <input type="number" matInput formControlName="advancePercent" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Tipo de obra / servicio</mat-label>
+            <input type="text" matInput formControlName="typeWork" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fiel Cumplimiento</mat-label>
+            <input type="text" matInput formControlName="faithfulCompliance" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Adelanto Directo</mat-label>
+            <input type="text" matInput formControlName="directAdvance" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Adelanto Materiales</mat-label>
+            <input type="text" matInput formControlName="advanceMaterials" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Entidad Afianzadora</mat-label>
+            <input type="text" matInput formControlName="bondingEntity" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Nombre de Entidades Afianzadoras </mat-label>
+            <input type="text" matInput formControlName="nameSuretyEntities" />
+        </mat-form-field>
+        <h2>Ingresos pasados, vigentes y proyectados (S/)</h2>
+        <mat-form-field appearance="fill">
+            <mat-label>Año</mat-label>
+            <input type="number" matInput [(ngModel)]="incomesYear" [ngModelOptions]="{ standalone: true }" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>monto</mat-label>
+            <input type="number" matInput [(ngModel)]="incomesAmount" [ngModelOptions]="{ standalone: true }" />
+        </mat-form-field>
         <mat-list class="mb-3">
-          <div mat-subheader>Experiencia</div>
-          <mat-list-item *ngFor="let item of consortium; let i = index">
-            <div>
-              Nombre: {{ item.name }}, Participación {{ item.participation }}
-            </div>
-            <span class="spacer"></span>
-            <button type="button" mat-icon-button (click)="removeConsortium(i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-list-item>
+            <div mat-subheader>Experiencia</div>
+            <mat-list-item *ngFor="let income of incomes; let i = index">
+                <div>
+                    Año: {{ income.year }}, Monto {{ income.amount }}
+                </div>
+                <span class="spacer"></span>
+                <button type="button" mat-icon-button (click)="removeIncomes(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-list-item>
         </mat-list>
-      </mat-card-content>
-      <mat-card-actions align="end">
-        <button type="button" mat-button (click)="addConsortium()">Agregar consorcio</button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  <mat-dialog-actions>
-    <span class="spacer"></span>
-    <button mat-button mat-button mat-dialog-close>CANCELAR</button>
-    <button type="submit" mat-raised-button color="primary">GUARDAR</button>
-  </mat-dialog-actions>
+        <div class="mb-3">
+            <button mat-raised-button color="primary" type="button" mat-button (click)="addIncomes()"
+                class="w-100">AGREGAR INGRESOS</button>
+        </div>
+
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isCompleted">Concluido</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isArbitration">Arbitraje</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isOperator">Operador</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle formControlName="isCommonRepresentative">Representante comun</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle [(ngModel)]="isCheckedConsortium"
+                formControlName="isConsorcio">Consorcio</mat-slide-toggle>
+        </div>
+        <div class="mb-3">
+            <mat-slide-toggle [(ngModel)]="isCheckedOthersConsortium" formControlName="isConsorcio">Otros Consorciados
+            </mat-slide-toggle>
+        </div>
+        <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput formControlName="nameConsortium" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+            <mat-label>Afianzados</mat-label>
+            <input type="text" matInput formControlName="bondedConsortium" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" *ngIf="isCheckedConsortium">
+            <mat-label>% Participación</mat-label>
+            <input type="text" matInput formControlName="participationConsortium" />
+        </mat-form-field>
+        <mat-card *ngIf="isCheckedOthersConsortium">
+            <mat-card-subtitle>Otros Consorciados</mat-card-subtitle>
+            <mat-card-content>
+                <div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Nombre</mat-label>
+                        <input type="text" matInput [(ngModel)]="nameOtherConsortium"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>% Participación</mat-label>
+                        <input type="text" matInput [(ngModel)]="participationOtherConsortium"
+                            [ngModelOptions]="{ standalone: true }" />
+                    </mat-form-field>
+                </div>
+                <mat-list class="mb-3">
+                    <div mat-subheader>Experiencia</div>
+                    <mat-list-item *ngFor="let item of consortium; let i = index">
+                        <div>
+                            Nombre: {{ item.name }}, Participación {{ item.participation }}
+                        </div>
+                        <span class="spacer"></span>
+                        <button type="button" mat-icon-button (click)="removeConsortium(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button type="button" mat-button (click)="addConsortium()">Agregar consorcio</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+    <mat-dialog-actions>
+        <span class="spacer"></span>
+        <button mat-button mat-button mat-dialog-close>CANCELAR</button>
+        <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+    </mat-dialog-actions>
 </form>

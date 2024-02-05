@@ -1,34 +1,35 @@
 <section class="container py-4">
-  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="fill">
-      <mat-label>N° de RUC</mat-label>
-      <input type="text" matInput formControlName="document" maxlength="11">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Razon Social</mat-label>
-      <input type="text" matInput formControlName="name">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input type="email" matInput formControlName="email">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Celular</mat-label>
-      <input type="text" matInput formControlName="mobileNumber">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Telefono</mat-label>
-      <input type="text" matInput formControlName="phoneNumber">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Anexo</mat-label>
-      <input type="text" matInput formControlName="annexed">
-    </mat-form-field>
-    <div class="d-flex">
-      <span class="spacer"></span>
-      <button type="button" mat-stroked-button color="primary" routerLink="/financiers" class="mr-2">CANCELAR</button>
-      <div class="divider"></div>
-      <button type="submit" mat-raised-button color="primary">GUARDAR</button>
-    </div>
-  </form>
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <mat-form-field appearance="fill">
+            <mat-label>N° de RUC</mat-label>
+            <input type="text" matInput formControlName="document" maxlength="11">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Razon Social</mat-label>
+            <input type="text" matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Celular</mat-label>
+            <input type="text" matInput formControlName="mobileNumber">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Telefono</mat-label>
+            <input type="text" matInput formControlName="phoneNumber">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Anexo</mat-label>
+            <input type="text" matInput formControlName="annexed">
+        </mat-form-field>
+        <div class="d-flex">
+            <span class="spacer"></span>
+            <button type="button" mat-stroked-button color="primary" routerLink="/financiers"
+                class="mr-2">CANCELAR</button>
+            <div class="divider"></div>
+            <button type="submit" mat-raised-button color="primary">GUARDAR</button>
+        </div>
+    </form>
 </section>

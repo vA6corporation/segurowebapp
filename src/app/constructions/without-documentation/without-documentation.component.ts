@@ -15,282 +15,284 @@ import { ConstructionPdfTypes } from '../construction-pdf.enum';
 import { first } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-without-documentation',
-  templateUrl: './without-documentation.component.html',
-  styleUrls: ['./without-documentation.component.sass']
+    selector: 'app-without-documentation',
+    templateUrl: './without-documentation.component.html',
+    styleUrls: ['./without-documentation.component.sass']
 })
 export class WithoutDocumentationComponent implements OnInit {
 
-  constructor(
-    private readonly constructionsService: ConstructionsService,
-    private readonly navigationService: NavigationService,
-    private readonly matDialog: MatDialog,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly formBuilder: UntypedFormBuilder, 
-  ) { }
-    
-  public displayedColumns: string[] = [ 
-    'index',
-    'code', 
-    'partnershipTwo',
-    'business',
-    'document',
-    'completion',
-    'partnership', 
-    'construction',
-    'legal',
-    'pro',
-    // 'voucher',
-    'actions' 
-  ];
-  public dataSource: ConstructionModel[] = [];
-  public length: number = 0;
-  public pageSize: number = 10;
-  public pageSizeOptions: number[] = [10, 30, 50];
-  public pageIndex: number = 0;
-  public documentCount: number = 0;
-  public completionCount: number = 0;
-  public partnershipCount: number = 0;
-  public constructionCount: number = 0;
-  public legalCount: number = 0;
-  public proCount: number = 0;
-  public voucherCount: number = 0;
-  private params: Params = {};
+    constructor(
+        private readonly constructionsService: ConstructionsService,
+        private readonly navigationService: NavigationService,
+        private readonly matDialog: MatDialog,
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly formBuilder: UntypedFormBuilder,
+    ) { }
 
-  public formGroup = this.formBuilder.group({
-    startDate: [ null, Validators.required ],
-    endDate: [ null, Validators.required ]
-  });
+    displayedColumns: string[] = [
+        'index',
+        'code',
+        'partnershipTwo',
+        'business',
+        'document',
+        'completion',
+        'partnership',
+        'construction',
+        'legal',
+        'pro',
+        'actions'
+    ];
+    dataSource: ConstructionModel[] = [];
+    length: number = 0;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    documentCount: number = 0;
+    completionCount: number = 0;
+    partnershipCount: number = 0;
+    constructionCount: number = 0;
+    legalCount: number = 0;
+    proCount: number = 0;
+    voucherCount: number = 0;
+    private params: Params = {};
 
-  public financierForm = this.formBuilder.group({
-    name: [ null, Validators.required ],
-    _id: [ null, Validators.required ],
-  });
-
-  private handleSearch$: Subscription = new Subscription();
-  private handleClickMenu$: Subscription = new Subscription();
-  private queryParams$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleSearch$.unsubscribe();
-    this.handleClickMenu$.unsubscribe();
-    this.queryParams$.unsubscribe();
-  }
-    
-  ngOnInit(): void {
-    this.navigationService.setTitle('Obras sin documentacion');
-
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true },
-      { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
-    ]);
-
-    this.constructionsService.getCountConstructionsWithoutDocumentation().subscribe(count => {
-      this.length = count;
+    formGroup = this.formBuilder.group({
+        startDate: [null, Validators.required],
+        endDate: [null, Validators.required]
     });
 
-    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-      const { startDate, endDate, financier } = params;
-      if (startDate && endDate) {
-        this.formGroup.patchValue({ 
-          startDate: new Date(startDate),
-          endDate: new Date(endDate) 
+    financierForm = this.formBuilder.group({
+        name: [null, Validators.required],
+        _id: [null, Validators.required],
+    });
+
+    private handleSearch$: Subscription = new Subscription();
+    private handleClickMenu$: Subscription = new Subscription();
+    private queryParams$: Subscription = new Subscription();
+
+    ngOnDestroy() {
+        this.handleSearch$.unsubscribe();
+        this.handleClickMenu$.unsubscribe();
+        this.queryParams$.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        this.navigationService.setTitle('Obras sin documentacion');
+
+        this.navigationService.setMenu([
+            { id: 'search', label: 'search', icon: 'search', show: true },
+            { id: 'export_excel', label: 'Exportar excel', icon: 'download', show: false }
+        ]);
+
+        this.constructionsService.getCountConstructionsWithoutDocumentation().subscribe(count => {
+            this.length = count;
         });
-        Object.assign(this.params, { 
-          startDate: new Date(startDate),
-          endDate: new Date(endDate) 
+
+        this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
+            const { startDate, endDate, financier } = params;
+            if (startDate && endDate) {
+                this.formGroup.patchValue({
+                    startDate: new Date(startDate),
+                    endDate: new Date(endDate)
+                });
+                Object.assign(this.params, {
+                    startDate: new Date(startDate),
+                    endDate: new Date(endDate)
+                });
+            }
+            if (financier) {
+                const financierParse = JSON.parse(financier);
+                this.financierForm.patchValue(financierParse);
+                Object.assign(this.params, { financierId: financierParse._id });
+            }
+            this.fetchData();
         });
-      }
-      if (financier) {
-        const financierParse = JSON.parse(financier);
-        this.financierForm.patchValue(financierParse);
-        Object.assign(this.params, { financierId: financierParse._id });
-      }
-      this.fetchData();
-    });
 
-    this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
-      switch (id) {
-        case 'export_excel':
-          const wscols = [ 20, 50, 50, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 ];
-          let body = [];
-          body.push([
-            'CODIGO',
-            'CONSORCIO',
-            'EMPRESA',
-            'DOCUMENTOS',
-            'A. DE OBRA',
-            'C. DE CONSOR.',
-            'C. DE OBRA',
-            'D. LEGAL',
-            'BUENA PRO',
-            // 'VOUCHER DE P.',
-          ]);
-          for (const construction of this.dataSource) {
-            const { business, partnership } = construction;
-            body.push([
-              construction.code,
-              partnership?.name,
-              business.name,
-              this.fileExist(construction, ConstructionPdfTypes.DOCUMENT) ? '' : 'X',
-              this.fileExist(construction, ConstructionPdfTypes.COMPLETION) ? '' : 'X',
-              this.fileExist(construction, ConstructionPdfTypes.PARTNERSHIP) ? '' : 'X',
-              this.fileExist(construction, ConstructionPdfTypes.CONSTRUCTION) ? '' : 'X',
-              this.fileExist(construction, ConstructionPdfTypes.LEGAL) ? '' : 'X',
-              this.fileExist(construction, ConstructionPdfTypes.PRO) ? '' : 'X',
-              // this.fileExist(construction, ConstructionPdfTypes.VOUCHER) ? '' : 'X',
-            ]);
-          }
-          const name = `OBRAS_SIN_DOCUMENTACION_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
-          buildExcel(body, name, wscols, [], []);
-          break;
-      
-        default:
-          break;
-      }
-    });
-    
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
-      this.navigationService.loadBarStart();
-      this.constructionsService.getConstructionsWithoutDocumentationByKey(key).subscribe(constructions => {
-        this.navigationService.loadBarFinish();
-        this.dataSource = constructions;
-      });
-    });
-  }
+        this.handleClickMenu$ = this.navigationService.handleClickMenu().subscribe(id => {
+            switch (id) {
+                case 'export_excel':
+                    const wscols = [20, 10, 10, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+                    let body = [];
+                    body.push([
+                        'CODIGO',
+                        'MES DE REGISTRO',
+                        'AÑO DE REGISTRO',
+                        'CONSORCIO',
+                        'EMPRESA',
+                        'DOCUMENTOS',
+                        'A. DE OBRA',
+                        'C. DE CONSOR.',
+                        'C. DE OBRA',
+                        'D. LEGAL',
+                        'BUENA PRO',
+                    ]);
+                    for (const construction of this.dataSource) {
+                        const { business, partnership } = construction;
+                        body.push([
+                            construction.code,
+                            new Date(construction.createdAt).getMonth(),
+                            new Date(construction.createdAt).getFullYear(),
+                            partnership?.name,
+                            business.name,
+                            this.fileExist(construction, ConstructionPdfTypes.DOCUMENT) ? '' : 'X',
+                            this.fileExist(construction, ConstructionPdfTypes.COMPLETION) ? '' : 'X',
+                            this.fileExist(construction, ConstructionPdfTypes.PARTNERSHIP) ? '' : 'X',
+                            this.fileExist(construction, ConstructionPdfTypes.CONSTRUCTION) ? '' : 'X',
+                            this.fileExist(construction, ConstructionPdfTypes.LEGAL) ? '' : 'X',
+                            this.fileExist(construction, ConstructionPdfTypes.PRO) ? '' : 'X',
+                            // this.fileExist(construction, ConstructionPdfTypes.VOUCHER) ? '' : 'X',
+                        ]);
+                    }
+                    const name = `OBRAS_SIN_DOCUMENTACION_${formatDate(new Date(), 'dd/MM/yyyy', 'en-US')}`;
+                    buildExcel(body, name, wscols, [], []);
+                    break;
 
-  onRangeChange() {
-    if (this.formGroup.valid) {
-      this.pageIndex = 0;
+                default:
+                    break;
+            }
+        });
 
-      const { startDate, endDate } = this.formGroup.value;
-      const queryParams: Params = { startDate, endDate, pageIndex: 0 };
-
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParams, 
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      });
-
-      Object.assign(this.params, queryParams);
-      this.fetchData();
-    }
-  }
-
-  fetchData() {
-    this.navigationService.loadBarStart();
-    this.constructionsService.getConstructionsWithoutDocumentation(this.params).subscribe(constructions => {
-      this.navigationService.loadBarFinish();
-      console.log(constructions);
-      this.dataSource = constructions;
-      this.length = constructions.length;
-      this.countFiles(constructions);
-    });
-  }
-
-  fileExist(construction: ConstructionModel, type: string): boolean {
-    if (construction.pdfs) {
-      if (type === ConstructionPdfTypes.PARTNERSHIP && construction.partnership == null) {
-        return true;
-      }
-      if (type === ConstructionPdfTypes.COMPLETION && construction.isService) {
-        return true;
-      }
-      return construction.pdfs.find(e => e.type === type) ? true : false;
-    } else {
-      return false;
-    }
-  }
-
-  countFiles(constructions: ConstructionModel[]): void {
-    this.documentCount = 0;
-    this.completionCount = 0;
-    this.partnershipCount = 0;
-    this.constructionCount = 0;
-    this.legalCount = 0;
-    this.legalCount = 0;
-    this.proCount = 0
-    this.voucherCount = 0;
-
-    for (const construction of constructions) {
-      if (construction.pdfs) {
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.DOCUMENT) ? true : this.documentCount++;
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.CONSTRUCTION) ? true : this.constructionCount++;
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.LEGAL) ? true : this.legalCount++;
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.PRO) ? true : this.proCount++;
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.VOUCHER) ? true : this.voucherCount++;
-      }
+        this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+            this.navigationService.loadBarStart();
+            this.constructionsService.getConstructionsWithoutDocumentationByKey(key).subscribe(constructions => {
+                this.navigationService.loadBarFinish();
+                this.dataSource = constructions;
+            });
+        });
     }
 
-    for (const construction of constructions) {
-      if (construction.pdfs) {
-        if (construction.partnership == null) {
-          continue;
+    onRangeChange() {
+        if (this.formGroup.valid) {
+            this.pageIndex = 0;
+
+            const { startDate, endDate } = this.formGroup.value;
+            const queryParams: Params = { startDate, endDate, pageIndex: 0 };
+
+            this.router.navigate([], {
+                relativeTo: this.activatedRoute,
+                queryParams: queryParams,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
+            });
+
+            Object.assign(this.params, queryParams);
+            this.fetchData();
         }
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.PARTNERSHIP) ? true : this.partnershipCount++;
-      }
     }
 
-    for (const construction of constructions) {
-      if (construction.pdfs) {
-        if (construction.isService) {
-          continue;
+    fetchData() {
+        this.navigationService.loadBarStart();
+        this.constructionsService.getConstructionsWithoutDocumentation(this.params).subscribe(constructions => {
+            this.navigationService.loadBarFinish();
+            console.log(constructions);
+            this.dataSource = constructions;
+            this.length = constructions.length;
+            this.countFiles(constructions);
+        });
+    }
+
+    fileExist(construction: ConstructionModel, type: string): boolean {
+        if (construction.pdfs) {
+            if (type === ConstructionPdfTypes.PARTNERSHIP && construction.partnership == null) {
+                return true;
+            }
+            if (type === ConstructionPdfTypes.COMPLETION && construction.isService) {
+                return true;
+            }
+            return construction.pdfs.find(e => e.type === type) ? true : false;
+        } else {
+            return false;
         }
-        construction.pdfs.find(e => e.type === ConstructionPdfTypes.COMPLETION) ? true : this.completionCount++;
-      }
     }
 
-  }
+    countFiles(constructions: ConstructionModel[]): void {
+        this.documentCount = 0;
+        this.completionCount = 0;
+        this.partnershipCount = 0;
+        this.constructionCount = 0;
+        this.legalCount = 0;
+        this.legalCount = 0;
+        this.proCount = 0
+        this.voucherCount = 0;
 
-  openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+        for (const construction of constructions) {
+            if (construction.pdfs) {
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.DOCUMENT) ? true : this.documentCount++;
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.CONSTRUCTION) ? true : this.constructionCount++;
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.LEGAL) ? true : this.legalCount++;
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.PRO) ? true : this.proCount++;
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.VOUCHER) ? true : this.voucherCount++;
+            }
+        }
 
-    dialogRef.afterClosed().subscribe(financier => {
-      if (financier) {
-        this.financierForm.patchValue(financier);
+        for (const construction of constructions) {
+            if (construction.pdfs) {
+                if (construction.partnership == null) {
+                    continue;
+                }
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.PARTNERSHIP) ? true : this.partnershipCount++;
+            }
+        }
 
-        const queryParams: Params = { financier: JSON.stringify({ name: financier.name, _id: financier._id }) };
+        for (const construction of constructions) {
+            if (construction.pdfs) {
+                if (construction.isService) {
+                    continue;
+                }
+                construction.pdfs.find(e => e.type === ConstructionPdfTypes.COMPLETION) ? true : this.completionCount++;
+            }
+        }
 
-        this.router.navigate([], {
-          relativeTo: this.activatedRoute,
-          queryParams: queryParams, 
-          queryParamsHandling: 'merge', // remove to replace all query params by provided
+    }
+
+    openDialogFinanciers() {
+        const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
+            width: '600px',
+            position: { top: '20px' }
         });
 
-        Object.assign(this.params, { financierId: financier._id });
+        dialogRef.afterClosed().subscribe(financier => {
+            if (financier) {
+                this.financierForm.patchValue(financier);
 
-      } else {
-        this.financierForm.patchValue({ name: null, _id: null });
-      }
-      this.fetchData();
-    });
-  }
+                const queryParams: Params = { financier: JSON.stringify({ name: financier.name, _id: financier._id }) };
 
-  onShowDetails(constructionId: string) {
-    this.matDialog.open(DialogDetailConstructionsComponent, {
-      width: '100vw',
-      // height: '90vh',
-      position: { top: '20px' },
-      data: constructionId,
-    });
-  }
+                this.router.navigate([], {
+                    relativeTo: this.activatedRoute,
+                    queryParams: queryParams,
+                    queryParamsHandling: 'merge', // remove to replace all query params by provided
+                });
 
-  onDelete(constructionId: string) {
-    const ok = confirm('Esta seguro de anular?...');
-    if (ok) {
-      this.navigationService.loadBarStart();
-      this.constructionsService.delete(constructionId).subscribe(() => {
-        this.navigationService.loadBarFinish();
-        this.dataSource = this.dataSource.filter(e => e._id !== constructionId);
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.showMessage(error.error.message);
-        this.navigationService.loadBarFinish();
-      });
+                Object.assign(this.params, { financierId: financier._id });
+
+            } else {
+                this.financierForm.patchValue({ name: null, _id: null });
+            }
+            this.fetchData();
+        });
     }
-  }
+
+    onShowDetails(constructionId: string) {
+        this.matDialog.open(DialogDetailConstructionsComponent, {
+            width: '100vw',
+            // height: '90vh',
+            position: { top: '20px' },
+            data: constructionId,
+        });
+    }
+
+    onDelete(constructionId: string) {
+        const ok = confirm('Esta seguro de anular?...');
+        if (ok) {
+            this.navigationService.loadBarStart();
+            this.constructionsService.delete(constructionId).subscribe(() => {
+                this.navigationService.loadBarFinish();
+                this.dataSource = this.dataSource.filter(e => e._id !== constructionId);
+            }, (error: HttpErrorResponse) => {
+                this.navigationService.showMessage(error.error.message);
+                this.navigationService.loadBarFinish();
+            });
+        }
+    }
 
 }
