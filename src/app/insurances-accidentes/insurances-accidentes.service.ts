@@ -26,7 +26,7 @@ export class InsurancesAccidentesService {
     }
 
     getInsurancesAccidentesByKey(key: string): Observable<InsuranceAccidentesModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesAccidentes/byKey/${key}`);
     }
 
     getCountInsurancesAccidentes(params: Params): Observable<number> {
@@ -61,8 +61,8 @@ export class InsurancesAccidentesService {
         return this.httpService.put(`insurancesAccidentes/${insuranceAccidentesId}`, { insuranceAccidentes, payments });
     }
 
-    createWithInsuranceGroup(insuranceAccidentes: any): Observable<InsuranceAccidentesModel> {
-        return this.httpService.post('insurancesAccidentes/withInsuranceGroup', { insuranceAccidentes });
+    createWithInsuranceGroup(insuranceAccidente: any): Observable<InsuranceAccidentesModel> {
+        return this.httpService.post('insurancesAccidentes/withInsuranceGroup', { insuranceAccidente });
     }
 
     updateOffice(insuranceId: string, officeId: string): Observable<void> {

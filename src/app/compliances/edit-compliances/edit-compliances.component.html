@@ -1,12 +1,12 @@
 <section class="container py-4">
     <div>
         <button type="button" mat-button color="primary" (click)="onEditConstruction()" class="w-100 p-0">
-            <span class="mat-h1 text-wrap">{{ construction ? (construction.object | uppercase) : 'Seleccionar obra'
-                }}</span>
+            <span class="mat-h1 text-wrap">
+                {{ construction ? (construction.object | uppercase) : 'Seleccionar obra' }}
+            </span>
         </button>
         <span>{{ construction?.code }}</span>
-        <a mat-icon-button [href]="[ '/constructions/' + construction._id + '/edit' ]" type="button" target="_blank"
-            *ngIf="construction !== null">
+        <a mat-icon-button [href]="[ '/constructions/' + construction._id + '/edit' ]" type="button" target="_blank" *ngIf="construction !== null">
             <mat-icon>open_in_new</mat-icon>
         </a>
         <button mat-icon-button type="button" *ngIf="construction !== null" [cdkCopyToClipboard]="construction.object">
@@ -46,6 +46,12 @@
             <mat-form-field appearance="fill">
                 <mat-label>Financiera</mat-label>
                 <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
+            </mat-form-field>
+        </div>
+        <div formGroupName="broker">
+            <mat-form-field appearance="fill">
+                <mat-label>Broker</mat-label>
+                <input type="text" matInput formControlName="name" (click)="openDialogBrokers()" readonly>
             </mat-form-field>
         </div>
         <div formGroupName="compliance">

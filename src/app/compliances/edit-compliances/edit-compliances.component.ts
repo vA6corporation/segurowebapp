@@ -29,6 +29,7 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { ComplianceModel } from '../compliance.model';
 import { CompliancesService } from '../compliances.service';
 import { CompliancePdfData, DialogPdfCompliancesComponent } from '../dialog-pdf-compliances/dialog-pdf-compliances.component';
+import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 
 @Component({
     selector: 'app-edit-compliances',
@@ -52,6 +53,10 @@ export class EditCompliancesComponent implements OnInit {
         financier: this.formBuilder.group({
             _id: [null, Validators.required],
             name: [null, Validators.required],
+        }),
+        broker: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
         }),
         compliance: this.formBuilder.group({
             constructionId: '',
@@ -106,9 +111,10 @@ export class EditCompliancesComponent implements OnInit {
         this.activatedRoute.params.subscribe(params => {
             this.complianceId = params.complianceId;
             this.compliancesService.getComplianceById(this.complianceId).subscribe(compliance => {
-                const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = compliance;
-                this.formGroup.patchValue({ financier });
-                this.formGroup.patchValue({ compliance });
+                const { financier, beneficiary, cheques = [], deposits = [], construction, payments, broker } = compliance;
+                this.formGroup.patchValue({ financier })
+                this.formGroup.patchValue({ compliance })
+                this.formGroup.patchValue({ broker })
                 this.construction = construction;
                 this.beneficiary = beneficiary || null;
                 this.business = construction?.business || null;
@@ -118,6 +124,17 @@ export class EditCompliancesComponent implements OnInit {
                 this.deposits = deposits;
                 this.payments = payments;
             });
+        });
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
         });
     }
 
@@ -295,17 +312,20 @@ export class EditCompliancesComponent implements OnInit {
         if (this.formGroup.valid) {
             this.isLoading = true;
             this.navigationService.loadBarStart();
-            const { financier, compliance } = this.formGroup.value;
-            compliance.financierId = financier._id;
-            this.compliancesService.updateWithPayments(compliance, this.payments, this.complianceId).subscribe(res => {
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage('Se han guardado los cambios');
-            }, (error: HttpErrorResponse) => {
-                console.log(error);
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
+            const { financier, compliance, broker } = this.formGroup.value;
+            compliance.financierId = financier._id
+            compliance.brokerId = broker._id
+            this.compliancesService.updateWithPayments(compliance, this.payments, this.complianceId).subscribe({
+                next: () => {
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage('Se han guardado los cambios');
+                }, error: (error: HttpErrorResponse) => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
+                }
             });
         }
     }

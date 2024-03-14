@@ -6,57 +6,61 @@ import { PaymentModel } from '../payments/payment.model';
 import { CapitalIncreasePdfModel } from './capital-increase-pdf.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CapitalIncreasesService {
 
-  constructor(
-    private readonly httpService: HttpService,
-  ) { }
+    constructor(
+        private readonly httpService: HttpService,
+    ) { }
 
-  getPdfs(capitalIncreaseId: string, type: string): Observable<CapitalIncreasePdfModel[]> {
-    return this.httpService.get(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`)
-  }
+    getPdfs(capitalIncreaseId: string, type: string): Observable<CapitalIncreasePdfModel[]> {
+        return this.httpService.get(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`)
+    }
 
-  deletePdf(pdfId: string): Observable<void> {
-    return this.httpService.delete(`capitalIncreasePdfs/${pdfId}`);
-  }
+    deletePdf(pdfId: string): Observable<void> {
+        return this.httpService.delete(`capitalIncreasePdfs/${pdfId}`);
+    }
 
-  uploadFile(formData: FormData, capitalIncreaseId: string, type: string): Observable<string> {
-    return this.httpService.postForm(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`, formData);
-  }
+    uploadFile(formData: FormData, capitalIncreaseId: string, type: string): Observable<string> {
+        return this.httpService.postForm(`capitalIncreasePdfs/${capitalIncreaseId}/${type}`, formData);
+    }
 
-  getCapitalIncreaseById(
-    capitalIncreaseId: string
-  ): Observable<CapitalIncreaseModel> {
-    return this.httpService.get(`capitalIncreases/byId/${capitalIncreaseId}`);
-  }
+    getCapitalIncreaseById(
+        capitalIncreaseId: string
+    ): Observable<CapitalIncreaseModel> {
+        return this.httpService.get(`capitalIncreases/byId/${capitalIncreaseId}`);
+    }
 
-  getCapitalIncreasesByPage(
-    pageIndex: number,
-    pageSize: number,
-  ): Observable<CapitalIncreaseModel[]> {
-    return this.httpService.get(`capitalIncreases/byPage/${pageIndex}/${pageSize}`);
-  }
+    getCountCapitalIncreases(): Observable<number> {
+        return this.httpService.get('capitalIncreases/countCapitalIncreases');
+    }
 
-  create(
-    capitalIncrease: any,
-  ): Observable<CapitalIncreaseModel> {
-    return this.httpService.post('capitalIncreases', { capitalIncrease });
-  }
+    getCapitalIncreasesByPage(
+        pageIndex: number,
+        pageSize: number,
+    ): Observable<CapitalIncreaseModel[]> {
+        return this.httpService.get(`capitalIncreases/byPage/${pageIndex}/${pageSize}`);
+    }
 
-  update(
-    capitalIncrease: any, 
-    payments: PaymentModel[], 
-    capitalIncreaseId: string
-  ): Observable<void> {
-    return this.httpService.put(`capitalIncreases/${capitalIncreaseId}`, { capitalIncrease, payments });
-  }
+    create(
+        capitalIncrease: any,
+    ): Observable<CapitalIncreaseModel> {
+        return this.httpService.post('capitalIncreases', { capitalIncrease });
+    }
 
-  delete(
-    capitalIncreaseId: string
-  ): Observable<void> {
-    return this.httpService.delete(`capitalIncreases/${capitalIncreaseId}`)
-  }
+    update(
+        capitalIncrease: any,
+        payments: PaymentModel[],
+        capitalIncreaseId: string
+    ): Observable<void> {
+        return this.httpService.put(`capitalIncreases/${capitalIncreaseId}`, { capitalIncrease, payments });
+    }
+
+    delete(
+        capitalIncreaseId: string
+    ): Observable<void> {
+        return this.httpService.delete(`capitalIncreases/${capitalIncreaseId}`)
+    }
 
 }

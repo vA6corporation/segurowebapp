@@ -22,9 +22,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-create-insurances-accidentes-with-insurance-group',
-  templateUrl: './create-insurances-accidentes-with-insurance-group.component.html',
-  styleUrl: './create-insurances-accidentes-with-insurance-group.component.sass'
+    selector: 'app-create-insurances-accidentes-with-insurance-group',
+    templateUrl: './create-insurances-accidentes-with-insurance-group.component.html',
+    styleUrl: './create-insurances-accidentes-with-insurance-group.component.sass'
 })
 export class CreateInsurancesAccidentesWithInsuranceGroupComponent {
 
@@ -274,41 +274,42 @@ export class CreateInsurancesAccidentesWithInsuranceGroupComponent {
         if (this.formGroup.valid) {
             this.isLoading = true;
             this.navigationService.loadBarStart();
-            const { business, financier, broker, worker, partnership, construction, ...insurance } = this.formGroup.value;
-            insurance.constructionId = construction._id || null;
-            insurance.onModel = construction.onModel || null;
-            insurance.partnershipId = partnership._id || null;
-            insurance.businessId = business._id;
-            insurance.financierId = financier._id;
-            insurance.brokerId = broker._id;
-            insurance.workerId = worker._id;
-            this.insurancesAccidentesService.createWithInsuranceGroup(insurance).subscribe(insurance => {
+            const { business, financier, broker, worker, partnership, construction, ...insuranceAccidente } = this.formGroup.value;
+            insuranceAccidente.constructionId = construction._id || null;
+            insuranceAccidente.onModel = construction.onModel || null;
+            insuranceAccidente.partnershipId = partnership._id || null;
+            insuranceAccidente.businessId = business._id;
+            insuranceAccidente.financierId = financier._id;
+            insuranceAccidente.brokerId = broker._id;
+            insuranceAccidente.workerId = worker._id;
+            this.insurancesAccidentesService.createWithInsuranceGroup(insuranceAccidente).subscribe({
+                next: insurance => {
+                    for (const pdf of this.pdfPolicy) {
+                        this.uploadFile(pdf.file, insurance._id, 'POLICY');
+                    }
 
-                for (const pdf of this.pdfPolicy) {
-                    this.uploadFile(pdf.file, insurance._id, 'POLICY');
+                    for (const pdf of this.pdfInvoice) {
+                        this.uploadFile(pdf.file, insurance._id, 'INVOICE');
+                    }
+
+                    for (const pdf of this.pdfDocument) {
+                        this.uploadFile(pdf.file, insurance._id, 'DOCUMENT');
+                    }
+
+                    for (const pdf of this.pdfVoucher) {
+                        this.uploadFile(pdf.file, insurance._id, 'VOUCHER');
+                    }
+
+                    this.navigationService.loadBarFinish();
+                    this.isLoading = false;
+                    this.location.back();
+                    this.navigationService.showMessage('Registrado correctamente');
+                }, error: (error: HttpErrorResponse) => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
                 }
-
-                for (const pdf of this.pdfInvoice) {
-                    this.uploadFile(pdf.file, insurance._id, 'INVOICE');
-                }
-
-                for (const pdf of this.pdfDocument) {
-                    this.uploadFile(pdf.file, insurance._id, 'DOCUMENT');
-                }
-
-                for (const pdf of this.pdfVoucher) {
-                    this.uploadFile(pdf.file, insurance._id, 'VOUCHER');
-                }
-
-                this.navigationService.loadBarFinish();
-                this.isLoading = false;
-                this.location.back();
-                this.navigationService.showMessage('Registrado correctamente');
-            }, (error: HttpErrorResponse) => {
-                console.log(error);
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
             });
         }
     }

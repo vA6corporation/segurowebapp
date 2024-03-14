@@ -29,6 +29,7 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { DialogPdfDirectsComponent, DirectPdfData } from '../dialog-pdf-directs/dialog-pdf-directs.component';
 import { DirectModel } from '../direct.model';
 import { DirectsService } from '../directs.service';
+import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 
 @Component({
     selector: 'app-edit-directs',
@@ -50,6 +51,10 @@ export class EditDirectsComponent implements OnInit {
 
     formGroup: UntypedFormGroup = this.formBuilder.group({
         financier: this.formBuilder.group({
+            _id: [null, Validators.required],
+            name: [null, Validators.required],
+        }),
+        broker: this.formBuilder.group({
             _id: [null, Validators.required],
             name: [null, Validators.required],
         }),
@@ -107,9 +112,10 @@ export class EditDirectsComponent implements OnInit {
             this.directId = params.directId;
             this.directsService.getDirectById(this.directId).subscribe(direct => {
                 this.direct = direct;
-                const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = direct;
-                this.formGroup.patchValue({ financier });
-                this.formGroup.patchValue({ direct });
+                const { financier, beneficiary, cheques = [], deposits = [], construction, payments, broker } = direct;
+                this.formGroup.patchValue({ financier })
+                this.formGroup.patchValue({ direct })
+                this.formGroup.patchValue({ broker })
                 this.construction = construction;
                 this.beneficiary = beneficiary;
                 this.business = construction?.business || null;
@@ -119,7 +125,18 @@ export class EditDirectsComponent implements OnInit {
                 this.deposits = deposits;
                 this.payments = payments;
             });
-        });;
+        });
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
+        });
     }
 
     onDialogPayments() {
@@ -292,17 +309,20 @@ export class EditDirectsComponent implements OnInit {
         if (this.formGroup.valid) {
             this.isLoading = true;
             this.navigationService.loadBarStart();
-            const { financier, direct } = this.formGroup.value;
-            direct.financierId = financier._id;
-            this.directsService.updateWithPayments(direct, this.payments, this.directId).subscribe(res => {
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage('Se han guardado los cambios');
-            }, (error: HttpErrorResponse) => {
-                console.log(error);
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
+            const { financier, direct, broker } = this.formGroup.value;
+            direct.financierId = financier._id
+            direct.brokerId = broker._id
+            this.directsService.updateWithPayments(direct, this.payments, this.directId).subscribe({
+                next: () => {
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage('Se han guardado los cambios');
+                }, error: (error: HttpErrorResponse) => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
+                }
             });
         }
     }

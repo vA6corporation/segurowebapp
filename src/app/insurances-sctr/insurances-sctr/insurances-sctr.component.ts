@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
-import { NavigationService } from 'src/app/navigation/navigation.service';
-import { InsurancesSctrService } from '../insurances-sctr.service';
-import { WorkersService } from 'src/app/workers/workers.service';
-import { ActivatedRoute, Params } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { InsuranceModel } from 'src/app/insurances/insurance.model';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { Subscription, lastValueFrom } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { formatDate } from '@angular/common';
-import { buildExcel } from 'src/app/xlsx';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { Params } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { InsuranceModel } from 'src/app/insurances/insurance.model';
 import { DialogMaterialComponent } from 'src/app/materials/dialog-material/dialog-material.component';
+import { NavigationService } from 'src/app/navigation/navigation.service';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { buildExcel } from 'src/app/xlsx';
+import { InsurancesSctrService } from '../insurances-sctr.service';
 
 @Component({
   selector: 'app-insurances-sctr',
@@ -29,12 +29,12 @@ export class InsurancesSctrComponent {
         private readonly formBuilder: UntypedFormBuilder
     ) { }
 
-    public formGroup: UntypedFormGroup = this.formBuilder.group({
+    formGroup: UntypedFormGroup = this.formBuilder.group({
         workerId: '',
         startDate: '',
         endDate: '',
     });
-    public displayedColumns: string[] = [
+    displayedColumns: string[] = [
         'partnership', 
         'business', 
         'financier', 
@@ -45,13 +45,13 @@ export class InsurancesSctrComponent {
         'observations',
         'actions',
     ];
-    public dataSource: InsuranceModel[] = [];
-    public length: number = 0;
-    public pageSize: number = 10;
-    public pageSizeOptions: number[] = [10, 30, 50];
-    public pageIndex: number = 0;
-    public type: string = '';
-    public workers: WorkerModel[] = [];
+    dataSource: InsuranceModel[] = [];
+    length: number = 0;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    type: string = '';
+    workers: WorkerModel[] = [];
 
     private handleWorkers$: Subscription = new Subscription();
     private handleSearch$: Subscription = new Subscription();
@@ -181,15 +181,13 @@ export class InsurancesSctrComponent {
             endDate
         };
 
-        this.insurancesSctrService.getCountInsurancesSctr( params).subscribe(count => {
+        this.insurancesSctrService.getCountInsurancesSctr(params).subscribe(count => {
             this.length = count;
         });
 
         this.navigationService.loadBarStart();
         this.insurancesSctrService.getInsurancesSctrByPage(this.pageIndex + 1, this.pageSize, params).subscribe(insurancesSctr => {
             this.navigationService.loadBarFinish();
-            console.log(insurancesSctr);
-            
             this.dataSource = insurancesSctr;
         });
     }

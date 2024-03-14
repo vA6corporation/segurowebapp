@@ -24,7 +24,7 @@ export class ToolbarComponent implements OnInit {
 
   public isAuth: boolean = false;
   public userName: string = 'User';
-  public title: string = 'Horvi';
+  public title: string = 'Fidenza';
   public showSearch: boolean = false;
   public showInputSearch: boolean = false;
   public isLoadingSpinner: boolean = true;

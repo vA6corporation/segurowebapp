@@ -3,6 +3,6 @@ export interface OperationNodeModel {
     name: string
     contentType: string | null
     operationNodeId: string | null
-    fileId: string | null
+    mediaLink: string | null
     operationId: string
 }

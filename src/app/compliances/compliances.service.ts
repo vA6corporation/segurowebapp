@@ -33,8 +33,8 @@ export class CompliancesService {
     return this.httpService.get(`compliances/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`);
   }
 
-  getCompliancesCount(): Observable<number> {
-    return this.httpService.get('compliances/count');
+  getCountCompliances(): Observable<number> {
+    return this.httpService.get('compliances/countCompliances');
   }
 
   getComplianceById(complianceId: string): Observable<ComplianceModel> {

@@ -27,7 +27,7 @@ export class InsurancesPolizatrecService {
     }
 
     getInsurancesPolizatrecByKey(key: string): Observable<InsurancePolizatrecModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesPolizatrec/byKey/${key}`);
     }
 
     getCountInsurancesPolizatrec(params: Params): Observable<number> {

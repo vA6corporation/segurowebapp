@@ -29,6 +29,7 @@ import { WorkerModel } from 'src/app/workers/worker.model';
 import { DialogPdfMaterialsComponent, MaterialPdfData } from '../dialog-pdf-materials/dialog-pdf-materials.component';
 import { MaterialModel } from '../material.model';
 import { MaterialsService } from '../materials.service';
+import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
 
 @Component({
     selector: 'app-edit-materials',
@@ -50,6 +51,10 @@ export class EditMaterialsComponent implements OnInit {
 
     formGroup: UntypedFormGroup = this.formBuilder.group({
         financier: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        broker: this.formBuilder.group({
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
@@ -107,9 +112,10 @@ export class EditMaterialsComponent implements OnInit {
             this.materialId = params.materialId;
             this.materialsService.getMaterialById(this.materialId).subscribe(material => {
                 this.material = material;
-                const { financier, beneficiary, cheques = [], deposits = [], construction, payments } = material;
-                this.formGroup.patchValue({ financier });
-                this.formGroup.patchValue({ material });
+                const { financier, beneficiary, cheques = [], deposits = [], construction, payments, broker } = material;
+                this.formGroup.patchValue({ financier })
+                this.formGroup.patchValue({ material })
+                this.formGroup.patchValue({ broker })
                 this.construction = construction;
                 this.beneficiary = beneficiary || null;
                 this.business = construction?.business || null;
@@ -119,6 +125,17 @@ export class EditMaterialsComponent implements OnInit {
                 this.deposits = deposits;
                 this.payments = payments;
             });
+        });
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
         });
     }
 
@@ -293,17 +310,20 @@ export class EditMaterialsComponent implements OnInit {
         if (this.formGroup.valid) {
             this.isLoading = true;
             this.navigationService.loadBarStart();
-            const { financier, material } = this.formGroup.value;
-            material.financierId = financier._id;
-            this.materialsService.updateWithPayments(material, this.payments, this.materialId).subscribe(res => {
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage('Se han guardado los cambios');
-            }, (error: HttpErrorResponse) => {
-                console.log(error);
-                this.isLoading = false;
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
+            const { financier, material, broker } = this.formGroup.value
+            material.financierId = financier._id
+            material.brokerId = broker._id
+            this.materialsService.updateWithPayments(material, this.payments, this.materialId).subscribe({
+                next: () => {
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage('Se han guardado los cambios');
+                }, error: (error: HttpErrorResponse) => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
+                }
             });
         }
     }

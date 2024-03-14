@@ -27,7 +27,7 @@ export class InsurancesSoatService {
     }
 
     getInsurancesSoatByKey(key: string): Observable<InsuranceSoatModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesSoat/byKey/${key}`);
     }
 
     getCountInsurancesSoat( params: Params): Observable<number> {

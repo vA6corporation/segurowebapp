@@ -42,10 +42,6 @@ export class InsurancesPolizaearService {
         return this.httpService.get(`insurances/renewByTypeWorker`, params);
     }
 
-    // getPdfs(insuranceId: string, type: string): Observable<InsurancePdfModel[]> {
-    //     return this.httpService.get(`insurances/pdfs/${insuranceId}/${type}`);
-    // }
-
     uploadFile(formData: FormData, insuranceId: string, type: string): Observable<any> {
         return this.httpService.postForm(`insurances/uploadPdf/${insuranceId}/${type}`, formData);
     }

@@ -27,7 +27,7 @@ export class InsurancesVidaService {
     }
 
     getInsurancesVidaByKey(key: string): Observable<InsuranceVidaModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesVida/byKey/${key}`);
     }
 
     getCountInsurancesVida(params: Params): Observable<number> {

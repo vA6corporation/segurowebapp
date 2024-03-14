@@ -22,171 +22,170 @@ import { DialogCustomersComponent } from 'src/app/customers/dialog-customers/dia
 import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
-  selector: 'app-create-fideicomisos',
-  templateUrl: './create-fideicomisos.component.html',
-  styleUrls: ['./create-fideicomisos.component.sass']
+    selector: 'app-create-fideicomisos',
+    templateUrl: './create-fideicomisos.component.html',
+    styleUrls: ['./create-fideicomisos.component.sass']
 })
 export class CreateFideicomisosComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly fideicomisosService: FideicomisosService,
-    private readonly navigationService: NavigationService,
-    private readonly workersService: WorkersService,
-    private readonly companiesService: CompaniesService,
-    private readonly router: Router,
-    private readonly matDialog: MatDialog,
-    private readonly banksService: BanksService,
-  ) { }
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly fideicomisosService: FideicomisosService,
+        private readonly navigationService: NavigationService,
+        private readonly workersService: WorkersService,
+        private readonly companiesService: CompaniesService,
+        private readonly router: Router,
+        private readonly matDialog: MatDialog,
+        private readonly banksService: BanksService,
+    ) { }
 
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    customer: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      partnershipName: '',
-      _id: [ null, Validators.required ],
-    }),
-    financier: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    worker: this.formBuilder.group({
-      _id: [ null, Validators.required ]
-    }),
-    fideicomiso: this.formBuilder.group({
-      days: [ null, Validators. required ],
-      emitionAt: [ null, Validators.required ],
-      charge: [ null, Validators.required ],
-      commission: null,
-    }),
-  });
-
-  public construction: ConstructionModel|null = null;
-  public isLoading: boolean = false;
-  public workers: WorkerModel[] = [];
-  public banks: BankModel[] = [];
-  public companies: CompanyModel[] = [];
-
-  private handleCompanies$: Subscription = new Subscription();
-  private handleBanks$: Subscription = new Subscription();
-  private handleWorkers$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleWorkers$.unsubscribe();
-    this.handleBanks$.unsubscribe();
-    this.handleCompanies$.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.navigationService.backTo();
-
-    this.navigationService.setTitle('Nuevo fideicomiso');
-
-    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
-      this.workers = workers;
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        customer: this.formBuilder.group({
+            name: [null, Validators.required],
+            partnershipName: '',
+            _id: [null, Validators.required],
+        }),
+        financier: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        worker: this.formBuilder.group({
+            _id: [null, Validators.required]
+        }),
+        constructionName: [null, Validators.required],
+        days: [null, Validators.required],
+        emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
+        commission: null,
     });
 
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
-    });
+    construction: ConstructionModel | null = null;
+    isLoading: boolean = false;
+    workers: WorkerModel[] = [];
+    banks: BankModel[] = [];
+    companies: CompanyModel[] = [];
 
-    this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
-    });
-  }
+    private handleCompanies$: Subscription = new Subscription();
+    private handleBanks$: Subscription = new Subscription();
+    private handleWorkers$: Subscription = new Subscription();
 
-  openDialogCustomers() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    })
-
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
-      }
-    })
-
-    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
-      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
-        width: '600px',
-        position: { top: '20px' }
-      })
-
-      dialogRef.afterClosed().subscribe(customer => {
-        if (customer) {
-          this.formGroup.patchValue({ customer })
-        }
-      })
-    })
-  }
-
-  openDialogBrokers() {
-    const dialogRef = this.matDialog.open(DialogBrokersComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(broker => {
-      this.formGroup.patchValue({ broker: broker || {} });
-    });
-  }
-
-  openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(financier => {
-      this.formGroup.patchValue({ financier: financier || {} });
-    });
-  }
-
-  openDialogBeneficiaries() {
-    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(beneficiary => {
-      this.formGroup.patchValue({ beneficiary: beneficiary || {} });
-    });
-  }
-
-  openDialogPartnerships() {
-    const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-    
-    dialogRef.afterClosed().subscribe(partnership => {
-      if (partnership) {
-        const { business } = partnership;
-        this.formGroup.patchValue({ business: business || {} });
-        this.formGroup.patchValue({ partnership: partnership || {} });
-      }
-    });
-  }
-
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const { customer, financier, worker, fideicomiso } = this.formGroup.value;
-      fideicomiso.customerId = customer._id;
-      fideicomiso.financierId = financier._id;
-      fideicomiso.workerId = worker._id;
-      this.fideicomisosService.create(fideicomiso).subscribe(fideicomiso => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Registrado correctamente');
-        this.router.navigate(['/fideicomisos']);
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    ngOnDestroy() {
+        this.handleWorkers$.unsubscribe();
+        this.handleBanks$.unsubscribe();
+        this.handleCompanies$.unsubscribe();
     }
-  }
+
+    ngOnInit(): void {
+        this.navigationService.backTo();
+
+        this.navigationService.setTitle('Nuevo fideicomiso');
+
+        this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+            this.workers = workers;
+        });
+
+        this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+            this.banks = banks;
+        });
+
+        this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
+            this.companies = companies;
+        });
+    }
+
+    openDialogCustomers() {
+        const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(customer => {
+            if (customer) {
+                this.formGroup.patchValue({ customer });
+            }
+        })
+
+        dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+            const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+                width: '600px',
+                position: { top: '20px' }
+            })
+
+            dialogRef.afterClosed().subscribe(customer => {
+                if (customer) {
+                    this.formGroup.patchValue({ customer })
+                }
+            })
+        })
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
+        });
+    }
+
+    openDialogFinanciers() {
+        const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(financier => {
+            this.formGroup.patchValue({ financier: financier || {} });
+        });
+    }
+
+    openDialogBeneficiaries() {
+        const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(beneficiary => {
+            this.formGroup.patchValue({ beneficiary: beneficiary || {} });
+        });
+    }
+
+    openDialogPartnerships() {
+        const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(partnership => {
+            if (partnership) {
+                const { business } = partnership;
+                this.formGroup.patchValue({ business: business || {} });
+                this.formGroup.patchValue({ partnership: partnership || {} });
+            }
+        });
+    }
+
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const { customer, financier, worker, ...fideicomiso } = this.formGroup.value;
+            fideicomiso.customerId = customer._id;
+            fideicomiso.financierId = financier._id;
+            fideicomiso.workerId = worker._id;
+            this.fideicomisosService.create(fideicomiso).subscribe(fideicomiso => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Registrado correctamente');
+                this.router.navigate(['/fideicomisos']);
+            }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
 
 }

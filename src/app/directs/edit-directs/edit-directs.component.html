@@ -48,6 +48,12 @@
                 <input type="text" matInput formControlName="name" (click)="openDialogFinanciers()" readonly>
             </mat-form-field>
         </div>
+        <div formGroupName="broker">
+            <mat-form-field appearance="fill">
+                <mat-label>Broker</mat-label>
+                <input type="text" matInput formControlName="name" (click)="openDialogBrokers()" readonly>
+            </mat-form-field>
+        </div>
         <div formGroupName="direct">
             <mat-form-field appearance="fill">
                 <mat-label>N° de poliza</mat-label>

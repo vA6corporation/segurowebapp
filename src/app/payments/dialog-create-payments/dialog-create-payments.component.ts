@@ -9,52 +9,52 @@ import { CompanyModel } from 'src/app/companies/company.model';
 import { BankModel } from 'src/app/providers/bank.model';
 
 @Component({
-  selector: 'app-dialog-create-payments',
-  templateUrl: './dialog-create-payments.component.html',
-  styleUrls: ['./dialog-create-payments.component.sass']
+    selector: 'app-dialog-create-payments',
+    templateUrl: './dialog-create-payments.component.html',
+    styleUrls: ['./dialog-create-payments.component.sass']
 })
 export class DialogCreatePaymentsComponent implements OnInit {
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) 
-    public readonly data: ChequeModel|null,
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly banksService: BanksService,
-    private readonly companiesService: CompaniesService,
-    private readonly dialogRef: MatDialogRef<DialogCreatePaymentsComponent>,
-  ) { }
+    constructor(
+        @Inject(MAT_DIALOG_DATA)
+        readonly data: ChequeModel | null,
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly banksService: BanksService,
+        private readonly companiesService: CompaniesService,
+        private readonly dialogRef: MatDialogRef<DialogCreatePaymentsComponent>,
+    ) { }
 
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    charge: [ null, Validators.required ],
-    paymentAt: [ new Date(), Validators.required ],
-    bankId: [ '', Validators.required ],
-    companyId: [ '', Validators.required ],
-  });
-  public banks: BankModel[] = [];
-  public companies: CompanyModel[] = [];
-
-  private handleCompanies$: Subscription = new Subscription();
-  private handleBanks$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleCompanies$.unsubscribe();
-    this.handleBanks$.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
-      this.banks = banks;
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        charge: [null, Validators.required],
+        paymentAt: [new Date(), Validators.required],
+        bankId: ['', Validators.required],
+        companyId: ['', Validators.required],
     });
+    banks: BankModel[] = []
+    companies: CompanyModel[] = []
 
-    this.companiesService.handleCompanies().subscribe(companies => {
-      this.companies = companies;
-    });
-  }
+    private handleCompanies$: Subscription = new Subscription();
+    private handleBanks$: Subscription = new Subscription();
 
-  onSubmit() {
-    if (this.formGroup.valid) {
-      this.dialogRef.close(this.formGroup.value);
+    ngOnDestroy() {
+        this.handleCompanies$.unsubscribe();
+        this.handleBanks$.unsubscribe();
     }
-  }
+
+    ngOnInit(): void {
+        this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
+            this.banks = banks;
+        });
+
+        this.companiesService.handleCompanies().subscribe(companies => {
+            this.companies = companies;
+        });
+    }
+
+    onSubmit() {
+        if (this.formGroup.valid) {
+            this.dialogRef.close(this.formGroup.value);
+        }
+    }
 
 }

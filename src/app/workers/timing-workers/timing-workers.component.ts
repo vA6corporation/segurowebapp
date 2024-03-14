@@ -168,15 +168,17 @@ export class TimingWorkersComponent implements OnInit {
         if (this.formGroup.valid) {
             const { year } = this.formGroup.value
             this.navigationService.loadBarStart()
-            this.workersService.getGoalByYear(year).subscribe(goal => {
-                this.goal = goal
-                this.workersService.getCommissionsByYear(year).subscribe(workers => {
+            this.workersService.getGoalByYear(year).subscribe({
+                next: goal => {
+                    this.goal = goal
+                    this.workersService.getCommissionsByYear(year).subscribe(workers => {
+                        this.navigationService.loadBarFinish()
+                        this.workers = workers
+                    })
+                }, error: (error: HttpErrorResponse) => {
                     this.navigationService.loadBarFinish()
-                    this.workers = workers
-                })
-            }, (error: HttpErrorResponse) => {
-                this.navigationService.loadBarFinish()
-                this.navigationService.showMessage('No se ha establecido metas para este año')
+                    this.navigationService.showMessage('No se ha establecido metas para este año')
+                }
             });
         }
     }

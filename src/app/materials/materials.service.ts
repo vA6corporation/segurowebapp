@@ -5,76 +5,76 @@ import { DepositModel } from '../deposits/deposit.model';
 import { HttpService } from '../http.service';
 import { MailModel } from '../mails/mail.model';
 import { MaterialPdfModel } from './material-pdf.model';
-import { MaterialModel }from './material.model';
+import { MaterialModel } from './material.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MaterialsService {
 
-  constructor(
-    private readonly httpService: HttpService,
-  ) { }
+    constructor(
+        private readonly httpService: HttpService,
+    ) { }
 
-  sendMail(materialId: string): Observable<MailModel> {
-    return this.httpService.get(`mails/${materialId}/mailMaterial`);
-  }
+    sendMail(materialId: string): Observable<MailModel> {
+        return this.httpService.get(`mails/${materialId}/mailMaterial`)
+    }
 
-  getMaterialsByKey(key: string): Observable<MaterialModel[]> {
-    return this.httpService.get(`materials/byKey/${key}`);
-  }
+    getMaterialsByKey(key: string): Observable<MaterialModel[]> {
+        return this.httpService.get(`materials/byKey/${key}`)
+    }
 
-  getMaterialsByPage(pageIndex: number, pageSize: number): Observable<MaterialModel[]> {
-    return this.httpService.get(`materials/byPage/${pageIndex}/${pageSize}`);
-  }
+    getMaterialsByPage(pageIndex: number, pageSize: number): Observable<MaterialModel[]> {
+        return this.httpService.get(`materials/byPage/${pageIndex}/${pageSize}`)
+    }
 
-  getMaterialsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<MaterialModel[]> {
-    return this.httpService.get(`materials/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`);
-  }
+    getMaterialsByCommercialPage(workerId: string, pageIndex: number, pageSize: number): Observable<MaterialModel[]> {
+        return this.httpService.get(`materials/byCommercialPage/${workerId}/${pageIndex}/${pageSize}`);
+    }
 
-  getMaterialsCount(): Observable<number> {
-    return this.httpService.get('materials/count');
-  }
-  
-  getMaterialById(materialId: string): Observable<MaterialModel> {
-    return this.httpService.get(`materials/byId/${materialId}`);
-  }
+    getCountMaterials(): Observable<number> {
+        return this.httpService.get('materials/countMaterials')
+    }
 
-  delete(materialId: string): Observable<any> {
-    return this.httpService.delete(`materials/${materialId}`);
-  }
+    getMaterialById(materialId: string): Observable<MaterialModel> {
+        return this.httpService.get(`materials/byId/${materialId}`)
+    }
 
-  getMaterialPdfs(materialId: string, type: string): Observable<MaterialPdfModel[]> {
-    return this.httpService.get(`materials/pdfs/${materialId}/${type}`);
-  }
+    delete(materialId: string): Observable<any> {
+        return this.httpService.delete(`materials/${materialId}`)
+    }
 
-  uploadPdf(formData: FormData, materialId: string, type: string, constructionId: string, attachAll: boolean): Observable<string> {
-    return this.httpService.postForm(`materials/uploadPdf/${materialId}/${type}/${constructionId}/${attachAll}`, formData);
-  }
+    getMaterialPdfs(materialId: string, type: string): Observable<MaterialPdfModel[]> {
+        return this.httpService.get(`materials/pdfs/${materialId}/${type}`)
+    }
 
-  deletePdf(pdfId: string): Observable<string> {
-    return this.httpService.delete(`materials/deletePdf/${pdfId}`);
-  }
+    uploadPdf(formData: FormData, materialId: string, type: string, constructionId: string, attachAll: boolean): Observable<string> {
+        return this.httpService.postForm(`materials/uploadPdf/${materialId}/${type}/${constructionId}/${attachAll}`, formData)
+    }
 
-  create(
-    material: any, 
-    cheques: ChequeModel[], 
-    deposits: DepositModel[], 
-    officeId: string
-  ): Observable<MaterialModel> {
-    return this.httpService.post(`materials/${officeId}`, { material, cheques, deposits });
-  }
+    deletePdf(pdfId: string): Observable<string> {
+        return this.httpService.delete(`materials/deletePdf/${pdfId}`)
+    }
 
-  update(material: any, materialId: string): Observable<MaterialModel> {
-    return this.httpService.put(`materials/${materialId}`, { material });
-  }
+    create(
+        material: any,
+        cheques: ChequeModel[],
+        deposits: DepositModel[],
+        officeId: string
+    ): Observable<MaterialModel> {
+        return this.httpService.post(`materials/${officeId}`, { material, cheques, deposits })
+    }
 
-  updateStatus(status: string, materialId: string): Observable<MaterialModel> {
-    return this.httpService.put(`materials/status/${materialId}`, { status });
-  }
+    update(material: any, materialId: string): Observable<MaterialModel> {
+        return this.httpService.put(`materials/${materialId}`, { material })
+    }
 
-  updateWithPayments(material: any, payments: any[], materialId: string): Observable<MaterialModel> {
-    return this.httpService.put(`materials/withPayments/${materialId}`, { material, payments });
-  }
+    updateStatus(status: string, materialId: string): Observable<MaterialModel> {
+        return this.httpService.put(`materials/status/${materialId}`, { status })
+    }
+
+    updateWithPayments(material: any, payments: any[], materialId: string): Observable<MaterialModel> {
+        return this.httpService.put(`materials/withPayments/${materialId}`, { material, payments })
+    }
 
 }

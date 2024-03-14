@@ -19,6 +19,7 @@ export class HttpService {
     ) { }
 
     private baseUrl: string = environment.baseUrl;
+    private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
     public accessToken: string | null = null;
 
     get(url: string, params?: Params): Observable<any> {
@@ -51,6 +52,19 @@ export class HttpService {
             'Authorization': `Bearer ${this.accessToken}`
         });
         const req = new HttpRequest('POST', `${this.baseUrl}${url}`, body, {
+            headers,
+            reportProgress: true
+        });
+        return this.http.request(req)
+    }
+
+    postStorage(file: File, nodeId: string) {
+        let url = `https://storage.googleapis.com/upload/storage/v1/b/${this.BUCKET_NAME}/o?name=${nodeId}/${file.name.replace(/[^a-zA-Z0-9. ]/g, '')}`;
+        const headers = new HttpHeaders({
+            'Content-Type': file.type,
+            // 'Authorization': `Bearer ${this.accessToken}`
+        });
+        const req = new HttpRequest('POST', url, file, {
             headers,
             reportProgress: true
         });

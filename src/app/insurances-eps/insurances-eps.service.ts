@@ -27,7 +27,7 @@ export class InsurancesEpsService {
     }
 
     getInsurancesEpsByKey(key: string): Observable<InsuranceEpsModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesEps/byKey/${key}`);
     }
 
     getCountInsurancesEps(params: Params): Observable<number> {

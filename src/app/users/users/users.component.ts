@@ -11,113 +11,111 @@ import { DialogDevicesComponent } from 'src/app/devices/dialog-devices/dialog-de
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.sass']
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.sass']
 })
 export class UsersComponent implements OnInit {
 
-  constructor( 
-    private readonly usersService: UsersService,
-    private readonly navigationService: NavigationService,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly matDialog: MatDialog
-  ) { }
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly navigationService: NavigationService,
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly matDialog: MatDialog
+    ) { }
 
-  public displayedColumns: string[] = [ 'name', 'email', 'isAdmin', 'office', 'devices', 'actions' ];
-  public dataSource: UserModel[] = [];
-  public length: number = 100;
-  public pageSize: number = 10;
-  public pageSizeOptions: number[] = [10, 30, 50];
-  public pageIndex: number = 0;
-  private params: Params = { isActive: true };
+    displayedColumns: string[] = ['name', 'email', 'isAdmin', 'office', 'devices', 'actions'];
+    dataSource: UserModel[] = [];
+    length: number = 100;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    private params: Params = { isActive: true };
 
-  private queryParams$: Subscription = new Subscription()
-  private handleSearch$: Subscription = new Subscription()
+    private handleSearch$: Subscription = new Subscription()
 
-  ngOnDestroy() {
-    this.queryParams$.unsubscribe();
+    ngOnDestroy() {
+        this.handleSearch$.unsubscribe()
+    }
 
-  }
+    ngOnInit(): void {
+        this.navigationService.setTitle('Usuarios');
 
-  ngOnInit(): void {
-    this.navigationService.setTitle('Usuarios');
-    
-    this.navigationService.setMenu([
-      { id: 'search', label: 'search', icon: 'search', show: true }
-    ]);
+        this.navigationService.setMenu([
+            { id: 'search', label: 'search', icon: 'search', show: true }
+        ]);
 
-    this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
-      this.navigationService.loadBarStart()
-      this.usersService.getUsersByKey(key).subscribe(users => {
-        this.navigationService.loadBarFinish()
-        this.dataSource = users
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.loadBarFinish()
-        this.navigationService.showMessage(error.error.message)
-      })
-    })
+        this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+            this.navigationService.loadBarStart()
+            this.usersService.getUsersByKey(key).subscribe({
+                next: users => {
+                    this.navigationService.loadBarFinish()
+                    this.dataSource = users
+                }, error: (error: HttpErrorResponse) => {
+                    this.navigationService.loadBarFinish()
+                    this.navigationService.showMessage(error.error.message)
+                }
+            })
+        })
 
-    this.queryParams$ = this.activatedRoute.queryParams.pipe(first()).subscribe(params => {
-      const { pageIndex, pageSize } = params;
-      
-      if (pageIndex && pageSize) {
-        this.pageIndex = Number(pageIndex);
-        this.pageSize = Number(pageSize);
-      }
-      
-      this.fetchData();
-      this.fetchCount();
-    });
-  }
+        const { pageIndex, pageSize } = this.activatedRoute.snapshot.queryParams;
 
-  countDevices(devices: any[]): number {
-    return devices.map(e => e.isActive).length;
-  }
+        if (pageIndex && pageSize) {
+            this.pageIndex = Number(pageIndex);
+            this.pageSize = Number(pageSize);
+        }
 
-  fetchCount() {
-    this.usersService.getCountUsers(this.params).subscribe(count => {
-      this.length = count;
-    });
-  }
-
-  fetchData() {
-    this.navigationService.loadBarStart();
-    this.usersService.getUsersByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(users => {
-      this.navigationService.loadBarFinish();
-      this.dataSource = users;
-    });
-  }
-
-  onDialogDevices(user: UserModel) {
-    const dialogRef = this.matDialog.open(DialogDevicesComponent, {
-      width: '600px',
-      position: { top: '20px' },
-      data: user.devices,
-    });
-
-    dialogRef.afterClosed().subscribe(ok => {
-      if (ok) {
         this.fetchData();
-      }
-    });
-  }
+        this.fetchCount();
+    }
 
-  handlePageEvent(event: PageEvent): void {
-    const { pageIndex, pageSize } = event;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
+    countDevices(devices: any[]): number {
+        return devices.map(e => e.isActive).length;
+    }
 
-    const queryParams: Params = { pageIndex, pageSize };
+    fetchCount() {
+        this.usersService.getCountUsers(this.params).subscribe(count => {
+            this.length = count;
+        });
+    }
 
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParams, 
-      queryParamsHandling: 'merge', // remove to replace all query params by provided
-    });
+    fetchData() {
+        this.navigationService.loadBarStart();
+        this.usersService.getUsersByPage(this.pageIndex + 1, this.pageSize, this.params).subscribe(users => {
+            this.navigationService.loadBarFinish();
+            this.dataSource = users;
+        });
+    }
 
-    this.fetchData();
-  }
-  
+    onDialogDevices(user: UserModel) {
+        const dialogRef = this.matDialog.open(DialogDevicesComponent, {
+            width: '600px',
+            position: { top: '20px' },
+            data: user.devices,
+        });
+
+        dialogRef.afterClosed().subscribe(ok => {
+            if (ok) {
+                this.fetchData();
+            }
+        });
+    }
+
+    handlePageEvent(event: PageEvent): void {
+        const { pageIndex, pageSize } = event;
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
+
+        const queryParams: Params = { pageIndex, pageSize };
+
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: queryParams,
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+        });
+
+        this.fetchData();
+    }
+
 }

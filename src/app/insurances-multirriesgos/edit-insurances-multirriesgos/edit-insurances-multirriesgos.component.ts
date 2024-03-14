@@ -27,13 +27,15 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
 
 @Component({
-  selector: 'app-edit-insurances-multirriesgos',
-  templateUrl: './edit-insurances-multirriesgos.component.html',
-  styleUrl: './edit-insurances-multirriesgos.component.sass'
+    selector: 'app-edit-insurances-multirriesgos',
+    templateUrl: './edit-insurances-multirriesgos.component.html',
+    styleUrl: './edit-insurances-multirriesgos.component.sass'
 })
 export class EditInsurancesMultirriesgosComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesMultirriesgosService: InsurancesMultirriesgosService,
@@ -127,7 +129,7 @@ export class EditInsurancesMultirriesgosComponent {
     }
 
     onDialogPayments() {
-        const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+        const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
             width: '600px',
             position: { top: '20px' }
         });

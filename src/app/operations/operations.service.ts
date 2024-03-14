@@ -55,9 +55,10 @@ export class OperationsService {
     }
 
     uploadFile(
-        formData: any,
+        file: File,
+        nodeId: string
     ) {
-        return this.httpService.postProgress('operationNodes/uploadFile', formData);
+        return this.httpService.postStorage(file, nodeId)
     }
 
     createNode(

@@ -23,11 +23,11 @@ export class InsurancesMultirriesgosService {
     }
 
     getInsurancesByInsuranceGroup(insuranceGroupId: string): Observable<InsuranceMultirriesgosModel[]> {
-        return this.httpService.get(`insurances/byInsuranceGroup/${insuranceGroupId}`);
+        return this.httpService.get(`insurancesMultirriesgos/byInsuranceGroup/${insuranceGroupId}`);
     }
 
     getInsurancesMultirriesgosByKey(key: string): Observable<InsuranceMultirriesgosModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesMultirriesgos/byKey/${key}`);
     }
 
     getCountInsurancesMultirriesgos(params: Params): Observable<number> {

@@ -22,66 +22,74 @@ export class DirectsComponent implements OnInit {
         private readonly matDialog: MatDialog,
     ) { }
 
-    private handleSearch$: Subscription = new Subscription();
+    displayedColumns: string[] = ['partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions'];
+    dataSource: DirectModel[] = [];
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageSize: number = 10;
+    pageIndex: number = 0;
+    length: number = 100;
 
-    public displayedColumns: string[] = ['partnership', 'business', 'policyNumber', 'startDate', 'endDate', 'price', 'actions'];
-    public dataSource: DirectModel[] = [];
-    public pageSizeOptions: number[] = [10, 30, 50];
-    public pageSize: number = 10;
-    public pageIndex: number = 0;
-    public length: number = 100;
+    private handleSearch$: Subscription = new Subscription()
+
+    ngOnDestroy() {
+        this.handleSearch$.unsubscribe()
+    }
 
     ngOnInit(): void {
         this.navigationService.setTitle('Adelanto directo');
         this.navigationService.setMenu([
             { id: 'search', label: 'search', icon: 'search', show: true }
-        ]);
+        ])
 
-        this.fetchData();
-        this.handleSearch$ = this.navigationService.handleSearch().subscribe((key: string) => {
-            this.navigationService.loadBarStart();
-            this.directsService.getDirectsByKey(key).subscribe(directs => {
-                this.navigationService.loadBarFinish();
-                this.dataSource = directs;
-            }, (error: HttpErrorResponse) => {
-                this.navigationService.loadBarFinish();
-                this.navigationService.showMessage(error.error.message);
-            });
-        });
+        this.handleSearch$ = this.navigationService.handleSearch().subscribe(key => {
+            this.navigationService.loadBarStart()
+            this.directsService.getDirectsByKey(key).subscribe({
+                next: directs => {
+                    this.navigationService.loadBarFinish()
+                    this.dataSource = directs
+                }, error: (error: HttpErrorResponse) => {
+                    this.navigationService.loadBarFinish()
+                    this.navigationService.showMessage(error.error.message);
+                }
+            })
+        })
+
+        this.fetchData()
+        this.fetchCount()
     }
 
-    async onRenewGuarantee(guarantee: GuaranteeModel) {
+    onRenewGuarantee(guarantee: GuaranteeModel) {
         guarantee.status = GuaranteeStatusTypes.RENEW;
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
+        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+            this.navigationService.showMessage('Se han guardado los cambios');
+        })
     }
 
-    async onNotRenewGuarantee(guarantee: GuaranteeModel) {
+    onNotRenewGuarantee(guarantee: GuaranteeModel) {
         guarantee.status = GuaranteeStatusTypes.NOT_RENEW;
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
+        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+            this.navigationService.showMessage('Se han guardado los cambios');
+        })
     }
 
-    async onFreeGuarantee(guarantee: GuaranteeModel) {
+    onFreeGuarantee(guarantee: GuaranteeModel) {
         guarantee.status = GuaranteeStatusTypes.FREE;
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
+        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+            this.navigationService.showMessage('Se han guardado los cambios');
+        })
     }
 
-    async onNotLookGuarantee(guarantee: GuaranteeModel) {
+    onNotLookGuarantee(guarantee: GuaranteeModel) {
         guarantee.status = GuaranteeStatusTypes.NOT_LOOK;
-        this.directsService.update(guarantee, guarantee._id).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
-    }
-
-    ngOnDestroy() {
-        this.handleSearch$.unsubscribe();
+        this.directsService.update(guarantee, guarantee._id).subscribe(() => {
+            this.navigationService.showMessage('Se han guardado los cambios');
+        })
     }
 
     handlePageEvent(event: PageEvent): void {
         this.directsService.getDirectsByPage(event.pageIndex + 1, event.pageSize).subscribe(materials => {
             this.dataSource = materials;
-        });
+        })
     }
 
     sendMail(directId: string): void {
@@ -89,10 +97,7 @@ export class DirectsComponent implements OnInit {
         this.directsService.sendMail(directId).subscribe(mail => {
             this.navigationService.loadBarFinish();
             this.navigationService.showMessage(`Enviado correctamente a: ${mail.to}`);
-        }, (error: HttpErrorResponse) => {
-            this.navigationService.loadBarFinish();
-            this.navigationService.showMessage(error.error.message);
-        });
+        })
     }
 
     onShowDetails(directId: string) {
@@ -102,22 +107,25 @@ export class DirectsComponent implements OnInit {
         });
     }
 
-    async fetchData() {
-        this.directsService.getDirectsCount().subscribe(count => {
+    fetchCount() {
+        this.directsService.getCountDirects().subscribe(count => {
             this.length = count
         })
-        
+    }
+
+    fetchData() {
         this.directsService.getDirectsByPage(this.pageIndex + 1, this.pageSize).subscribe(directs => {
             this.dataSource = directs
         })
     }
 
-    async onDelete(directId: string) {
-        const ok = confirm('Esta seguro de eliminar?...');
+    onDelete(directId: string) {
+        const ok = confirm('Esta seguro de eliminar?...')
         if (ok) {
-            await this.directsService.delete(directId).toPromise();
-            this.navigationService.showMessage('Eliminado correctamente');
-            this.fetchData();
+            this.directsService.delete(directId).subscribe(() => {
+                this.navigationService.showMessage('Eliminado correctamente')
+                this.fetchData()
+            })
         }
 
     }

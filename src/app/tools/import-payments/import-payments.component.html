@@ -1,0 +1,72 @@
+<section class="container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <div class="d-flex mb-3">
+            <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">CARGAR EXCEL</button>
+            <span class="divider"></span>
+            <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">
+                SUBIR {{ dataSource.length }} ITEMS
+            </button>
+            <span class="divider"></span>
+        </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Cuenta de la empresa</mat-label>
+            <mat-select formControlName="bankId">
+                <mat-option value="">SELECCIONE UNA CUENTA</mat-option>
+                @for (bank of banks; track bank._id) {
+                    <mat-option [value]="bank._id">
+                        {{ bank.providerName }} - {{ bank.bankName }} {{ bank.accountNumber }}
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Razon social</mat-label>
+            <mat-select formControlName="companyId">
+                <mat-option value="">SELECCIONE UNA RAZON SOCIAL</mat-option>
+                @for (company of companies; track company._id) {
+                    <mat-option [value]="company._id">{{ company.name }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <div class="pb-3"></div>
+    <input type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput, tableCustomers)" hidden>
+    <div class="mat-elevation-z2">
+        <table mat-table #tableCustomers [dataSource]="dataSource" class="w-100">
+            <ng-container matColumnDef="parentId">
+                <th mat-header-cell *matHeaderCellDef>_id</th>
+                <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">
+                    {{ element.parentId }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="commission">
+                <th mat-header-cell *matHeaderCellDef>Comision</th>
+                <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">
+                    {{ element.commission.toFixed(2) }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="policyNumber">
+                <th mat-header-cell *matHeaderCellDef>N° de poliza</th>
+                <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">
+                    {{ element.policyNumber }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="guaranteeType">
+                <th mat-header-cell *matHeaderCellDef>Garantia</th>
+                <td mat-cell *matCellDef="let element" class="text-capitalize truncate-cell">
+                    {{ element.guaranteeType }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                    <button type="button" (click)="onDeleteCustomer(i, tableCustomers)" mat-icon-button>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</section>

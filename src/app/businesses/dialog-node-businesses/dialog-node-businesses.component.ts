@@ -6,9 +6,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, firstValueFrom, lastValueFrom, merge } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { ObjectId } from 'src/app/shared/ObjectId';
 import { BusinessNodeModel } from '../business-node.model';
 import { BusinessesService } from '../businesses.service';
+import { CreateBusinessNodeModel } from '../create-business-node.model';
 
 export interface UploadFileModel {
     name: string
@@ -35,8 +36,6 @@ export class FlatNode {
         public level = 1,
         public expandable = false,
         public contentType: string | null = null,
-        // public parentNodeId: string | null = null,
-        public fileId: string | null = null,
     ) { }
 }
 
@@ -63,7 +62,7 @@ export class DynamicDatabase {
     rootLevelNodes: BusinessNodeModel[] = [];
 
     initialData(): FlatNode[] {
-        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.fileId, e.contentType, e.fileId));
+        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.fileId, e.contentType));
     }
 
     setBusinessNodes(operations: BusinessNodeModel[]): void {
@@ -170,11 +169,10 @@ export class DynamicDataSource implements DataSource<FlatNode> {
             const nodes = children.map(
                 businessNode => new FlatNode(
                     businessNode._id,
-                    businessNode.name, node.level + 1,
-                    !businessNode.fileId,
-                    businessNode.contentType || '',
-                    // businessNode.businessNodeId,
-                    businessNode.fileId || null,
+                    businessNode.name, 
+                    node.level + 1,
+                    !businessNode.contentType,
+                    businessNode.contentType || null,
                 )
             )
             this.data.splice(index + 1, 0, ...nodes)
@@ -222,6 +220,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     isDragOver = false
     uploadingFiles: UploadFileModel[] = []
     isUploading: boolean = false
+    private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
 
     getLevel = (node: FlatNode) => node.level;
 
@@ -362,9 +361,11 @@ export class DialogNodeBusinessesComponent implements OnInit {
         const businessNodeId = parentNode ? parentNode._id : null;
         const name = prompt('Nueva carpeta');
         if (name) {
-            const businessNode = {
+            const businessNode: CreateBusinessNodeModel = {
+                _id: ObjectId(),
                 name,
                 type: this.data.type,
+                contentType: null,
                 businessId: this.data.businessId,
                 businessNodeId
             }
@@ -376,8 +377,6 @@ export class DialogNodeBusinessesComponent implements OnInit {
                         createdBusinessNode.name,
                         level,
                         true,
-                        '',
-                        parentNode ? parentNode._id : null,
                     )
                     this.fetchData()
                     let isExpanded = false
@@ -398,15 +397,15 @@ export class DialogNodeBusinessesComponent implements OnInit {
 
     onSelectFile(businessNode: FlatNode) {
         console.log(businessNode);
-        this.fileId = businessNode.fileId || '';
+        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${businessNode._id}/${businessNode.name}`
         if (
             businessNode.contentType &&
             (businessNode.contentType === 'application/pdf' || businessNode.contentType.includes('image'))
         ) {
-            this.tabIndex = 1;
-            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.baseUrl}businessNodes/byFileId/${this.fileId}`);
+            this.tabIndex = 1
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
         } else {
-            this.downloadURI(`${environment.baseUrl}businessNodes/byFileIdDownload/${this.fileId}/${businessNode.name}`, businessNode.name);
+            this.downloadURI(url, '');
         }
     }
 
@@ -436,21 +435,16 @@ export class DialogNodeBusinessesComponent implements OnInit {
             const createdBusinessNodes: any[] = []
             for (let index = 0; index < files.length; index++) {
                 const file = files[index]
-                const formData = new FormData()
-                formData.append('file', file)
-                formData.append('businessNode[name]', file.name)
-                formData.append('businessNode[type]', this.data.type)
-                formData.append('businessNode[businessId]', this.data.businessId)
-                formData.append('businessNode[businessNodeId]', parentNode._id)
                 const uploadFile: UploadFileModel = {
-                    name: file.name,
+                    name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
                     progressPercent: 0,
                     message: null
                 }
                 this.isUploading = true
                 this.uploadingFiles.push(uploadFile)
                 this.tabIndex = 2
-                const promise = lastValueFrom(this.businessesService.uploadFile(formData).pipe(
+                const objectId = ObjectId()
+                const promise = lastValueFrom(this.businessesService.uploadFile(file, objectId).pipe(
                     map(event => this.getEventMessage(event)),
                     tap(progressPercent => {
                         uploadFile.progressPercent = progressPercent
@@ -459,8 +453,17 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     catchError(err => {
                         throw err
                     })
-                )).then(createdBusinessNode => {
-                    createdBusinessNodes.push(createdBusinessNode)
+                )).then(async () => {
+                    const createdBusinessNode: CreateBusinessNodeModel = {
+                        _id: objectId,
+                        name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
+                        type: this.data.type,
+                        contentType: file.type,
+                        businessId: this.data.businessId,
+                        businessNodeId: parentNode._id,
+                    }
+                    const savedBusinessNode = await lastValueFrom(this.businessesService.createNode(createdBusinessNode))
+                    createdBusinessNodes.push(savedBusinessNode)
                     const subIndex = this.uploadingFiles.indexOf(uploadFile)
                     this.uploadingFiles.splice(subIndex, 1)
                 }).catch((error: HttpErrorResponse) => {
@@ -481,8 +484,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     createdBusinessNode.name,
                     level,
                     false,
-                    '',
-                    parentNode._id
+                    createdBusinessNode.contentType
                 )
                 const isExpanded = this.treeControl.isExpanded(parentNode);
                 if (!isExpanded) {
@@ -503,16 +505,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     ): Promise<void> {
         return new Promise(async (resolve, _) => {
             if (item.isFile) {
-                // Get file
                 item.file((file: any) => {
-                    const formData = new FormData()
-                    formData.append('file', file)
-                    formData.append('businessNode[name]', file.name)
-                    formData.append('businessNode[type]', this.data.type)
-                    formData.append('businessNode[businessId]', this.data.businessId)
-                    if (businessNodeId) {
-                        formData.append('businessNode[businessNodeId]', businessNodeId)
-                    }
                     const uploadFile: UploadFileModel = {
                         name: file.name,
                         progressPercent: 0,
@@ -522,7 +515,8 @@ export class DialogNodeBusinessesComponent implements OnInit {
                         this.uploadingFiles.push(uploadFile)
                     })
                     this.tabIndex = 2
-                    lastValueFrom(this.businessesService.uploadFile(formData).pipe(
+                    const objectId = ObjectId()
+                    lastValueFrom(this.businessesService.uploadFile(file, objectId).pipe(
                         map(event => this.getEventMessage(event)),
                         tap(progressPercent => {
                             this.ngZone.run(() => {
@@ -534,6 +528,15 @@ export class DialogNodeBusinessesComponent implements OnInit {
                             throw err
                         })
                     )).then(() => {
+                        const createdBusinessNode: CreateBusinessNodeModel = {
+                            _id: objectId,
+                            name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
+                            type: this.data.type,
+                            contentType: file.type,
+                            businessId: this.data.businessId,
+                            businessNodeId,
+                        }
+                        lastValueFrom(this.businessesService.createNode(createdBusinessNode))
                         resolve()
                     }).catch((error: HttpErrorResponse) => {
                         console.log(error);
@@ -541,9 +544,15 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     })
                 });
             } else {
-                // Get folder contents
-                var dirReader = item.createReader();
-                const businessNode = { name: item.name, type: this.data.type, businessId: this.data.businessId, businessNodeId }
+                let dirReader = item.createReader();
+                const businessNode = {
+                    _id: ObjectId(),
+                    name: item.name, 
+                    type: this.data.type, 
+                    businessId: 
+                    this.data.businessId, 
+                    businessNodeId 
+                }
                 const createdOperationNode = await firstValueFrom(this.businessesService.createNode(businessNode))
                 dirReader.readEntries(async (entries: any) => {
                     for (let i = 0; i < entries.length; i++) {

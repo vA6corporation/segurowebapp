@@ -12,6 +12,7 @@ import { BusinessModel } from 'src/app/businesses/business.model';
 import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 import { DialogNodeOperationsComponent } from '../dialog-node-operations/dialog-node-operations.component';
 import { BusinessNodeType, DialogBusinessNodeData, DialogNodeBusinessesComponent } from 'src/app/businesses/dialog-node-businesses/dialog-node-businesses.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-edit-operations',
@@ -25,6 +26,7 @@ export class EditOperationsComponent implements OnInit {
         private readonly operationsService: OperationsService,
         private readonly navigationService: NavigationService,
         private readonly matDialog: MatDialog,
+        private readonly sanitizer: DomSanitizer,
         private readonly activatedRoute: ActivatedRoute,
     ) { }
 
@@ -47,6 +49,7 @@ export class EditOperationsComponent implements OnInit {
     businesses: BusinessModel[] = [];
     nodeIncludes: string[] = []
     private operationId: string = '';
+    private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
     private params$: Subscription = new Subscription();
 
     ngOnDestroy() {
@@ -106,7 +109,11 @@ export class EditOperationsComponent implements OnInit {
         this.operationsService.getBuildFile(this.operationId).subscribe(res => {
             this.isLoading = false
             this.navigationService.loadBarFinish()
-            this.downloadURI(decodeURIComponent(res.url), '');
+            console.log(res);
+            const { name } = this.formGroup.value
+            const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${this.operationId}/${name}.zip`
+            console.log(url);
+            this.downloadURI(url, name);
         })
     }
 
@@ -118,7 +125,7 @@ export class EditOperationsComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,
@@ -133,7 +140,7 @@ export class EditOperationsComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,
@@ -148,7 +155,7 @@ export class EditOperationsComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,

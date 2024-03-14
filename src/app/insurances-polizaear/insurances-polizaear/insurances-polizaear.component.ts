@@ -187,6 +187,7 @@ export class InsurancesPolizaearComponent {
 
         this.navigationService.loadBarStart();
         this.insurancesPolizaearService.getInsurancesPolizaearByPage(this.pageIndex + 1, this.pageSize, params).subscribe(insurancesPolizaear => {
+            console.log(insurancesPolizaear);
             this.navigationService.loadBarFinish();
             this.dataSource = insurancesPolizaear;
         });

@@ -23,11 +23,11 @@ export class InsurancesFolaService {
     }
 
     getInsurancesByInsuranceGroup(insuranceGroupId: string): Observable<InsuranceFolaModel[]> {
-        return this.httpService.get(`insurances/byInsuranceGroup/${insuranceGroupId}`);
+        return this.httpService.get(`insurancesFola/byInsuranceGroup/${insuranceGroupId}`);
     }
 
     getInsurancesFolaByKey(key: string): Observable<InsuranceFolaModel[]> {
-        return this.httpService.get(`insurances/byKey/${key}`);
+        return this.httpService.get(`insurancesFola/byKey/${key}`);
     }
 
     getCountInsurancesFola(params: Params): Observable<number> {

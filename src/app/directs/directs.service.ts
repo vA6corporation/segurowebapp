@@ -25,8 +25,8 @@ export class DirectsService {
     return this.httpService.get(`mails/${directId}/mailDirect`);
   }
 
-  getDirectsCount(): Observable<number> {
-    return this.httpService.get('directs/count');
+  getCountDirects(): Observable<number> {
+    return this.httpService.get('directs/countDirects');
   }
 
   getDirectById(directId: string): Observable<DirectModel> {

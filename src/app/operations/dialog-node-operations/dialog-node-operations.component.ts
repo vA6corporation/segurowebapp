@@ -6,9 +6,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, lastValueFrom, merge } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { CreateOperationNodeModel } from '../create-operation-node.model';
 import { OperationNodeModel } from '../operation-node.model';
 import { OperationsService } from '../operations.service';
+import { ObjectId } from 'src/app/shared/ObjectId';
 
 export interface UploadFileModel {
     name: string
@@ -23,7 +24,6 @@ export class FlatNode {
         public level = 1,
         public expandable = false,
         public contentType: string | null = null,
-        public fileId: string | null = null,
     ) { }
 }
 
@@ -50,7 +50,11 @@ export class DynamicDatabase {
     rootLevelNodes: OperationNodeModel[] = [];
 
     initialData(): FlatNode[] {
-        return this.operationNodes.filter(e => e.operationNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.fileId, e.contentType, e.fileId));
+        return this.operationNodes.filter(e => e.operationNodeId === null).map(e => {
+            const flat = new FlatNode(e._id, e.name, 0, !e.contentType, e.contentType)
+            console.log(flat);
+            return flat
+        });
     }
 
     setOperationNodes(operations: OperationNodeModel[]): void {
@@ -154,10 +158,11 @@ export class DynamicDataSource implements DataSource<FlatNode> {
             const nodes = children.map(
                 operationNode => new FlatNode(
                     operationNode._id,
-                    operationNode.name, node.level + 1,
-                    !operationNode.fileId,
+                    operationNode.name, 
+                    node.level + 1,
+                    !operationNode.contentType,
                     operationNode.contentType || '',
-                    operationNode.fileId,
+                    // operationNode.mediaLink,
                 )
             );
             this.data.splice(index + 1, 0, ...nodes)
@@ -204,6 +209,7 @@ export class DialogNodeOperationsComponent implements OnInit {
     isDragOver = false
     uploadingFiles: UploadFileModel[] = []
     isUploading: boolean = false
+    private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
 
     getLevel = (node: FlatNode) => node.level;
 
@@ -266,7 +272,13 @@ export class DialogNodeOperationsComponent implements OnInit {
         const operationNodeId = parentNode ? parentNode._id : null;
         const name = prompt('Nueva carpeta');
         if (name) {
-            const operationNode = { name, operationId: this.operationId, operationNodeId };
+            const operationNode: CreateOperationNodeModel = {
+                _id: ObjectId(),
+                name, 
+                contentType: null,
+                operationId: this.operationId, 
+                operationNodeId, 
+            }
             this.operationsService.createNode(operationNode).subscribe({
                 next: async createdOperationNode => {
                     const level = parentNode ? parentNode.level + 1 : 0;
@@ -294,15 +306,15 @@ export class DialogNodeOperationsComponent implements OnInit {
     }
 
     onSelectFile(operationNode: FlatNode) {
-        this.fileId = operationNode.fileId || '';
+        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${operationNode._id}/${operationNode.name}`
         if (
             operationNode.contentType &&
             (operationNode.contentType === 'application/pdf' || operationNode.contentType.includes('image'))
         ) {
-            this.tabIndex = 1;
-            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.baseUrl}operationNodes/byFileId/${this.fileId}`);
+            this.tabIndex = 1
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
         } else {
-            this.downloadURI(`${environment.baseUrl}operationNodes/byFileIdDownload/${this.fileId}/${operationNode.name}`, operationNode.name);
+            this.downloadURI(url, '');
         }
     }
 
@@ -332,30 +344,34 @@ export class DialogNodeOperationsComponent implements OnInit {
             const createdOperationNodes: any[] = []
             for (let index = 0; index < files.length; index++) {
                 const file = files[index]
-                const formData = new FormData()
-                formData.append('file', file)
-                formData.append('operationNode[name]', file.name)
-                formData.append('operationNode[operationId]', this.operationId)
-                formData.append('operationNode[operationNodeId]', parentNode._id)
                 const uploadFile: UploadFileModel = {
-                    name: file.name,
+                    name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
                     progressPercent: 0,
                     message: null
                 }
                 this.isUploading = true
                 this.uploadingFiles.push(uploadFile)
                 this.tabIndex = 2
-                const promise = this.operationsService.uploadFile(formData).pipe(
+                const objectId = ObjectId()
+                const promise = lastValueFrom(this.operationsService.uploadFile(file, objectId).pipe(
                     map(event => this.getEventMessage(event)),
                     tap(progressPercent => {
                         uploadFile.progressPercent = progressPercent
                     }),
-                    last(), // return last (completed) message to caller
+                    last(),
                     catchError(err => {
                         throw err
                     })
-                ).toPromise().then(createdOperationNode => {
-                    createdOperationNodes.push(createdOperationNode)
+                )).then(async () => {
+                    const createdOperationNode: CreateOperationNodeModel = {
+                        _id: objectId,
+                        name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
+                        contentType: file.type,
+                        operationId: this.operationId,
+                        operationNodeId: parentNode._id,
+                    }
+                    const savedOperationNode = await lastValueFrom(this.operationsService.createNode(createdOperationNode))
+                    createdOperationNodes.push(savedOperationNode)
                     const subIndex = this.uploadingFiles.indexOf(uploadFile)
                     this.uploadingFiles.splice(subIndex, 1)
                 }).catch((error: HttpErrorResponse) => {
@@ -366,26 +382,27 @@ export class DialogNodeOperationsComponent implements OnInit {
             }
             try {
                 await Promise.all(promises)
+                for (const createdOperationNode of createdOperationNodes) {
+                    const level = parentNode ? parentNode.level + 1 : 0;
+                    const createdFlatNode = new FlatNode(
+                        createdOperationNode._id,
+                        createdOperationNode.name,
+                        level,
+                        false,
+                        createdOperationNode.contentType
+                    )
+                    const isExpanded = this.treeControl.isExpanded(parentNode);
+                    if (!isExpanded) {
+                        this.treeControl.expand(parentNode)
+                    }
+                    this.dataSource.addNode(createdFlatNode, parentNode)
+                }
+                this.tabIndex = 0
+                this.isLoading = false
+                this.fetchData()
             } catch (error) {
                 console.log(error);
             }
-            for (const createdOperationNode of createdOperationNodes) {
-                const level = parentNode ? parentNode.level + 1 : 0;
-                const createdFlatNode = new FlatNode(
-                    createdOperationNode._id,
-                    createdOperationNode.name,
-                    level,
-                    false,
-                )
-                const isExpanded = this.treeControl.isExpanded(parentNode);
-                if (!isExpanded) {
-                    this.treeControl.expand(parentNode)
-                }
-                this.dataSource.addNode(createdFlatNode, parentNode)
-            }
-            this.tabIndex = 0
-            this.isLoading = false
-            this.fetchData()
         }
         input.value = '';
     }
@@ -398,15 +415,8 @@ export class DialogNodeOperationsComponent implements OnInit {
             if (item.isFile) {
                 // Get file
                 item.file((file: any) => {
-                    const formData = new FormData()
-                    formData.append('file', file)
-                    formData.append('operationNode[name]', file.name)
-                    formData.append('operationNode[operationId]', this.operationId)
-                    if (operationNodeId) {
-                        formData.append('operationNode[operationNodeId]', operationNodeId)
-                    }
                     const uploadFile: UploadFileModel = {
-                        name: file.name,
+                        name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
                         progressPercent: 0,
                         message: null
                     }
@@ -414,7 +424,9 @@ export class DialogNodeOperationsComponent implements OnInit {
                         this.uploadingFiles.push(uploadFile)
                     })
                     this.tabIndex = 2
-                    this.operationsService.uploadFile(formData).pipe(
+                    const objectId = ObjectId()
+                    
+                    lastValueFrom(this.operationsService.uploadFile(file, objectId).pipe(
                         map(event => this.getEventMessage(event)),
                         tap(progressPercent => {
                             this.ngZone.run(() => {
@@ -425,7 +437,15 @@ export class DialogNodeOperationsComponent implements OnInit {
                         catchError(err => {
                             throw err
                         })
-                    ).toPromise().then(() => {
+                    )).then(() => {
+                        const createdOperationNode: CreateOperationNodeModel = {
+                            _id: objectId,
+                            name: file.name.replace(/[^a-zA-Z0-9. ]/g, ''),
+                            contentType: file.type,
+                            operationId: this.operationId,
+                            operationNodeId,
+                        }
+                        lastValueFrom(this.operationsService.createNode(createdOperationNode))
                         resolve()
                     }).catch((error: HttpErrorResponse) => {
                         console.log(error);
@@ -433,9 +453,14 @@ export class DialogNodeOperationsComponent implements OnInit {
                     })
                 });
             } else {
-                // Get folder contents
-                var dirReader = item.createReader();
-                const operationNode = { name: item.name, operationId: this.operationId, operationNodeId }
+                let dirReader = item.createReader();
+                const operationNode = {
+                    _id: ObjectId(), 
+                    name: item.name, 
+                    contentType: null,
+                    operationId: this.operationId, 
+                    operationNodeId,
+                }
                 const createdOperationNode = await lastValueFrom(this.operationsService.createNode(operationNode))
                 dirReader.readEntries(async (entries: any) => {
                     for (let i = 0; i < entries.length; i++) {

@@ -1,6 +1,7 @@
-
 export interface CreateOperationNodeModel {
-  name: string
-  operationId: string
-  operationNodeId: string|null
+    _id: string,
+    name: string
+    contentType: string | null
+    operationId: string
+    operationNodeId: string | null
 }

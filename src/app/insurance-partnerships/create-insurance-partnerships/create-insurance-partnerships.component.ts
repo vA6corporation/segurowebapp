@@ -9,74 +9,74 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { InsurancePartnershipsService } from '../insurance-partnerships.service';
 
 @Component({
-  selector: 'app-create-insurance-partnerships',
-  templateUrl: './create-insurance-partnerships.component.html',
-  styleUrls: ['./create-insurance-partnerships.component.sass']
+    selector: 'app-create-insurance-partnerships',
+    templateUrl: './create-insurance-partnerships.component.html',
+    styleUrls: ['./create-insurance-partnerships.component.sass']
 })
 export class CreateInsurancePartnershipsComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly partnershipsService: InsurancePartnershipsService,
-    private readonly navigationService: NavigationService,
-    private readonly router: Router,
-    private readonly matDialog: MatDialog,
-  ) { }
-    
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    partnership: this.formBuilder.group({
-      document: null,
-      name: [ null, Validators.required ],
-      address: [ null ],
-      representative: [ null, Validators.required ],
-      representativeDocument: [ null, Validators.required ],
-      businessId: [ null, Validators.required ],
-    }),
-  });
-  public isLoading: boolean = false;
-  public businesses: BusinessModel[] = [];
-  
-  ngOnInit(): void { 
-    this.navigationService.setTitle('Nuevo consorcio');
-    this.navigationService.backTo();
-  }
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly partnershipsService: InsurancePartnershipsService,
+        private readonly navigationService: NavigationService,
+        private readonly router: Router,
+        private readonly matDialog: MatDialog,
+    ) { }
 
-  openDialogBusinesses(): void {
-    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
-      width: '600px',
-      position: { top: '20px' }
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        document: null,
+        name: [null, Validators.required],
+        address: [null],
+        representative: [null, Validators.required],
+        representativeDocument: [null, Validators.required],
+        businessId: [null, Validators.required],
     });
+    isLoading: boolean = false;
+    businesses: BusinessModel[] = [];
 
-    dialogRef.afterClosed().subscribe(business => {
-      if (business) {
-        this.businesses.push(business);
-      }
-    });
-  }
-
-  removeBusiness(index: number): void {
-    this.businesses.splice(index, 1);
-  }
-
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const partnership = this.formGroup.value;
-      partnership.businessIds = this.businesses.map(e => e._id);
-      this.partnershipsService.create(partnership).subscribe(res => {
-        console.log(res);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.router.navigate(['/insurancePartnerships']);
-        this.navigationService.showMessage('Registrado correctamente');
-      }, (error: HttpErrorResponse) => {
-        console.log(error);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    ngOnInit(): void {
+        this.navigationService.setTitle('Nuevo consorcio');
+        this.navigationService.backTo();
     }
-  }
+
+    openDialogBusinesses(): void {
+        const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(business => {
+            if (business) {
+                this.businesses.push(business);
+            }
+        });
+    }
+
+    removeBusiness(index: number): void {
+        this.businesses.splice(index, 1);
+    }
+
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const partnership = this.formGroup.value;
+            partnership.businessIds = this.businesses.map(e => e._id);
+            this.partnershipsService.create(partnership).subscribe({
+                next: res => {
+                    console.log(res);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.router.navigate(['/insurancePartnerships']);
+                    this.navigationService.showMessage('Registrado correctamente');
+                }, error: (error: HttpErrorResponse) => {
+                    console.log(error);
+                    this.isLoading = false;
+                    this.navigationService.loadBarFinish();
+                    this.navigationService.showMessage(error.error.message);
+                }
+            });
+        }
+    }
 
 }

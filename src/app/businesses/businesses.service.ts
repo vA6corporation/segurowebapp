@@ -130,9 +130,10 @@ export class BusinessesService {
     }
 
     uploadFile(
-        formData: FormData,
-    ): Observable<any> {
-        return this.httpService.postProgress(`businessNodes/uploadFile`, formData);
+        file: File,
+        nodeId: string
+    ) {
+        return this.httpService.postStorage(file, nodeId)
     }
 
     createNode(businessNode: any): Observable<BusinessModel> {

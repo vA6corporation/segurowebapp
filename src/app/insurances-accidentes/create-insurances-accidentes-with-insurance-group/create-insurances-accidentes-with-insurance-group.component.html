@@ -51,8 +51,9 @@
             <mat-form-field appearance="fill">
                 <mat-label>Promotor</mat-label>
                 <mat-select formControlName="_id">
-                    <mat-option *ngFor="let element of workers" [value]="element._id">{{ element.name | uppercase
-                        }}</mat-option>
+                    <mat-option *ngFor="let element of workers" [value]="element._id">
+                        {{ element.name | uppercase }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
