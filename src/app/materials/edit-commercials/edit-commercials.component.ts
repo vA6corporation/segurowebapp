@@ -23,344 +23,343 @@ import { DialogPdfMaterialsComponent, MaterialPdfData } from '../dialog-pdf-mate
 import { MaterialsService } from '../materials.service';
 
 @Component({
-  selector: 'app-edit-commercials',
-  templateUrl: './edit-commercials.component.html',
-  styleUrls: ['./edit-commercials.component.sass']
+    selector: 'app-edit-commercials',
+    templateUrl: './edit-commercials.component.html',
+    styleUrls: ['./edit-commercials.component.sass']
 })
 export class EditCommercialsComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly materialsService: MaterialsService,
-    private readonly chequesService: ChequesService,
-    private readonly depositsService: DepositsService,
-    private readonly navigationService: NavigationService,
-    private readonly matDialog: MatDialog,
-    private readonly activatedRoute: ActivatedRoute,
-  ) { }
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly materialsService: MaterialsService,
+        private readonly chequesService: ChequesService,
+        private readonly depositsService: DepositsService,
+        private readonly navigationService: NavigationService,
+        private readonly matDialog: MatDialog,
+        private readonly activatedRoute: ActivatedRoute,
+    ) { }
 
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    financier: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    beneficiary: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    material: this.formBuilder.group({
-      constructionId: '',
-      policyNumber: [ null, Validators.required ],
-      object: null,
-      price: [ null, Validators.required ],
-      startDate: [null, Validators. required ],
-      endDate: [ null, Validators.required ],
-      guarantee: null,
-      prima: null,
-      isEmition: false,
-      commission: null,
-      currencyCode: 'PEN',
-    }),
-  });
-
-  public isLoading: boolean = false;
-  private materialId: string = '';
-  public cheques: ChequeModel[] = [];
-  public deposits: DepositModel[] = [];
-  public construction: ConstructionModel|null = null;
-  public business: BusinessModel|null = null;
-  public partnership: PartnershipModel|null = null;
-
-  ngOnInit(): void { 
-    this.navigationService.setTitle('Editar adelanto de materiales');
-    this.navigationService.backTo();
-    this.activatedRoute.params.subscribe(params => {
-      this.materialId = params.materialId;
-      this.materialsService.getMaterialById(this.materialId).subscribe(material => {
-        const { financier, beneficiary, cheques = [], deposits = [], construction } = material;
-        this.formGroup.patchValue({ financier });
-        this.formGroup.patchValue({ beneficiary });
-        this.formGroup.patchValue({ material });
-        this.construction = construction;
-        this.business = construction.business || null;
-        this.partnership = construction?.partnership || null;
-        this.cheques = cheques;
-        this.deposits = deposits;
-      });
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        financier: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        beneficiary: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        material: this.formBuilder.group({
+            constructionId: '',
+            policyNumber: [null, Validators.required],
+            object: null,
+            price: [null, Validators.required],
+            startDate: [null, Validators.required],
+            endDate: [null, Validators.required],
+            guarantee: null,
+            prima: null,
+            isEmition: false,
+            commission: null,
+            currencyCode: 'PEN',
+        }),
     });
 
-  }
+    isLoading: boolean = false;
+    cheques: ChequeModel[] = [];
+    deposits: DepositModel[] = [];
+    construction: ConstructionModel | null = null;
+    business: BusinessModel | null = null;
+    partnership: PartnershipModel | null = null;
+    private materialId: string = '';
 
-  onEditConstruction() {
-    const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
-      width: '100vw',
-      position: { top: '20px' }
-    });
+    ngOnInit(): void {
+        this.navigationService.setTitle('Editar adelanto de materiales');
+        this.activatedRoute.params.subscribe(params => {
+            this.materialId = params.materialId;
+            this.materialsService.getMaterialById(this.materialId).subscribe(material => {
+                const { financier, beneficiary, cheques = [], deposits = [], construction } = material;
+                this.formGroup.patchValue({ financier });
+                this.formGroup.patchValue({ beneficiary });
+                this.formGroup.patchValue({ material });
+                this.construction = construction;
+                this.business = construction.business || null;
+                this.partnership = construction?.partnership || null;
+                this.cheques = cheques;
+                this.deposits = deposits;
+            });
+        });
 
-    dialogRef.afterClosed().subscribe(construction => {
-      console.log(construction);
-      
-      if (construction) {
-        this.construction = construction;
-        this.formGroup.patchValue({ material: { constructionId: construction._id } });
-      }
-    });
-  }
-
-  onAttachPdfInvoice() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'invoice',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
     }
-  }
 
-  onAttachPdfTicket() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'voucher',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+    onEditConstruction() {
+        const dialogRef = this.matDialog.open(DialogConstructionsComponent, {
+            width: '100vw',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(construction => {
+            console.log(construction);
+
+            if (construction) {
+                this.construction = construction;
+                this.formGroup.patchValue({ material: { constructionId: construction._id } });
+            }
+        });
     }
-  }
 
-  onAttachPdfDocuments() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'document',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+    onAttachPdfInvoice() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'invoice',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
+
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  onAttachPdfCheques() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'cheque',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+    onAttachPdfTicket() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'voucher',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
+
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  onAttachPdfDeposits() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'deposit',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+    onAttachPdfDocuments() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'document',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
+
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  onAttachPdfFianzas() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'fianza',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+    onAttachPdfCheques() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'cheque',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
+
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  onAttachPdfConstruction() {
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data: this.construction?._id,
-    });
-  }
+    onAttachPdfDeposits() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'deposit',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
 
-  onAttachPdfConstructions() {
-    if (this.construction) {
-      const data: MaterialPdfData = {
-        type: 'construction',
-        constructionId: this.construction._id,
-        materialId: this.materialId
-      }
-  
-      this.matDialog.open(DialogPdfMaterialsComponent, {
-        width: '100vw',
-        height: '90vh',
-        position: { top: '20px' },
-        data,
-      });
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  removeCheque(index: number): void {
-    const ok = confirm('Esta seguro de eliminar?...');
-    if (ok) {
-      const cheque = this.cheques[index];
-      this.chequesService.deleteOne(cheque._id).subscribe(() => {
-        this.cheques.splice(index, 1);
-        this.navigationService.showMessage('Eliminado correctamente');
-      }, (error: HttpErrorResponse) => {
-        this.navigationService.showMessage(error.error.message);
-      });
+    onAttachPdfFianzas() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'fianza',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
+
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
 
-  removeDeposit(index: number): void {
-    const ok = confirm('Esta seguro de aliminar?...');
-    if (ok) {
-      const deposit = this.deposits[index];
-      this.deposits.splice(index, 1);
-      this.depositsService.deleteOne(deposit._id || '').subscribe(() => {
-        this.navigationService.showMessage('Se han guardado los cambios');
-      });
+    onAttachPdfConstruction() {
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data: this.construction?._id,
+        });
     }
-  }
 
-  openDialogBusinesses() {
-    const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+    onAttachPdfConstructions() {
+        if (this.construction) {
+            const data: MaterialPdfData = {
+                type: 'construction',
+                constructionId: this.construction._id,
+                materialId: this.materialId
+            }
 
-    dialogRef.afterClosed().subscribe(business => {
-      if (business) {
-        this.formGroup.patchValue({ business });
-      }
-    });
-  }
-
-  openDialogFinanciers() {
-    const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(financier => {
-      this.formGroup.patchValue({ financier: financier || {} });
-    });
-  }
-
-  openDialogBeneficiaries() {
-    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(beneficiary => {
-      this.formGroup.patchValue({ beneficiary: beneficiary || {} });
-    });
-  }
-
-  openDialogPartnerships() {
-    const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-    
-    dialogRef.afterClosed().subscribe(partnership => {
-      if (partnership) {
-        const { business } = partnership;
-        this.formGroup.patchValue({ business: business || {} });
-        this.formGroup.patchValue({ partnership: partnership || {} });
-      }
-    });
-  }
-
-  onEditCheque(cheque: ChequeModel): void {
-    const dialogRef = this.matDialog.open(DialogChequesComponent, {
-      width: '600px',
-      position: { top: '20px' },
-      data: cheque,
-    });
-
-    dialogRef.afterClosed().subscribe(async updatedCheque => {
-      if (updatedCheque) {
-        Object.assign(cheque, updatedCheque);
-        await this.chequesService.update(updatedCheque, cheque._id).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }
-    });
-  }
-
-  openDialogDeposits() {
-    const dialogRef = this.matDialog.open(DialogDepositsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(async deposit => {
-      if (deposit) {
-        this.deposits.push(deposit);
-        deposit.onModel = 'Material';
-        deposit.guaranteeId = this.materialId;
-        await this.depositsService.create(deposit).toPromise();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }
-    });
-  }
-
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const { financier, beneficiary, material } = this.formGroup.value;
-      material.financierId = financier._id;
-      material.beneficiaryId = beneficiary._id;
-      this.materialsService.update(material, this.materialId).subscribe(res => {
-        console.log(res);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        console.log(error);
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+            this.matDialog.open(DialogPdfMaterialsComponent, {
+                width: '100vw',
+                height: '90vh',
+                position: { top: '20px' },
+                data,
+            });
+        }
     }
-  }
+
+    removeCheque(index: number): void {
+        const ok = confirm('Esta seguro de eliminar?...');
+        if (ok) {
+            const cheque = this.cheques[index];
+            this.chequesService.deleteOne(cheque._id).subscribe(() => {
+                this.cheques.splice(index, 1);
+                this.navigationService.showMessage('Eliminado correctamente');
+            }, (error: HttpErrorResponse) => {
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
+
+    removeDeposit(index: number): void {
+        const ok = confirm('Esta seguro de aliminar?...');
+        if (ok) {
+            const deposit = this.deposits[index];
+            this.deposits.splice(index, 1);
+            this.depositsService.deleteOne(deposit._id || '').subscribe(() => {
+                this.navigationService.showMessage('Se han guardado los cambios');
+            });
+        }
+    }
+
+    openDialogBusinesses() {
+        const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(business => {
+            if (business) {
+                this.formGroup.patchValue({ business });
+            }
+        });
+    }
+
+    openDialogFinanciers() {
+        const dialogRef = this.matDialog.open(DialogFinanciesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(financier => {
+            this.formGroup.patchValue({ financier: financier || {} });
+        });
+    }
+
+    openDialogBeneficiaries() {
+        const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(beneficiary => {
+            this.formGroup.patchValue({ beneficiary: beneficiary || {} });
+        });
+    }
+
+    openDialogPartnerships() {
+        const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(partnership => {
+            if (partnership) {
+                const { business } = partnership;
+                this.formGroup.patchValue({ business: business || {} });
+                this.formGroup.patchValue({ partnership: partnership || {} });
+            }
+        });
+    }
+
+    onEditCheque(cheque: ChequeModel): void {
+        const dialogRef = this.matDialog.open(DialogChequesComponent, {
+            width: '600px',
+            position: { top: '20px' },
+            data: cheque,
+        });
+
+        dialogRef.afterClosed().subscribe(async updatedCheque => {
+            if (updatedCheque) {
+                Object.assign(cheque, updatedCheque);
+                await this.chequesService.update(updatedCheque, cheque._id).toPromise();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }
+        });
+    }
+
+    openDialogDeposits() {
+        const dialogRef = this.matDialog.open(DialogDepositsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(async deposit => {
+            if (deposit) {
+                this.deposits.push(deposit);
+                deposit.onModel = 'Material';
+                deposit.guaranteeId = this.materialId;
+                await this.depositsService.create(deposit).toPromise();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }
+        });
+    }
+
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const { financier, beneficiary, material } = this.formGroup.value;
+            material.financierId = financier._id;
+            material.beneficiaryId = beneficiary._id;
+            this.materialsService.update(material, this.materialId).subscribe(res => {
+                console.log(res);
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                console.log(error);
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
 
 }

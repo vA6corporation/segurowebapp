@@ -114,8 +114,6 @@ export class EditInsurancesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });

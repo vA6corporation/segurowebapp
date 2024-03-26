@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { InsuranceSctrModel } from './insurance-sctr.model';
 import { Params } from '@angular/router';
 import { PaymentModel } from '../payments/payment.model';
+import { FeeModel } from '../fees/fee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,9 +58,10 @@ export class InsurancesSctrService {
     update(
         insuranceSctr: any,
         payments: PaymentModel[],
+        fees: FeeModel[],
         insuranceSctrId: string
     ): Observable<void> {
-        return this.httpService.put(`insurancesSctr/${insuranceSctrId}`, { insuranceSctr, payments });
+        return this.httpService.put(`insurancesSctr/${insuranceSctrId}`, { insuranceSctr, payments, fees });
     }
 
     createWithInsuranceGroup(insuranceSctr: any): Observable<InsuranceSctrModel> {

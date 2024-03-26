@@ -93,12 +93,12 @@ export class NavigationService {
     return this.isMainToolbar$.asObservable();
   }
 
-  isMainToolbar() {
-    this.isMainToolbar$.emit(true);
+  setIsMainScreen(isMainScreen: boolean) {
+    this.isMainToolbar$.emit(isMainScreen);
   }
 
-  backTo() {
-    this.isMainToolbar$.emit(false);
-  }
+//   backTo() {
+//     this.isMainToolbar$.emit(false);
+//   }
 
 }

@@ -39,7 +39,6 @@ export class EditCompaniesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> { 
     this.navigationService.setTitle('Editar empresa');
-    this.navigationService.backTo();
 
     this.params$ = this.activatedRoute.params.subscribe(params => {
       this.companyId = params.companyId;

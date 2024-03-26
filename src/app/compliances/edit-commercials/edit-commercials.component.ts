@@ -73,7 +73,6 @@ export class EditCommercialsComponent implements OnInit {
   public cheques: ChequeModel[] = [];
 
   ngOnInit(): void { 
-    this.navigationService.backTo();
     this.navigationService.setTitle('Editar fiel cumplimiento');
     this.activatedRoute.params.subscribe(params => {
       this.complianceId = params.complianceId;

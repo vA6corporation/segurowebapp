@@ -28,9 +28,82 @@ export class AppComponent {
         private readonly matDialog: MatDialog,
     ) { }
 
-    public isStart: boolean = false;
-    public isLoading: boolean = true;
+    isStart: boolean = false;
+    isLoading: boolean = true;
     private currentPath: string = '';
+    private mainScreens = [
+        '/',
+        '/surveys',
+        '/operations',
+        '/seace/seaceInbox',
+        '/seace',
+        '/notifications',
+        '/search',
+        '/search/commercial',
+        '/financiers',
+        '/users',
+        '/workers',
+        '/cheques',
+        '/credits',
+        '/customers',
+        '/certifiers',
+        '/compliances',
+        '/directs',
+        '/materials',
+        '/constructions',
+        '/constructions/commercial',
+        '/partnerships',
+        '/businesses',
+        '/businesses/commercial',
+        '/beneficiaries',
+        '/guaranties',
+        '/mails',
+        '/insurancesSctr',
+        '/insurancesSoat',
+        '/insurancesVidaley',
+        '/insurancesPolizacar',
+        '/insurancesPolizatrec',
+        '/insurancesPolizaear',
+        '/insurancesMultirriesgos',
+        '/insurancesRcivil',
+        '/insurancesVehicular',
+        '/insurancesVida',
+        '/insurancesEps',
+        '/insurancesSalud',
+        '/insurancesAccidentes',
+        '/insurancesFola',
+        '/insurancesViaje',
+        '/insuranceBusinesses',
+        '/insurancePartnerships',
+        '/brokers',
+        '/insuranceConstructions',
+        '/insurances/renew',
+        '/insurances/report/reportPie',
+        '/templates',
+        '/shareholders',
+        '/templatePartnerships',
+        '/providers',
+        '/paymentOrders',
+        '/payments',
+        '/banks',
+        '/constructions/collection',
+        '/paymentOrders/report',
+        '/tools/importPayments',
+        '/collections',
+        '/primas',
+        '/legals',
+        '/documentation',
+        '/constructions/withoutDocumentation',
+        '/businesses/withoutDocumentation',
+        '/insurances/report/report',
+        '/credits/report',
+        '/constructions/percentCompletions',
+        '/constructions/updatePercentCompletions',
+        '/workers/commissions',
+        '/workers/timing',
+        '/settings',
+        '/logout'
+    ]
 
     ngOnInit(): void {
         this.navigationService.handleLoadSpinner().subscribe(state => {
@@ -116,7 +189,12 @@ export class AppComponent {
             if (event instanceof NavigationEnd) {
                 if (this.currentPath !== this.router.url.split('?')[0]) {
                     this.navigationService.setMenu([]);
-                    this.navigationService.isMainToolbar();
+                    // this.navigationService.isMainToolbar();
+                    if (this.mainScreens.includes(this.router.url.split('?')[0])) {
+                        this.navigationService.setIsMainScreen(true)
+                    } else {
+                        this.navigationService.setIsMainScreen(false)
+                    }
                 }
                 this.currentPath = this.router.url.split('?')[0];
             }

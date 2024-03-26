@@ -29,8 +29,6 @@ export class EditCertifiersComponent implements OnInit {
 
   ngOnInit() { 
     this.navigationService.setTitle('Editar certificadora');
-    this.navigationService.backTo();
-
     this.activatedRoute.params.subscribe(params => {
       this.certifierId = params['certifierId'];
       this.certifiersService.getCertifierById(this.certifierId).subscribe(certifier => {

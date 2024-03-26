@@ -76,8 +76,6 @@ export class CreateFideicomisosComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
-
         this.navigationService.setTitle('Nuevo fideicomiso');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

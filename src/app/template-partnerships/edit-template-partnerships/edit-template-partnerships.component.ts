@@ -45,7 +45,6 @@ export class EditTemplatePartnershipsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar consorcio para formatos');
-        this.navigationService.backTo();
         this.activatedRoute.params.subscribe(params => {
             this.partnershipId = params.partnershipId;
             this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {

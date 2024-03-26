@@ -100,8 +100,6 @@ export class CreateInsurancesWithInsuranceGroupComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
-
         this.activatedRoute.params.subscribe(params => {
             this.type = params.type;
             this.navigationService.setTitle('Nuevo ' + this.type);

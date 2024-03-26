@@ -23,7 +23,7 @@ export class CreateOperationsComponent implements OnInit {
         private readonly matDialog: MatDialog
     ) { }
 
-    public formGroup: UntypedFormGroup = this.formBuilder.group({
+    formGroup: UntypedFormGroup = this.formBuilder.group({
         name: [null, Validators.required],
         partnership: this.formBuilder.group({
             _id: null,
@@ -34,12 +34,11 @@ export class CreateOperationsComponent implements OnInit {
             _id: [null, Validators.required],
         }),
     });
-    public isLoading: boolean = false;
-    public hide: boolean = true;
+    isLoading: boolean = false;
+    hide: boolean = true;
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nueva operacion');
-        this.navigationService.backTo();
     }
 
     onAttachFile() {

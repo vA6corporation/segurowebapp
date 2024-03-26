@@ -185,8 +185,6 @@ export class EditBusinessesComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar empresa');
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });
@@ -249,65 +247,65 @@ export class EditBusinessesComponent implements OnInit {
         const dialogRef = this.matDialog.open(DialogBoardMembersComponent, {
             width: '600px',
             position: { top: '20px' },
-        });
+        })
 
         dialogRef.afterClosed().subscribe((boardMemberItem) => {
             if (boardMemberItem) {
                 this.boardMembers.push(boardMemberItem);
             }
-        });
+        })
     }
 
     onDialogLinkedBusinesses() {
         const dialogRef = this.matDialog.open(DialogBusinessesComponent, {
             width: '600px',
             position: { top: '20px' },
-        });
+        })
 
         dialogRef.afterClosed().subscribe((business) => {
             if (business) {
                 this.linkedBusinesses.push(business);
             }
-        });
+        })
     }
 
     onDialogShareholders() {
         const dialogRef = this.matDialog.open(DialogShareholdersComponent, {
             width: '600px',
             position: { top: '20px' },
-        });
+        })
 
         dialogRef.afterClosed().subscribe((shareholder) => {
             if (shareholder) {
                 this.shareholders.push(shareholder);
             }
-        });
+        })
     }
 
     onDialogProperties() {
         const dialogRef = this.matDialog.open(DialogPropertiesComponent, {
             width: '600px',
             position: { top: '20px' },
-        });
+        })
 
         dialogRef.afterClosed().subscribe((property) => {
             if (property) {
                 this.properties.push(property);
             }
-        });
+        })
     }
 
     onDialogMovableProperties() {
         const dialogRef = this.matDialog.open(DialogMovablePropertiesComponent, {
             width: '600px',
             position: { top: '20px' },
-        });
+        })
 
         dialogRef.afterClosed().subscribe((movableProperty) => {
             if (movableProperty) {
                 this.movableProperties.push(movableProperty);
             }
-        });
+        })
     }
 
     onDialogInvestments() {
@@ -524,7 +522,7 @@ export class EditBusinessesComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,
@@ -538,7 +536,7 @@ export class EditBusinessesComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,
@@ -552,7 +550,7 @@ export class EditBusinessesComponent implements OnInit {
         }
 
         this.matDialog.open(DialogNodeBusinessesComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
             data,

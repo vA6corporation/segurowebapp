@@ -48,8 +48,6 @@ export class ConstructionStatusComponent implements OnInit {
   ngOnInit(): void {
     this.navigationService.setTitle('Emisiones');
 
-    this.navigationService.backTo();
-
     this.navigationService.setMenu([
       { id: 'search', label: 'search', icon: 'search', show: true }
     ]);

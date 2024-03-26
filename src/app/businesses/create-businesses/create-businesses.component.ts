@@ -177,8 +177,6 @@ export class CreateBusinessesComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nueva empresa');
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });

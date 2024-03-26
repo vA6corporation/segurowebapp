@@ -102,7 +102,6 @@ export class EditMaterialsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar adelanto de materiales');
-        this.navigationService.backTo();
 
         this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
             this.user = auth.user;

@@ -79,8 +79,6 @@ export class EditFideicomisosComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });
@@ -105,10 +103,10 @@ export class EditFideicomisosComponent implements OnInit {
             type,
         }
         this.matDialog.open(DialogAttachPdfComponent, {
-            width: '100vw',
+            width: '80vw',
             height: '90vh',
             position: { top: '20px' },
-            data: data
+            data,
         });
     }
 

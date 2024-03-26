@@ -100,7 +100,6 @@ export class CreateMaterialsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nuevo adelanto de materiales')
-        this.navigationService.backTo()
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;

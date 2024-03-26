@@ -24,7 +24,6 @@ export class CompaniesComponent implements OnInit {
     public pageIndex: number = 0;
 
     ngOnInit(): void {
-        this.navigationService.backTo()
         this.navigationService.setTitle('Empresas')
         this.fetchData()
     }

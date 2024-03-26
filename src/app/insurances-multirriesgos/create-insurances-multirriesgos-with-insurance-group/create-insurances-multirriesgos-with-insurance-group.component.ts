@@ -27,6 +27,7 @@ import { Location } from '@angular/common';
   styleUrl: './create-insurances-multirriesgos-with-insurance-group.component.sass'
 })
 export class CreateInsurancesMultirriesgosWithInsuranceGroupComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesMultirriesgosService: InsurancesMultirriesgosService,
@@ -66,6 +67,7 @@ export class CreateInsurancesMultirriesgosWithInsuranceGroupComponent {
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: [null, Validators.required],
         commission: [null, Validators.required],
         currencyCode: 'PEN',
@@ -89,7 +91,6 @@ export class CreateInsurancesMultirriesgosWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Multirriesgos');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

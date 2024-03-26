@@ -74,7 +74,6 @@ export class EditCommercialsComponent implements OnInit {
 
   ngOnInit(): void { 
     this.navigationService.setTitle('Editar adelanto directo');
-    this.navigationService.backTo();
     this.activatedRoute.params.subscribe(params => {
       this.directId = params.directId;
       this.directsService.getDirectById(this.directId).subscribe(direct => {

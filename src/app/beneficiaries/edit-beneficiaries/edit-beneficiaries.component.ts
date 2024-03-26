@@ -40,8 +40,6 @@ export class EditBeneficiariesComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar beneficiario');
-        this.navigationService.backTo();
-
         this.activatedRoute.params.subscribe(params => {
             this.beneficiaryId = params.beneficiaryId;
             this.beneficiariesService.getBeneficiaryById(this.beneficiaryId).subscribe(beneficiary => {

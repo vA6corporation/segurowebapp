@@ -70,8 +70,6 @@ export class EditCapitalIncreasesComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationService.setTitle('Editar incremento de capital');
-    this.navigationService.backTo();
-
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });

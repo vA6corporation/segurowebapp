@@ -36,7 +36,6 @@ export class CreateInsurancePartnershipsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nuevo consorcio');
-        this.navigationService.backTo();
     }
 
     openDialogBusinesses(): void {

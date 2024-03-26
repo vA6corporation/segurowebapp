@@ -31,7 +31,6 @@ export class CreateBanksComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.navigationService.setTitle('Nueva cuenta bancaria');
-        this.navigationService.backTo();
     }
 
     onSubmit(): void {

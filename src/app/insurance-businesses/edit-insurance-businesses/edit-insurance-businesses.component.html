@@ -1,60 +1,60 @@
 <section class="container py-4">
-  <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
-    <mat-form-field appearance="fill">
-      <mat-label>Tipo de Documento</mat-label>
-      <mat-select formControlName="documentType">
-        <mat-option value="RUC">RUC</mat-option>
-        <mat-option value="DNI">DNI</mat-option>
-        <mat-option value="CE">CE</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>N° de Documento</mat-label>
-      <input type="text" matInput formControlName="document" [maxlength]="maxlength">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Nombres/Razon Social</mat-label>
-      <input type="text" matInput formControlName="name">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input type="email" matInput formControlName="email">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Celular</mat-label>
-      <input type="text" matInput formControlName="phoneNumber">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Telefono</mat-label>
-      <input type="text" matInput formControlName="mobileNumber">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Anexo</mat-label>
-      <input type="text" matInput formControlName="annexed">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Direccion</mat-label>
-      <input type="text" matInput formControlName="address">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Fecha de nacimiento</mat-label>
-      <input matInput [matDatepicker]="birthDatePicker" formControlName="birthDate">
-      <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
-      <mat-datepicker #birthDatePicker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Representante legal</mat-label>
-      <input type="text" matInput formControlName="representative">
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Documento del representante legal</mat-label>
-      <input type="text" matInput formControlName="representativeDocument">
-    </mat-form-field>
-    <div class="d-flex">
-      <span class="spacer"></span>
-      <button type="button" mat-stroked-button color="primary" routerLink="/businesses">CANCELAR</button>
-      <div class="divider"></div>
-      <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
-    </div>
-  </form>
+    <form (ngSubmit)="onSubmit()" [formGroup]="formGroup" autocomplete="off">
+        <mat-form-field appearance="fill">
+            <mat-label>Tipo de Documento</mat-label>
+            <mat-select formControlName="documentType">
+                <mat-option value="RUC">RUC</mat-option>
+                <mat-option value="DNI">DNI</mat-option>
+                <mat-option value="CE">CE</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>N° de Documento</mat-label>
+            <input type="text" matInput formControlName="document" [maxlength]="maxlength">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Nombres/Razon Social</mat-label>
+            <input type="text" matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Celular</mat-label>
+            <input type="text" matInput formControlName="phoneNumber">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Telefono</mat-label>
+            <input type="text" matInput formControlName="mobileNumber">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Anexo</mat-label>
+            <input type="text" matInput formControlName="annexed">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Direccion</mat-label>
+            <input type="text" matInput formControlName="address">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput [matDatepicker]="birthDatePicker" formControlName="birthDate">
+            <mat-datepicker-toggle matSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #birthDatePicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Representante legal</mat-label>
+            <input type="text" matInput formControlName="representative">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Documento del representante legal</mat-label>
+            <input type="text" matInput formControlName="representativeDocument">
+        </mat-form-field>
+        <div class="d-flex">
+            <span class="spacer"></span>
+            <button type="button" mat-stroked-button color="primary" routerLink="/businesses">CANCELAR</button>
+            <div class="divider"></div>
+            <button type="submit" [disabled]="isLoading" mat-raised-button color="primary">GUARDAR</button>
+        </div>
+    </form>
 </section>

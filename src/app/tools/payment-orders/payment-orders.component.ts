@@ -34,14 +34,14 @@ export class PaymentOrdersComponent implements OnInit {
         private readonly matDialog: MatDialog
     ) { }
 
-    public users: UserModel[] = [];
-    public displayedColumns: string[] = ['index', 'concept', 'charge', 'currencyCode', 'paymentAt', 'bank', 'company', 'provider', 'actions'];
-    public dataSource: any[] = [];
-    public length: number = 0;
-    public pageSize: number = 10;
-    public pageSizeOptions: number[] = [10, 30, 50];
-    public pageIndex: number = 0;
-    public isLoading: boolean = false;
+    users: UserModel[] = [];
+    displayedColumns: string[] = ['index', 'concept', 'charge', 'currencyCode', 'paymentAt', 'bank', 'company', 'provider', 'actions'];
+    dataSource: any[] = [];
+    length: number = 0;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
+    isLoading: boolean = false;
     private banks: BankModel[] = [];
     private companies: CompanyModel[] = [];
     private providers: ProviderModel[] = [];
@@ -56,7 +56,6 @@ export class PaymentOrdersComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Importar Excel');
-        this.navigationService.backTo();
 
         this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
             this.banks = banks;
@@ -143,7 +142,7 @@ export class PaymentOrdersComponent implements OnInit {
                             provider,
                             providerId: provider ? provider._id : null,
                             pdfName: paymentOrder.numeroPdf.toString() + '.pdf',
-                        };
+                        }
 
                         this.dataSource.push(createdPaymentOrder);
 
@@ -177,11 +176,13 @@ export class PaymentOrdersComponent implements OnInit {
     }
 
     async onSubmit() {
-        if (this.dataSource.length && this.dataSource.filter(e => e.file).length === this.dataSource.length && !this.dataSource.filter(e => e.provider == null).length) {
+        if (this.dataSource.length) {
             this.navigationService.loadSpinnerStart();
             for (const paymentOrder of this.dataSource) {
                 const createdPaymentOrder = await lastValueFrom(this.paymentOrdersService.create(paymentOrder))
-                await lastValueFrom(this.paymentOrdersService.uploadFile(paymentOrder.file, createdPaymentOrder._id))
+                if (paymentOrder.file) {
+                    await lastValueFrom(this.paymentOrdersService.uploadFile(paymentOrder.file, createdPaymentOrder._id))
+                }
             }
             this.navigationService.loadSpinnerFinish();
             this.navigationService.showMessage('Se han guardado los cambios');

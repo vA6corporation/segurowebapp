@@ -90,7 +90,6 @@ export class CreateInsurancesSaludWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Salud');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

@@ -89,7 +89,6 @@ export class CreateInsurancesFolaWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Fola');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

@@ -16,181 +16,177 @@ import { IncomeModel } from '../income.model';
 import { ShareholdersService } from '../shareholders.service';
 
 @Component({
-  selector: 'app-create-shareholders',
-  templateUrl: './create-shareholders.component.html',
-  styleUrls: ['./create-shareholders.component.sass']
+    selector: 'app-create-shareholders',
+    templateUrl: './create-shareholders.component.html',
+    styleUrls: ['./create-shareholders.component.sass']
 })
 export class CreateShareholdersComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly shareholdersService: ShareholdersService,
-    private readonly navigationService: NavigationService,
-    private readonly matDialog: MatDialog,
-    private readonly router: Router,
-  ) { }
-    
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    documentType: [ null, Validators.required ],
-    document: [ null, Validators.required ],
-    name: [ null, Validators.required ],
-    email: null,
-    nationality: [ null, Validators.required ],
-    maritalStatus: [ null, Validators.required ],
-    percent: [ null, Validators.required ],
-    mobileNumber: null,
-    phoneNumber: null,
-    annexed: null,
-    birthDate: null,
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly shareholdersService: ShareholdersService,
+        private readonly navigationService: NavigationService,
+        private readonly matDialog: MatDialog,
+        private readonly router: Router,
+    ) { }
 
-    countryOrigin: null,
-    addressResidence: null,
-    countryResidence: null,
-    districtResidence: null,
-    provinceResidence: null,
-    departmentResidence: null,
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        documentType: [null, Validators.required],
+        document: [null, Validators.required],
+        name: [null, Validators.required],
+        email: null,
+        nationality: [null, Validators.required],
+        maritalStatus: [null, Validators.required],
+        percent: [null, Validators.required],
+        mobileNumber: null,
+        phoneNumber: null,
+        annexed: null,
+        birthDate: null,
 
-    professionOccupation: null,
-    position: null,
-    PEPInstitution: null,
-    PEPPositionn: null,
+        countryOrigin: null,
+        addressResidence: null,
+        countryResidence: null,
+        districtResidence: null,
+        provinceResidence: null,
+        departmentResidence: null,
 
-    publicCompaniesCurrently: null,
-    publicCompaniesLast5year: null,
-    publicCompaniesInstitute: null,
-    publicCompaniesPosition: null,
-    publicCompaniesTime: null,
+        professionOccupation: null,
+        position: null,
+        PEPInstitution: null,
+        PEPPositionn: null,
 
-    // Spouse
-    documentTypeSpouse: null,
-    documentSpouse: null,
-    nameSpouse: null,
-    nationalitySpouse: null,
-    maritalStatusSpouse: null,
-    birthDateSpouse: null,
-  });
-  public isLoading: boolean = false;
-  public maxlength: number = 11;
+        publicCompaniesCurrently: null,
+        publicCompaniesLast5year: null,
+        publicCompaniesInstitute: null,
+        publicCompaniesPosition: null,
+        publicCompaniesTime: null,
 
-  private shareholderId: string = '';
-  private params$: Subscription = new Subscription();
-  public properties: PropertyModel[] = [];
-  public movableProperties: MovablePropertyModel[] = [];
-  public incomes: IncomeModel[] = [];
-  public investments: InvestmentModel[] = [];
-  public isCheckedPEP = false;
-  public isCheckedPC = false;
-  
-  ngOnInit(): void { 
-    this.navigationService.setTitle('Nuevo accionista');
-    this.navigationService.backTo();
-    this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
-      switch (value) {
-        case 'RUC':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(11), Validators.maxLength(11) ]);
-          this.maxlength = 11;
-          break;
-        case 'DNI':
-          this.formGroup.get('documento')?.setValidators([ Validators.required, Validators.minLength(8), Validators.maxLength(8) ]);
-          this.maxlength = 8;
-          break;
-      }
-      this.formGroup.get('documento')?.updateValueAndValidity();
-    });
-  }
+        documentTypeSpouse: null,
+        documentSpouse: null,
+        nameSpouse: null,
+        nationalitySpouse: null,
+        maritalStatusSpouse: null,
+        birthDateSpouse: null,
+    })
+    isLoading: boolean = false;
+    maxlength: number = 11;
 
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      if (!this.isCheckedPEP) {
-        this.formGroup.controls['PEPInstitution'].setValue('');
-        this.formGroup.controls['PEPPositionn'].setValue('');
-      }
-      if (!this.isCheckedPC) {
-        this.formGroup.controls['publicCompaniesInstitute'].setValue('');
-        this.formGroup.controls['publicCompaniesPosition'].setValue('');
-        this.formGroup.controls['publicCompaniesTime'].setValue('');
-      }
-      this.shareholdersService.create(this.formGroup.value).subscribe(res => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.router.navigate(['/shareholders']);
-        this.navigationService.showMessage('Registrador correctamente');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    properties: PropertyModel[] = [];
+    movableProperties: MovablePropertyModel[] = [];
+    incomes: IncomeModel[] = [];
+    investments: InvestmentModel[] = [];
+    isCheckedPEP = false;
+    isCheckedPC = false;
+
+    ngOnInit(): void {
+        this.navigationService.setTitle('Nuevo accionista');
+        this.formGroup.get('documentType')?.valueChanges.subscribe(value => {
+            switch (value) {
+                case 'RUC':
+                    this.formGroup.get('documento')?.setValidators([Validators.required, Validators.minLength(11), Validators.maxLength(11)]);
+                    this.maxlength = 11;
+                    break;
+                case 'DNI':
+                    this.formGroup.get('documento')?.setValidators([Validators.required, Validators.minLength(8), Validators.maxLength(8)]);
+                    this.maxlength = 8;
+                    break;
+            }
+            this.formGroup.get('documento')?.updateValueAndValidity();
+        });
     }
-  }
 
-  onRemoveProperty(index: number) {
-    this.properties.splice(index, 1);
-  }
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            if (!this.isCheckedPEP) {
+                this.formGroup.controls['PEPInstitution'].setValue('');
+                this.formGroup.controls['PEPPositionn'].setValue('');
+            }
+            if (!this.isCheckedPC) {
+                this.formGroup.controls['publicCompaniesInstitute'].setValue('');
+                this.formGroup.controls['publicCompaniesPosition'].setValue('');
+                this.formGroup.controls['publicCompaniesTime'].setValue('');
+            }
+            this.shareholdersService.create(this.formGroup.value).subscribe(res => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.router.navigate(['/shareholders']);
+                this.navigationService.showMessage('Registrador correctamente');
+            }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
 
-  onRemoveMovableProperty(index: number) {
-    this.movableProperties.splice(index, 1);
-  }
+    onRemoveProperty(index: number) {
+        this.properties.splice(index, 1);
+    }
 
-  onDialogProperties() {
-    const dialogRef = this.matDialog.open(DialogPropertiesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+    onRemoveMovableProperty(index: number) {
+        this.movableProperties.splice(index, 1);
+    }
 
-    dialogRef.afterClosed().subscribe(property => {
-      if (property) {
-        this.properties.push(property);
-      }
-    });
-  }
+    onDialogProperties() {
+        const dialogRef = this.matDialog.open(DialogPropertiesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
 
-  onDialogIncomes() {
-    const dialogRef = this.matDialog.open(DialogIncomesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+        dialogRef.afterClosed().subscribe(property => {
+            if (property) {
+                this.properties.push(property);
+            }
+        });
+    }
 
-    dialogRef.afterClosed().subscribe(income => {
-      if (income) {
-        this.incomes.push(income);
-      }
-    });
-  }
+    onDialogIncomes() {
+        const dialogRef = this.matDialog.open(DialogIncomesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
 
-  onRemoveIncome(index: number) {
-    this.incomes.splice(index, 1);
-  }
+        dialogRef.afterClosed().subscribe(income => {
+            if (income) {
+                this.incomes.push(income);
+            }
+        });
+    }
 
-  onDialogMovableProperties() {
-    const dialogRef = this.matDialog.open(DialogMovablePropertiesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+    onRemoveIncome(index: number) {
+        this.incomes.splice(index, 1);
+    }
 
-    dialogRef.afterClosed().subscribe(movableProperty => {
-      if (movableProperty) {
-        this.movableProperties.push(movableProperty);
-      }
-    });
-  }
+    onDialogMovableProperties() {
+        const dialogRef = this.matDialog.open(DialogMovablePropertiesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
 
-  onRemoveInvestment(index: number) {
-    this.investments.splice(index, 1);
-  }
+        dialogRef.afterClosed().subscribe(movableProperty => {
+            if (movableProperty) {
+                this.movableProperties.push(movableProperty);
+            }
+        });
+    }
 
-  onDialogInvestments() {
-    const dialogRef = this.matDialog.open(DialogInvestmentsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+    onRemoveInvestment(index: number) {
+        this.investments.splice(index, 1);
+    }
 
-    dialogRef.afterClosed().subscribe(investment => {
-      if (investment) {
-        this.investments.push(investment);
-      }
-    });
-  }
+    onDialogInvestments() {
+        const dialogRef = this.matDialog.open(DialogInvestmentsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(investment => {
+            if (investment) {
+                this.investments.push(investment);
+            }
+        });
+    }
 
 }

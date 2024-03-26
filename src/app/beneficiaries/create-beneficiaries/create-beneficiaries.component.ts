@@ -38,7 +38,6 @@ export class CreateBeneficiariesComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nuevo beneficiario');
-        this.navigationService.backTo();
     }
 
     onSubmit(): void {

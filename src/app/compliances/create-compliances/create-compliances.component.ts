@@ -99,7 +99,6 @@ export class CreateCompliancesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo fiel cumplimiento');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

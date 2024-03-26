@@ -1,33 +1,34 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { InsurancesMultirriesgosService } from '../insurances-multirriesgos.service';
-import { NavigationService } from 'src/app/navigation/navigation.service';
-import { WorkersService } from 'src/app/workers/workers.service';
-import { OfficesService } from 'src/app/offices/offices.service';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
-import { MatDialog } from '@angular/material/dialog';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { ConstructionModel } from 'src/app/constructions/construction.model';
-import { WorkerModel } from 'src/app/workers/worker.model';
-import { OfficeModel } from 'src/app/auth/office.model';
-import { BankModel } from 'src/app/providers/bank.model';
-import { CompanyModel } from 'src/app/companies/company.model';
-import { PaymentModel } from 'src/app/payments/payment.model';
-import { UserModel } from 'src/app/users/user.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { SheetConstructionsComponent } from 'src/app/insurances/sheet-constructions/sheet-constructions.component';
-import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
-import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
-import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
-import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
-import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { AuthService } from 'src/app/auth/auth.service';
+import { OfficeModel } from 'src/app/auth/office.model';
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
+import { DialogBrokersComponent } from 'src/app/brokers/dialog-brokers/dialog-brokers.component';
+import { CompanyModel } from 'src/app/companies/company.model';
+import { ConstructionModel } from 'src/app/constructions/construction.model';
+import { DialogConstructionsComponent } from 'src/app/constructions/dialog-constructions/dialog-constructions.component';
+import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/dialog-financiers.component';
+import { DialogInsuranceBusinessesComponent } from 'src/app/insurance-businesses/dialog-insurance-businesses/dialog-insurance-businesses.component';
+import { DialogInsuranceConstructionsComponent } from 'src/app/insurance-constructions/dialog-insurance-constructions/dialog-insurance-constructions.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
+import { SheetConstructionsComponent } from 'src/app/insurances/sheet-constructions/sheet-constructions.component';
+import { NavigationService } from 'src/app/navigation/navigation.service';
+import { OfficesService } from 'src/app/offices/offices.service';
 import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
+import { PaymentModel } from 'src/app/payments/payment.model';
+import { BankModel } from 'src/app/providers/bank.model';
+import { UserModel } from 'src/app/users/user.model';
+import { WorkerModel } from 'src/app/workers/worker.model';
+import { WorkersService } from 'src/app/workers/workers.service';
+import { InsurancesMultirriesgosService } from '../insurances-multirriesgos.service';
+import { FeeModel } from 'src/app/fees/fee.model';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
 
 @Component({
     selector: 'app-edit-insurances-multirriesgos',
@@ -70,12 +71,15 @@ export class EditInsurancesMultirriesgosComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
-        prima: null,
-        commission: null,
+        charge: [null, Validators.required],
+        prima: [null, Validators.required],
+        commission: [null, Validators.required],
         currencyCode: 'PEN',
         isPaid: false,
         isEmition: false,
@@ -90,6 +94,7 @@ export class EditInsurancesMultirriesgosComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insuranceMultirriesgosId: string = '';
 
@@ -105,7 +110,6 @@ export class EditInsurancesMultirriesgosComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
@@ -143,6 +147,23 @@ export class EditInsurancesMultirriesgosComponent {
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {

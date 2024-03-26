@@ -31,7 +31,6 @@ export class CreateCompaniesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> { 
     this.navigationService.setTitle('Nueva empresa');
-    this.navigationService.backTo();
   }
 
   onSubmit(): void {

@@ -63,7 +63,6 @@ export class EditTemplatesComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar documentacion');
-        this.navigationService.backTo();
 
         this.activatedRoute$ = this.activatedRoute.params.subscribe(params => {
             this.templateId = params.templateId;

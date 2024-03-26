@@ -102,8 +102,6 @@ export class EditDirectsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar adelanto directo');
-        this.navigationService.backTo();
-
         this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
             this.user = auth.user;
         });

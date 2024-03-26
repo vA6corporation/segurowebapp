@@ -100,8 +100,6 @@ export class CreateDirectsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Nuevo adelanto directo');
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });

@@ -35,7 +35,6 @@ export class SeaceErrosComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Seace Errores');
-        this.navigationService.backTo();
         this.navigationService.setMenu([
             { id: 'search', label: 'search', icon: 'search', show: true }
         ]);

@@ -76,8 +76,6 @@ export class CreateCapitalIncreasesComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nuevo incremento de capital');
-    this.navigationService.backTo();
-
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
       this.workers = workers;
     });

@@ -28,7 +28,6 @@ export class CreateCertifiersComponent implements OnInit {
 
   ngOnInit() { 
     this.navigationService.setTitle('Nueva certificadora');
-    this.navigationService.backTo();
   }
 
   onSubmit(): void {

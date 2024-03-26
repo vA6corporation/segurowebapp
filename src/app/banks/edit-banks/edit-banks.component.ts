@@ -32,8 +32,6 @@ export class EditBanksComponent implements OnInit {
 
   async ngOnInit(): Promise<void> { 
     this.navigationService.setTitle('Editar cuenta bancaria');
-    this.navigationService.backTo();
-
     this.activatedRoute.params.subscribe(params => {
       this.bankId = params.bankId;
       this.banksService.getBankById(this.bankId).subscribe(bank => {

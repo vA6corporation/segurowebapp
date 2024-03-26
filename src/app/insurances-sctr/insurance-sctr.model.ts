@@ -1,6 +1,7 @@
 import { BrokerModel } from "../brokers/broker.model"
 import { BusinessModel } from "../businesses/business.model"
 import { ConstructionModel } from "../constructions/construction.model"
+import { FeeModel } from "../fees/fee.model"
 import { FinancierModel } from "../financiers/financier.model"
 import { InsurancePartnershipModel } from "../insurance-partnerships/insurance-partnership.model"
 import { PaymentModel } from "../payments/payment.model"
@@ -27,6 +28,7 @@ export interface InsuranceSctrModel {
     partnership: InsurancePartnershipModel|null
     construction: ConstructionModel
     payments: PaymentModel[]
+    fees: FeeModel[]
     broker: BrokerModel
     financier: FinancierModel
     business: BusinessModel

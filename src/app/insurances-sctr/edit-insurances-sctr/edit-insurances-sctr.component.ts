@@ -20,21 +20,23 @@ import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/d
 import { SheetConstructionsComponent } from 'src/app/insurances/sheet-constructions/sheet-constructions.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from 'src/app/offices/offices.service';
-import { DialogPaymentsComponent } from 'src/app/payments/dialog-payments/dialog-payments.component';
+import { DialogCreatePaymentsComponent } from 'src/app/payments/dialog-create-payments/dialog-create-payments.component';
 import { PaymentModel } from 'src/app/payments/payment.model';
 import { BankModel } from 'src/app/providers/bank.model';
 import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { InsurancesSctrService } from '../insurances-sctr.service';
+import { FeeModel } from 'src/app/fees/fee.model';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
 
 @Component({
-  selector: 'app-edit-insurances-sctr',
-  templateUrl: './edit-insurances-sctr.component.html',
-  styleUrl: './edit-insurances-sctr.component.sass'
+    selector: 'app-edit-insurances-sctr',
+    templateUrl: './edit-insurances-sctr.component.html',
+    styleUrl: './edit-insurances-sctr.component.sass'
 })
 export class EditInsurancesSctrComponent {
-    
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesSctrService: InsurancesSctrService,
@@ -69,10 +71,13 @@ export class EditInsurancesSctrComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: null,
         prima: null,
         commission: null,
         currencyCode: 'PEN',
@@ -89,6 +94,7 @@ export class EditInsurancesSctrComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insuranceSctrId: string = '';
 
@@ -104,31 +110,31 @@ export class EditInsurancesSctrComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
-        });
+        })
 
         this.handleOffices$ = this.officesService.handleOffices().subscribe(offices => {
             this.offices = offices;
-        });
+        })
 
         this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
             this.user = auth.user;
-        });
+        })
 
         this.activatedRoute.params.subscribe(params => {
             this.insuranceSctrId = params.insuranceSctrId
             this.insurancesSctrService.getInsuranceSctrById(this.insuranceSctrId).subscribe(insuranceSctr => {
                 this.payments = insuranceSctr.payments
+                this.fees = insuranceSctr.fees
                 this.formGroup.patchValue(insuranceSctr)
-            });
-        });
+            })
+        })
     }
 
     onDialogPayments() {
-        const dialogRef = this.matDialog.open(DialogPaymentsComponent, {
+        const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
             width: '600px',
             position: { top: '20px' }
         });
@@ -137,11 +143,28 @@ export class EditInsurancesSctrComponent {
             if (payment) {
                 this.payments.push(payment);
             }
-        });
+        })
     }
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {
@@ -315,7 +338,7 @@ export class EditInsurancesSctrComponent {
             insurance.businessId = business._id
             insurance.financierId = financier._id
             insurance.brokerId = broker._id
-            this.insurancesSctrService.update(insurance, this.payments, this.insuranceSctrId).subscribe(res => {
+            this.insurancesSctrService.update(insurance, this.payments, this.fees, this.insuranceSctrId).subscribe(res => {
                 this.navigationService.loadBarFinish();
                 this.isLoading = false;
                 this.navigationService.showMessage('Se han guardado los cambios');

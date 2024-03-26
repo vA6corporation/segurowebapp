@@ -39,7 +39,6 @@ export class EditInsurancePartnershipsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar consorcio');
-        this.navigationService.backTo();
         this.activatedRoute.params.subscribe(params => {
             this.partnershipId = params.partnershipId;
             this.partnershipsService.getPartnershipById(this.partnershipId).subscribe(partnership => {

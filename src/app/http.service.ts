@@ -4,11 +4,6 @@ import { Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 
-interface Options {
-    headers?: HttpHeaders,
-    params?: Params,
-}
-
 @Injectable({
     providedIn: 'root'
 })
@@ -20,15 +15,15 @@ export class HttpService {
 
     private baseUrl: string = environment.baseUrl;
     private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
-    public accessToken: string | null = null;
+    accessToken: string | null = null;
 
     get(url: string, params?: Params): Observable<any> {
         const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.accessToken}`
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.accessToken}`
         });
         return this.http.get(`${this.baseUrl}${url}`, { headers, params });
-      }
+    }
 
     post(url: string, body: any): Observable<any> {
         const headers = new HttpHeaders({
@@ -58,8 +53,8 @@ export class HttpService {
         return this.http.request(req)
     }
 
-    postStorage(file: File, nodeId: string) {
-        let url = `https://storage.googleapis.com/upload/storage/v1/b/${this.BUCKET_NAME}/o?name=${nodeId}/${file.name.replace(/[^a-zA-Z0-9. ]/g, '')}`;
+    postStorage(file: File, nodeId: string, prefix: string) {
+        let url = `https://storage.googleapis.com/upload/storage/v1/b/${this.BUCKET_NAME}/o?name=${prefix}/${nodeId}/${file.name.replace(/[^a-zA-Z0-9. ]/g, '')}`;
         const headers = new HttpHeaders({
             'Content-Type': file.type,
             // 'Authorization': `Bearer ${this.accessToken}`

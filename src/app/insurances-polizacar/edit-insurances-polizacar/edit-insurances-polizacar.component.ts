@@ -27,13 +27,16 @@ import { UserModel } from 'src/app/users/user.model';
 import { WorkerModel } from 'src/app/workers/worker.model';
 import { WorkersService } from 'src/app/workers/workers.service';
 import { InsurancesPolizacarService } from '../insurances-polizacar.service';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
+import { FeeModel } from 'src/app/fees/fee.model';
 
 @Component({
-  selector: 'app-edit-insurances-polizacar',
-  templateUrl: './edit-insurances-polizacar.component.html',
-  styleUrl: './edit-insurances-polizacar.component.sass'
+    selector: 'app-edit-insurances-polizacar',
+    templateUrl: './edit-insurances-polizacar.component.html',
+    styleUrl: './edit-insurances-polizacar.component.sass'
 })
 export class EditInsurancesPolizacarComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesPolizacarService: InsurancesPolizacarService,
@@ -68,12 +71,15 @@ export class EditInsurancesPolizacarComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
-        prima: null,
-        commission: null,
+        charge: [null, Validators.required],
+        prima: [null, Validators.required],
+        commission: [null, Validators.required],
         currencyCode: 'PEN',
         isPaid: false,
         isEmition: false,
@@ -88,6 +94,7 @@ export class EditInsurancesPolizacarComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insurancePolizacarId: string = '';
 
@@ -103,7 +110,6 @@ export class EditInsurancesPolizacarComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
@@ -141,6 +147,23 @@ export class EditInsurancesPolizacarComponent {
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {

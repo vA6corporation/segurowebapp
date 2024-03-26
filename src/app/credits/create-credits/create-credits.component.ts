@@ -87,8 +87,6 @@ export class CreateCreditsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.navigationService.backTo();
-
     this.navigationService.setTitle('Nueva linea credito');
 
     this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

@@ -27,6 +27,7 @@ import { Location } from '@angular/common';
   styleUrl: './create-insurances-pempresarial-with-insurance-group.component.sass'
 })
 export class CreateInsurancesPempresarialWithInsuranceGroupComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesPempresarialService: InsurancesPempresarialService,
@@ -66,6 +67,7 @@ export class CreateInsurancesPempresarialWithInsuranceGroupComponent {
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: [null, Validators.required],
         commission: [null, Validators.required],
         currencyCode: 'PEN',
@@ -89,7 +91,6 @@ export class CreateInsurancesPempresarialWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Pempresarial');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

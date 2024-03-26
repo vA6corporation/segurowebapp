@@ -97,8 +97,6 @@ export class CreateConstructionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationService.setTitle('Nueva obra');
-    this.navigationService.backTo();
-
     this.handleCompanies$ = this.companiesService.handleCompanies().subscribe(companies => {
       this.companies = companies;
     });

@@ -50,8 +50,6 @@ export class EditFinancierModelsComponent implements OnInit {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar financiera');
-        this.navigationService.backTo();
-
         this.handleBanks$ = this.banksService.handleBanks().subscribe(banks => {
             this.banks = banks;
         });

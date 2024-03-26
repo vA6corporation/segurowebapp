@@ -5,34 +5,31 @@ import { NavigationService } from 'src/app/navigation/navigation.service';
 import { OfficesService } from '../offices.service';
 
 @Component({
-  selector: 'app-offices',
-  templateUrl: './offices.component.html',
-  styleUrls: ['./offices.component.sass']
+    selector: 'app-offices',
+    templateUrl: './offices.component.html',
+    styleUrls: ['./offices.component.sass']
 })
 export class OfficesComponent implements OnInit {
 
-  constructor(
-    private readonly navigationService: NavigationService,
-    private readonly officesService: OfficesService,
-  ) { }
+    constructor(
+        private readonly navigationService: NavigationService,
+        private readonly officesService: OfficesService,
+    ) { }
 
-  public displayedColumns: string[] = [ 'name', 'address', 'actions' ];
-  public dataSource: OfficeModel[] = [];
-  public length: number = 0;
-  public pageSize: number = 10;
-  public pageSizeOptions: number[] = [10, 30, 50];
-  public pageIndex: number = 0;
+    displayedColumns: string[] = ['name', 'address', 'actions'];
+    dataSource: OfficeModel[] = [];
+    length: number = 0;
+    pageSize: number = 10;
+    pageSizeOptions: number[] = [10, 30, 50];
+    pageIndex: number = 0;
 
-  ngOnInit(): void {
-    this.navigationService.setTitle('Oficinas');
-    this.navigationService.backTo();
-    this.officesService.getOffices().subscribe(offices => {
-      console.log(offices);
-      
-      return this.dataSource = offices;
-    }, (error: HttpErrorResponse) => {
-      this.navigationService.showMessage(error.error.message);
-    });
-  }
+    ngOnInit(): void {
+        this.navigationService.setTitle('Oficinas');
+        this.officesService.getOffices().subscribe(offices => {
+            return this.dataSource = offices;
+        }, (error: HttpErrorResponse) => {
+            this.navigationService.showMessage(error.error.message);
+        });
+    }
 
 }

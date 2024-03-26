@@ -101,7 +101,6 @@ export class EditCompliancesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Editar fiel cumplimiento');
 
         this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {

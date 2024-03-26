@@ -89,7 +89,6 @@ export class CreateInsurancesPolizaearWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Polizaear');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

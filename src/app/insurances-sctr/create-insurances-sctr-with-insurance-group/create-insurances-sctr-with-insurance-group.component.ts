@@ -68,6 +68,7 @@ export class CreateInsurancesSctrWithInsuranceGroupComponent {
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
         prima: [null, Validators.required],
+        charge: [null, Validators.required],
         commission: [null, Validators.required],
         currencyCode: 'PEN',
         isPaid: false,
@@ -90,7 +91,6 @@ export class CreateInsurancesSctrWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo SCTR');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

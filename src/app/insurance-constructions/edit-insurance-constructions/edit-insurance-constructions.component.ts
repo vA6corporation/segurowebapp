@@ -10,99 +10,98 @@ import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partner
 import { InsuranceConstructionsService } from '../insurance-constructions.service';
 
 @Component({
-  selector: 'app-edit-insurance-constructions',
-  templateUrl: './edit-insurance-constructions.component.html',
-  styleUrls: ['./edit-insurance-constructions.component.sass']
+    selector: 'app-edit-insurance-constructions',
+    templateUrl: './edit-insurance-constructions.component.html',
+    styleUrls: ['./edit-insurance-constructions.component.sass']
 })
 export class EditInsuranceConstructionsComponent implements OnInit {
 
-  constructor(
-    private readonly constructionsService: InsuranceConstructionsService,
-    private readonly navigationService: NavigationService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly matDialog: MatDialog,
-  ) { }
-    
-  private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
-  public isLoading: boolean = false;
+    constructor(
+        private readonly constructionsService: InsuranceConstructionsService,
+        private readonly navigationService: NavigationService,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly matDialog: MatDialog,
+    ) { }
 
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    business: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    object: [ null, Validators.required ],
-  });
-  private constructionId: string = '';
+    private formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
+    isLoading: boolean = false;
 
-  ngOnInit(): void {
-    this.navigationService.setTitle('Editar obra');
-    this.navigationService.backTo();
-
-    this.activatedRoute.params.subscribe(params => {
-      this.constructionId = params.constructionId;
-      this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
-        const { business, ...value } = construction;
-        this.formGroup.patchValue(value);
-        this.formGroup.patchValue({ business });
-      });
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        business: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        object: [null, Validators.required],
     });
-  }
-  
-  openDialogBusinesses() {
-    const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
+    private constructionId: string = '';
 
-    dialogRef.afterClosed().subscribe(business => {
-      if (business) {
-        this.formGroup.patchValue({ business });
-      }
-    });
-  }
+    ngOnInit(): void {
+        this.navigationService.setTitle('Editar obra');
 
-  openDialogPartnerships() {
-    const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-    
-    dialogRef.afterClosed().subscribe(partnership => {
-      if (partnership) {
-        const { business } = partnership;
-        this.formGroup.patchValue({ business: business || {} });
-        this.formGroup.patchValue({ partnership: partnership || {} });
-      }
-    });
-  }
-
-  onAttachPdf() {
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data: this.constructionId,
-    });
-  }
-
-  async onSubmit() {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const { business, ...construction } = this.formGroup.value;
-      construction.businessId = business._id;
-      this.constructionsService.update(construction, this.constructionId).subscribe(res => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+        this.activatedRoute.params.subscribe(params => {
+            this.constructionId = params.constructionId;
+            this.constructionsService.getConstructionById(params.constructionId).subscribe(construction => {
+                const { business, ...value } = construction;
+                this.formGroup.patchValue(value);
+                this.formGroup.patchValue({ business });
+            });
+        });
     }
-  }
-  
+
+    openDialogBusinesses() {
+        const dialogRef = this.matDialog.open(DialogInsuranceBusinessesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(business => {
+            if (business) {
+                this.formGroup.patchValue({ business });
+            }
+        });
+    }
+
+    openDialogPartnerships() {
+        const dialogRef = this.matDialog.open(DialogPartnershipsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(partnership => {
+            if (partnership) {
+                const { business } = partnership;
+                this.formGroup.patchValue({ business: business || {} });
+                this.formGroup.patchValue({ partnership: partnership || {} });
+            }
+        });
+    }
+
+    onAttachPdf() {
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data: this.constructionId,
+        });
+    }
+
+    async onSubmit() {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const { business, ...construction } = this.formGroup.value;
+            construction.businessId = business._id;
+            this.constructionsService.update(construction, this.constructionId).subscribe(res => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
+
 
 }

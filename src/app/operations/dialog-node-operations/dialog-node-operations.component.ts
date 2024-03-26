@@ -210,6 +210,7 @@ export class DialogNodeOperationsComponent implements OnInit {
     uploadingFiles: UploadFileModel[] = []
     isUploading: boolean = false
     private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
+    private PREFIX = 'operations'
 
     getLevel = (node: FlatNode) => node.level;
 
@@ -306,7 +307,7 @@ export class DialogNodeOperationsComponent implements OnInit {
     }
 
     onSelectFile(operationNode: FlatNode) {
-        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${operationNode._id}/${operationNode.name}`
+        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${this.PREFIX}/${operationNode._id}/${operationNode.name}`
         if (
             operationNode.contentType &&
             (operationNode.contentType === 'application/pdf' || operationNode.contentType.includes('image'))
@@ -314,7 +315,7 @@ export class DialogNodeOperationsComponent implements OnInit {
             this.tabIndex = 1
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(url)
         } else {
-            this.downloadURI(url, '');
+            this.downloadURI(url, '')
         }
     }
 
@@ -353,7 +354,7 @@ export class DialogNodeOperationsComponent implements OnInit {
                 this.uploadingFiles.push(uploadFile)
                 this.tabIndex = 2
                 const objectId = ObjectId()
-                const promise = lastValueFrom(this.operationsService.uploadFile(file, objectId).pipe(
+                const promise = lastValueFrom(this.operationsService.uploadFile(file, objectId, this.PREFIX).pipe(
                     map(event => this.getEventMessage(event)),
                     tap(progressPercent => {
                         uploadFile.progressPercent = progressPercent
@@ -426,7 +427,7 @@ export class DialogNodeOperationsComponent implements OnInit {
                     this.tabIndex = 2
                     const objectId = ObjectId()
                     
-                    lastValueFrom(this.operationsService.uploadFile(file, objectId).pipe(
+                    lastValueFrom(this.operationsService.uploadFile(file, objectId, this.PREFIX).pipe(
                         map(event => this.getEventMessage(event)),
                         tap(progressPercent => {
                             this.ngZone.run(() => {

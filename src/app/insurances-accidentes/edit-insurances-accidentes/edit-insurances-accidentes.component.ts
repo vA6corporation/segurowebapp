@@ -27,6 +27,8 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
+import { FeeModel } from 'src/app/fees/fee.model';
 
 @Component({
   selector: 'app-edit-insurances-accidentes',
@@ -34,7 +36,6 @@ import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/d
   styleUrl: './edit-insurances-accidentes.component.sass'
 })
 export class EditInsurancesAccidentesComponent {
-
 
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
@@ -70,10 +71,13 @@ export class EditInsurancesAccidentesComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: null,
         commission: null,
         currencyCode: 'PEN',
@@ -81,7 +85,7 @@ export class EditInsurancesAccidentesComponent {
         isEmition: false,
         officeId: '',
         workerId: ['', Validators.required],
-    });
+    })
 
     construction: ConstructionModel | null = null;
     isLoading: boolean = false;
@@ -90,6 +94,7 @@ export class EditInsurancesAccidentesComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insuranceAccidentesId: string = '';
 
@@ -105,8 +110,6 @@ export class EditInsurancesAccidentesComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
-
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
         });
@@ -143,6 +146,23 @@ export class EditInsurancesAccidentesComponent {
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {

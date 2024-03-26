@@ -27,13 +27,16 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
+import { FeeModel } from 'src/app/fees/fee.model';
 
 @Component({
-  selector: 'app-edit-insurances-salud',
-  templateUrl: './edit-insurances-salud.component.html',
-  styleUrl: './edit-insurances-salud.component.sass'
+    selector: 'app-edit-insurances-salud',
+    templateUrl: './edit-insurances-salud.component.html',
+    styleUrl: './edit-insurances-salud.component.sass'
 })
 export class EditInsurancesSaludComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesSaludService: InsurancesSaludService,
@@ -68,6 +71,8 @@ export class EditInsurancesSaludComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
@@ -88,6 +93,7 @@ export class EditInsurancesSaludComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insuranceSaludId: string = '';
 
@@ -103,7 +109,6 @@ export class EditInsurancesSaludComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
@@ -141,6 +146,23 @@ export class EditInsurancesSaludComponent {
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {

@@ -12,11 +12,11 @@ import { BankModel } from 'src/app/providers/bank.model';
 import { parseExcel } from 'src/app/xlsx';
 
 @Component({
-  selector: 'app-import-payments',
-  standalone: true,
-  imports: [MaterialModule, ReactiveFormsModule],
-  templateUrl: './import-payments.component.html',
-  styleUrl: './import-payments.component.sass'
+    selector: 'app-import-payments',
+    standalone: true,
+    imports: [MaterialModule, ReactiveFormsModule],
+    templateUrl: './import-payments.component.html',
+    styleUrl: './import-payments.component.sass'
 })
 export class ImportPaymentsComponent {
 
@@ -72,7 +72,7 @@ export class ImportPaymentsComponent {
                 if (!guarantee._id || !guarantee['COMISION'] || !guarantee['GARANTIA']) {
                     this.dataSource = []
                     alert(`La fina N° ${index + 1} no cumple con los datos requeridos`)
-                    break                    
+                    break
                 } else {
                     this.dataSource.push({
                         parentId: guarantee._id,

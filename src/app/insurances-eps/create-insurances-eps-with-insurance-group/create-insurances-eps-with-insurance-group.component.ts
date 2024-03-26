@@ -66,6 +66,7 @@ export class CreateInsurancesEpsWithInsuranceGroupComponent {
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: [null, Validators.required],
         commission: [null, Validators.required],
         currencyCode: 'PEN',
@@ -89,7 +90,6 @@ export class CreateInsurancesEpsWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Eps');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

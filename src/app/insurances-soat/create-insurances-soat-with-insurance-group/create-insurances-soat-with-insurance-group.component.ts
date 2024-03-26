@@ -68,6 +68,7 @@ export class CreateInsurancesSoatWithInsuranceGroupComponent {
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: [null, Validators.required],
         commission: [null, Validators.required],
         placa: [null, Validators.required],
@@ -92,7 +93,6 @@ export class CreateInsurancesSoatWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo SOAT');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

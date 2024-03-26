@@ -68,6 +68,7 @@ export class CreateInsurancesViajeWithInsuranceGroupComponent {
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
+        charge: [null, Validators.required],
         prima: [null, Validators.required],
         commission: [null, Validators.required],
         currencyCode: 'PEN',
@@ -91,7 +92,6 @@ export class CreateInsurancesViajeWithInsuranceGroupComponent {
     }
 
     ngOnInit(): void {
-        this.navigationService.backTo();
         this.navigationService.setTitle('Nuevo Viaje');
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {

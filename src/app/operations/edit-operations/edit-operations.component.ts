@@ -3,16 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BusinessModel } from 'src/app/businesses/business.model';
 import { DialogBusinessesComponent } from 'src/app/businesses/dialog-businesses/dialog-businesses.component';
+import { BusinessNodeType, DialogBusinessNodeData, DialogNodeBusinessesComponent } from 'src/app/businesses/dialog-node-businesses/dialog-node-businesses.component';
 import { NavigationService } from 'src/app/navigation/navigation.service';
 import { DialogPartnershipsComponent } from 'src/app/partnerships/dialog-partnerships/dialog-partnerships.component';
-import { OperationsService } from '../operations.service';
-import { BusinessModel } from 'src/app/businesses/business.model';
 import { PartnershipItemModel } from 'src/app/partnerships/partnership-item.model';
 import { DialogNodeOperationsComponent } from '../dialog-node-operations/dialog-node-operations.component';
-import { BusinessNodeType, DialogBusinessNodeData, DialogNodeBusinessesComponent } from 'src/app/businesses/dialog-node-businesses/dialog-node-businesses.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import { OperationsService } from '../operations.service';
 
 @Component({
     selector: 'app-edit-operations',
@@ -26,7 +24,6 @@ export class EditOperationsComponent implements OnInit {
         private readonly operationsService: OperationsService,
         private readonly navigationService: NavigationService,
         private readonly matDialog: MatDialog,
-        private readonly sanitizer: DomSanitizer,
         private readonly activatedRoute: ActivatedRoute,
     ) { }
 
@@ -43,35 +40,26 @@ export class EditOperationsComponent implements OnInit {
         sendAt: null,
         status: '01',
         observations: ''
-    });
+    })
     isLoading: boolean = false;
     hide: boolean = true;
     businesses: BusinessModel[] = [];
     nodeIncludes: string[] = []
     private operationId: string = '';
     private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
-    private params$: Subscription = new Subscription();
-
-    ngOnDestroy() {
-        this.params$.unsubscribe();
-    }
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar operacion');
-        this.navigationService.backTo();
 
-        this.params$ = this.activatedRoute.params.subscribe(params => {
-            this.operationId = params['operationId'];
-            this.operationsService.getOperationById(this.operationId).subscribe(operation => {
-                console.log(operation);
-                if (operation.partnership) {
-                    this.businesses = operation.partnership.partnershipItems.map(e => e.business)
-                } else {
-                    this.businesses = [operation.business]
-                }
-                this.formGroup.patchValue(operation)
-                this.nodeIncludes = operation.nodeIncludes
-            });
+        this.operationId = this.activatedRoute.snapshot.params['operationId']
+        this.operationsService.getOperationById(this.operationId).subscribe(operation => {
+            if (operation.partnership) {
+                this.businesses = operation.partnership.partnershipItems.map(e => e.business)
+            } else {
+                this.businesses = [operation.business]
+            }
+            this.formGroup.patchValue(operation)
+            this.nodeIncludes = operation.nodeIncludes
         });
     }
 
@@ -111,7 +99,7 @@ export class EditOperationsComponent implements OnInit {
             this.navigationService.loadBarFinish()
             console.log(res);
             const { name } = this.formGroup.value
-            const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${this.operationId}/${name}.zip`
+            const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/tmp/${this.operationId}/${name}.zip`
             console.log(url);
             this.downloadURI(url, name);
         })

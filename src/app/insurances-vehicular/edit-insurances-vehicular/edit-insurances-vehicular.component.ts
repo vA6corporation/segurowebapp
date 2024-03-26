@@ -27,13 +27,16 @@ import { DialogFinanciesComponent } from 'src/app/financiers/dialog-financiers/d
 import { DialogBeneficiariesComponent } from 'src/app/beneficiaries/dialog-beneficiaries/dialog-beneficiaries.component';
 import { DialogInsurancePartnershipsComponent } from 'src/app/insurance-partnerships/dialog-insurance-partnerships/dialog-insurance-partnerships.component';
 import { DialogAttachPdfComponent, InsurancePdfData } from 'src/app/insurances/dialog-attach-pdf/dialog-attach-pdf.component';
+import { DialogCreateFeesComponent } from 'src/app/fees/dialog-create-fees/dialog-create-fees.component';
+import { FeeModel } from 'src/app/fees/fee.model';
 
 @Component({
-  selector: 'app-edit-insurances-vehicular',
-  templateUrl: './edit-insurances-vehicular.component.html',
-  styleUrl: './edit-insurances-vehicular.component.sass'
+    selector: 'app-edit-insurances-vehicular',
+    templateUrl: './edit-insurances-vehicular.component.html',
+    styleUrl: './edit-insurances-vehicular.component.sass'
 })
 export class EditInsurancesVehicularComponent {
+
     constructor(
         private readonly formBuilder: UntypedFormBuilder,
         private readonly insurancesVehicularService: InsurancesVehicularService,
@@ -68,12 +71,15 @@ export class EditInsurancesVehicularComponent {
             name: [null, Validators.required],
             _id: [null, Validators.required],
         }),
+        invoiceNumber: '',
+        proformaNumber: '',
         observations: '',
         policyNumber: [null, Validators.required],
         expirationAt: [null, Validators.required],
         emitionAt: [null, Validators.required],
-        prima: null,
-        commission: null,
+        charge: [null, Validators.required],
+        prima: [null, Validators.required],
+        commission: [null, Validators.required],
         currencyCode: 'PEN',
         isPaid: false,
         isEmition: false,
@@ -88,6 +94,7 @@ export class EditInsurancesVehicularComponent {
     banks: BankModel[] = [];
     companies: CompanyModel[] = [];
     payments: PaymentModel[] = [];
+    fees: FeeModel[] = []
     user: UserModel | null = null;
     private insuranceVehicularId: string = '';
 
@@ -103,7 +110,6 @@ export class EditInsurancesVehicularComponent {
 
     ngOnInit(): void {
         this.navigationService.setTitle('Editar seguro');
-        this.navigationService.backTo();
 
         this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
             this.workers = workers;
@@ -141,6 +147,23 @@ export class EditInsurancesVehicularComponent {
 
     onRemovePayment(index: number) {
         this.payments.splice(index, 1);
+    }
+
+    onDialogFees() {
+        const dialogRef = this.matDialog.open(DialogCreateFeesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(fee => {
+            if (fee) {
+                this.fees.push(fee);
+            }
+        })
+    }
+
+    onRemoveFee(index: number) {
+        this.fees.splice(index, 1);
     }
 
     onChangeOffice() {

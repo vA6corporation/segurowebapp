@@ -62,7 +62,7 @@ export class DynamicDatabase {
     rootLevelNodes: BusinessNodeModel[] = [];
 
     initialData(): FlatNode[] {
-        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.fileId, e.contentType));
+        return this.operations.filter(e => e.businessNodeId === null).map(e => new FlatNode(e._id, e.name, 0, !e.contentType, e.contentType));
     }
 
     setBusinessNodes(operations: BusinessNodeModel[]): void {
@@ -221,6 +221,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     uploadingFiles: UploadFileModel[] = []
     isUploading: boolean = false
     private BUCKET_NAME = 'fidenzaconsultores.appspot.com'
+    private PREFIX = 'businesses'
 
     getLevel = (node: FlatNode) => node.level;
 
@@ -235,8 +236,8 @@ export class DialogNodeBusinessesComponent implements OnInit {
             this.dataSource = new DynamicDataSource(this.treeControl, this.dataBase);
             this.dataSource.data = this.dataBase.initialData();
         }, (error: HttpErrorResponse) => {
-            console.log(error);
-        });
+            console.log(error)
+        })
     }
 
     fetchData() {
@@ -396,8 +397,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
     }
 
     onSelectFile(businessNode: FlatNode) {
-        console.log(businessNode);
-        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${businessNode._id}/${businessNode.name}`
+        const url = `https://storage.googleapis.com/${this.BUCKET_NAME}/${this.PREFIX}/${businessNode._id}/${businessNode.name}`
         if (
             businessNode.contentType &&
             (businessNode.contentType === 'application/pdf' || businessNode.contentType.includes('image'))
@@ -444,7 +444,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                 this.uploadingFiles.push(uploadFile)
                 this.tabIndex = 2
                 const objectId = ObjectId()
-                const promise = lastValueFrom(this.businessesService.uploadFile(file, objectId).pipe(
+                const promise = lastValueFrom(this.businessesService.uploadFile(file, objectId, this.PREFIX).pipe(
                     map(event => this.getEventMessage(event)),
                     tap(progressPercent => {
                         uploadFile.progressPercent = progressPercent
@@ -516,7 +516,7 @@ export class DialogNodeBusinessesComponent implements OnInit {
                     })
                     this.tabIndex = 2
                     const objectId = ObjectId()
-                    lastValueFrom(this.businessesService.uploadFile(file, objectId).pipe(
+                    lastValueFrom(this.businessesService.uploadFile(file, objectId, this.PREFIX).pipe(
                         map(event => this.getEventMessage(event)),
                         tap(progressPercent => {
                             this.ngZone.run(() => {

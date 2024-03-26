@@ -1,17 +1,20 @@
 <mat-tab-group [selectedIndex]="tabIndex" (selectedIndexChange)="tabIndex = $event">
-  <mat-tab label="Documentos">
-    <mat-action-list (drop)="onDrop($event)" (dragover)="onDragOver($event)">
-      <button mat-list-item *ngFor="let fideicomisoPdf of fideicomisoPdfs" (click)="onChangePdf(fideicomisoPdf)">{{ fideicomisoPdf.filename }}</button>
-    </mat-action-list>
-  </mat-tab>
-  <mat-tab label="Preview">
-    <iframe [src]="url" frameborder="0"></iframe>
-  </mat-tab>
+    <mat-tab label="Documentos">
+        <mat-action-list (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+            <button mat-list-item *ngFor="let fideicomisoPdf of fideicomisoPdfs"
+                (click)="onChangePdf(fideicomisoPdf)">{{ fideicomisoPdf.filename }}</button>
+        </mat-action-list>
+    </mat-tab>
+    <mat-tab label="Preview">
+        <iframe [src]="url" frameborder="0"></iframe>
+    </mat-tab>
 </mat-tab-group>
 <mat-dialog-actions>
-  <button type="button" mat-raised-button color="warn" (click)="onDeletePdf()" [disabled]="pdfId === ''">ELIMINAR</button>
-  <span class="spacer"></span>
-  <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
-  <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">ADJUNTAR</button>
-  <input id="fileInput" type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput)" [accept]="accept" hidden multiple>  
+    <button type="button" mat-raised-button color="warn" (click)="onDeletePdf()"
+        [disabled]="pdfId === ''">ELIMINAR</button>
+    <span class="spacer"></span>
+    <button mat-stroked-button mat-dialog-close color="primary">VOLVER</button>
+    <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">ADJUNTAR</button>
+    <input id="fileInput" type="file" #fileInput (change)="onFileSelected(fileInput.files, fileInput)" [accept]="accept"
+        hidden multiple>
 </mat-dialog-actions>

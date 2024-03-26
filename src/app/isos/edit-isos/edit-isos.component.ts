@@ -22,196 +22,194 @@ import { DialogAttachPdfComponent, DialogAttachPdfData } from '../dialog-attach-
 import { DialogCreateCustomersComponent } from 'src/app/customers/dialog-create-customers/dialog-create-customers.component';
 
 @Component({
-  selector: 'app-edit-isos',
-  templateUrl: './edit-isos.component.html',
-  styleUrls: ['./edit-isos.component.sass']
+    selector: 'app-edit-isos',
+    templateUrl: './edit-isos.component.html',
+    styleUrls: ['./edit-isos.component.sass']
 })
 export class EditIsosComponent implements OnInit {
 
-  constructor(
-    private readonly formBuilder: UntypedFormBuilder,
-    private readonly isosService: IsosService,
-    private readonly navigationService: NavigationService,
-    private readonly workersService: WorkersService,
-    private readonly certifiersService: CertifiersService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly matDialog: MatDialog,
-  ) { }
+    constructor(
+        private readonly formBuilder: UntypedFormBuilder,
+        private readonly isosService: IsosService,
+        private readonly navigationService: NavigationService,
+        private readonly workersService: WorkersService,
+        private readonly certifiersService: CertifiersService,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly authService: AuthService,
+        private readonly matDialog: MatDialog,
+    ) { }
 
-  formArray: FormArray = this.formBuilder.array([])
-  public formGroup: UntypedFormGroup = this.formBuilder.group({
-    isos: this.formArray,
-    customer: this.formBuilder.group({
-      name: [ null, Validators.required ],
-      _id: [ null, Validators.required ],
-    }),
-    certifierId: [ null, Validators.required ],
-    workerId: [ null, Validators.required ],
-    charge: [ null, Validators.required ],
-    commission: null,
-    emitionAt: [ null, Validators.required ],
-  });
-
-  public construction: ConstructionModel|null = null;
-  public isLoading: boolean = false;
-  public workers: WorkerModel[] = [];
-  public certifiers: CertifierModel[] = [];
-  private isoId: string = '';
-  public payments: PaymentModel[] = [];
-  public user: UserModel|null = null;
-  
-  private handleAuth$: Subscription = new Subscription();
-  private handleCompanies$: Subscription = new Subscription();
-  private handleBanks$: Subscription = new Subscription();
-  private handleWorkers$: Subscription = new Subscription();
-  private handleCertifiers$: Subscription = new Subscription();
-
-  ngOnDestroy() {
-    this.handleAuth$.unsubscribe();
-    this.handleCompanies$.unsubscribe();
-    this.handleBanks$.unsubscribe();
-    this.handleWorkers$.unsubscribe();
-    this.handleCertifiers$.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.navigationService.backTo();
-    
-    this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
-      this.workers = workers;
+    formArray: FormArray = this.formBuilder.array([])
+    formGroup: UntypedFormGroup = this.formBuilder.group({
+        isos: this.formArray,
+        customer: this.formBuilder.group({
+            name: [null, Validators.required],
+            _id: [null, Validators.required],
+        }),
+        certifierId: [null, Validators.required],
+        workerId: [null, Validators.required],
+        charge: [null, Validators.required],
+        commission: null,
+        emitionAt: [null, Validators.required],
     });
 
-    this.handleCertifiers$ = this.certifiersService.handleCertifiers().subscribe(certifiers => {
-      this.certifiers = certifiers;
-    });
+    construction: ConstructionModel | null = null;
+    isLoading: boolean = false;
+    workers: WorkerModel[] = [];
+    certifiers: CertifierModel[] = [];
+    payments: PaymentModel[] = [];
+    user: UserModel | null = null;
+    private isoId: string = '';
 
-    this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
-      this.user = auth.user;
-    });
-    
-    this.activatedRoute.params.subscribe(params => {
-      this.isoId = params.isoId;
-      this.navigationService.setTitle('Editar ISO');
-      this.isosService.getIsoById(this.isoId).subscribe(iso => {
-        const { customer } = iso;
-        for (const type of iso.types) {
-          const formGroup = this.formBuilder.group({
-            type: [ type, Validators.required ],
-          });
-          this.formArray.push(formGroup)
-        }
-        this.formGroup.patchValue({ customer });
-        this.formGroup.patchValue(iso);
-        this.payments = iso.payments;
-      });
-    });
-  }
+    private handleAuth$: Subscription = new Subscription();
+    private handleCompanies$: Subscription = new Subscription();
+    private handleBanks$: Subscription = new Subscription();
+    private handleWorkers$: Subscription = new Subscription();
+    private handleCertifiers$: Subscription = new Subscription();
 
-  onAddIso() {
-    const formGroup = this.formBuilder.group({
-      type: [ '', Validators.required ],
-    });
-    this.formArray.push(formGroup);
-  }
-
-
-  onAttachPdf(type: string) {
-    const data: DialogAttachPdfData = {
-      isoId: this.isoId,
-      type,
-    } 
-    this.matDialog.open(DialogAttachPdfComponent, {
-      width: '100vw',
-      height: '90vh',
-      position: { top: '20px' },
-      data: data
-    });
-  }
-
-  onDialogPayments() {
-    const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(payment => {
-      if (payment) {
-        this.payments.push(payment);
-      }
-    });
-  }
-
-  onRemovePayment(index: number) {
-    this.payments.splice(index, 1);
-  }
-
-  openDialogCustomers() {
-    const dialogRef = this.matDialog.open(DialogCustomersComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    })
-
-    dialogRef.afterClosed().subscribe(customer => {
-      if (customer) {
-        this.formGroup.patchValue({ customer });
-      }
-    })
-
-    dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
-      const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
-        width: '600px',
-        position: { top: '20px' }
-      })
-
-      dialogRef.afterClosed().subscribe(customer => {
-        if (customer) {
-          this.formGroup.patchValue({ customer })
-        }
-      })
-    })
-  }
-
-  openDialogBrokers() {
-    const dialogRef = this.matDialog.open(DialogBrokersComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(broker => {
-      this.formGroup.patchValue({ broker: broker || {} });
-    });
-  }
-
-  openDialogBeneficiaries() {
-    const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
-      width: '600px',
-      position: { top: '20px' }
-    });
-
-    dialogRef.afterClosed().subscribe(beneficiary => {
-      this.formGroup.patchValue({ beneficiary: beneficiary || {} });
-    });
-  }
-
-  onSubmit(): void {
-    if (this.formGroup.valid) {
-      this.isLoading = true;
-      this.navigationService.loadBarStart();
-      const iso = this.formGroup.value;
-      iso.customerId = iso.customer._id;
-      iso.types = iso.isos.map((e: any) => e.type);
-      this.navigationService.loadBarStart();
-      this.isosService.update(iso, this.payments, this.isoId).subscribe(() => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage('Se han guardado los cambios');
-      }, (error: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.navigationService.loadBarFinish();
-        this.navigationService.showMessage(error.error.message);
-      });
+    ngOnDestroy() {
+        this.handleAuth$.unsubscribe();
+        this.handleCompanies$.unsubscribe();
+        this.handleBanks$.unsubscribe();
+        this.handleWorkers$.unsubscribe();
+        this.handleCertifiers$.unsubscribe();
     }
-  }
+
+    ngOnInit(): void {
+        this.handleWorkers$ = this.workersService.handleWorkers().subscribe(workers => {
+            this.workers = workers;
+        });
+
+        this.handleCertifiers$ = this.certifiersService.handleCertifiers().subscribe(certifiers => {
+            this.certifiers = certifiers;
+        });
+
+        this.handleAuth$ = this.authService.handleAuth().subscribe(auth => {
+            this.user = auth.user;
+        });
+
+        this.activatedRoute.params.subscribe(params => {
+            this.isoId = params.isoId;
+            this.navigationService.setTitle('Editar ISO');
+            this.isosService.getIsoById(this.isoId).subscribe(iso => {
+                const { customer } = iso;
+                for (const type of iso.types) {
+                    const formGroup = this.formBuilder.group({
+                        type: [type, Validators.required],
+                    });
+                    this.formArray.push(formGroup)
+                }
+                this.formGroup.patchValue({ customer });
+                this.formGroup.patchValue(iso);
+                this.payments = iso.payments;
+            });
+        });
+    }
+
+    onAddIso() {
+        const formGroup = this.formBuilder.group({
+            type: ['', Validators.required],
+        });
+        this.formArray.push(formGroup);
+    }
+
+
+    onAttachPdf(type: string) {
+        const data: DialogAttachPdfData = {
+            isoId: this.isoId,
+            type,
+        }
+        this.matDialog.open(DialogAttachPdfComponent, {
+            width: '100vw',
+            height: '90vh',
+            position: { top: '20px' },
+            data: data
+        });
+    }
+
+    onDialogPayments() {
+        const dialogRef = this.matDialog.open(DialogCreatePaymentsComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(payment => {
+            if (payment) {
+                this.payments.push(payment);
+            }
+        });
+    }
+
+    onRemovePayment(index: number) {
+        this.payments.splice(index, 1);
+    }
+
+    openDialogCustomers() {
+        const dialogRef = this.matDialog.open(DialogCustomersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        })
+
+        dialogRef.afterClosed().subscribe(customer => {
+            if (customer) {
+                this.formGroup.patchValue({ customer });
+            }
+        })
+
+        dialogRef.componentInstance.handleCreateCustomer().subscribe(() => {
+            const dialogRef = this.matDialog.open(DialogCreateCustomersComponent, {
+                width: '600px',
+                position: { top: '20px' }
+            })
+
+            dialogRef.afterClosed().subscribe(customer => {
+                if (customer) {
+                    this.formGroup.patchValue({ customer })
+                }
+            })
+        })
+    }
+
+    openDialogBrokers() {
+        const dialogRef = this.matDialog.open(DialogBrokersComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(broker => {
+            this.formGroup.patchValue({ broker: broker || {} });
+        });
+    }
+
+    openDialogBeneficiaries() {
+        const dialogRef = this.matDialog.open(DialogBeneficiariesComponent, {
+            width: '600px',
+            position: { top: '20px' }
+        });
+
+        dialogRef.afterClosed().subscribe(beneficiary => {
+            this.formGroup.patchValue({ beneficiary: beneficiary || {} });
+        });
+    }
+
+    onSubmit(): void {
+        if (this.formGroup.valid) {
+            this.isLoading = true;
+            this.navigationService.loadBarStart();
+            const iso = this.formGroup.value;
+            iso.customerId = iso.customer._id;
+            iso.types = iso.isos.map((e: any) => e.type);
+            this.navigationService.loadBarStart();
+            this.isosService.update(iso, this.payments, this.isoId).subscribe(() => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage('Se han guardado los cambios');
+            }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
+                this.navigationService.loadBarFinish();
+                this.navigationService.showMessage(error.error.message);
+            });
+        }
+    }
 
 }
