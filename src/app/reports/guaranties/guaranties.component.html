@@ -89,7 +89,7 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04' }"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ 'bg-success': row.status === '02', 'bg-warning': row.status === '03', 'bg-danger': row.status === '04', 'bg-info': row.status === '05' }"></tr>
     </table>
   </div>
 </section>

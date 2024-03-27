@@ -24,8 +24,9 @@
             <mat-label>Oficina</mat-label>
             <mat-select [(value)]="officeId" (selectionChange)="onStatusChange()">
                 <mat-option value="" disabled>TODAS LAS OFICINAS</mat-option>
-                <mat-option *ngFor="let element of offices" [value]="element._id">{{ element.name | uppercase
-                    }}</mat-option>
+                <mat-option *ngFor="let element of offices" [value]="element._id">
+                    {{ element.name | uppercase }}
+                </mat-option>
             </mat-select>
         </mat-form-field>
     </div>
@@ -37,7 +38,8 @@
             </ng-container>
             <ng-container matColumnDef="partnership">
                 <th mat-header-cell *matHeaderCellDef>Consorcio</th>
-                <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }" class="truncate-cell">
+                <td mat-cell *matCellDef="let element" [ngClass]="{ 'text-muted': !element.partnership }"
+                    class="truncate-cell">
                     {{ element.partnership ? (element.partnership.name | uppercase) : 'NINGUNO' }}
                 </td>
             </ng-container>
